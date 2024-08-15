@@ -1,0 +1,9 @@
+import React from 'react'
+
+const Artwork = () => {
+  return (
+    <div>Artwork</div>
+  )
+}
+
+export default Artwork
