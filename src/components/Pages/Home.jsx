@@ -17,11 +17,11 @@ const Home = () => {
             <button className="secondary-button">Sign Up</button>
           </div>
           <div className="home-image-section">
+            <img src="./Images/homeimg.png" alt="fireSpot" />
           </div>
         </div>
       </div>
-      </div>
+    </div>
   )
 }
-
 export default Home
