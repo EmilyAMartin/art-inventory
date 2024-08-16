@@ -1,0 +1,72 @@
+.modal-container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal {
+  border-radius: 5px;
+  padding: 2rem;
+  background-color: white;
+  width: 35em;
+}
+
+.cancel-button {
+  margin-left: 1rem;
+  padding: 0.5rem 1.5rem;
+  background-color: #ff6363;
+  color: #ffffff;
+  outline: none;
+  border: none;
+  border-radius: 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+}
+.cancel-button:hover {
+  background-color: #b84949;
+}
+.submit-button {
+  padding: 0.5rem 1.5rem;
+  background-color: #6c63ff;
+  color: #ffffff;
+  outline: none;
+  border: none;
+  border-radius: 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+}
+.submit-button:hover {
+  background-color: #4640ad;
+}
+
+.close {
+  cursor: pointer;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 2rem;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 2rem;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: space-evenly;
+}
