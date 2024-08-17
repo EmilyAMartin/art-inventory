@@ -17,7 +17,7 @@ const Home = () => {
             <button className="secondary-button">Sign Up</button>
           </div>
           <div className="home-image-section">
-            <img src="./Images/homeimg.png" alt="fireSpot" />
+            <img src="./Images/homeimg.png" alt="illustration of girl painting" />
           </div>
         </div>
       </div>

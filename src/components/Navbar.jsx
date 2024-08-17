@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
 import "./Navbar.css";
 import { Link, NavLink } from 'react-router-dom'
+import { BsList } from "react-icons/bs";
 
 export const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   return (
     <nav>
-      <Link to="/" className='logo'><img src="./Images/Logo.png" alt="logo portfolio" width="15%" /></Link>
+      <Link to="/" className='logo'><img src="./Images/Logo.png" alt="logo portfolio" /></Link>
       <div className='menu' onClick={() => setMenuOpen(!menuOpen)}>
-        <span></span>
-        <span></span>
-        <span></span>
+        <BsList />
       </div>
       <ul className={menuOpen ? "open" : ""}>
         <li><NavLink to="/">Home</NavLink></li>
