@@ -37,3 +37,10 @@
   justify-content: flex-end;
   font-size: 2rem;
 }
+.modal-content {
+  margin-bottom: 2rem;
+}
+.modal-footer {
+  display: flex;
+  justify-content: space-evenly;
+}
