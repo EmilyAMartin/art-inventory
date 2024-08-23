@@ -10,6 +10,7 @@ import Contact from './components/Pages/Contact'
 
 import Modal from './components/Modal'
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 
 function App() {
   const [modalOpen, setModalOpen] = useState(false)
@@ -30,10 +31,12 @@ function App() {
         Open
       </button>
 
-      {modalOpen && (<Modal onSubmit={handleButtonClick} onCancel={handleButtonClick} onClose={handleButtonClick}>
-        <h1>This is the modal header</h1>
-        <p>This is the modal description</p>
-      </Modal>)}
+      {modalOpen && (
+        createPortal(<Modal onSubmit={handleButtonClick} onCancel={handleButtonClick} onClose={handleButtonClick}>
+          <h1>This is the modal header</h1>
+          <p>This is the modal description</p>
+        </Modal>, document.body)
+      )}
     </div>
   )
 }

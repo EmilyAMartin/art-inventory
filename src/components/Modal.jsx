@@ -3,7 +3,11 @@ import "./Modal.css"
 
 const Modal = ({ onSubmit, onCancel, onClose, children }) => {
   return (
-    <div className='modal-container'>
+    <div className="modal-container" onClick={(e) => {
+      if (e.target.className === "modal-container")
+        onClose();
+    }}
+    >
       <div className='modal'>
         <div className='modal-header'>
           <p className='close' onClick={() => onClose()}>&times;</p>
