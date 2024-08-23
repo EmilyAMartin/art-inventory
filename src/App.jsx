@@ -12,7 +12,10 @@ import Modal from './components/Modal'
 import { useState } from 'react'
 
 function App() {
-  const [modalOpen] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false)
+  const handleButtonClick = () => {
+    setModalOpen(false);
+  };
   return (
     <div className='App'>
       <Navbar />
@@ -23,11 +26,14 @@ function App() {
         <Route path="/Contact" element={<Contact />} />
       </Routes>
 
-      {modalOpen && <Modal>
+      <button onClick={() => setModalOpen(true)}>
+        Open
+      </button>
+
+      {modalOpen && (<Modal onSubmit={handleButtonClick} onCancel={handleButtonClick} onClose={handleButtonClick}>
         <h1>This is the modal header</h1>
         <p>This is the modal description</p>
-      </Modal>}
-
+      </Modal>)}
     </div>
   )
 }
