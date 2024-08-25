@@ -23,5 +23,4 @@ const Modal = ({ onSubmit, onCancel, onClose, children }) => {
     </div>
   )
 }
-
 export default Modal

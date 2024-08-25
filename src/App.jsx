@@ -6,19 +6,15 @@ import Artwork from './components/Pages/Artwork'
 import Account from './components/Pages/Account'
 import Contact from './components/Pages/Contact'
 
-
-
-import { Modal } from './components/Modal'
+import Modal from './components/Modal'
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 
 function App() {
-
   const [modalOpen, setModalOpen] = useState(false)
   const handleButtonClick = () => {
     setModalOpen(false);
   };
-
   return (
     <div className='App'>
       <Navbar />
@@ -28,19 +24,17 @@ function App() {
         <Route path="/Account" element={<Account />} />
         <Route path="/Contact" element={<Contact />} />
       </Routes>
-
       <button onClick={() => setModalOpen(true)}>
         Open
       </button>
+
       {modalOpen && (
         createPortal(<Modal onSubmit={handleButtonClick} onCancel={handleButtonClick} onClose={handleButtonClick}>
           <h1>This is the modal header</h1>
           <p>This is the modal description</p>
         </Modal>, document.body)
       )}
-
     </div>
   )
 }
-
 export default App
