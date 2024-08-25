@@ -30,7 +30,6 @@ export const Navbar = () => {
       </ul>
       {modalOpen && (
         createPortal(<Modal onSubmit={handleButtonClick} onCancel={handleButtonClick} onClose={handleButtonClick}>
-
           <div className='login-form-container'>
             <div className="login-header">Login</div>
             <label for="email">
