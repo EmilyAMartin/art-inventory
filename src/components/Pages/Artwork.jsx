@@ -16,7 +16,8 @@ const Artwork = () => {
     setModalOpen(false);
   };
   return (
-    <div className="art-container">
+    <div className="artwork-container">
+
       <div className='add-artwork'>
         <div>Add New Artwork</div>
         <div onClick={() => setModalOpen(true)}><BsPlusCircle /></div>
@@ -51,7 +52,7 @@ const Artwork = () => {
 
       {modalOpen && (
         createPortal(<Modal onSubmit={handleButtonClick} onCancel={handleButtonClick} onClose={handleButtonClick}>
-          <div className="artwork-container">
+          <div className="artwork-modal-container">
             <div className="artwork-image-placeholder">
               <div className="artwork-header">Artwork</div>
               <div className="box">
