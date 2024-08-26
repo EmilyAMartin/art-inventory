@@ -88,12 +88,21 @@ img {
   font-size: 1.5rem;
   font-weight: 600;
 }
+.add-artwork {
+  display: flex;
+  flex-direction: row;
+  align-items: left;
+  gap: 0.5rem;
+}
 .artwork-grid {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
   gap: 3rem;
 }
+
 .artwork-container {
   display: flex;
   flex-direction: row;

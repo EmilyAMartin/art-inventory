@@ -4,7 +4,7 @@ import { Navbar } from './components/Navbar'
 import Home from './components/Pages/Home'
 import Artwork from './components/Pages/Artwork'
 import Account from './components/Pages/Account'
-import Contact from './components/Pages/Contact'
+import Contact from './components/Contact'
 
 function App() {
   return (

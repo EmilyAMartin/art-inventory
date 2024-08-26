@@ -23,7 +23,6 @@ export const Navbar = () => {
         <li><NavLink to="/">Home</NavLink></li>
         <li><NavLink to="Artwork">Artwork</NavLink></li>
         <li><NavLink to="Account">Account</NavLink></li>
-        <li><NavLink to="Contact">Contact</NavLink></li>
         <button className="primary-button" onClick={() => setModalOpen(true)}>
           Login
         </button>
