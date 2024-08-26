@@ -20,11 +20,32 @@ const Artwork = () => {
       <div>Add New Artwork</div>
       <div onClick={() => setModalOpen(true)}><BsPlusCircle /></div>
 
+      <h3>Painting</h3>
       <div className='artwork-grid'>
+        <Card />
+        <Card />
+        <Card />
         <Card />
         <Card />
       </div>
 
+      <h3>Photography</h3>
+      <div className='artwork-grid'>
+        <Card />
+        <Card />
+        <Card />
+        <Card />
+        <Card />
+      </div>
+
+      <h3>Printmaking</h3>
+      <div className='artwork-grid'>
+        <Card />
+        <Card />
+        <Card />
+        <Card />
+        <Card />
+      </div>
 
       {modalOpen && (
         createPortal(<Modal onSubmit={handleButtonClick} onCancel={handleButtonClick} onClose={handleButtonClick}>

@@ -1,0 +1,8 @@
+.art-card {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  width: 15rem;
+  font-size: 1rem;
+  gap: 1rem;
+}
