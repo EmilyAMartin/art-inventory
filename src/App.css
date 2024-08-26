@@ -102,12 +102,17 @@ img {
 }
 .art-container {
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
   justify-content: left;
   gap: 1rem;
   margin: 2rem;
   font-size: 1.2rem;
+}
+.add-artwork {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
 }
 .account-container {
   display: flex;

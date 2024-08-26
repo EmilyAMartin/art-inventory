@@ -31,7 +31,7 @@ nav ul li a {
   border-radius: 0.5rem;
 }
 nav ul li a:not(.active):hover {
-  background-color: rgb(222, 186, 255);
+  background-color: #b9b5ff;
 }
 nav .menu {
   display: none;

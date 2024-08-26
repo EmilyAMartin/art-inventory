@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { BsImage } from "react-icons/bs";
 
+
 const Artwork = () => {
   const [modalOpen, setModalOpen] = useState(false)
   const handleButtonClick = () => {
@@ -14,9 +15,13 @@ const Artwork = () => {
   return (
     <div className="art-container">
       <div>Add New Artwork</div>
-      <div onClick={() => setModalOpen(true)}>
-        <BsPlusCircle />
+      <div onClick={() => setModalOpen(true)}><BsPlusCircle /></div>
+
+      <div className='artwork-grid'>
+        <div className="artwork-header">Painting</div>
+        <div className='box'></div>
       </div>
+
 
       {modalOpen && (
         createPortal(<Modal onSubmit={handleButtonClick} onCancel={handleButtonClick} onClose={handleButtonClick}>
@@ -111,7 +116,6 @@ const Artwork = () => {
           </div>
         </Modal>, document.body)
       )}
-
     </div>
   )
 }
