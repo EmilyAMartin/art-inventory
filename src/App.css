@@ -88,6 +88,9 @@ img {
   font-size: 1.5rem;
   font-weight: 600;
 }
+.artword-grid {
+  display: flex;
+}
 .artwork-container {
   display: flex;
   flex-direction: row;
@@ -108,12 +111,7 @@ img {
   margin: 2rem;
   font-size: 1.2rem;
 }
-.add-artwork {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: left;
-}
+
 .account-container {
   display: flex;
   flex-direction: row;

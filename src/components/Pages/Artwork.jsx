@@ -1,10 +1,13 @@
 import React from 'react'
 import { BsPlusCircle } from "react-icons/bs";
 
+import Card from './Card';
+
 import Modal from '../Modal';
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { BsImage } from "react-icons/bs";
+
 
 
 const Artwork = () => {
@@ -18,8 +21,8 @@ const Artwork = () => {
       <div onClick={() => setModalOpen(true)}><BsPlusCircle /></div>
 
       <div className='artwork-grid'>
-        <div className="artwork-header">Painting</div>
-        <div className='box'></div>
+        <Card />
+        <Card />
       </div>
 
 
@@ -35,7 +38,7 @@ const Artwork = () => {
               </div>
             </div>
 
-            <div className="artwork-form-container">
+            <div className="artwork-form-container">d
               <label for="title">
                 <b>Title</b>
               </label>
