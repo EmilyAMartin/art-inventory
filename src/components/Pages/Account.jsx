@@ -1,90 +1,40 @@
 import React from 'react'
-import { BsPersonCircle } from "react-icons/bs";
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 const Account = () => {
+  const bull = (
+    <Box
+      component="span"
+      sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
+    >
+      •
+    </Box>
+  );
   return (
-    <div className="account-container">
-      <div className="profile-container">
-        <div className="profile-picture">
-          <BsPersonCircle />
-        </div>
-        <div className="profile-header">Jane Doe</div>
-        <div className="profile-subheader">fake@fake.com</div>
-        <label for="first name">
-          <b>First Name</b>
-        </label>
-        <input
-          aria-label="first name"
-          type="text"
-          placeholder="First Name"
-          name="first name"
-          required
-        />
-
-        <label for="last name">
-          <b>Last Name</b>
-        </label>
-        <input
-          aria-label="last name"
-          type="text"
-          placeholder="Last Name"
-          name="last name"
-          required
-        />
-        <button className="update-button">Update</button>
-      </div>
-
-      <div className="security-container">
-        <div className="security-header">Sign-in & Security</div>
-        <div className="security-text">
-          {"Update your email or password used to sign in "}
-        </div>
-        <label for="email">
-          <b>Email</b>
-        </label>
-        <input
-          aria-label="email"
-          type="text"
-          placeholder="Enter Email"
-          name="email"
-          required
-        />
-
-        <label for="password">
-          <b>Password</b>
-        </label>
-        <input
-          aria-label="password"
-          type="text"
-          placeholder="Enter Password"
-          name="password"
-          required
-        />
-
-        <label for="repeat-password">
-          <b>Repeat Password</b>
-        </label>
-        <input
-          aria-label="repeat-password"
-          type="text"
-          placeholder="Repeat Password"
-          name="repeat-password"
-          required
-        />
-
-        <label>
-          <input
-            aria-label="remember-me-checkbox"
-            type="radio"
-            checked="checked"
-            name="remember"
-            style={{ marginRight: "0.5rem" }}
-          />
-          2-Step Verification
-        </label>
-        <button className="update-button">Update</button>
-      </div>
-    </div>
+    <Card sx={{ minWidth: 275 }}>
+      <CardContent>
+        <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
+          Word of the Day
+        </Typography>
+        <Typography variant="h5" component="div">
+          be{bull}nev{bull}o{bull}lent
+        </Typography>
+        <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>adjective</Typography>
+        <Typography variant="body2">
+          well meaning and kindly.
+          <br />
+          {'"a benevolent smile"'}
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button size="small">Learn More</Button>
+      </CardActions>
+    </Card>
   )
 }
 
