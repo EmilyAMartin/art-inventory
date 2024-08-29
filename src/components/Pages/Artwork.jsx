@@ -1,6 +1,6 @@
 import React from "react";
 import { BsPlusCircle } from "react-icons/bs";
-import MediaCard from "../MediaCard";
+import ArtCard from "../ArtCard";
 
 const Artwork = () => {
 
@@ -10,7 +10,34 @@ const Artwork = () => {
         <div>Add New Artwork</div>
         <div ><BsPlusCircle /></div>
       </div>
-      <MediaCard />
+
+      <div>Category</div>
+      <div className="media-card-container">
+        <ArtCard />
+        <ArtCard />
+        <ArtCard />
+        <ArtCard />
+        <ArtCard />
+      </div>
+
+      <div>Favorites</div>
+      <div className="media-card-container">
+        <ArtCard />
+        <ArtCard />
+        <ArtCard />
+        <ArtCard />
+        <ArtCard />
+      </div>
+
+      <div>Recent Added</div>
+      <div className="media-card-container">
+        <ArtCard />
+        <ArtCard />
+        <ArtCard />
+        <ArtCard />
+        <ArtCard />
+      </div>
+
     </div>
 
   )
