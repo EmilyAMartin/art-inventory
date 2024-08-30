@@ -1,5 +1,6 @@
 import React from "react";
 import ArtCard from "../ArtCard";
+import MediumCard from "../MediumCard";
 
 const Gallery = () => {
 
@@ -7,11 +8,11 @@ const Gallery = () => {
     <div className="artwork-container">
       <div>Category</div>
       <div className="media-card-container">
-        <ArtCard />
-        <ArtCard />
-        <ArtCard />
-        <ArtCard />
-        <ArtCard />
+        <MediumCard />
+        <MediumCard />
+        <MediumCard />
+        <MediumCard />
+        <MediumCard />
       </div>
 
       <div>Favorites</div>
