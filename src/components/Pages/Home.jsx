@@ -4,12 +4,35 @@ import Modal from '../Modal'
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormControl from '@mui/material/FormControl';
+import TextField from '@mui/material/TextField';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Typography from '@mui/material/Typography';
+import Checkbox from '@mui/material/Checkbox';
+
 const Home = () => {
   const [modalOpen, setModalOpen] = useState(false)
   const handleButtonClick = () => {
     setModalOpen(false);
   };
 
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const handleMouseUpPassword = (event) => {
+    event.preventDefault();
+  };
   return (
     <div className="App">
       <div className="home-container">
@@ -32,56 +55,67 @@ const Home = () => {
       </div>
       {modalOpen && (
         createPortal(<Modal onSubmit={handleButtonClick} onCancel={handleButtonClick} onClose={handleButtonClick}>
-          <div className='registration-container'>
-            <div className="registration-header">Sign Up</div>
-            <div className="registration-primary-text">{" "}
-              Please fill in this form to create an account.
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <div>
+              <Typography gutterBottom variant="h5" component="div" paddingBottom={2} paddingLeft={12}>Sign Up</Typography>
+              <Typography gutterBottom variant="h7" component="div" paddingBottom={1}>Welcome, please sign up to continue</Typography>
             </div>
-
-            <label for="email">
-              <b>Email</b>
-            </label>
-            <input
-              aria-label="email"
-              type="text"
-              placeholder="Enter Email"
-              name="email"
-              required
-            />
-
-            <label for="password">
-              <b>Password</b>
-            </label>
-            <input
-              aria-label="password"
-              type="text"
-              placeholder="Enter Password"
-              name="password"
-              required
-            />
-
-            <label for="repeat-password">
-              <b>Repeat Password</b>
-            </label>
-            <input
-              aria-label="repeat-password"
-              type="text"
-              placeholder="Repeat Password"
-              name="repeat-password"
-              required
-            />
-
-            <label>
-              <input
-                aria-label="remember-me-checkbox"
-                type="checkbox"
-                checked="checked"
-                name="remember"
-                style={{ marginRight: "0.5rem" }}
-              />
-              Remember me
-            </label>
-          </div>
+            <div>
+              <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-email"> Email</InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-email"
+                  endAdornment={
+                    <InputAdornment position="end">
+                    </InputAdornment>
+                  }
+                  label="Email"
+                />
+              </FormControl>              <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showPassword ? 'text' : 'password'}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        onMouseUp={handleMouseUpPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Password"
+                />
+              </FormControl>
+              <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-password">Repeat Password</InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showPassword ? 'text' : 'password'}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        onMouseUp={handleMouseUpPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Password"
+                />
+              </FormControl>
+              <Checkbox /> Remember Password
+            </div>
+          </Box>
         </Modal>, document.body)
       )}
     </div>
