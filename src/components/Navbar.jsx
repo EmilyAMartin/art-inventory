@@ -17,7 +17,8 @@ import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Typography from '@mui/material/Typography';
-import LockOpenIcon from '@mui/icons-material/LockOpen';
+import Checkbox from '@mui/material/Checkbox';
+import { RememberMe } from '@mui/icons-material';
 
 
 
@@ -59,22 +60,25 @@ export const Navbar = () => {
       </ul>
       {modalOpen && (
         createPortal(<Modal onSubmit={handleButtonClick} onCancel={handleButtonClick} onClose={handleButtonClick}>
-          <LockOpenIcon fontSize='large' />
-          <Typography gutterBottom variant="h5" component="div" paddingBottom={2}>Login</Typography>
-          <Typography gutterBottom variant="h7" component="div" paddingBottom={1}>Welcome, please login to continue</Typography>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <div>
+              <Typography gutterBottom variant="h5" component="div" paddingBottom={2} paddingLeft={12}>Login</Typography>
+              <Typography gutterBottom variant="h7" component="div" paddingBottom={1}>Welcome, please login to continue</Typography>
+            </div>
+
             <div>
               <TextField
                 label=" Email"
                 id="outlined-start-adornment"
-                sx={{ m: 1, width: '25ch' }}
+                sx={{ m: 1, width: '100%' }}
                 slotProps={{
                   input: {
-                    startAdornment: <InputAdornment position="start">Email</InputAdornment>,
+                    startAdornment: <InputAdornment position="start"></InputAdornment>,
                   },
                 }}
               />
-              <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+              <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
                 <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                 <OutlinedInput
                   id="outlined-adornment-password"
@@ -95,8 +99,11 @@ export const Navbar = () => {
                   label="Password"
                 />
               </FormControl>
+              <Checkbox /> Remember Password
             </div>
+
           </Box>
+
         </Modal>, document.body)
       )}
     </nav >

@@ -13,7 +13,7 @@
   border-radius: 5px;
   background-color: white;
   padding: 2rem;
-  width: 35rem;
+  width: 40rem;
 }
 
 .btn-submit {
@@ -22,7 +22,7 @@
   color: #ffffff;
   outline: none;
   border: none;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   font-size: 1rem;
   cursor: pointer;
   font-weight: 500;
@@ -38,7 +38,7 @@
   color: #ffffff;
   outline: none;
   border: none;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   font-size: 1rem;
   cursor: pointer;
   font-weight: 500;
