@@ -5,6 +5,7 @@ import Home from './components/Pages/Home'
 import Artwork from './components/Pages/Artwork'
 import Account from './components/Pages/Account'
 import Gallery from './components/Pages/Gallery'
+import ArtData from './components/ArtData.json'
 
 function App() {
   return (
@@ -16,6 +17,19 @@ function App() {
         <Route path="/Gallery" element={<Gallery />} />
         <Route path="/Account" element={<Account />} />
       </Routes>
+
+      {
+        ArtData.map(artwork => {
+          return (
+            <div key={artwork}>
+              {artwork.image}
+              {artwork.title}
+              {artwork.artist}
+              {artwork.date}
+            </div>
+          )
+        })
+      }
     </div>
   )
 }
