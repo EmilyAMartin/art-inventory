@@ -62,13 +62,16 @@ const Artwork = () => {
           )}
         </div>
       </div>
+      <Typography variant="h6" sx={{ color: 'text.secondary' }}>
+        Recently Added
+      </Typography>
 
       <div>
         <Container maxWidth="lg">
           <Grid2 container spacing={5} style={{ marginTop: "20px" }}>
             {Data.map((result, index) => (
               <Grid2 item xs={12} ms={4} key={index}>
-                <Card sx={{ maxWidth: 345 }}>
+                <Card sx={{ maxWidth: 250 }}>
                   <CardActionArea>
                     <CardMedia
                       component="img"
@@ -78,11 +81,13 @@ const Artwork = () => {
                     />
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="div">
-                        Lizard
+                        Untitled
                       </Typography>
                       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        Lizards are a widespread group of squamate reptiles, with over 6,000
-                        species, ranging across all continents except Antarctica
+                        Artist Name
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                        2023
                       </Typography>
                     </CardContent>
                   </CardActionArea>
@@ -93,7 +98,6 @@ const Artwork = () => {
           </Grid2>
         </Container>
       </div>
-
 
     </div>
 
