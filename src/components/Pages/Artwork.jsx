@@ -1,6 +1,14 @@
 import React from "react";
 import { BsPlusCircle } from "react-icons/bs";
-import ArtCard from "../ArtCard";
+
+import Grid2 from '@mui/material/Grid2';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import CardActionArea from '@mui/material/CardActionArea';
+import Container from '@mui/material/Container';
+import Data from '../ArtData.json'
 
 
 import Modal from '../Modal'
@@ -52,20 +60,43 @@ const Artwork = () => {
               </Button>
             </Modal>, document.body)
           )}
-
         </div>
+      </div>
+
+      <div>
+        <Container maxWidth="lg">
+          <Grid2 container spacing={5} style={{ marginTop: "20px" }}>
+            {Data.map((result, index) => (
+              <Grid2 item xs={12} ms={4} key={index}>
+                <Card sx={{ maxWidth: 345 }}>
+                  <CardActionArea>
+                    <CardMedia
+                      component="img"
+                      height="140"
+                      image={result.image}
+                      alt="green iguana"
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="div">
+                        Lizard
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                        Lizards are a widespread group of squamate reptiles, with over 6,000
+                        species, ranging across all continents except Antarctica
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+
+              </Grid2>
+            ))}
+          </Grid2>
+        </Container>
+      </div>
 
 
-      </div>
-      <div>Recent Added</div>
-      <div className="media-card-container">
-        <ArtCard />
-        <ArtCard />
-        <ArtCard />
-        <ArtCard />
-        <ArtCard />
-      </div>
     </div>
+
 
   )
 }

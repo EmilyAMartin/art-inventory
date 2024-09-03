@@ -17,19 +17,6 @@ function App() {
         <Route path="/Gallery" element={<Gallery />} />
         <Route path="/Account" element={<Account />} />
       </Routes>
-
-      {
-        ArtData.map(artwork => {
-          return (
-            <div key={artwork}>
-              <img src={artwork.image} alt="" width={250} />
-              {artwork.title}
-              {artwork.artist}
-              {artwork.date}
-            </div>
-          )
-        })
-      }
     </div>
   )
 }
