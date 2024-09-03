@@ -6,12 +6,14 @@ import CardMedia from '@mui/material/CardMedia';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-
+import ArtData from './ArtData.json'
 
 export default function MediaCard() {
     return (
         <Card sx={{ maxWidth: 250 }}>
-            <CardMedia/>
+            <CardMedia
+
+            />
             <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
                     Untitled

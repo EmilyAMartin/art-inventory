@@ -22,7 +22,7 @@ function App() {
         ArtData.map(artwork => {
           return (
             <div key={artwork}>
-              {artwork.image}
+              <img src={artwork.image} alt="" width={250} />
               {artwork.title}
               {artwork.artist}
               {artwork.date}

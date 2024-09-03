@@ -3,31 +3,19 @@
         "title": "Untitled", 
         "artist":"Emily Martin",
         "date": "2023",
-        "image": "p1.jpg"
+        "image": "/Images/img3.jpg"
     },
     {
         "title": "Untitled", 
         "artist":"Emily Martin",
         "date": "2023",
-        "image": ""
+        "image": "/Images/img4.jpg"
     },
     {
         "title": "Untitled", 
         "artist":"Emily Martin",
         "date": "2023",
-        "image": ""
-    },
-    {
-        "title": "Untitled", 
-        "artist":"Emily Martin",
-        "date": "2023",
-        "image": ""
-    },
-    {
-        "title": "Untitled", 
-        "artist":"Emily Martin",
-        "date": "2023",
-        "image": ""
+        "image": "/Images/img5.jpg"
     }
 ]
 
