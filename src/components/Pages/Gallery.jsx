@@ -16,7 +16,14 @@ import CardActionArea from '@mui/material/CardActionArea';
 import Container from '@mui/material/Container';
 import Data from '../ArtData.json'
 
+import { useState } from "react";
+
 const top100Films = [];
+
+const BASE_URL = 'https://api.artic.edu/api/v1/artworks'
+const getAllArtworkByPage = () => {
+
+}
 
 const Gallery = () => {
 

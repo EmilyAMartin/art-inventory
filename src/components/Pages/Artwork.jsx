@@ -81,13 +81,13 @@ const Artwork = () => {
                     />
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="div">
-                        Untitled
+                        {result.title}
                       </Typography>
                       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        Artist Name
+                        {result.artist}
                       </Typography>
                       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        2023
+                        {result.date}
                       </Typography>
                     </CardContent>
                   </CardActionArea>

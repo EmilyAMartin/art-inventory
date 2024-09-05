@@ -1,15 +1,39 @@
 [
     {
-        "title": "Untitled", 
+        "title": "Untitled 1", 
         "artist":"Emily Martin",
         "date": "2023",
         "image": "/Images/img3.jpg"
     },
     {
+        "title": "Untitled 2", 
+        "artist":"Emily Martin",
+        "date": "2024",
+        "image": "/Images/img4.jpg"
+    },
+    {
+        "title": "Untitled 3", 
+        "artist":"Emily Martin",
+        "date": "2025",
+        "image": "/Images/img5.jpg"
+    },
+    {
+        "title": "Untitled 4", 
+        "artist":"Emily Martin",
+        "date": "2026",
+        "image": "/Images/img5.jpg"
+    },
+    {
         "title": "Untitled", 
         "artist":"Emily Martin",
         "date": "2023",
-        "image": "/Images/img4.jpg"
+        "image": "/Images/img5.jpg"
+    },
+    {
+        "title": "Untitled", 
+        "artist":"Emily Martin",
+        "date": "2023",
+        "image": "/Images/img5.jpg"
     },
     {
         "title": "Untitled", 
