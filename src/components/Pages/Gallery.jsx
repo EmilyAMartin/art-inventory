@@ -21,10 +21,10 @@ const Gallery = () => {
   //Working on API//
   const [quote, setQuote] = useState('')
   const getQuote = () => {
-    axios.get('https://api.quotable.io/random')
+    axios.get('https://api.artic.edu/api/v1/artworks/129884')
       .then(res => {
         console.log(res)
-        setQuote(res.data.content)
+        setQuote(res.data.data.title)
       }).catch(err => {
         console.log(err)
       })
