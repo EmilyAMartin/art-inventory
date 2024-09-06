@@ -13,14 +13,31 @@ import CardActionArea from '@mui/material/CardActionArea';
 import Container from '@mui/material/Container';
 import Data from '../ArtData.json'
 
-
-
-
+import axios from 'axios'
+import { useState } from 'react'
 
 const Gallery = () => {
 
+  //Working on API//
+  const [quote, setQuote] = useState('')
+  const getQuote = () => {
+    axios.get('https://api.quotable.io/random')
+      .then(res => {
+        console.log(res)
+        setQuote(res.data.content)
+      }).catch(err => {
+        console.log(err)
+      })
+  }
+
   return (
     <div className="artwork-container">
+
+      <div>
+        <button onClick={getQuote}>Get Quote</button>
+        {quote && <div>{quote}</div>}
+      </div>
+
       <div>
         <Container maxWidth="lg">
           <Grid2 container spacing={5} style={{ marginTop: "10px" }}>
