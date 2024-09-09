@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -17,28 +17,22 @@ import Data from '../ArtData.json'
 
 
 const Gallery = () => {
-  const [artwork, setArtwork] = useState([]);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
-    axios.get('https://api.artic.edu/api/v1/artworks/title')
-      .then(response => {
-        setArtwork(response.data);
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    fetch('https://api.artic.edu/api/v1/artworks?page=2&limit=1')
+      .then(response => response.json())
+      .then(json => setData(json))
+      .catch(error => console.error(error));
   }, []);
 
 
   return (
     <div className="artwork-container">
-
       <div>
-        <ul>
-          {artwork.map(art => (
-            <li key={art.id}>{art.title}</li>
-          ))}
-        </ul>
+        <div>
+          {data ? <pre>{JSON.stringify(data, null, 2)}</pre> : 'Loading...'}
+        </div>
       </div>
 
       <div>
