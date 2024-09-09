@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -13,29 +14,31 @@ import CardActionArea from '@mui/material/CardActionArea';
 import Container from '@mui/material/Container';
 import Data from '../ArtData.json'
 
-import axios from 'axios'
-import { useState } from 'react'
+
 
 const Gallery = () => {
+  const [artwork, setArtwork] = useState([]);
 
-  //Working on API//
-  const [quote, setQuote] = useState('')
-  const getQuote = () => {
-    axios.get('https://api.artic.edu/api/v1/artworks/129884')
-      .then(res => {
-        console.log(res)
-        setQuote(res.data.data.title)
-      }).catch(err => {
-        console.log(err)
+  useEffect(() => {
+    axios.get('https://api.artic.edu/api/v1/artworks/title')
+      .then(response => {
+        setArtwork(response.data);
       })
-  }
+      .catch(error => {
+        console.error(error);
+      });
+  }, []);
+
 
   return (
     <div className="artwork-container">
 
       <div>
-        <button onClick={getQuote}>Get Quote</button>
-        {quote && <div>{quote}</div>}
+        <ul>
+          {artwork.map(art => (
+            <li key={art.id}>{art.title}</li>
+          ))}
+        </ul>
       </div>
 
       <div>

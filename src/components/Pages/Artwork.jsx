@@ -98,7 +98,6 @@ const Artwork = () => {
           </Grid2>
         </Container>
       </div>
-
     </div>
 
 
