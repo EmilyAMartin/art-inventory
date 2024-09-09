@@ -7,44 +7,44 @@
     },
     {
         "title": "Untitled 2", 
-        "artist":"Emily Martin",
+        "artist":"Ben Cole",
         "date": "2024",
         "image": "/Images/img4.jpg"
     },
     {
         "title": "Untitled 3", 
-        "artist":"Emily Martin",
+        "artist":"Linn White",
         "date": "2025",
         "image": "/Images/img5.jpg"
     },
     {
         "title": "Untitled 4", 
-        "artist":"Emily Martin",
+        "artist":"Krista Carry",
         "date": "2026",
         "image": "/Images/img5.jpg"
     },
     {
-        "title": "Untitled", 
-        "artist":"Emily Martin",
-        "date": "2023",
+        "title": "Untitled 5", 
+        "artist":"Owen Barron",
+        "date": "2027",
         "image": "/Images/img5.jpg"
     },
     {
-        "title": "Untitled", 
-        "artist":"Emily Martin",
-        "date": "2023",
+        "title": "Untitled 6", 
+        "artist":"James Cole",
+        "date": "2028",
         "image": "/Images/img5.jpg"
     },
     {
-        "title": "Untitled", 
-        "artist":"Emily Martin",
-        "date": "2023",
+        "title": "Untitled 7", 
+        "artist":"Mike Bennett",
+        "date": "2029",
         "image": "/Images/img5.jpg"
     },
     {
-        "title": "Untitled", 
-        "artist":"Emily Martin",
-        "date": "2023",
+        "title": "Untitled 8", 
+        "artist":"Amanda Lee",
+        "date": "2012",
         "image": "/Images/img5.jpg"
     }
 ]

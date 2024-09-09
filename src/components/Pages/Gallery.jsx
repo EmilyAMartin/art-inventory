@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
@@ -17,22 +18,26 @@ import Data from '../ArtData.json'
 
 
 const Gallery = () => {
-  const [data, setData] = useState(null);
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    fetch('https://api.artic.edu/api/v1/artworks?page=2&limit=1')
-      .then(response => response.json())
-      .then(json => setData(json))
-      .catch(error => console.error(error));
-  }, []);
+    fetchData()
+  }, [])
 
+  const fetchData = async () => {
+    const { data } = await axios.get("https://jsonplaceholder.typicode.com/posts")
+    setPosts(data)
+  }
 
   return (
     <div className="artwork-container">
       <div>
-        <div>
-          {data ? <pre>{JSON.stringify(data, null, 2)}</pre> : 'Loading...'}
-        </div>
+        {posts.map(post => (
+          <div key={post.id}>
+            <h5>{post.title}</h5>
+            <p>{post.body}</p>
+          </div>
+        ))}
       </div>
 
       <div>
@@ -46,17 +51,17 @@ const Gallery = () => {
                       component="img"
                       height="140"
                       image={result.image}
-                      alt="green iguana"
+                      alt=""
                     />
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="div">
-                        Untitled
+                        {result.title}
                       </Typography>
                       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        Artist Name
+                        {result.artist}
                       </Typography>
                       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        2023
+                        {result.date}
                       </Typography>
                     </CardContent>
                   </CardActionArea>
