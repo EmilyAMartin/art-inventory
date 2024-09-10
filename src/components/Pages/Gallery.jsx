@@ -25,21 +25,26 @@ const Gallery = () => {
   }
 
   return (
-
     <div className="artwork-container">
       <div>
         <Container maxWidth="lg">
           <Grid2 container spacing={5} style={{ marginTop: "10px" }}>
-            {artwork.map(data => (
-              <Grid2 item xs={12} ms={4} key={data.id}>
+            {artwork.map(art => (
+              <Grid2 item xs={12} ms={4} key={art.id}>
                 <Card sx={{ maxWidth: 250 }}>
                   <CardActionArea>
+                    <CardMedia
+                      component="img"
+                      height="140"
+                      image="/Images/img3.jpg"
+                      alt=""
+                    />
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="div">
-                        {data.title}
+                        {art.title}
                       </Typography>
                       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        {data.body}
+                        {art.body}
                       </Typography>
                       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                         2023
