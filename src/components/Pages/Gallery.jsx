@@ -17,7 +17,7 @@ const Gallery = () => {
   }, [])
 
   const fetchData = async () => {
-    const response = await axios.get("https://api.artic.edu/api/v1/artworks?page=1")
+    const response = await axios.get("https://api.artic.edu/api/v1/artworks?page=2")
     console.log(response.data.data)
     setArtwork(response.data.data)
   }
@@ -34,13 +34,13 @@ const Gallery = () => {
                     <CardMedia
                       component="img"
                       height="140"
-                      image=""
+                      image="https://www.artic.edu/iiif/2/{art.image_id}/full/843,/1/default.jpg"
                       alt=""
                     />
                     <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">{art.title}</Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_display}</Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_display}</Typography>
+                      <Typography gutterBottom variant="h6" component="div">{art.title}</Typography>
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_end}</Typography>
 
                     </CardContent>
                   </CardActionArea>
