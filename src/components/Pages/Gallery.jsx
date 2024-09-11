@@ -17,8 +17,9 @@ const Gallery = () => {
   }, [])
 
   const fetchData = async () => {
-    const { data } = await axios.get("https://jsonplaceholder.typicode.com/posts?userId=1")
-    setArtwork(data)
+    const response = await axios.get("https://api.artic.edu/api/v1/artworks?page=1")
+    console.log(response.data.data)
+    setArtwork(response.data.data)
   }
 
   return (
@@ -37,29 +38,19 @@ const Gallery = () => {
                       alt=""
                     />
                     <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
-                        {art.title}
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        {art.body}
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        2023
-                      </Typography>
+                      <Typography gutterBottom variant="h5" component="div">{art.title}</Typography>
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_display}</Typography>
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_display}</Typography>
+
                     </CardContent>
                   </CardActionArea>
                 </Card>
-
               </Grid2>
             ))}
           </Grid2>
         </Container>
       </div>
-      <div>
-      </div>
-
     </div>
-
   )
 }
 
