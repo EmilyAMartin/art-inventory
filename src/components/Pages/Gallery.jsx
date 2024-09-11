@@ -33,7 +33,7 @@ const Gallery = () => {
                     <CardMedia
                       component="img"
                       height="140"
-                      image="/Images/img3.jpg"
+                      image=""
                       alt=""
                     />
                     <CardContent>
