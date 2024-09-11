@@ -32,13 +32,13 @@ img {
   gap: 1rem;
 }
 .home-heading {
-  font-size: clamp(2rem, 5vw, 4rem);
+  font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 600;
   color: #000000;
   max-width: 600px;
 }
 .home-primary-text {
-  font-size: clamp(1rem, 3vw, 1.5rem);
+  font-size: clamp(1rem, 3vw, 1.3rem);
   max-width: 500px;
   color: #000000;
   margin: 1.5rem 0rem;

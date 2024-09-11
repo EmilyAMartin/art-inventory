@@ -8,9 +8,6 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import Container from '@mui/material/Container';
-import Data from '../ArtData.json'
-
-
 
 const Gallery = () => {
   const [artwork, setArtwork] = useState([]);
@@ -20,7 +17,7 @@ const Gallery = () => {
   }, [])
 
   const fetchData = async () => {
-    const { data } = await axios.get("https://jsonplaceholder.typicode.com/posts")
+    const { data } = await axios.get("https://jsonplaceholder.typicode.com/posts?userId=1")
     setArtwork(data)
   }
 
