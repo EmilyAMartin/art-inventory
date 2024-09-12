@@ -17,6 +17,7 @@ import { createPortal } from 'react-dom'
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import TextField from '@mui/material/TextField';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -44,20 +45,36 @@ const Artwork = () => {
         <div>
           {modalOpen && (
             createPortal(<Modal onSubmit={handleButtonClick} onCancel={handleButtonClick} onClose={handleButtonClick}>
-              <Button
-                component="label"
-                role={undefined}
-                variant="contained"
-                tabIndex={-1}
-                startIcon={<CloudUploadIcon />}
-              >
-                Upload files
-                <VisuallyHiddenInput
-                  type="file"
-                  onChange={(event) => console.log(event.target.files)}
-                  multiple
+              <div>
+                <TextField
+                  required
+                  id="outlined-required"
+                  label="Required"
+                  defaultValue="Title"
+                  margin="normal"
                 />
-              </Button>
+                <TextField
+                  required
+                  id="outlined-required"
+                  label="Required"
+                  defaultValue="Date"
+                  margin="normal"
+                />
+                <TextField
+                  required
+                  id="outlined-required"
+                  label="Required"
+                  defaultValue="Location"
+                  margin="normal"
+                />
+                <TextField
+                  required
+                  id="outlined-required"
+                  label="Required"
+                  defaultValue="Medium"
+                  margin="normal"
+                />
+              </div>
             </Modal>, document.body)
           )}
         </div>
