@@ -33,9 +33,10 @@ const Gallery = () => {
                     <CardMedia
                       component="img"
                       height="140"
-                      image="https://www.artic.edu/iiif/2/b77d4b7b-abc7-f1ef-a8c2-377167820d63/full/843,/0/default.jpg"
+                      image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
                       alt=""
                     />
+
                     <CardContent>
                       <Typography gutterBottom variant="h6" component="div">{art.title}</Typography>
                       <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
