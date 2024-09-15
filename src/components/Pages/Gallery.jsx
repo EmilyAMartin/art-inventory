@@ -37,22 +37,12 @@ const Gallery = () => {
     <div className="artwork-container">
       <div>
 
-        <Stack spacing={2} sx={{ width: 300 }} style={{ paddingLeft: 10 }}>
+        <Stack paddingBottom={4} margin='auto' spacing={2} sx={{ width: 300 }}>
           <Autocomplete
-            disableClearable
+            id="search"
+            freeSolo
             options={search.map((response) => response.artist_title)}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Search"
-                slotProps={{
-                  input: {
-                    ...params.InputProps,
-                    type: 'search',
-                  },
-                }}
-              />
-            )}
+            renderInput={(params) => <TextField {...params} label="Search" />}
           />
         </Stack>
 
