@@ -40,7 +40,7 @@ const Gallery = () => {
         <Stack spacing={2} sx={{ width: 300 }} style={{ paddingLeft: 10 }}>
           <Autocomplete
             disableClearable
-            options={search.map((response) => response.title)}
+            options={search.map((response) => response.artist_title)}
             renderInput={(params) => (
               <TextField
                 {...params}
