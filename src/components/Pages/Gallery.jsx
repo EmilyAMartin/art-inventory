@@ -29,7 +29,7 @@ const Gallery = () => {
     searchArtwork()
   }, [])
   const searchArtwork = async () => {
-    const response = await axios.get("https://api.artic.edu/api/v1/artworks")
+    const response = await axios.get("https://api.artic.edu/api/v1/artworks?page=2")
     setSearch(response.data.data)
   }
 
@@ -41,36 +41,36 @@ const Gallery = () => {
           <Autocomplete
             id="search"
             freeSolo
-            options={search.map((response) => response.artist_title)}
+            options={search.map((response) => response.title)}
             renderInput={(params) => <TextField {...params} label="Search" />}
           />
         </Stack>
 
-        <Container maxWidth="lg">
-          <Grid2 container spacing={5} style={{ marginTop: "10px" }}>
-            {artwork.map(art => (
-              <Grid2 item xs={12} ms={4} key={art.id}>
-                <Card sx={{ maxWidth: 250 }}>
-                  <CardActionArea>
-                    <CardMedia
-                      component="img"
-                      height="140"
-                      image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
-                      alt=""
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h6" component="div">{art.title}</Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.place_of_origin}</Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_end}</Typography>
-                      <FavoriteBorderIcon style={{ float: 'right', margin: "10" }} />
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Grid2>
-            ))}
-          </Grid2>
-        </Container>
+
+        <Grid2 margin='auto' container spacing={5} style={{ marginTop: "10px" }}>
+          {artwork.map(art => (
+            <Grid2 item xs={12} ms={5} key={art.id}>
+              <Card sx={{ maxWidth: 200 }}>
+                <CardActionArea>
+                  <CardMedia
+                    component="img"
+                    height="140"
+                    image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
+                    alt=""
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h6" component="div">{art.title}</Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.place_of_origin}</Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_end}</Typography>
+                    <FavoriteBorderIcon style={{ float: 'right', margin: "10" }} />
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid2>
+          ))}
+        </Grid2>
+
       </div>
     </div>
   )
