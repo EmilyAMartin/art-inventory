@@ -7,36 +7,28 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
-import Container from '@mui/material/Container';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Button from '@mui/material/Button';
 
 const Gallery = () => {
+  const BASE_URL = "https://api.artic.edu/api/v1/artworks";
   const [artwork, setArtwork] = useState([]);
   const [page, setPage] = useState(1);
 
-
   useEffect(() => {
-    fetchData(page)
-
-  }, [])
-
-  const fetchData = async () => {
-    const response = await axios.get(`https://api.artic.edu/api/v1/artworks?${page}`)
-    setArtwork(response.data.data)
-  }
-
-
+    const fetchData = async () => {
+      const { data } = await axios.get(BASE_URL);
+      setArtwork(data.data)
+    };
+    fetchData();
+  }, []);
 
   return (
     <div className="artwork-container">
       <div>
 
-        <Button disabled={page === 1} onClick={() => setPage((prevState) => prevState - 1)}> Prev</Button>
-        <Button onClick={() => setPage((prevState) => prevState + 1)}> Next</Button>
-
-
-
+        <Button disabled={page === 1} onClick={() => setPage((prevState) => prevState - 1)}> Prev </Button>
+        <Button onClick={() => setPage((prevState) => prevState + 1)}> Next </Button>
         <Grid2 margin='auto' container spacing={5} style={{ marginTop: "10px" }}>
           {artwork.map(art => (
             <Grid2 item xs={12} ms={5} key={art.id}>
