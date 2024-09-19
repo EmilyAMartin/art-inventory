@@ -22,15 +22,11 @@ export const Navbar = () => {
     setModalOpen(false);
   };
   const [menuOpen, setMenuOpen] = useState(false);
-
   const [showPassword, setShowPassword] = React.useState(false);
-
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-
   const handleMouseUpPassword = (event) => {
     event.preventDefault();
   };
