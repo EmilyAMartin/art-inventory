@@ -7,50 +7,45 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
-import Container from '@mui/material/Container';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 
-import TextField from '@mui/material/TextField';
-import Stack from '@mui/material/Stack';
-import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
+
+
+
 
 const Gallery = () => {
   const [artwork, setArtwork] = useState([]);
-  const [search, setSearch] = useState([]);
   const [page, setPage] = useState(1);
 
-
   useEffect(() => {
-    fetchData(page)
-
-  }, [])
-
-  const fetchData = async () => {
-    const response = await axios.get(`https://api.artic.edu/api/v1/artworks?${page}`)
-    setArtwork(response.data.data)
-  }
-
-  const searchArtwork = async () => {
-    const response = await axios.get("https://api.artic.edu/api/v1/artworks?page=2")
-    setSearch(response.data.data)
-  }
+    axios
+      .get(
+        `https://api.artic.edu/api/v1/artworks?&page=${page + 1}`
+      )
+      .then((res) => {
+        setArtwork((prevState) => [...res.data.data]);
+        console.log(res.data);
+        return res.data.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div className="artwork-container">
-      <div>
 
-        <Stack paddingBottom={4} margin='auto' spacing={2} sx={{ width: 300 }}>
-          <Autocomplete
-            id="search"
-            freeSolo
-            options={search.map((response) => response.title)}
-            renderInput={(params) => <TextField {...params} label="Search" />}
-          />
-        </Stack>
-        <Button onClick={() => setPage((prevState) => prevState + 1)}> Next</Button>
-        <Button disabled={page === 1} onClick={() => setPage((prevState) => prevState - 1)}> Prev</Button>
-
+      <div >
+        <Button
+          disabled={page === 1}
+          onClick={() => setPage((prevState) => prevState - 1)}
+        >
+          Prev
+        </Button>
+        <Button onClick={() => setPage(page + 1)}>
+          Next
+        </Button>
 
         <Grid2 margin='auto' container spacing={5} style={{ marginTop: "10px" }}>
           {artwork.map(art => (
