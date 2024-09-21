@@ -8,6 +8,7 @@ nav {
   margin-top: 3rem;
   background-color: rgb(255, 255, 255);
   position: sticky;
+  z-index: 1;
   top: 0;
 }
 nav .logo {

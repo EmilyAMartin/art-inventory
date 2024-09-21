@@ -28,7 +28,7 @@ const SearchBar = ({ setSearchQuery }) => (
       size="small"
     />
     <IconButton type="submit" aria-label="search">
-      <SearchIcon style={{ fill: "blue" }} />
+      <SearchIcon style={{ fill: "black" }} />
     </IconButton>
   </form>
 );
@@ -42,6 +42,8 @@ const filterData = (query, data) => {
 };
 
 const data = []
+
+
 
 const Gallery = () => {
   const BASE_URL = "https://api.artic.edu/api/v1/artworks";

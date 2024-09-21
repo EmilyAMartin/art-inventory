@@ -120,6 +120,7 @@ const Home = () => {
           </Box>
         </Modal>, document.body)
       )}
+
     </div>
   )
 }
