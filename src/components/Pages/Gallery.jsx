@@ -126,7 +126,7 @@ const Gallery = () => {
       <Grid2 margin='auto' container spacing={5} style={{ marginTop: "10px" }}>
         {artwork.map(art => (
           <Grid2 item xs={12} ms={5} key={art.id}>
-            <Card sx={{ maxWidth: 200, }}>
+            <Card sx={{ maxWidth: 200, maxHeight: 600, objectFit: 'scale-down' }}>
               <CardActionArea>
                 <CardMedia
                   component="img"
