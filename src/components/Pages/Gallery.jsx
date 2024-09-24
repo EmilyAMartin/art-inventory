@@ -4,7 +4,7 @@ import axios from 'axios';
 import Grid2 from '@mui/material/Grid2';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia'; state = { isOpen: false };
+import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -14,6 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 
+import Popover from '@mui/material/Popover';
 
 const SearchBar = ({ setSearchQuery }) => (
   <form>
@@ -44,8 +45,6 @@ const filterData = (query, data) => {
 
 const data = []
 
-
-
 const Gallery = () => {
   const BASE_URL = "https://api.artic.edu/api/v1/artworks";
   const [artwork, setArtwork] = useState([]);
@@ -55,10 +54,15 @@ const Gallery = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const dataFiltered = filterData(searchQuery, data);
 
-  handleShowDialog = () => {
-    this.setState({ isOpen: !this.state.isOpen });
-    console.log("cliked");
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
   };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -86,8 +90,6 @@ const Gallery = () => {
       setIsLoading(true);
     };
   }, [page]);
-
-
 
   return (
     <div id='galley-container' style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', margin: '2rem 7rem' }}>
@@ -141,23 +143,26 @@ const Gallery = () => {
                   height="140"
                   image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
                   alt=""
+                  onClick={handleClick}
                 />
-                {this.state.isOpen && (
-                  <dialog
-                    className="dialog"
-                    style={{ position: "absolute" }}
-                    open
-                    onClick={this.handleShowDialog}
-                  >
-                    <CardMedia
-                      style={{ width: 300 }}
-                      component="img"
-                      height="140"
-                      image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
-                      alt=""
-                    />
-                  </dialog>
-                )}
+                <Popover
+                  id={id}
+                  open={open}
+                  anchorEl={anchorEl}
+                  onClose={handleClose}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    height="50"
+                    image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
+                    alt=""
+                  />
+                </Popover>
+
                 <CardContent>
                   <Typography gutterBottom variant="h6" component="div">{art.title}</Typography>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
