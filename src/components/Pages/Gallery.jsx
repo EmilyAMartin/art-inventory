@@ -4,7 +4,7 @@ import axios from 'axios';
 import Grid2 from '@mui/material/Grid2';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
+import CardMedia from '@mui/material/CardMedia'; state = { isOpen: false };
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -13,6 +13,7 @@ import Button from '@mui/material/Button';
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
+
 
 const SearchBar = ({ setSearchQuery }) => (
   <form>
@@ -54,6 +55,11 @@ const Gallery = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const dataFiltered = filterData(searchQuery, data);
 
+  handleShowDialog = () => {
+    this.setState({ isOpen: !this.state.isOpen });
+    console.log("cliked");
+  };
+
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
@@ -80,6 +86,8 @@ const Gallery = () => {
       setIsLoading(true);
     };
   }, [page]);
+
+
 
   return (
     <div id='galley-container' style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', margin: '2rem 7rem' }}>
@@ -134,6 +142,22 @@ const Gallery = () => {
                   image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
                   alt=""
                 />
+                {this.state.isOpen && (
+                  <dialog
+                    className="dialog"
+                    style={{ position: "absolute" }}
+                    open
+                    onClick={this.handleShowDialog}
+                  >
+                    <CardMedia
+                      style={{ width: 300 }}
+                      component="img"
+                      height="140"
+                      image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
+                      alt=""
+                    />
+                  </dialog>
+                )}
                 <CardContent>
                   <Typography gutterBottom variant="h6" component="div">{art.title}</Typography>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>

@@ -75,6 +75,7 @@ const Account = () => {
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
+
           },
         }}
         variant="persistent"
