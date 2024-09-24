@@ -9,12 +9,10 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import TextField from '@mui/material/TextField';
 import { BsPersonCircle } from "react-icons/bs";
 
+import { NavLink } from 'react-router-dom'
 
 const drawerWidth = 240;
 
@@ -88,15 +86,14 @@ const Account = () => {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List >
-          {['Account', 'Settings', 'Help'].map((text) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: 20, gap: '1.5rem' }}>
+          <Typography>Account</Typography>
+          <Typography>Settings</Typography>
+          <Typography>Help</Typography>
+          <NavLink to="Account">Account</NavLink>
+          <NavLink to="Gallery">Gallery</NavLink>
+
+        </div>
       </Drawer>
       <Main open={open}>
         <DrawerHeader />

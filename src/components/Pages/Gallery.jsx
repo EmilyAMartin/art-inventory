@@ -145,6 +145,7 @@ const Gallery = () => {
                   alt=""
                   onClick={handleClick}
                 />
+                
                 <Popover
                   id={id}
                   open={open}
@@ -157,7 +158,7 @@ const Gallery = () => {
                 >
                   <CardMedia
                     component="img"
-                    height="50"
+                    height="140"
                     image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
                     alt=""
                   />
