@@ -75,7 +75,7 @@ const Account = () => {
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
-
+            zIndex: -1,
           },
         }}
         variant="persistent"
@@ -88,7 +88,7 @@ const Account = () => {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
+        <List >
           {['Account', 'Settings', 'Help'].map((text) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>
