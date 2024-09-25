@@ -16,34 +16,7 @@ import TextField from "@mui/material/TextField";
 
 import Popover from '@mui/material/Popover';
 
-const SearchBar = ({ setSearchQuery }) => (
-  <form>
-    <TextField
-      id="search-bar"
-      className="text"
-      onInput={(e) => {
-        setSearchQuery(e.target.value);
-      }}
-      label="Search Keyword"
-      variant="outlined"
-      placeholder="Search..."
-      size="small"
-    />
-    <IconButton type="submit" aria-label="search">
-      <SearchIcon style={{ fill: "black" }} />
-    </IconButton>
-  </form>
-);
 
-const filterData = (query, data) => {
-  if (!query) {
-    return data;
-  } else {
-    return data.filter((d) => d.toLowerCase().includes(query));
-  }
-};
-
-const data = []
 
 const Gallery = () => {
   const BASE_URL = "https://api.artic.edu/api/v1/artworks";
@@ -51,18 +24,62 @@ const Gallery = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [popoverImageId, setPopoverImageId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const dataFiltered = filterData(searchQuery, data);
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+    setPopoverImageId[event.target.src]
   };
+
   const handleClose = () => {
     setAnchorEl(null);
+    setPopoverImageId(null);
   };
+
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
+
+  const fetchDataByKeyword = async () => {
+    const response = await axios.get(`${BASE_URL}/search?q=${searchQuery}`);
+    console.log(response.data.data);
+    const data = response.data.data;
+    const fetchedData = await Promise.all(
+      data.map(async (art) => {
+        return await fetchDataById(art.id);
+      })
+    );
+    console.log(fetchedData);
+    setArtwork(fetchedData);
+  };
+
+  const fetchDataById = async (id) => {
+    const response = await axios.get(`${BASE_URL}/${id}`);
+    console.log(response.data.data);
+    return response.data.data;
+  };
+
+  const SearchBar = ({ setSearchQuery }) => (
+    <form>
+      <TextField
+        id="search-bar"
+        className="text"
+        onInput={(e) => {
+          setSearchQuery(e.target.value);
+        }}
+        label="Search Keyword"
+        variant="outlined"
+        placeholder="Search..."
+        size="small"
+      />
+      <IconButton type="submit" onClick={{ fetchDataByKeyword }}
+        aria-label="search">
+        <SearchIcon style={{ fill: "black" }}
+        />
+      </IconButton>
+    </form>
+  );
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -103,6 +120,7 @@ const Gallery = () => {
           padding: 20
         }}
       >
+
         <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         <div style={{ padding: 3 }}>
           {dataFiltered.map((d) => (
@@ -136,7 +154,7 @@ const Gallery = () => {
       <Grid2 margin='auto' container spacing={5} style={{ marginTop: "10px" }}>
         {artwork.map(art => (
           <Grid2 item xs={12} ms={5} key={art.id}>
-            <Card sx={{ maxWidth: 200, maxHeight: 600, objectFit: 'scale-down' }}>
+            <Card sx={{ maxWidth: 200, maxHeight: 600, }}>
               <CardActionArea>
                 <CardMedia
                   component="img"
@@ -145,7 +163,6 @@ const Gallery = () => {
                   alt=""
                   onClick={handleClick}
                 />
-
                 <Popover
                   id={id}
                   open={open}
@@ -159,11 +176,10 @@ const Gallery = () => {
                   <CardMedia
                     component="img"
                     height="140"
-                    image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
+                    image={popoverImageId}
                     alt=""
                   />
                 </Popover>
-
                 <CardContent>
                   <Typography gutterBottom variant="h6" component="div">{art.title}</Typography>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
