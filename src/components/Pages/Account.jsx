@@ -14,6 +14,7 @@ import { BsPersonCircle } from "react-icons/bs";
 
 import { NavLink } from 'react-router-dom'
 
+
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -90,9 +91,6 @@ const Account = () => {
           <Typography>Account</Typography>
           <Typography>Settings</Typography>
           <Typography>Help</Typography>
-          <NavLink to="Account">Account</NavLink>
-          <NavLink to="Gallery">Gallery</NavLink>
-
         </div>
       </Drawer>
       <Main open={open}>

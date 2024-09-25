@@ -145,7 +145,7 @@ const Gallery = () => {
                   alt=""
                   onClick={handleClick}
                 />
-                
+
                 <Popover
                   id={id}
                   open={open}
