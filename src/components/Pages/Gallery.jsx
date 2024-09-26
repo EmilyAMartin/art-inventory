@@ -48,31 +48,11 @@ const Gallery = () => {
     console.log(fetchedData);
     setArtwork(fetchedData);
   };
-
   const fetchDataById = async (id) => {
     const response = await axios.get(`${BASE_URL}/${id}`);
     console.log(response.data.data);
     return response.data.data;
   };
-
-  const SearchBar = (setSearchQuery) => (
-    <div>
-      <TextField
-        id="search-bar"
-        className="text"
-        onInput={(e) => {
-          setSearchQuery(e.target.value);
-        }}
-        label="Search Keyword"
-        variant="outlined"
-        placeholder="Search..."
-        size="small"
-      />
-      <IconButton type="submit" onClick={fetchDataByKeyword} aria-label="search">
-        <SearchIcon style={{ fill: "black" }} />
-      </IconButton>
-    </div>
-  );
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -104,7 +84,22 @@ const Gallery = () => {
   return (
     <div id='galley-container' style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', margin: '2rem 7rem' }}>
 
-      <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <div className='search-bar' style={{ display: 'flex', justifyContent: 'center' }}>
+        <TextField
+          id="search-bar"
+          className="text"
+          onInput={(e) => {
+            setSearchQuery(e.target.value);
+          }}
+          label="Search Keyword"
+          variant="outlined"
+          placeholder="Search..."
+          size="small"
+        />
+        <IconButton type="submit" onClick={fetchDataByKeyword} aria-label="search">
+          <SearchIcon style={{ fill: "black" }} />
+        </IconButton>
+      </div>
 
       <div id='page-navigation'>
         <Button color='black' onClick={() => setPage(page - 1)}> Prev</Button>

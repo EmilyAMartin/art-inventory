@@ -80,7 +80,6 @@ const Artwork = () => {
                       label="date"
                     />
                   </FormControl>
-
                   <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
                     <InputLabel htmlFor="outlined-adornment-medium">Medium</InputLabel>
                     <OutlinedInput
