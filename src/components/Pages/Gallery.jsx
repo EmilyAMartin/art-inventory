@@ -108,14 +108,14 @@ const Gallery = () => {
         {isLoading && <div>Loading...</div>}
       </div>
 
-      <Grid2 margin='auto' container spacing={5} style={{ marginTop: "10px" }}>
+      <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px" }}>
         {artwork.map(art => (
           <Grid2 item xs={12} ms={5} key={art.id}>
-            <Card sx={{ maxWidth: 200 }}>
+            <Card sx={{ maxWidth: 300, maxHeight: 600, }}>
               <CardActionArea>
                 <CardMedia
+                  style={{ width: 300, height: 300 }}
                   component="img"
-                  height="200"
                   image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
                   alt=""
                   onClick={handleClick}
