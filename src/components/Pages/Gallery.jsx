@@ -13,6 +13,8 @@ import Popover from '@mui/material/Popover';
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
+import Fv from './Fv';
+
 
 const Gallery = () => {
   const BASE_URL = "https://api.artic.edu/api/v1/artworks";
@@ -83,6 +85,7 @@ const Gallery = () => {
   return (
     <div id='galley-container' style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', margin: '2rem 7rem' }}>
 
+
       <div className='search-bar' style={{ display: 'flex', justifyContent: 'center' }}>
         <TextField
           id="search-bar"
@@ -119,6 +122,7 @@ const Gallery = () => {
                   alt=""
                   onClick={handleClick}
                 />
+                <Fv></Fv>
                 <Popover
                   id={id}
                   open={open}
