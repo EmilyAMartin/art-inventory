@@ -7,7 +7,6 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
 
@@ -138,12 +137,11 @@ const Gallery = () => {
                     alt=""
                   />
                 </Popover>
-                <CardContent>
+                <CardContent style={{ width: 300, height: 200 }}>
                   <Typography gutterBottom variant="h6" component="div">{art.title}</Typography>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.place_of_origin}</Typography>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_end}</Typography>
-                  <FavoriteBorderIcon style={{ float: 'right', margin: "10" }} />
                 </CardContent>
               </CardActionArea>
             </Card>
