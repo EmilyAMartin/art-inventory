@@ -166,7 +166,6 @@ const Artwork = () => {
                     </CardContent>
                   </CardActionArea>
                 </Card>
-
               </Grid2>
             ))}
           </Grid2>

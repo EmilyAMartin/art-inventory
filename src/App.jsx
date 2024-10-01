@@ -5,6 +5,7 @@ import Home from './components/Pages/Home'
 import Artwork from './components/Pages/Artwork'
 import Account from './components/Pages/Account'
 import Gallery from './components/Pages/Gallery'
+import Favorites from './components/Pages/Favorites'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/Artwork" element={<Artwork />} />
         <Route path="/Gallery" element={<Gallery />} />
+        <Route path="/Favorites" element={<Favorites />} />
         <Route path="/Account" element={<Account />} />
       </Routes>
     </div>

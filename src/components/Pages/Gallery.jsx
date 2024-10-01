@@ -13,7 +13,8 @@ import Popover from '@mui/material/Popover';
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
-import Fv from './Fv';
+import AddFav from '../AddFav';
+
 
 
 const Gallery = () => {
@@ -122,7 +123,7 @@ const Gallery = () => {
                   alt=""
                   onClick={handleClick}
                 />
-                <Fv></Fv>
+                <AddFav />
                 <Popover
                   id={id}
                   open={open}
