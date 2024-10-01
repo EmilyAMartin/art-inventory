@@ -2,7 +2,7 @@ import React from 'react'
 
 const Favorites = () => {
     return (
-        <div style={{ margin: 5 }}>Favorites</div>
+        <div>Favorites</div>
     )
 }
 
