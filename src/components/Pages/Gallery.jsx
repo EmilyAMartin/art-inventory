@@ -27,6 +27,13 @@ const Gallery = () => {
   const [popoverImageId, setPopoverImageId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
+  const [fav, setFav] = useState([]);
+  const addFavArtwork = (artwork) => {
+    const newFavList = [...fav, artwork]
+    setFav(newFavList);
+  }
+
+
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
   const handleClick = (event) => {
@@ -83,9 +90,53 @@ const Gallery = () => {
     };
   }, [page]);
 
+
   return (
     <div id='galley-container' style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', margin: '2rem 7rem' }}>
 
+      <div className='favorites-list'>
+        <h3>Favorites</h3>
+        <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px" }}>
+          {fav.map(art => (
+            <Grid2 item xs={12} ms={5} key={art.id}>
+              <Card sx={{ maxWidth: 300, maxHeight: 600, }}>
+                <CardActionArea>
+                  <CardMedia
+                    style={{ width: 300, height: 300 }}
+                    component="img"
+                    image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
+                    alt=""
+                    onClick={handleClick}
+                  />
+                  <Popover
+                    id={id}
+                    open={open}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'left',
+                    }}
+                  >
+                    <CardMedia
+                      component="img"
+                      height="140"
+                      image={popoverImageId}
+                      alt=""
+                    />
+                  </Popover>
+                  <CardContent style={{ width: 300, height: 200 }}>
+                    <Typography gutterBottom variant="h6" component="div">{art.title}</Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.place_of_origin}</Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_end}</Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid2>
+          ))}
+        </Grid2>
+      </div>
 
       <div className='search-bar' style={{ display: 'flex', justifyContent: 'center' }}>
         <TextField
@@ -111,48 +162,52 @@ const Gallery = () => {
         {isLoading && <div>Loading...</div>}
       </div>
 
-      <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px" }}>
-        {artwork.map(art => (
-          <Grid2 item xs={12} ms={5} key={art.id}>
-            <Card sx={{ maxWidth: 300, maxHeight: 600, }}>
-              <CardActionArea>
-                <CardMedia
-                  style={{ width: 300, height: 300 }}
-                  component="img"
-                  image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
-                  alt=""
-                  onClick={handleClick}
-                />
-                <AddFav />
-                <Popover
-                  id={id}
-                  open={open}
-                  anchorEl={anchorEl}
-                  onClose={handleClose}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                  }}
-
-                >
+      <div className='galley-artwork'>
+        <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px" }}>
+          {artwork.map(art => (
+            <Grid2 item xs={12} ms={5} key={art.id}>
+              <Card sx={{ maxWidth: 300, maxHeight: 600, }}>
+                <CardActionArea>
                   <CardMedia
+                    style={{ width: 300, height: 300 }}
                     component="img"
-                    height="140"
-                    image={popoverImageId}
+                    image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
                     alt=""
+                    onClick={handleClick}
                   />
-                </Popover>
-                <CardContent style={{ width: 300, height: 200 }}>
-                  <Typography gutterBottom variant="h6" component="div">{art.title}</Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.place_of_origin}</Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_end}</Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          </Grid2>
-        ))}
-      </Grid2>
+
+                  <AddFav handleFavClick={addFavArtwork} onClick={() => handleClick(artwork)} />
+
+                  <Popover
+                    id={id}
+                    open={open}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'left',
+                    }}
+
+                  >
+                    <CardMedia
+                      component="img"
+                      height="140"
+                      image={popoverImageId}
+                      alt=""
+                    />
+                  </Popover>
+                  <CardContent style={{ width: 300, height: 200 }}>
+                    <Typography gutterBottom variant="h6" component="div">{art.title}</Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.place_of_origin}</Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_end}</Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid2>
+          ))}
+        </Grid2>
+      </div>
     </div>
   )
 }
