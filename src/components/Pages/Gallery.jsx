@@ -28,14 +28,13 @@ const Gallery = () => {
   const [fav, setFav] = useState([]);
 
   const addFavArtwork = (artwork) => {
-    const newFavList = [...fav, artwork]
+    const newFavList = [...fav, artwork];
+    localStorage.setItem("fav", JSON.stringify(newFavList));
     setFav(newFavList);
   }
-  const handleFavClick = () => {
+  const handleFavClick = (id) => {
     addFavArtwork(fav);
   };
-
-
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
@@ -51,21 +50,24 @@ const Gallery = () => {
 
   const fetchDataByKeyword = async () => {
     const response = await axios.get(`${BASE_URL}/search?q=${searchQuery}`);
-    console.log(response.data.data);
     const data = response.data.data;
     const fetchedData = await Promise.all(
       data.map(async (art) => {
         return await fetchDataById(art.id);
       })
     );
-    console.log(fetchedData);
+
     setArtwork(fetchedData);
   };
   const fetchDataById = async (id) => {
     const response = await axios.get(`${BASE_URL}/${id}`);
-    console.log(response.data.data);
     return response.data.data;
   };
+
+  const handleReset = () => {
+    setPage(1);
+    setSearchQuery("");
+  }
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -97,7 +99,6 @@ const Gallery = () => {
 
   return (
     <div id='galley-container' style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', margin: '2rem 7rem' }}>
-
       <div className='favorites-list'>
         <h3>Favorites</h3>
         <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px", marginBottom: "50px" }}>
@@ -145,6 +146,7 @@ const Gallery = () => {
       <div className='search-bar' style={{ display: 'flex', justifyContent: 'center' }}>
         <TextField
           id="search-bar"
+          value={searchQuery}
           className="text"
           onInput={(e) => {
             setSearchQuery(e.target.value);
@@ -157,16 +159,16 @@ const Gallery = () => {
         <IconButton type="submit" onClick={fetchDataByKeyword} aria-label="search">
           <SearchIcon style={{ fill: "black" }} />
         </IconButton>
+        <Button onClick={handleReset}>Reset </Button>
       </div>
-
       <div id='page-navigation'>
-        <Button color='black' onClick={() => setPage(page - 1)}> Prev</Button>
+        <Button disabled={page === 1} color='black' onClick={() => setPage(page - 1)} > Prev</Button>
         <Button color='black' onClick={() => setPage(page + 1)}> Next</Button>
         {error && <div>{error}</div>}
-        {isLoading && <div>Loading...</div>}
       </div>
 
       <div className='galley-artwork'>
+
         <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px" }}>
           {artwork.map(art => (
             <Grid2 item xs={12} ms={5} key={art.id}>
@@ -179,7 +181,11 @@ const Gallery = () => {
                     alt=""
                     onClick={handleClick}
                   />
-                  <Favorite style={{ margin: 10 }} handleFavClick={addFavArtwork} onClick={() => { handleFavClick(artwork) }} />
+                  <Favorite
+                    style={{ margin: 10 }}
+                    handleFavClick={addFavArtwork}
+                    onClick={() => { handleFavClick(art.id) }} />
+
                   <Popover
                     id={id}
                     open={open}

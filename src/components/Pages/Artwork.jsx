@@ -126,7 +126,7 @@ const Artwork = () => {
                     Upload files
                     <VisuallyHiddenInput
                       type="file"
-                      onChange={(event) => console.log(event.target.images)}
+                      onChange={(event) => console.log(event.target.files)}
                       multiple
                     />
                   </Button>
