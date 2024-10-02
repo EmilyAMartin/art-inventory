@@ -99,30 +99,59 @@ const Account = () => {
           <BsPersonCircle fontSize={150} />
           <Typography variant="h6">Jane Doe</Typography>
         </div>
-        <TextField
-          required
-          id="outlined-required"
-          fullWidth
-          margin="normal"
-          label="Required"
-          defaultValue="Full Name"
-        />
-        <TextField
-          required
-          id="outlined-required"
-          fullWidth
-          margin="normal"
-          label="Required"
-          defaultValue="Email Address"
-        />
-        <TextField
-          required
-          id="outlined-required"
-          fullWidth
-          margin="normal"
-          label="Required"
-          defaultValue="Password"
-        />
+        <div className='profile-section' style={{ marginBottom: 50 }}>
+          <Typography variant="h6">Profile</Typography>
+          <TextField
+            id="outlined-required"
+            fullWidth
+            margin="normal"
+            label="Full Name"
+            defaultValue=""
+          />
+          <TextField
+            id="outlined-required"
+            fullWidth
+            margin="normal"
+            label="Username"
+            defaultValue=""
+          />
+          <TextField
+            id="outlined-required"
+            fullWidth
+            margin="normal"
+            label="Email Address"
+            defaultValue=""
+          />
+          <TextField
+            id="outlined-multiline-static"
+            fullWidth
+            label="Bio"
+            multiline
+            rows={4}
+            defaultValue=""
+          />
+        </div>
+        <div className='security-section' style={{ marginBottom: 50 }}>
+          <Typography variant="h6">Password and Security</Typography>
+          <TextField
+            id="outlined-required"
+            fullWidth
+            margin="normal"
+            label="Current Password"
+          />
+          <TextField
+            id="outlined-required"
+            fullWidth
+            margin="normal"
+            label="New Password"
+          />
+          <TextField
+            id="outlined-required"
+            fullWidth
+            margin="normal"
+            label="Re-type New Password"
+          />
+        </div>
       </Main>
     </Box>
   )

@@ -26,14 +26,15 @@ const Gallery = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [fav, setFav] = useState([]);
+
   const addFavArtwork = (artwork) => {
     const newFavList = [...fav, artwork]
     setFav(newFavList);
   }
-  const handleFavClick = (event) => {
-    addFavArtwork(event.currentTarget);
+  const handleFavClick = () => {
+    addFavArtwork(fav);
   };
-  console.log(handleFavClick)
+
 
 
   const open = Boolean(anchorEl);
@@ -99,13 +100,13 @@ const Gallery = () => {
 
       <div className='favorites-list'>
         <h3>Favorites</h3>
-        <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px" }}>
+        <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px", marginBottom: "50px" }}>
           {fav.map(art => (
             <Grid2 item xs={12} ms={5} key={art.id}>
-              <Card sx={{ maxWidth: 300, maxHeight: 600, }}>
+              <Card sx={{ maxWidth: 100, maxHeight: 200, }}>
                 <CardActionArea>
                   <CardMedia
-                    style={{ width: 300, height: 300 }}
+                    style={{ width: 100, height: 100 }}
                     component="img"
                     image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
                     alt=""
@@ -178,7 +179,7 @@ const Gallery = () => {
                     alt=""
                     onClick={handleClick}
                   />
-                  <Favorite onClick={handleFavClick} />
+                  <Favorite style={{ margin: 10 }} handleFavClick={addFavArtwork} onClick={() => { handleFavClick(artwork) }} />
                   <Popover
                     id={id}
                     open={open}
@@ -203,7 +204,6 @@ const Gallery = () => {
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_end}</Typography>
                   </CardContent>
                 </CardActionArea>
-
               </Card>
             </Grid2>
           ))}
