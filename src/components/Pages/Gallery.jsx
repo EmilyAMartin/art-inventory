@@ -32,8 +32,10 @@ const Gallery = () => {
     localStorage.setItem("fav", JSON.stringify(newFavList));
     setFav(newFavList);
   }
-  const handleFavClick = (id) => {
+  const handleFavClick = (event) => {
     addFavArtwork(fav);
+    setAnchorEl(event.currentTarget);
+    setPopoverImageId(event.target.src)
   };
 
   const open = Boolean(anchorEl);
@@ -49,7 +51,6 @@ const Gallery = () => {
   };
 
   const fetchDataByKeyword = async () => {
-
     const response = await axios.get(`${BASE_URL}/search?q=${searchQuery}`);
     const data = response.data.data;
     const fetchedData = await Promise.all(
@@ -57,7 +58,10 @@ const Gallery = () => {
         return await fetchDataById(art.id);
       })
     );
+
     setArtwork(fetchedData);
+    setIsLoading(true);
+    setIsLoading(false);
     setPage(0)
   };
   const fetchDataById = async (id) => {
@@ -170,10 +174,11 @@ const Gallery = () => {
           <Button disabled={page === 1} color='black' onClick={() => setPage(page - 1)} > Prev</Button>
           <Button color='black' onClick={() => setPage(page + 1)}> Next</Button>
           {error && <div>{error}</div>}
+
         </div>
       )}
       <div className='galley-artwork'>
-        {isLoading && <div>Loading...</div>}
+        {isLoading === true && <div>Loading...</div>}
         <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px" }}>
           {artwork.map(art => (
             <Grid2 item xs={12} ms={5} key={art.id}>
