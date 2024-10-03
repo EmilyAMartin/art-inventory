@@ -49,6 +49,7 @@ const Gallery = () => {
   };
 
   const fetchDataByKeyword = async () => {
+
     const response = await axios.get(`${BASE_URL}/search?q=${searchQuery}`);
     const data = response.data.data;
     const fetchedData = await Promise.all(
@@ -56,8 +57,8 @@ const Gallery = () => {
         return await fetchDataById(art.id);
       })
     );
-
     setArtwork(fetchedData);
+    setPage(0)
   };
   const fetchDataById = async (id) => {
     const response = await axios.get(`${BASE_URL}/${id}`);
@@ -89,11 +90,14 @@ const Gallery = () => {
         setIsLoading(false);
       }
     };
-    fetchData();
-    return () => {
-      abortController.abort();
-      setIsLoading(true);
-    };
+    {
+      page > 0 &&
+        fetchData();
+      return () => {
+        abortController.abort();
+        setIsLoading(true);
+      };
+    }
   }, [page]);
 
 
@@ -161,14 +165,15 @@ const Gallery = () => {
         </IconButton>
         <Button onClick={handleReset}>Reset </Button>
       </div>
-      <div id='page-navigation'>
-        <Button disabled={page === 1} color='black' onClick={() => setPage(page - 1)} > Prev</Button>
-        <Button color='black' onClick={() => setPage(page + 1)}> Next</Button>
-        {error && <div>{error}</div>}
-      </div>
-
+      {page > 0 && (
+        <div id='page-navigation'>
+          <Button disabled={page === 1} color='black' onClick={() => setPage(page - 1)} > Prev</Button>
+          <Button color='black' onClick={() => setPage(page + 1)}> Next</Button>
+          {error && <div>{error}</div>}
+        </div>
+      )}
       <div className='galley-artwork'>
-
+        {isLoading && <div>Loading...</div>}
         <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px" }}>
           {artwork.map(art => (
             <Grid2 item xs={12} ms={5} key={art.id}>
@@ -184,8 +189,8 @@ const Gallery = () => {
                   <Favorite
                     style={{ margin: 10 }}
                     handleFavClick={addFavArtwork}
-                    onClick={() => { handleFavClick(art.id) }} />
-
+                    onClick={() => { handleFavClick(art.id) }}
+                  />
                   <Popover
                     id={id}
                     open={open}

@@ -137,6 +137,10 @@ const Artwork = () => {
         </div>
       </div>
       <Typography variant="h6" sx={{ color: 'text.secondary' }}>
+        Favorites
+      </Typography>
+      
+      <Typography variant="h6" sx={{ color: 'text.secondary' }}>
         Recently Added
       </Typography>
 
