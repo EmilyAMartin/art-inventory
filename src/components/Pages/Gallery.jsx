@@ -73,14 +73,6 @@ const Gallery = () => {
     setPage(1);
     setSearchQuery("");
   }
-  const handleDelete = async (id) => {
-    await axios.get(`${BASE_URL}?page=${page}` + id, {
-      method: 'DELETE'
-    })
-    const newArtwork = artwork.filter(art => art.id != id)
-    setArtwork(newArtwork)
-  }
-
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -128,7 +120,6 @@ const Gallery = () => {
                     image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
                     alt=""
                     onClick={handleClick}
-
                   />
                   <Popover
                     id={id}
@@ -199,11 +190,12 @@ const Gallery = () => {
                     image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
                     alt=""
                     onClick={handleClick}
-                    handleDelete={handleDelete}
                   />
-                  <IconButton onClick={() => handleDelete(art.id)} >
-                    <Favorite />
-                  </IconButton>
+                  <Favorite
+                    style={{ margin: 10 }}
+                    handleFavClick={addFavArtwork}
+                    onClick={() => { handleFavClick(art.id) }}
+                  />
                   <Popover
                     id={id}
                     open={open}
