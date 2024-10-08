@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BsPlusCircle } from "react-icons/bs";
 
 import Grid2 from '@mui/material/Grid2';
@@ -11,8 +11,7 @@ import Container from '@mui/material/Container';
 import Data from '../ArtData.json'
 
 
-import Modal from '../Modal'
-import { useState } from 'react'
+import Modal from '../Modal';
 import { createPortal } from 'react-dom'
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
@@ -23,6 +22,12 @@ import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 
+import { Favorite } from "@mui/icons-material";
+const data = [
+  { id: 1, name: "Marco" },
+  { id: 2, name: "Lincoln" },
+  { id: 3, name: "Aya" }
+];
 
 
 const VisuallyHiddenInput = styled('input')({
@@ -38,12 +43,31 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 const Artwork = () => {
+
+  const [favorites, setFavorites] = useState([]);
+  useEffect(() => {
+    setFavorites(data);
+  }, []);
+
+  useEffect(() => {
+    console.log(favorites);
+  }, [favorites]);
+
+  function handleFavorite(id) {
+    const newFavorites = favorites.map(item => {
+      return item.id === id ? { ...item, favorite: !item.favorite } : item;
+    });
+
+    setFavorites(newFavorites);
+  }
+
   const [modalOpen, setModalOpen] = useState(false)
   const handleButtonClick = () => {
     setModalOpen(false);
   };
 
   return (
+
     <div className="artwork-container">
       <div className='add-artwork'>
         <div>Add New Artwork</div>
@@ -136,10 +160,31 @@ const Artwork = () => {
           )}
         </div>
       </div>
-      <Typography variant="h6" sx={{ color: 'text.secondary' }}>
-        Favorites
-      </Typography>
-      
+
+      <div className="Favorites">
+        <Typography variant="h6" sx={{ color: 'text.secondary' }}>List</Typography>
+
+        <div>
+          {favorites.map((item, i) => (
+            <div key={i}>
+              {item.name}{" "}
+              <Favorite onClick={() => { handleFavorite(item.id); }}>
+                {item.favorite === true ? "Remove" : "Add"}
+              </Favorite>
+            </div>
+          ))}
+        </div>
+
+        <Typography variant="h6" sx={{ color: 'text.secondary' }}>Favorites</Typography>
+        <div>
+          {favorites.map(item =>
+            item.favorite === true ? <div key={item.id}>{item.name}</div> : null
+          )}
+        </div>
+      </div>
+
+
+
       <Typography variant="h6" sx={{ color: 'text.secondary' }}>
         Recently Added
       </Typography>
@@ -175,6 +220,7 @@ const Artwork = () => {
           </Grid2>
         </Container>
       </div>
+
     </div>
 
 
