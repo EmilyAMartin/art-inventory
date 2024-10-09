@@ -10,7 +10,6 @@ import CardActionArea from '@mui/material/CardActionArea';
 import Container from '@mui/material/Container';
 import Data from '../ArtData.json'
 
-
 import Modal from '../Modal';
 import { createPortal } from 'react-dom'
 import { styled } from '@mui/material/styles';
@@ -22,12 +21,8 @@ import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 
-import { Favorite } from "@mui/icons-material";
-const data = [
-  { id: 1, name: "Marco" },
-  { id: 2, name: "Lincoln" },
-  { id: 3, name: "Aya" }
-];
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 
 const VisuallyHiddenInput = styled('input')({
@@ -43,31 +38,21 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 const Artwork = () => {
-
-  const [favorites, setFavorites] = useState([]);
-  useEffect(() => {
-    setFavorites(data);
-  }, []);
-
-  useEffect(() => {
-    console.log(favorites);
-  }, [favorites]);
-
-  function handleFavorite(id) {
-    const newFavorites = favorites.map(item => {
-      return item.id === id ? { ...item, favorite: !item.favorite } : item;
-    });
-
-    setFavorites(newFavorites);
-  }
-
   const [modalOpen, setModalOpen] = useState(false)
   const handleButtonClick = () => {
     setModalOpen(false);
   };
 
-  return (
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
 
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  return (
     <div className="artwork-container">
       <div className='add-artwork'>
         <div>Add New Artwork</div>
@@ -160,35 +145,36 @@ const Artwork = () => {
           )}
         </div>
       </div>
-
-      <div className="Favorites">
-        <Typography variant="h6" sx={{ color: 'text.secondary' }}>List</Typography>
-
-        <div>
-          {favorites.map((item, i) => (
-            <div key={i}>
-              {item.name}{" "}
-              <Favorite onClick={() => { handleFavorite(item.id); }}>
-                {item.favorite === true ? "Remove" : "Add"}
-              </Favorite>
-            </div>
-          ))}
-        </div>
-
-        <Typography variant="h6" sx={{ color: 'text.secondary' }}>Favorites</Typography>
-        <div>
-          {favorites.map(item =>
-            item.favorite === true ? <div key={item.id}>{item.name}</div> : null
-          )}
-        </div>
+      <div>
+        <Button
+          id="demo-positioned-button"
+          aria-controls={open ? 'demo-positioned-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+          style={{ color: 'black' }}
+        >
+          Dashboard
+        </Button>
+        <Menu
+          id="demo-positioned-menu"
+          aria-labelledby="demo-positioned-button"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+        >
+          <MenuItem onClick={handleClose}>Recently Added</MenuItem>
+          <MenuItem onClick={handleClose}>Favorites</MenuItem>
+        </Menu>
       </div>
-
-
-
-      <Typography variant="h6" sx={{ color: 'text.secondary' }}>
-        Recently Added
-      </Typography>
-
       <div>
         <Container maxWidth="lg">
           <Grid2 container spacing={5} style={{ marginTop: "20px" }}>

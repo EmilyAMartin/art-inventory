@@ -29,13 +29,11 @@ const Gallery = () => {
 
   const addFavArtwork = (artwork) => {
     const newFavList = [...fav, artwork];
-    localStorage.setItem("fav", JSON.stringify(newFavList));
     setFav(newFavList);
   }
+
   const handleFavClick = (event) => {
     addFavArtwork(fav);
-    setAnchorEl(event.currentTarget);
-    setPopoverImageId(event.target.src)
   };
 
   const open = Boolean(anchorEl);
@@ -44,7 +42,6 @@ const Gallery = () => {
     setAnchorEl(event.currentTarget);
     setPopoverImageId(event.target.src)
   };
-
   const handleClose = () => {
     setAnchorEl(null);
     setPopoverImageId(null)
