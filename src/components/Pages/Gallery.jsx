@@ -30,10 +30,32 @@ const Gallery = () => {
     const newFavList = [...fav, artwork];
     setFav(newFavList);
   }
-  const handleFavClick = (event) => {
-    addFavArtwork(fav);
-  };
 
+  const handleFavClick = (id) => {
+    console.log(id);
+    setArtwork(
+      artwork.map((item) => {
+        return item.id === id ? { ...item, favorite: !item.favorite } : item;
+      })
+    );
+    const selectedArtwork = artwork.find((art) => art.id === id);
+    if (selectedArtwork.favorite === true) {
+      const favoritesList =
+        JSON.parse(localStorage.getItem("favoritesList")) ?? [];
+      favoritesList.push(selectedArtwork);
+      localStorage.setItem("favoritesList", JSON.stringify(favoritesList));
+    } else if (selectedArtwork === false) {
+      const favoritesList =
+        JSON.parse(localStorage.getItem("favoritesList")) ?? [];
+      const updatedFavoritesList = favoritesList.filter(
+        (art) => art.id !== selectedArtwork.id
+      );
+      localStorage.setItem(
+        "favoritesList",
+        JSON.stringify(updatedFavoritesList)
+      );
+    }
+  };
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
   const handleClick = (event) => {
@@ -46,6 +68,7 @@ const Gallery = () => {
   };
 
   const fetchDataByKeyword = async () => {
+    setIsLoading(true);
     const response = await axios.get(`${BASE_URL}/search?q=${searchQuery}`);
     const data = response.data.data;
     const fetchedData = await Promise.all(
@@ -53,9 +76,7 @@ const Gallery = () => {
         return await fetchDataById(art.id);
       })
     );
-
     setArtwork(fetchedData);
-    setIsLoading(true);
     setIsLoading(false);
     setPage(0)
   };
@@ -98,7 +119,6 @@ const Gallery = () => {
       };
     }
   }, [page]);
-
 
   return (
     <div id='galley-container' style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', margin: '2rem 7rem' }}>
@@ -185,11 +205,20 @@ const Gallery = () => {
                     alt=""
                     onClick={handleClick}
                   />
-                  <Favorite
-                    style={{ margin: 10 }}
-                    handleFavClick={addFavArtwork}
-                    onClick={() => { handleFavClick(art.id) }}
-                  />
+
+                  {art.favorite === true && (
+                    <Favorite
+                      style={{ margin: 10 }}
+                      onClick={() => { handleFavClick(art.id) }}
+                    />
+                  )}
+                  {art.favorite === null && (
+                    <Favorite
+                      style={{ margin: 10 }}
+                      onClick={() => { handleFavClick(art.id) }}
+                    />
+                  )}
+
                   <Popover
                     id={id}
                     open={open}
