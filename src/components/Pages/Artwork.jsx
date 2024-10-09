@@ -154,7 +154,7 @@ const Artwork = () => {
           onClick={handleClick}
           style={{ color: 'black' }}
         >
-          Dashboard
+          Display
         </Button>
         <Menu
           id="demo-positioned-menu"

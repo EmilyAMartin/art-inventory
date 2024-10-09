@@ -103,7 +103,6 @@ const Gallery = () => {
   return (
     <div id='galley-container' style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', margin: '2rem 7rem' }}>
       <div className='favorites-list'>
-        <h3>Favorites</h3>
         <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px", marginBottom: "50px" }}>
           {fav.map(art => (
             <Grid2 item xs={12} ms={5} key={art.id}>

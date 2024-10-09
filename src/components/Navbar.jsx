@@ -15,7 +15,6 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Typography from '@mui/material/Typography';
 import Checkbox from '@mui/material/Checkbox';
-import { Menu } from '@mui/icons-material';
 
 export const Navbar = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -33,7 +32,6 @@ export const Navbar = () => {
   };
 
   return (
-
     <nav>
       <Link to="/" className='logo'><img src="./Images/Logo.png" alt="logo portfolio" /></Link>
       <div className='menu' onClick={() => setMenuOpen(!menuOpen)}>
