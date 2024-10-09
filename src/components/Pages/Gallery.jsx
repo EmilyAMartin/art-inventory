@@ -26,12 +26,10 @@ const Gallery = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [fav, setFav] = useState([]);
-
   const addFavArtwork = (artwork) => {
     const newFavList = [...fav, artwork];
     setFav(newFavList);
   }
-
   const handleFavClick = (event) => {
     addFavArtwork(fav);
   };
@@ -179,7 +177,7 @@ const Gallery = () => {
         <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px" }}>
           {artwork.map(art => (
             <Grid2 item xs={12} ms={5} key={art.id}>
-              <Card sx={{ maxWidth: 300, maxHeight: 600, }}>
+              <Card sx={{ maxWidth: 300, maxHeight: 600, display: "flex" }}>
                 <CardActionArea>
                   <CardMedia
                     style={{ width: 300, height: 300 }}

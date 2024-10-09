@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import "./Navbar.css";
 import { Link, NavLink } from 'react-router-dom'
-import { BsList } from "react-icons/bs";
+import MenuIcon from '@mui/icons-material/Menu';
 
 import Modal from './Modal';
 import { createPortal } from 'react-dom'
@@ -15,6 +15,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Typography from '@mui/material/Typography';
 import Checkbox from '@mui/material/Checkbox';
+import { Menu } from '@mui/icons-material';
 
 export const Navbar = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -36,7 +37,7 @@ export const Navbar = () => {
     <nav>
       <Link to="/" className='logo'><img src="./Images/Logo.png" alt="logo portfolio" /></Link>
       <div className='menu' onClick={() => setMenuOpen(!menuOpen)}>
-        <BsList />
+        <MenuIcon style={{ margin: 10 }} />
       </div>
       <ul className={menuOpen ? "open" : ""}>
         <li><NavLink to="/">Home</NavLink></li>
