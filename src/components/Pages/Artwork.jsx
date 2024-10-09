@@ -24,6 +24,13 @@ import FormControl from '@mui/material/FormControl';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
+import { Favorite } from "@mui/icons-material";
+const data = [
+  { id: 1, name: "Artist Name #1" },
+  { id: 2, name: "Artist Name #2" },
+  { id: 3, name: "Artist Name #3" }
+];
+
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -38,6 +45,21 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 const Artwork = () => {
+
+  const [favorites, setFavorites] = useState([]);
+  useEffect(() => {
+    setFavorites(data);
+  }, []);
+  useEffect(() => {
+    console.log(favorites);
+  }, [favorites]);
+  function handleFavorite(id) {
+    const newFavorites = favorites.map(item => {
+      return item.id === id ? { ...item, favorite: !item.favorite } : item;
+    });
+    setFavorites(newFavorites);
+  }
+
   const [modalOpen, setModalOpen] = useState(false)
   const handleButtonClick = () => {
     setModalOpen(false);
@@ -145,6 +167,26 @@ const Artwork = () => {
           )}
         </div>
       </div>
+      <div className="Favorites">
+        <Typography variant="h6" sx={{ color: 'text.secondary' }}>List</Typography>
+        <div>
+          {favorites.map((item, i) => (
+            <div key={i}>
+              {item.name}{" "}
+              <Favorite onClick={() => { handleFavorite(item.id); }}>
+                {item.favorite === true ? "Remove" : "Add"}
+              </Favorite>
+            </div>
+          ))}
+        </div>
+        <Typography variant="h6" sx={{ color: 'text.secondary' }}>Favorites</Typography>
+        <div>
+          {favorites.map(item =>
+            item.favorite === true ? <div key={item.id}>{item.name}</div> : null
+          )}
+        </div>
+      </div>
+
       <div>
         <Button
           id="demo-positioned-button"
