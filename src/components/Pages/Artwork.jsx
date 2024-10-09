@@ -7,7 +7,6 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
-import Container from '@mui/material/Container';
 import Data from '../ArtData.json'
 
 import Modal from '../Modal';
@@ -136,35 +135,27 @@ const Artwork = () => {
       <SelectFilter sx={{ width: '50%' }} />
 
       <div>
-        <Container maxWidth="lg">
-          <Grid2 container spacing={5} style={{ marginTop: "20px" }}>
-            {Data.map((result, index) => (
-              <Grid2 item xs={12} ms={4} key={index}>
-                <Card sx={{ maxWidth: 250 }}>
-                  <CardActionArea>
-                    <CardMedia
-                      component="img"
-                      height="140"
-                      image={result.image}
-                      alt="green iguana"
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
-                        {result.title}
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        {result.artist}
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        {result.date}
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Grid2>
-            ))}
-          </Grid2>
-        </Container>
+        <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px" }}>
+          {Data.map((result, index) => (
+            <Grid2 item xs={12} ms={5} key={index}>
+              <Card sx={{ maxWidth: 300, maxHeight: 600, display: "flex" }}>
+                <CardActionArea>
+                  <CardMedia
+                    style={{ width: 300, height: 300 }}
+                    component="img"
+                    image={result.image}
+                    alt=""
+                  />
+                  <CardContent style={{ width: 300, height: 200 }}>
+                    <Typography gutterBottom variant="h6" component="div">{result.title}</Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{result.artist}</Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{result.date}</Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid2>
+          ))}
+        </Grid2>
       </div>
 
     </div>
