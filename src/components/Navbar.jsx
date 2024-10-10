@@ -42,7 +42,20 @@ export const Navbar = () => {
         <li><NavLink to="Artwork">Artwork</NavLink></li>
         <li><NavLink to="Gallery">Gallery</NavLink></li>
         <li><NavLink to="Account">Account</NavLink></li>
-        <button className="primary-button" onClick={() => setModalOpen(true)}>
+        <button style={{
+
+          backgroundColor: '#6c63ff',
+          color: '#ffffff',
+          outline: 'none',
+          border: 'none',
+          borderRadius: '0.5rem',
+          fontSize: '1rem',
+          fontWeight: 500,
+          cursor: 'pointer',
+          transition: '0.2s',
+          width: 100,
+        }}
+          onClick={() => setModalOpen(true)}>
           Login
         </button>
       </ul>

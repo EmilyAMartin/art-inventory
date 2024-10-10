@@ -48,7 +48,40 @@ const Home = () => {
               or explore the styles and techniques of the greats, Portfolio is your go-to platform
               for artistic expression and discovery. Join us in celebrating creativity and igniting your passion for art!
             </div>
-            <button className="secondary-button" onClick={() => setModalOpen(true)}>Sign Up</button>
+            <div style={{ display: 'flex', flexDirection: 'row', gap: 25 }}>
+              <button style={{
+                padding: '0.6rem',
+                backgroundColor: '#6c63ff',
+                color: '#ffffff',
+                outline: 'none',
+                border: 'none',
+                borderRadius: '0.5rem',
+                fontSize: '1rem',
+                fontWeight: 500,
+                cursor: 'pointer',
+                transition: '0.2s',
+                width: 150,
+              }}
+                onClick={() => setModalOpen(true)}>
+                Sign Up
+              </button>
+              <button style={{
+                padding: '0.6rem',
+                backgroundColor: '#6c63ff',
+                color: '#ffffff',
+                outline: 'none',
+                border: 'none',
+                borderRadius: '0.5rem',
+                fontSize: '1rem',
+                fontWeight: 500,
+                cursor: 'pointer',
+                transition: '0.2s',
+                width: 150,
+              }}
+                onClick={() => setModalOpen(true)}>
+                Login
+              </button>
+            </div>
           </div>
           <div className="home-image-section">
             <img src="./Images/homeimg.png" alt="illustration of girl painting" />

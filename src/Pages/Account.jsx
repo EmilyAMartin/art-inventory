@@ -63,6 +63,28 @@ const Account = () => {
           label="Re-type New Password"
         />
       </div>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignContent: 'center',
+        paddingBottom: 30,
+      }}>
+        <button style={{
+          padding: '0.6rem',
+          backgroundColor: '#6c63ff',
+          color: '#ffffff',
+          outline: 'none',
+          border: 'none',
+          borderRadius: '0.5rem',
+          fontSize: '1rem',
+          fontWeight: 500,
+          cursor: 'pointer',
+          transition: '0.2s',
+          width: 150,
+        }}>
+          Submit
+        </button>
+      </div>
     </>
   )
 }

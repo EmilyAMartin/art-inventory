@@ -55,9 +55,20 @@ const Artwork = () => {
     <div className="artwork-container">
       <div className='add-artwork'>
         <button style={{
-          padding: '1rem', backgroundColor: '#6c63ff', color: '#ffffff', outline: 'none', border: 'none', borderRadius: '1.5rem', fontSize: '1rem', fontWeight: 500, cursor: 'pointer', transition: '0.2s',
+          padding: '0.6rem',
+          backgroundColor: '#6c63ff',
+          color: '#ffffff',
+          outline: 'none',
+          border: 'none',
+          borderRadius: '0.5rem',
+          fontSize: '1rem',
+          fontWeight: 500,
+          cursor: 'pointer',
+          transition: '0.2s',
+          width: 200,
         }}
-          onClick={() => setModalOpen(true)}>Add New Artwork
+          onClick={() => setModalOpen(true)}>
+          Add New Artwork
         </button>
         <div>
           {modalOpen && (
