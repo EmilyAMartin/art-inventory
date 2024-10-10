@@ -1,7 +1,7 @@
-import React from 'react'
 import "./Modal.css"
-import { styled } from '@mui/material/styles';
+import React from 'react'
 import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
 import { green } from '@mui/material/colors';
 import { red } from '@mui/material/colors';
 
@@ -34,9 +34,9 @@ const Modal = ({ onSubmit, onCancel, onClose, children }) => {
         <div className='modal-content'>
           {children}
         </div>
-        <div className='modal-footer'>
-          <SubmitButton variant="contained" className='btn btn-submit' onClick={() => onSubmit()}>Submit</SubmitButton>
-          <CancelButton variant="contained" className='btn btn-cancel' onClick={() => onCancel()}>Cancel</CancelButton>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 100, }}>
+          <SubmitButton sx={{ color: 'white' }} variant="contained" onClick={() => onSubmit()}>Submit</SubmitButton>
+          <CancelButton sx={{ color: 'white' }} variant="contained" onClick={() => onCancel()}>Cancel</CancelButton>
         </div>
       </div>
     </div>

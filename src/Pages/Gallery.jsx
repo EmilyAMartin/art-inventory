@@ -183,14 +183,15 @@ const Gallery = () => {
         </IconButton>
         <Button onClick={handleReset}>Reset </Button>
       </div>
+
       {page > 0 && (
         <div id='page-navigation'>
           <Button disabled={page === 1} color='black' onClick={() => setPage(page - 1)} > Prev</Button>
           <Button color='black' onClick={() => setPage(page + 1)}> Next</Button>
           {error && <div>{error}</div>}
-
         </div>
       )}
+
       <div className='galley-artwork'>
         {isLoading === true && <div>Loading...</div>}
         <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px" }}>
