@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { BsPlusCircle } from "react-icons/bs";
-
+import React, { useState } from "react";
 import Grid2 from '@mui/material/Grid2';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
-import Data from '../ArtData.json'
+import Data from '../components/ArtData.json'
 
-import Modal from '../Modal';
+import Modal from '../components/Modal';
 import { createPortal } from 'react-dom'
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
@@ -20,7 +18,8 @@ import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 
-import SelectFilter from "../SelectFilter";
+import SelectFilter from "../components/SelectFilter";
+import Popover from '@mui/material/Popover';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -36,14 +35,30 @@ const VisuallyHiddenInput = styled('input')({
 
 const Artwork = () => {
   const [modalOpen, setModalOpen] = useState(false)
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [popoverImageId, setPopoverImageId] = useState(null);
   const handleButtonClick = () => {
     setModalOpen(false);
+  };
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    setPopoverImageId(event.target.src)
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+    setPopoverImageId(null)
   };
 
   return (
     <div className="artwork-container">
       <div className='add-artwork'>
-        <Button sx={{ backgroundColor: '#6c63ff', color: 'white', margin: 1 }} onClick={() => setModalOpen(true)}>Add New Artwork</Button>
+        <button style={{
+          padding: '1rem', backgroundColor: '#6c63ff', color: '#ffffff', outline: 'none', border: 'none', borderRadius: '1.5rem', fontSize: '1rem', fontWeight: 500, cursor: 'pointer', transition: '0.2s',
+        }}
+          onClick={() => setModalOpen(true)}>Add New Artwork
+        </button>
         <div>
           {modalOpen && (
             createPortal(<Modal onSubmit={handleButtonClick} onCancel={handleButtonClick} onClose={handleButtonClick}>
@@ -145,7 +160,25 @@ const Artwork = () => {
                     component="img"
                     image={result.image}
                     alt=""
+                    onClick={handleClick}
                   />
+                  <Popover
+                    id={id}
+                    open={open}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'left',
+                    }}
+                  >
+                    <CardMedia
+                      component="img"
+                      height="140"
+                      image={popoverImageId}
+                      alt=""
+                    />
+                  </Popover>
                   <CardContent style={{ width: 300, height: 200 }}>
                     <Typography gutterBottom variant="h6" component="div">{result.title}</Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>{result.artist}</Typography>

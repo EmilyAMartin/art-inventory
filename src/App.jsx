@@ -1,10 +1,10 @@
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
 import { Navbar } from './components/Navbar'
-import Home from './components/Pages/Home'
-import Artwork from './components/Pages/Artwork'
-import Account from './components/Pages/Account'
-import Gallery from './components/Pages/Gallery'
+import Home from './Pages/Home'
+import Artwork from './Pages/Artwork'
+import Account from './Pages/Account'
+import Gallery from './Pages/Gallery'
 
 function App() {
   return (
