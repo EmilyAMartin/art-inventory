@@ -1,8 +1,5 @@
 import React from 'react'
 import Modal from '../components/Modal'
-import { useState } from 'react'
-import { createPortal } from 'react-dom'
-
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -13,6 +10,8 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Typography from '@mui/material/Typography';
 import Checkbox from '@mui/material/Checkbox';
+import { useState } from 'react'
+import { createPortal } from 'react-dom'
 
 const SignUpBtn = () => {
     const [modalOpen, setModalOpen] = useState(false)
