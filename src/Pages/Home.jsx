@@ -65,6 +65,7 @@ const Home = () => {
                 onClick={() => setModalOpen(true)}>
                 Sign Up
               </button>
+              
               <button style={{
                 padding: '0.6rem',
                 backgroundColor: '#6c63ff',

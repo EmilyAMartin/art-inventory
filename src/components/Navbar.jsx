@@ -43,7 +43,7 @@ export const Navbar = () => {
         <li><NavLink to="Gallery">Gallery</NavLink></li>
         <li><NavLink to="Account">Account</NavLink></li>
         <button style={{
-
+          padding: '0.6rem',
           backgroundColor: '#6c63ff',
           color: '#ffffff',
           outline: 'none',

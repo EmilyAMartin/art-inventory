@@ -3,11 +3,30 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import { BsPersonCircle } from "react-icons/bs";
 
+import { useRef } from 'react';
+
 const Account = () => {
+  const hiddenFileInput = useRef(null);
+  const handleClick = event => {
+    hiddenFileInput.current.click();
+  };
+  const handleChange = event => {
+    const fileUploaded = event.target.files[0];
+    handleFile(fileUploaded);
+  };
+
   return (
     <>
+
       <div className='profile-header' style={{ marginTop: 50, gap: 25, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-        <BsPersonCircle fontSize={150} />
+        <BsPersonCircle fontSize={150} className="button-upload" onClick={handleClick}>
+        </BsPersonCircle>
+        <input
+          type="file"
+          onChange={handleChange}
+          ref={hiddenFileInput}
+          style={{ display: 'none' }} // Make the file input element invisible
+        />
         <Typography variant="h6">Jane Doe</Typography>
       </div>
       <div className='profile-section' style={{ marginBottom: 50 }}>
