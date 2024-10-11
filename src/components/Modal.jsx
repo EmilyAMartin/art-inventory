@@ -34,7 +34,7 @@ const Modal = ({ onSubmit, onCancel, onClose, children }) => {
         <div className='modal-content'>
           {children}
         </div>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 100, }}>
+        <div className="modal-btn">
           <SubmitButton sx={{ color: 'white' }} variant="contained" onClick={() => onSubmit()}>Submit</SubmitButton>
           <CancelButton sx={{ color: 'white' }} variant="contained" onClick={() => onCancel()}>Cancel</CancelButton>
         </div>
