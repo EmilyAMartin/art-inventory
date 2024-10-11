@@ -114,6 +114,7 @@ const AddArtworkBtn = () => {
                                 />
                             </FormControl>
                             <Button
+                                sx={{ display: 'flex', justifyContent: 'center', m: 1, width: '100%' }}
                                 component="label"
                                 role={undefined}
                                 variant="contained"
