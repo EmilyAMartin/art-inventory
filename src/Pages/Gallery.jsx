@@ -14,6 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import { Favorite } from '@mui/icons-material';
+import { FavoriteBorder } from '@mui/icons-material';
 
 const Gallery = () => {
   const BASE_URL = "https://api.artic.edu/api/v1/artworks";
@@ -25,6 +26,12 @@ const Gallery = () => {
   const [popoverImageId, setPopoverImageId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
+  const [iconId, setIconId] = useState(100);
+
+  const handleIconClick = (id) => () => {
+    setIconId(id);
+  };
+
   const [fav, setFav] = useState([]);
   const addFavArtwork = (artwork) => {
     const newFavList = [...fav, artwork];
@@ -32,7 +39,6 @@ const Gallery = () => {
   }
 
   const handleFavClick = (id) => {
-    console.log(id);
     setArtwork(
       artwork.map((item) => {
         return item.id === id ? { ...item, favorite: !item.favorite } : item;
@@ -207,18 +213,10 @@ const Gallery = () => {
                     onClick={handleClick}
                   />
 
-                  {art.favorite === true && (
-                    <Favorite
-                      style={{ margin: 10 }}
-                      onClick={() => { handleFavClick(art.id) }}
-                    />
-                  )}
-                  {art.favorite === null && (
-                    <Favorite
-                      style={{ margin: 10 }}
-                      onClick={() => { handleFavClick(art.id) }}
-                    />
-                  )}
+
+                  <div style={{ margin: 10 }} onClick={handleIconClick(id)}>
+                    {iconId === 100 ? <FavoriteBorder /> : <Favorite />}
+                  </div>
 
                   <Popover
                     id={id}
