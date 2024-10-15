@@ -13,9 +13,7 @@ import Popover from '@mui/material/Popover';
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
-import Fav from '../components/Fav';
-
-
+import { Favorite } from '@mui/icons-material';
 
 const Gallery = () => {
   const BASE_URL = "https://api.artic.edu/api/v1/artworks";
@@ -26,13 +24,9 @@ const Gallery = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [popoverImageId, setPopoverImageId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [fav, setFav] = useState([]);
-  const addFavArtwork = (artwork) => {
-    const newFavList = [...fav, artwork];
-    setFav(newFavList);
-  }
 
   const handleFavClick = (id) => {
+    console.log(id);
     setArtwork(
       artwork.map((item) => {
         return item.id === id ? { ...item, favorite: !item.favorite } : item;
@@ -89,10 +83,7 @@ const Gallery = () => {
     setPage(1);
     setSearchQuery("");
   }
-  const [items, setItems] = useState([]);
-
   useEffect(() => {
-    setItems();
     const abortController = new AbortController();
     const signal = abortController.signal;
     const fetchData = async () => {
@@ -124,49 +115,6 @@ const Gallery = () => {
 
   return (
     <div id='galley-container' style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', margin: '2rem 7rem' }}>
-      <div className='favorites-list'>
-        <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px", marginBottom: "50px" }}>
-          {fav.map(art => (
-            <Grid2 item xs={12} ms={5} key={art.id}>
-              <Card sx={{ maxWidth: 100, maxHeight: 200, }}>
-                <CardActionArea>
-                  <CardMedia
-                    style={{ width: 100, height: 100 }}
-                    component="img"
-                    image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
-                    alt=""
-                    onClick={handleClick}
-                  />
-                  <Popover
-                    id={id}
-                    open={open}
-                    anchorEl={anchorEl}
-                    onClose={handleClose}
-                    anchorOrigin={{
-                      vertical: 'bottom',
-                      horizontal: 'left',
-                    }}
-                  >
-                    <CardMedia
-                      component="img"
-                      height="140"
-                      image={popoverImageId}
-                      alt=""
-                    />
-                  </Popover>
-                  <CardContent style={{ width: 300, height: 200 }}>
-                    <Typography gutterBottom variant="h6" component="div">{art.title}</Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.place_of_origin}</Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_end}</Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            </Grid2>
-          ))}
-        </Grid2>
-      </div>
-
       <div className='search-bar' style={{ display: 'flex', justifyContent: 'center' }}>
         <TextField
           id="search-bar"
@@ -210,10 +158,10 @@ const Gallery = () => {
                   />
 
 
-                  <div>
-                    {items.map((item) => <Fav item={item} key={item.id} />)}
-                  </div>
-
+                  <Favorite
+                    style={{ margin: 10 }}
+                    onClick={() => { handleFavClick(art.id) }}
+                  />
 
                   <Popover
                     id={id}

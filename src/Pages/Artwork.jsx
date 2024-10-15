@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Grid2 from '@mui/material/Grid2';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -24,13 +24,54 @@ const Artwork = () => {
     setPopoverImageId(null)
   };
 
+  const [fav, setFav] = useState([]);
+  useEffect(() => {
+    setFav(JSON.parse(localStorage.getItem('favoritesList')));
+  }, [])
+
   return (
     <div className="artwork-container">
       <div className='add-artwork'>
         <AddArtworkBtn />
       </div>
-
       <SelectFilter sx={{ width: '50%' }} />
+
+      <div style={{ marginBottom: 50 }} className='favorites-list'>
+        <h4>Favorite List</h4>
+        <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px" }}>
+          {fav.map(art => (
+            <Grid2 item xs={12} ms={5} key={art.id}>
+              <Card sx={{ maxWidth: 100, maxHeight: 100, display: "flex" }}>
+                <CardActionArea>
+                  <CardMedia
+                    style={{ width: 100, height: 100 }}
+                    component="img"
+                    image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
+                    onClick={handleClick}
+                  />
+                  <Popover
+                    id={id}
+                    open={open}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'left',
+                    }}
+                  >
+                    <CardMedia
+                      component="img"
+                      height="140"
+                      image={popoverImageId}
+                      alt=""
+                    />
+                  </Popover>
+                </CardActionArea>
+              </Card>
+            </Grid2>
+          ))}
+        </Grid2>
+      </div>
 
       <div>
         <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px" }}>
