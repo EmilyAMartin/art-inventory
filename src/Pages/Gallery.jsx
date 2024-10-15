@@ -13,8 +13,9 @@ import Popover from '@mui/material/Popover';
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
-import { Favorite } from '@mui/icons-material';
-import { FavoriteBorder } from '@mui/icons-material';
+import Fav from '../components/Fav';
+
+
 
 const Gallery = () => {
   const BASE_URL = "https://api.artic.edu/api/v1/artworks";
@@ -25,16 +26,13 @@ const Gallery = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [popoverImageId, setPopoverImageId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-
   const [fav, setFav] = useState([]);
   const addFavArtwork = (artwork) => {
     const newFavList = [...fav, artwork];
     setFav(newFavList);
   }
-  const [iconId, setIconId] = useState(100);
+
   const handleFavClick = (id) => {
-    console.log(id);
-    setIconId(id)
     setArtwork(
       artwork.map((item) => {
         return item.id === id ? { ...item, favorite: !item.favorite } : item;
@@ -91,8 +89,10 @@ const Gallery = () => {
     setPage(1);
     setSearchQuery("");
   }
+  const [items, setItems] = useState([]);
 
   useEffect(() => {
+    setItems();
     const abortController = new AbortController();
     const signal = abortController.signal;
     const fetchData = async () => {
@@ -210,12 +210,10 @@ const Gallery = () => {
                   />
 
 
-                  <div
-                    style={{ margin: 10 }}
-                    onClick={() => { handleFavClick(art.id) }}
-                  >
-                    {iconId === 100 ? <FavoriteBorder /> : <Favorite />}
+                  <div>
+                    {items.map((item) => <Fav item={item} key={item.id} />)}
                   </div>
+
 
                   <Popover
                     id={id}
