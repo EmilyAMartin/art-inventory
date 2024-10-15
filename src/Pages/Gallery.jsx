@@ -26,19 +26,15 @@ const Gallery = () => {
   const [popoverImageId, setPopoverImageId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [iconId, setIconId] = useState(100);
-
-  const handleIconClick = (id) => () => {
-    setIconId(id);
-  };
-
   const [fav, setFav] = useState([]);
   const addFavArtwork = (artwork) => {
     const newFavList = [...fav, artwork];
     setFav(newFavList);
   }
-
+  const [iconId, setIconId] = useState(100);
   const handleFavClick = (id) => {
+    console.log(id);
+    setIconId(id)
     setArtwork(
       artwork.map((item) => {
         return item.id === id ? { ...item, favorite: !item.favorite } : item;
@@ -214,7 +210,10 @@ const Gallery = () => {
                   />
 
 
-                  <div style={{ margin: 10 }} onClick={handleIconClick(id)}>
+                  <div
+                    style={{ margin: 10 }}
+                    onClick={() => { handleFavClick(art.id) }}
+                  >
                     {iconId === 100 ? <FavoriteBorder /> : <Favorite />}
                   </div>
 
