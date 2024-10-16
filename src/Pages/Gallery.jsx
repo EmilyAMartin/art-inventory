@@ -14,6 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import { Favorite } from '@mui/icons-material';
+import { FavoriteBorder } from '@mui/icons-material';
 
 const Gallery = () => {
   const BASE_URL = "https://api.artic.edu/api/v1/artworks";
@@ -27,18 +28,20 @@ const Gallery = () => {
 
   const handleFavClick = (id) => {
     console.log(id);
-    setArtwork(
-      artwork.map((item) => {
-        return item.id === id ? { ...item, favorite: !item.favorite } : item;
-      })
+    const updateArtwork = artwork.map((item) => {
+      return item.id === id ? { ...item, favorite: !item.favorite } : item;
+    })
+
+    setArtwork(updateArtwork
+
     );
-    const selectedArtwork = artwork.find((art) => art.id === id);
+    const selectedArtwork = updateArtwork.find((art) => art.id === id);
     if (selectedArtwork.favorite === true) {
       const favoritesList =
         JSON.parse(localStorage.getItem("favoritesList")) ?? [];
       favoritesList.push(selectedArtwork);
       localStorage.setItem("favoritesList", JSON.stringify(favoritesList));
-    } else if (selectedArtwork === false) {
+    } else if (selectedArtwork.favorite === false) {
       const favoritesList =
         JSON.parse(localStorage.getItem("favoritesList")) ?? [];
       const updatedFavoritesList = favoritesList.filter(
@@ -157,12 +160,18 @@ const Gallery = () => {
                     onClick={handleClick}
                   />
 
-
-                  <Favorite
-                    style={{ margin: 10 }}
-                    onClick={() => { handleFavClick(art.id) }}
-                  />
-
+                  {art.favorite === true && (
+                    <Favorite
+                      style={{ margin: 10 }}
+                      onClick={() => { handleFavClick(art.id) }}
+                    />
+                  )}
+                  {(art.favorite === undefined || art.favorite === false) && (
+                    <FavoriteBorder
+                      style={{ margin: 10 }}
+                      onClick={() => { handleFavClick(art.id) }}
+                    />
+                  )}
                   <Popover
                     id={id}
                     open={open}
