@@ -32,9 +32,7 @@ const Gallery = () => {
       return item.id === id ? { ...item, favorite: !item.favorite } : item;
     })
 
-    setArtwork(updateArtwork
-
-    );
+    setArtwork(updateArtwork);
     const selectedArtwork = updateArtwork.find((art) => art.id === id);
     if (selectedArtwork.favorite === true) {
       const favoritesList =
@@ -55,7 +53,7 @@ const Gallery = () => {
   };
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-  const handleClick = (event) => {
+  const handlePopClick = (event) => {
     setAnchorEl(event.currentTarget);
     setPopoverImageId(event.target.src)
   };
@@ -73,8 +71,8 @@ const Gallery = () => {
         return await fetchDataById(art.id);
       })
     );
-    setArtwork(fetchedData);
     setIsLoading(false);
+    setArtwork(fetchedData);
     setPage(0)
   };
   const fetchDataById = async (id) => {
@@ -98,7 +96,6 @@ const Gallery = () => {
         setError(null);
       } catch (error) {
         if (axios.isCancel(error)) {
-          console.log("Fetch aborted");
           return;
         }
         setError(error.message);
@@ -157,7 +154,7 @@ const Gallery = () => {
                     component="img"
                     image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
                     alt=""
-                    onClick={handleClick}
+                    onClick={handlePopClick}
                   />
 
                   {art.favorite === true && (
