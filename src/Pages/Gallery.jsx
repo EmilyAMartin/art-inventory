@@ -158,6 +158,8 @@ const Gallery = () => {
                     alt=""
                     onClick={handlePopClick}
                   />
+
+
                   <Popover
                     id={id}
                     open={open}
@@ -195,6 +197,7 @@ const Gallery = () => {
                   )}
                 </CardActionArea>
               </Card>
+
             </Grid2>
           ))}
         </Grid2>
