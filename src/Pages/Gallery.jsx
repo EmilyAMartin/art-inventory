@@ -27,11 +27,9 @@ const Gallery = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleFavClick = (id) => {
-    console.log(id);
     const updateArtwork = artwork.map((item) => {
       return item.id === id ? { ...item, favorite: !item.favorite } : item;
     })
-
     setArtwork(updateArtwork);
     const selectedArtwork = updateArtwork.find((art) => art.id === id);
     if (selectedArtwork.favorite === true) {
@@ -51,12 +49,14 @@ const Gallery = () => {
       );
     }
   };
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
+
   const handlePopClick = (event) => {
     setAnchorEl(event.currentTarget);
     setPopoverImageId(event.target.src)
   };
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+
   const handleClose = () => {
     setAnchorEl(null);
     setPopoverImageId(null)
@@ -75,6 +75,7 @@ const Gallery = () => {
     setArtwork(fetchedData);
     setPage(0)
   };
+
   const fetchDataById = async (id) => {
     const response = await axios.get(`${BASE_URL}/${id}`);
     return response.data.data;
@@ -84,6 +85,7 @@ const Gallery = () => {
     setPage(1);
     setSearchQuery("");
   }
+
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
@@ -156,19 +158,6 @@ const Gallery = () => {
                     alt=""
                     onClick={handlePopClick}
                   />
-
-                  {art.favorite === true && (
-                    <Favorite
-                      style={{ margin: 10 }}
-                      onClick={() => { handleFavClick(art.id) }}
-                    />
-                  )}
-                  {(art.favorite === undefined || art.favorite === false) && (
-                    <FavoriteBorder
-                      style={{ margin: 10 }}
-                      onClick={() => { handleFavClick(art.id) }}
-                    />
-                  )}
                   <Popover
                     id={id}
                     open={open}
@@ -192,6 +181,18 @@ const Gallery = () => {
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.place_of_origin}</Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_end}</Typography>
                   </CardContent>
+                  {art.favorite === true && (
+                    <Favorite
+                      style={{ margin: 10 }}
+                      onClick={() => { handleFavClick(art.id) }}
+                    />
+                  )}
+                  {(art.favorite === undefined || art.favorite === false) && (
+                    <FavoriteBorder
+                      style={{ margin: 10 }}
+                      onClick={() => { handleFavClick(art.id) }}
+                    />
+                  )}
                 </CardActionArea>
               </Card>
             </Grid2>

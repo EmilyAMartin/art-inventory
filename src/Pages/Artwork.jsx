@@ -15,7 +15,7 @@ const Artwork = () => {
   const [popoverImageId, setPopoverImageId] = useState(null);
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-  const handleClick = (event) => {
+  const handlePopClick = (event) => {
     setAnchorEl(event.currentTarget);
     setPopoverImageId(event.target.src)
   };
@@ -34,7 +34,8 @@ const Artwork = () => {
       <div className='add-artwork'>
         <AddArtworkBtn />
       </div>
-      <SelectFilter sx={{ width: '50%' }} />
+      <SelectFilter
+        sx={{ width: '50%' }} />
 
       <div style={{ marginBottom: 50 }} className='favorites-list'>
         <h4>Favorite List</h4>
@@ -47,7 +48,7 @@ const Artwork = () => {
                     style={{ width: 100, height: 100 }}
                     component="img"
                     image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
-                    onClick={handleClick}
+                    onClick={handlePopClick}
                   />f
                   <Popover
                     id={id}
@@ -75,16 +76,16 @@ const Artwork = () => {
 
       <div>
         <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px" }}>
-          {Data.map((result, index) => (
+          {Data.map((art, index) => (
             <Grid2 item xs={12} ms={5} key={index}>
               <Card sx={{ maxWidth: 300, maxHeight: 600, display: "flex" }}>
                 <CardActionArea>
                   <CardMedia
                     style={{ width: 300, height: 300 }}
                     component="img"
-                    image={result.image}
+                    image={art.image_id}
                     alt=""
-                    onClick={handleClick}
+                    onClick={handlePopClick}
                   />
                   <Popover
                     id={id}
@@ -104,9 +105,10 @@ const Artwork = () => {
                     />
                   </Popover>
                   <CardContent style={{ width: 300, height: 200 }}>
-                    <Typography gutterBottom variant="h6" component="div">{result.title}</Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{result.artist}</Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{result.date}</Typography>
+                    <Typography gutterBottom variant="h6" component="div">{art.title}</Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.place_of_origin}</Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_end}</Typography>
                   </CardContent>
                 </CardActionArea>
               </Card>

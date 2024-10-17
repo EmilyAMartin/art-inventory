@@ -1,51 +1,59 @@
 [
     {
         "title": "Untitled 1", 
-        "artist":"Emily Martin",
-        "date": "2023",
-        "image": "/Images/img3.jpg"
+        "artist_title":"Emily Martin",
+        "date_end": "2023",
+        "place_of_origin": "Canada",
+        "image_id": "/Images/img3.jpg"
     },
     {
         "title": "Untitled 2", 
-        "artist":"Ben Cole",
-        "date": "2024",
-        "image": "/Images/img4.jpg"
+        "artist_title":"Ben Cole",
+        "date_end": "2024",
+        "place_of_origin": "Canada",
+        "image_id": "/Images/img4.jpg"
     },
     {
         "title": "Untitled 3", 
-        "artist":"Linn White",
-        "date": "2025",
-        "image": "/Images/img5.jpg"
+        "artist_title":"Linn White",
+        "date_end": "2025",
+        "place_of_origin": "Canada",
+        "image_id": "/Images/img5.jpg"
     },
     {
         "title": "Untitled 4", 
-        "artist":"Krista Carry",
-        "date": "2026",
-        "image": "/Images/img5.jpg"
+        "artist_title":"Krista Carry",
+        "date_end": "2026",
+        "place_of_origin": "Canada",
+        "image_id": "/Images/img5.jpg"
     },
     {
         "title": "Untitled 5", 
-        "artist":"Owen Barron",
-        "date": "2027",
-        "image": "/Images/img5.jpg"
+        "artist_title":"Owen Barron",
+        "date_end": "2027",
+        "place_of_origin": "Canada",
+        "image_id": "/Images/img5.jpg"
     },
     {
         "title": "Untitled 6", 
-        "artist":"James Cole",
-        "date": "2028",
-        "image": "/Images/img5.jpg"
+        "artist_title":"James Cole",
+        "date_end": "2028",
+        "place_of_origin": "Canada",
+        "image_id": "/Images/img5.jpg"
     },
     {
         "title": "Untitled 7", 
-        "artist":"Mike Bennett",
-        "date": "2029",
-        "image": "/Images/img5.jpg"
+        "artist_title":"Mike Bennett",
+        "date_end": "2029",
+        "place_of_origin": "Canada",
+        "image_id": "/Images/img5.jpg"
     },
     {
         "title": "Untitled 8", 
-        "artist":"Amanda Lee",
-        "date": "2012",
-        "image": "/Images/img5.jpg"
+        "artist_title":"Amanda Lee",
+        "date_end": "2012",
+        "place_of_origin": "Canada",
+        "image_id": "/Images/img5.jpg"
     }
 ]
 
