@@ -9,6 +9,7 @@ import Data from '../components/ArtData.json'
 import SelectFilter from "../components/SelectFilter";
 import Popover from '@mui/material/Popover';
 import AddArtworkBtn from "../components/AddArtworkBtn";
+import ClearIcon from '@mui/icons-material/Clear';
 
 const Artwork = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -42,14 +43,14 @@ const Artwork = () => {
         <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px" }}>
           {fav?.map(art => (
             <Grid2 item xs={12} ms={5} key={art.id}>
-              <Card sx={{ maxWidth: 100, maxHeight: 100, display: "flex" }}>
+              <Card sx={{ maxWidth: 300, maxHeight: 600, display: "flex" }}>
                 <CardActionArea>
                   <CardMedia
-                    style={{ width: 100, height: 100 }}
+                    style={{ width: 300, height: 300 }}
                     component="img"
                     image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
                     onClick={handlePopClick}
-                  />f
+                  />
                   <Popover
                     id={id}
                     open={open}
@@ -67,7 +68,15 @@ const Artwork = () => {
                       alt=""
                     />
                   </Popover>
+                  <CardContent style={{ width: 300, height: 200 }}>
+                    <Typography gutterBottom fontSize={16} fontWeight={500} component="div">{art.title}</Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.place_of_origin}</Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_end}</Typography>
+                  </CardContent>
+                  <ClearIcon style={{ margin: 10 }} />
                 </CardActionArea>
+
               </Card>
             </Grid2>
           ))}
@@ -105,7 +114,7 @@ const Artwork = () => {
                     />
                   </Popover>
                   <CardContent style={{ width: 300, height: 200 }}>
-                    <Typography gutterBottom variant="h6" component="div">{art.title}</Typography>
+                    <Typography gutterBottom fontSize={16} fontWeight={500} component="div">{art.title}</Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.place_of_origin}</Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_end}</Typography>

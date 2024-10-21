@@ -178,7 +178,7 @@ const Gallery = () => {
                     />
                   </Popover>
                   <CardContent style={{ width: 300, height: 200 }}>
-                    <Typography gutterBottom variant="h6" component="div">{art.title}</Typography>
+                    <Typography gutterBottom fontSize={16} fontWeight={500} component="div">{art.title}</Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.place_of_origin}</Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_end}</Typography>
