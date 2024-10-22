@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import { BsPersonCircle } from "react-icons/bs";
-import { useState, useRef } from 'react';
-import SaveFormData from '../components/SaveFormData';
+
 
 const Account = () => {
   const hiddenFileInput = useRef(null);
@@ -14,12 +13,18 @@ const Account = () => {
     const fileUploaded = event.target.files[0];
     handleFile(fileUploaded);
   };
+  const handelSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email")
+    for (const [key, value] of formData.entries()) {
+      console.log({ key, value })
+    }
 
-  const [value, setValue] = SaveFormData('')
+  }
 
   return (
     <>
-
       <div className='profile-header' style={{ marginTop: 50, gap: 25, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
         <BsPersonCircle fontSize={150} className="button-upload" onClick={handleClick}>
         </BsPersonCircle>
@@ -31,82 +36,90 @@ const Account = () => {
         />
         <Typography variant="h6">Jane Doe</Typography>
       </div>
-      <div className='profile-section' style={{ marginBottom: 50 }}>
+      <form onSubmit={handelSubmit}>
         <Typography variant="h6">Profile</Typography>
         <TextField
-          id="outlined-required"
           fullWidth
-          margin="normal"
+          margin='normal'
           label="Full Name"
-          onChange={(event) => setValue(event.target.value)}
-          value={value}
+          name="fullName"
+          type='text'
+          placeholder='Full Name'
         />
         <TextField
-          id="outlined-required"
           fullWidth
-          margin="normal"
+          margin='normal'
           label="Username"
-          defaultValue=""
+          name="username"
+          type='text'
+          placeholder='Username'
         />
         <TextField
-          id="outlined-required"
           fullWidth
-          margin="normal"
-          label="Email Address"
-          defaultValue=""
+          margin='normal'
+          label="Email"
+          name="email"
+          type='email'
+          placeholder='Email'
         />
         <TextField
-          id="outlined-multiline-static"
           fullWidth
+          margin='normal'
           label="Bio"
+          name="bio"
+          type='text'
+          placeholder='Bio'
           multiline
           rows={4}
-          defaultValue=""
         />
-      </div>
-      <div className='security-section' style={{ marginBottom: 50 }}>
         <Typography variant="h6">Password and Security</Typography>
         <TextField
-          id="outlined-required"
           fullWidth
-          margin="normal"
+          margin='normal'
           label="Current Password"
+          name="current-password"
+          type='text'
+          placeholder='Current Password'
         />
         <TextField
-          id="outlined-required"
           fullWidth
-          margin="normal"
+          margin='normal'
           label="New Password"
+          name="new-password"
+          type='text'
+          placeholder='New Password'
         />
         <TextField
-          id="outlined-required"
           fullWidth
-          margin="normal"
-          label="Re-type New Password"
+          margin='normal'
+          label="Re-Type Password"
+          name="re-type-password"
+          type='text'
+          placeholder='Re-Type Password'
         />
-      </div>
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignContent: 'center',
-        paddingBottom: 30,
-      }}>
-        <button style={{
-          padding: '0.6rem',
-          backgroundColor: '#6c63ff',
-          color: '#ffffff',
-          outline: 'none',
-          border: 'none',
-          borderRadius: '0.5rem',
-          fontSize: '1rem',
-          fontWeight: 500,
-          cursor: 'pointer',
-          transition: '0.2s',
-          width: 150,
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignContent: 'center',
+          paddingBottom: 30,
         }}>
-          Submit
-        </button>
-      </div>
+          <button style={{
+            padding: '0.6rem',
+            backgroundColor: '#6c63ff',
+            color: '#ffffff',
+            outline: 'none',
+            border: 'none',
+            borderRadius: '0.5rem',
+            fontSize: '1rem',
+            fontWeight: 500,
+            cursor: 'pointer',
+            transition: '0.2s',
+            width: 150,
+          }}>
+            Submit
+          </button>
+        </div>
+      </form>
     </>
   )
 }
