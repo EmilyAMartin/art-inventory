@@ -31,7 +31,7 @@ const Artwork = () => {
   }, [])
 
   return (
-    <div className="artwork-container">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 25 }}>
       <div className='add-artwork'>
         <AddArtworkBtn />
       </div>
@@ -40,7 +40,7 @@ const Artwork = () => {
 
       <div style={{ marginBottom: 50 }} className='favorites-list'>
         <h4>Favorite List</h4>
-        <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px" }}>
+        <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px", justifyContent: 'space-around' }}>
           {fav?.map(art => (
             <Grid2 item xs={12} ms={5} key={art.id}>
               <Card sx={{ maxWidth: 300, maxHeight: 600, display: "flex" }}>
@@ -84,7 +84,7 @@ const Artwork = () => {
       </div>
 
       <div>
-        <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px" }}>
+        <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px", justifyContent: 'space-around' }}>
           {Data.map((art, index) => (
             <Grid2 item xs={12} ms={5} key={index}>
               <Card sx={{ maxWidth: 300, maxHeight: 600, display: "flex" }}>

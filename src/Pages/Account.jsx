@@ -20,9 +20,8 @@ const Account = () => {
     for (const [key, value] of formData.entries()) {
       console.log({ key, value })
     }
-
   }
-
+useEffect
   return (
     <>
       <div className='profile-header' style={{ marginTop: 50, gap: 25, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
