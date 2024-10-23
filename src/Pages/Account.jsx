@@ -16,16 +16,12 @@ const Account = () => {
     handleFile(fileUploaded);
   };
   const handelSubmit = (e) => {
-    e.preventDefault();
+    event.preventDefault();
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email")
     for (const [key, value] of formData.entries()) {
       console.log({ key, value })
     }
-  }
-  const [btnLoading, setBtnLoading] = useState(false);
-  function handleButtonClick() {
-    setBtnLoading(true);
   }
 
   return (
@@ -41,7 +37,7 @@ const Account = () => {
         />
         <Typography variant="h6">Jane Doe</Typography>
       </div>
-      <form >
+      <form onSubmit={handelSubmit} >
         <Typography variant="h6">Profile</Typography>
         <TextField
           fullWidth
@@ -108,7 +104,7 @@ const Account = () => {
           alignContent: 'center',
           paddingBottom: 30,
         }}>
-          <button onSubmit={handelSubmit} style={{
+          <button style={{
             marginTop: '1.5rem',
             padding: '0.6rem',
             backgroundColor: '#6c63ff',
@@ -124,23 +120,6 @@ const Account = () => {
           }}>
             Submit
           </button>
-          <div
-            style={{
-              display: "flex",
-              marginTop: 30,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 10,
-            }}>
-            <LoadingButton
-              loadingPosition="start"
-              variant="contained"
-              loading={btnLoading}
-              onClick={handleButtonClick}>
-              Submit
-            </LoadingButton>
-          </div>
         </div>
       </form>
     </>

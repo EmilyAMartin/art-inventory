@@ -30,56 +30,57 @@ const Artwork = () => {
     setFav(JSON.parse(localStorage.getItem('favoritesList')));
   }, [])
 
-
+  const handleClearClick = (id) => {
+    localStorage.removeItem("favoritesList");
+  };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 25 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 15, marginTop: 25, }}>
       <AddArtworkBtn />
       <SelectFilter sx={{ width: '50%' }} />
-      <div style={{ marginBottom: 50 }} className='favorites-list'>
-        <h4>Favorite List</h4>
-        <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px", justifyContent: 'space-around' }}>
-          {fav?.map(art => (
-            <Grid2 item xs={12} ms={5} key={art.id}>
-              <Card sx={{ maxWidth: 300, maxHeight: 600, display: "flex" }}>
-                <CardActionArea>
+      <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px", justifyContent: 'space-around' }}>
+        {fav?.map(art => (
+          <Grid2 item xs={12} ms={5} key={art.id}>
+            <Card sx={{ maxWidth: 300, maxHeight: 600, display: "flex" }}>
+              <CardActionArea>
+                <CardMedia
+                  style={{ width: 300, height: 300 }}
+                  component="img"
+                  image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
+                  onClick={handlePopClick}
+                />
+                <Popover
+                  id={id}
+                  open={open}
+                  anchorEl={anchorEl}
+                  onClose={handleClose}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                >
                   <CardMedia
-                    style={{ width: 300, height: 300 }}
                     component="img"
-                    image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
-                    onClick={handlePopClick}
+                    height="140"
+                    image={popoverImageId}
+                    alt=""
                   />
-                  <Popover
-                    id={id}
-                    open={open}
-                    anchorEl={anchorEl}
-                    onClose={handleClose}
-                    anchorOrigin={{
-                      vertical: 'bottom',
-                      horizontal: 'left',
-                    }}
-                  >
-                    <CardMedia
-                      component="img"
-                      height="140"
-                      image={popoverImageId}
-                      alt=""
-                    />
-                  </Popover>
-                  <CardContent style={{ width: 300, height: 200 }}>
-                    <Typography gutterBottom fontSize={16} fontWeight={500} component="div">{art.title}</Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.place_of_origin}</Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_end}</Typography>
-                  </CardContent>
-                  <ClearIcon style={{ margin: 10 }} />
-                </CardActionArea>
+                </Popover>
+                <CardContent style={{ width: 300, height: 200 }}>
+                  <Typography gutterBottom fontSize={16} fontWeight={500} component="div">{art.title}</Typography>
+                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
+                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.place_of_origin}</Typography>
+                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_end}</Typography>
+                </CardContent>
+                <ClearIcon style={{ margin: 10 }}
+                  onClick={() => { handleClearClick(art.id) }}
+                />
+              </CardActionArea>
 
-              </Card>
-            </Grid2>
-          ))}
-        </Grid2>
-      </div>
+            </Card>
+          </Grid2>
+        ))}
+      </Grid2>
 
       <div>
         <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px", justifyContent: 'space-around' }}>
