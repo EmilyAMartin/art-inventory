@@ -16,6 +16,7 @@ import TextField from "@mui/material/TextField";
 import { Favorite } from '@mui/icons-material';
 import { FavoriteBorder } from '@mui/icons-material';
 
+
 const Gallery = () => {
   const BASE_URL = "https://api.artic.edu/api/v1/artworks";
   const [artwork, setArtwork] = useState([]);
@@ -49,6 +50,11 @@ const Gallery = () => {
       );
     }
   };
+
+  const [isFavChecked, setIsFavChecked] = useState(false)
+  const checkHandler = () => {
+    setIsFavChecked(!isFavChecked)
+  }
 
   const handlePopClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -187,6 +193,8 @@ const Gallery = () => {
                     <Favorite
                       style={{ margin: 10 }}
                       onClick={() => { handleFavClick(art.id) }}
+                      checked={isFavChecked}
+                      onChange={checkHandler}
                     />
                   )}
                   {(art.favorite === undefined || art.favorite === false) && (

@@ -30,14 +30,12 @@ const Artwork = () => {
     setFav(JSON.parse(localStorage.getItem('favoritesList')));
   }, [])
 
+
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 25 }}>
-      <div className='add-artwork'>
-        <AddArtworkBtn />
-      </div>
-      <SelectFilter
-        sx={{ width: '50%' }} />
-
+      <AddArtworkBtn />
+      <SelectFilter sx={{ width: '50%' }} />
       <div style={{ marginBottom: 50 }} className='favorites-list'>
         <h4>Favorite List</h4>
         <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px", justifyContent: 'space-around' }}>

@@ -1,7 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import { BsPersonCircle } from "react-icons/bs";
+import { LoadingButton } from "@mui/lab";
+
 
 
 const Account = () => {
@@ -21,7 +23,11 @@ const Account = () => {
       console.log({ key, value })
     }
   }
-useEffect
+  const [btnLoading, setBtnLoading] = useState(false);
+  function handleButtonClick() {
+    setBtnLoading(true);
+  }
+
   return (
     <>
       <div className='profile-header' style={{ marginTop: 50, gap: 25, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
@@ -35,7 +41,7 @@ useEffect
         />
         <Typography variant="h6">Jane Doe</Typography>
       </div>
-      <form onSubmit={handelSubmit}>
+      <form >
         <Typography variant="h6">Profile</Typography>
         <TextField
           fullWidth
@@ -102,7 +108,8 @@ useEffect
           alignContent: 'center',
           paddingBottom: 30,
         }}>
-          <button style={{
+          <button onSubmit={handelSubmit} style={{
+            marginTop: '1.5rem',
             padding: '0.6rem',
             backgroundColor: '#6c63ff',
             color: '#ffffff',
@@ -117,6 +124,23 @@ useEffect
           }}>
             Submit
           </button>
+          <div
+            style={{
+              display: "flex",
+              marginTop: 30,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 10,
+            }}>
+            <LoadingButton
+              loadingPosition="start"
+              variant="contained"
+              loading={btnLoading}
+              onClick={handleButtonClick}>
+              Submit
+            </LoadingButton>
+          </div>
         </div>
       </form>
     </>
