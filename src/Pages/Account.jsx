@@ -2,11 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import { BsPersonCircle } from "react-icons/bs";
-import { LoadingButton } from "@mui/lab";
-
-
 
 const Account = () => {
+  const [profileData, setProfileData] = useState([])
   const hiddenFileInput = useRef(null);
   const handleClick = event => {
     hiddenFileInput.current.click();
@@ -18,11 +16,17 @@ const Account = () => {
   const handelSubmit = (e) => {
     event.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const email = formData.get("email")
+    const data = []
     for (const [key, value] of formData.entries()) {
-      console.log({ key, value })
+      data.push({ ...data, [key]: value })
     }
+    setProfileData(data);
+    localStorage.setItem("profile", JSON.stringify(data))
   }
+  useEffect(() => {
+    const profile = JSON.parse(localStorage.getItem("profile"));
+    setProfileData(profile)
+  }, [])
 
   return (
     <>
@@ -46,6 +50,7 @@ const Account = () => {
           name="fullName"
           type='text'
           placeholder='Full Name'
+          value={profileDat.fullName??""}
         />
         <TextField
           fullWidth
@@ -81,6 +86,7 @@ const Account = () => {
           name="current-password"
           type='text'
           placeholder='Current Password'
+
         />
         <TextField
           fullWidth

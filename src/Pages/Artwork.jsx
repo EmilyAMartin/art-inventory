@@ -9,7 +9,8 @@ import Data from '../components/ArtData.json'
 import SelectFilter from "../components/SelectFilter";
 import Popover from '@mui/material/Popover';
 import AddArtworkBtn from "../components/AddArtworkBtn";
-import ClearIcon from '@mui/icons-material/Clear';
+import { Favorite } from '@mui/icons-material';
+import { FavoriteBorder } from '@mui/icons-material';
 
 const Artwork = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -30,10 +31,6 @@ const Artwork = () => {
     setFav(JSON.parse(localStorage.getItem('favoritesList')));
   }, [])
 
-  const handleClearClick = (id) => {
-    localStorage.removeItem("favoritesList");
-  };
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 15, marginTop: 25, }}>
       <AddArtworkBtn />
@@ -47,6 +44,7 @@ const Artwork = () => {
                   style={{ width: 300, height: 300 }}
                   component="img"
                   image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
+                  alt=""
                   onClick={handlePopClick}
                 />
                 <Popover
@@ -72,11 +70,19 @@ const Artwork = () => {
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.place_of_origin}</Typography>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_end}</Typography>
                 </CardContent>
-                <ClearIcon style={{ margin: 10 }}
-                  onClick={() => { handleClearClick(art.id) }}
-                />
+                {art.favorite === true && (
+                  <Favorite
+                    style={{ margin: 10 }}
+                    onClick={() => { handleFavClick(art.id) }}
+                  />
+                )}
+                {art.favorite === false && (
+                  <FavoriteBorder
+                    style={{ margin: 10 }}
+                    onClick={() => { handleFavClick(art.id) }}
+                  />
+                )}
               </CardActionArea>
-
             </Card>
           </Grid2>
         ))}

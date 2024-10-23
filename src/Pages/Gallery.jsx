@@ -51,11 +51,6 @@ const Gallery = () => {
     }
   };
 
-  const [isFavChecked, setIsFavChecked] = useState(false)
-  const checkHandler = () => {
-    setIsFavChecked(!isFavChecked)
-  }
-
   const handlePopClick = (event) => {
     setAnchorEl(event.currentTarget);
     setPopoverImageId(event.target.src)
@@ -93,32 +88,35 @@ const Gallery = () => {
   }
 
   useEffect(() => {
-    const abortController = new AbortController();
-    const signal = abortController.signal;
+
     const fetchData = async () => {
+      setIsLoading(true);
       try {
-        const { data } = await axios.get(`${BASE_URL}?page=${page}`, {
-          signal,
-        });
-        setArtwork(data.data);
+        const { data } = await axios.get(`${BASE_URL}?page=${page}`);
+        const favoritesList = JSON.parse(localStorage.getItem("favoritesList"));
+        const dataWithFavorites = data.data.map((art) => {
+          const isFavorite = favoritesList?.some((fav) => fav.id === art.id)
+          return { ...art, favorite: isFavorite };
+        })
+        setArtwork(dataWithFavorites);
         setError(null);
+
       } catch (error) {
         if (axios.isCancel(error)) {
           return;
         }
         setError(error.message);
+
       } finally {
         setIsLoading(false);
       }
     };
-    {
-      page > 0 &&
-        fetchData();
-      return () => {
-        abortController.abort();
-        setIsLoading(true);
-      };
+    if (page > 0) {
+      fetchData()
     }
+    return () => {
+      setIsLoading(true);
+    };
   }, [page]);
 
   return (
@@ -164,8 +162,6 @@ const Gallery = () => {
                     alt=""
                     onClick={handlePopClick}
                   />
-
-
                   <Popover
                     id={id}
                     open={open}
@@ -193,8 +189,6 @@ const Gallery = () => {
                     <Favorite
                       style={{ margin: 10 }}
                       onClick={() => { handleFavClick(art.id) }}
-                      checked={isFavChecked}
-                      onChange={checkHandler}
                     />
                   )}
                   {(art.favorite === undefined || art.favorite === false) && (
@@ -205,7 +199,6 @@ const Gallery = () => {
                   )}
                 </CardActionArea>
               </Card>
-
             </Grid2>
           ))}
         </Grid2>
