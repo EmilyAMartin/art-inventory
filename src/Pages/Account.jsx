@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import { BsPersonCircle } from "react-icons/bs";
 
 const Account = () => {
-  const [profileData, setProfileData] = useState([])
+  const [profileData, setProfileData] = useState("")
   const hiddenFileInput = useRef(null);
   const handleClick = event => {
     hiddenFileInput.current.click();
@@ -17,9 +17,10 @@ const Account = () => {
     event.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = []
-    for (const [key, value] of formData.entries()) {
-      data.push({ ...data, [key]: value })
+    for (const [key, defaultValue] of formData.entries()) {
+      data.push({ ...data, [key]: defaultValue })
     }
+    console.log(profileData)
     setProfileData(data);
     localStorage.setItem("profile", JSON.stringify(data))
   }
@@ -50,7 +51,9 @@ const Account = () => {
           name="fullName"
           type='text'
           placeholder='Full Name'
-          value={profileDat.fullName??""}
+          defaultValue={profileData.fullName ?? ""}
+
+
         />
         <TextField
           fullWidth

@@ -2,13 +2,7 @@ import React from 'react'
 import SignUpBtn from '../components/SignUpBtn'
 import LoginBtn from '../components/LoginBtn'
 
-
-
-
-
-
 const Home = () => {
-
   return (
     <div className="App">
       <div className="home-container">
@@ -27,7 +21,6 @@ const Home = () => {
             <div style={{ display: 'flex', flexDirection: 'row', gap: 25 }}>
               <SignUpBtn />
               <LoginBtn />
-
             </div>
           </div>
           <div className="home-image-section">

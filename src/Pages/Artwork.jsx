@@ -26,9 +26,33 @@ const Artwork = () => {
     setPopoverImageId(null)
   };
 
-  const [fav, setFav] = useState([]);
+  const handleFavClick = (id) => {
+    const updateArtwork = artwork.map((item) => {
+      return item.id === id ? { ...item, favorite: !item.favorite } : item;
+    })
+    setArtwork(updateArtwork);
+    const selectedArtwork = updateArtwork.find((art) => art.id === id);
+    if (selectedArtwork.favorite === true) {
+      const favoritesList =
+        JSON.parse(localStorage.getItem("favoritesList")) ?? [];
+      favoritesList.push(selectedArtwork);
+      localStorage.setItem("favoritesList", JSON.stringify(favoritesList));
+    } else if (selectedArtwork.favorite === false) {
+      const favoritesList =
+        JSON.parse(localStorage.getItem("favoritesList")) ?? [];
+      const updatedFavoritesList = favoritesList.filter(
+        (art) => art.id !== selectedArtwork.id
+      );
+      localStorage.setItem(
+        "favoritesList",
+        JSON.stringify(updatedFavoritesList)
+      );
+    }
+  };
+
+  const [artwork, setArtwork] = useState([]);
   useEffect(() => {
-    setFav(JSON.parse(localStorage.getItem('favoritesList')));
+    setArtwork(JSON.parse(localStorage.getItem('favoritesList')));
   }, [])
 
   return (
@@ -36,7 +60,7 @@ const Artwork = () => {
       <AddArtworkBtn />
       <SelectFilter sx={{ width: '50%' }} />
       <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px", justifyContent: 'space-around' }}>
-        {fav?.map(art => (
+        {artwork?.map(art => (
           <Grid2 item xs={12} ms={5} key={art.id}>
             <Card sx={{ maxWidth: 300, maxHeight: 600, display: "flex" }}>
               <CardActionArea>

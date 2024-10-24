@@ -15,6 +15,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import { Favorite } from '@mui/icons-material';
 import { FavoriteBorder } from '@mui/icons-material';
+import LearnMore from '../components/LearnMore';
+
 
 
 const Gallery = () => {
@@ -185,18 +187,19 @@ const Gallery = () => {
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.place_of_origin}</Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_end}</Typography>
                   </CardContent>
-                  {art.favorite === true && (
-                    <Favorite
-                      style={{ margin: 10 }}
-                      onClick={() => { handleFavClick(art.id) }}
-                    />
-                  )}
-                  {(art.favorite === undefined || art.favorite === false) && (
-                    <FavoriteBorder
-                      style={{ margin: 10 }}
-                      onClick={() => { handleFavClick(art.id) }}
-                    />
-                  )}
+                  <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', margin: 25 }}>
+                    {art.favorite === true && (
+                      <Favorite
+                        onClick={() => { handleFavClick(art.id) }}
+                      />
+                    )}
+                    {(art.favorite === undefined || art.favorite === false) && (
+                      <FavoriteBorder
+                        onClick={() => { handleFavClick(art.id) }}
+                      />
+                    )}
+                    <LearnMore />
+                  </div>
                 </CardActionArea>
               </Card>
             </Grid2>
