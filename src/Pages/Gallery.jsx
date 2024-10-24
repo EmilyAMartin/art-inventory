@@ -31,7 +31,7 @@ const Gallery = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [modalOpen, setModalOpen] = useState(false)
-  const handleButtonClick = () => {
+  const handleButtonClick = (event) => {
     setModalOpen(false);
   };
 
@@ -205,6 +205,7 @@ const Gallery = () => {
                         onClick={() => { handleFavClick(art.id) }}
                       />
                     )}
+
                     <div className='learn-more-modal'>
                       <button style={{
                         color: "black"
@@ -217,7 +218,7 @@ const Gallery = () => {
                           <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
                             <div>
                               <Typography gutterBottom variant="h5" component="div" paddingBottom={2} paddingLeft={12}>Description</Typography>
-                              <Typography anchorEl={anchorEl} variant="body2" sx={{ color: 'text.secondary' }}>{art.description}</Typography>
+                              <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.description}</Typography>
                             </div>
                           </Box>
                         </Modal>, document.body)
