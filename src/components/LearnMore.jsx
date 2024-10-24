@@ -10,6 +10,7 @@ const style = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 400,
+
     bgcolor: 'background.paper',
     p: 4,
 };
@@ -21,7 +22,7 @@ const LearnMore = () => {
 
     return (
         <div>
-            <Button onClick={handleOpen}>Learn More</Button>
+            <Button color='black' onClick={handleOpen}>Learn More</Button>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -33,7 +34,7 @@ const LearnMore = () => {
                         Description
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        "    "
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
                     </Typography>
                 </Box>
             </Modal>

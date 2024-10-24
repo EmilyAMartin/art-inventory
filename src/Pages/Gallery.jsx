@@ -15,9 +15,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import { Favorite } from '@mui/icons-material';
 import { FavoriteBorder } from '@mui/icons-material';
-import LearnMore from '../components/LearnMore';
 
-
+import { createPortal } from 'react-dom'
+import Modal from '../components/Modal'
+import Box from '@mui/material/Box';
 
 const Gallery = () => {
   const BASE_URL = "https://api.artic.edu/api/v1/artworks";
@@ -28,6 +29,12 @@ const Gallery = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [popoverImageId, setPopoverImageId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [modalOpen, setModalOpen] = useState(false)
+  const handleButtonClick = () => {
+    setModalOpen(false);
+  };
+
 
   const handleFavClick = (id) => {
     const updateArtwork = artwork.map((item) => {
@@ -198,7 +205,24 @@ const Gallery = () => {
                         onClick={() => { handleFavClick(art.id) }}
                       />
                     )}
-                    <LearnMore />
+                    <div className='learn-more-modal'>
+                      <button style={{
+                        color: "black"
+                      }}
+                        onClick={() => setModalOpen(true)}>
+                        Learn More
+                      </button>
+                      {modalOpen && (
+                        createPortal(<Modal onSubmit={handleButtonClick} onCancel={handleButtonClick} onClose={handleButtonClick}>
+                          <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+                            <div>
+                              <Typography gutterBottom variant="h5" component="div" paddingBottom={2} paddingLeft={12}>Description</Typography>
+                              <Typography anchorEl={anchorEl} variant="body2" sx={{ color: 'text.secondary' }}>{art.description}</Typography>
+                            </div>
+                          </Box>
+                        </Modal>, document.body)
+                      )}
+                    </div>
                   </div>
                 </CardActionArea>
               </Card>
