@@ -17,7 +17,7 @@ import { Favorite } from '@mui/icons-material';
 import { FavoriteBorder } from '@mui/icons-material';
 
 import { createPortal } from 'react-dom'
-import Modal from '../components/Modal'
+import LearnMoreModal from '../components/LearnMoreModal';
 import Box from '@mui/material/Box';
 
 const Gallery = () => {
@@ -31,10 +31,9 @@ const Gallery = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [modalOpen, setModalOpen] = useState(false)
-  const handleButtonClick = (event) => {
+  const handleModalButtonClick = (event) => {
     setModalOpen(false);
   };
-
 
   const handleFavClick = (id) => {
     const updateArtwork = artwork.map((item) => {
@@ -177,8 +176,8 @@ const Gallery = () => {
                     anchorEl={anchorEl}
                     onClose={handleClose}
                     anchorOrigin={{
-                      vertical: 'bottom',
-                      horizontal: 'left',
+                      vertical: 'center',
+                      horizontal: 'center',
                     }}
                   >
                     <CardMedia
@@ -207,21 +206,20 @@ const Gallery = () => {
                     )}
 
                     <div className='learn-more-modal'>
-                      <button style={{
-                        color: "black"
-                      }}
-                        onClick={() => setModalOpen(true)}>
+                      <button style={{ color: "black" }} onClick={() => setModalOpen(true)}>
                         Learn More
                       </button>
                       {modalOpen && (
-                        createPortal(<Modal onSubmit={handleButtonClick} onCancel={handleButtonClick} onClose={handleButtonClick}>
-                          <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-                            <div>
-                              <Typography gutterBottom variant="h5" component="div" paddingBottom={2} paddingLeft={12}>Description</Typography>
-                              <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.description}</Typography>
-                            </div>
-                          </Box>
-                        </Modal>, document.body)
+                        createPortal(
+                          <LearnMoreModal
+                            onClose={handleModalButtonClick}>
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+                              <div>
+                                <Typography gutterBottom variant="h5" component="div" paddingBottom={2} paddingLeft={12}>Description</Typography>
+                                <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.description}</Typography>
+                              </div>
+                            </Box>
+                          </LearnMoreModal>, document.body)
                       )}
                     </div>
                   </div>
