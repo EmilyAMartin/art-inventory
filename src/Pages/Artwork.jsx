@@ -13,6 +13,7 @@ import { Favorite } from '@mui/icons-material';
 import { FavoriteBorder } from '@mui/icons-material';
 
 const Artwork = () => {
+  const [artwork, setArtwork] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [popoverImageId, setPopoverImageId] = useState(null);
   const open = Boolean(anchorEl);
@@ -50,7 +51,6 @@ const Artwork = () => {
     }
   };
 
-  const [artwork, setArtwork] = useState([]);
   useEffect(() => {
     setArtwork(JSON.parse(localStorage.getItem('favoritesList')));
   }, [])

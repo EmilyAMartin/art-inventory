@@ -2,6 +2,7 @@ import React from 'react'
 import SignUpBtn from '../components/SignUpBtn'
 import LoginBtn from '../components/LoginBtn'
 
+
 const Home = () => {
   return (
     <div className="App">

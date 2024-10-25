@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import { BsPersonCircle } from "react-icons/bs";
 
 const Account = () => {
-  const [profileData, setProfileData] = useState("")
+
   const hiddenFileInput = useRef(null);
   const handleClick = event => {
     hiddenFileInput.current.click();
@@ -13,21 +13,6 @@ const Account = () => {
     const fileUploaded = event.target.files[0];
     handleFile(fileUploaded);
   };
-  const handelSubmit = (e) => {
-    event.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const data = []
-    for (const [key, defaultValue] of formData.entries()) {
-      data.push({ ...data, [key]: defaultValue })
-    }
-    console.log(profileData)
-    setProfileData(data);
-    localStorage.setItem("profile", JSON.stringify(data))
-  }
-  useEffect(() => {
-    const profile = JSON.parse(localStorage.getItem("profile"));
-    setProfileData(profile)
-  }, [])
 
   return (
     <>
@@ -42,7 +27,9 @@ const Account = () => {
         />
         <Typography variant="h6">Jane Doe</Typography>
       </div>
-      <form onSubmit={handelSubmit} >
+
+
+      <form >
         <Typography variant="h6">Profile</Typography>
         <TextField
           fullWidth
@@ -51,9 +38,6 @@ const Account = () => {
           name="fullName"
           type='text'
           placeholder='Full Name'
-          defaultValue={profileData.fullName ?? ""}
-
-
         />
         <TextField
           fullWidth
@@ -62,6 +46,7 @@ const Account = () => {
           name="username"
           type='text'
           placeholder='Username'
+
         />
         <TextField
           fullWidth
@@ -70,6 +55,7 @@ const Account = () => {
           name="email"
           type='email'
           placeholder='Email'
+
         />
         <TextField
           fullWidth
@@ -80,6 +66,7 @@ const Account = () => {
           placeholder='Bio'
           multiline
           rows={4}
+
         />
         <Typography variant="h6">Password and Security</Typography>
         <TextField
@@ -90,6 +77,7 @@ const Account = () => {
           type='text'
           placeholder='Current Password'
 
+
         />
         <TextField
           fullWidth
@@ -98,6 +86,7 @@ const Account = () => {
           name="new-password"
           type='text'
           placeholder='New Password'
+
         />
         <TextField
           fullWidth
