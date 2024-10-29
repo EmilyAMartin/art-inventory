@@ -50,18 +50,7 @@ nav .menu span {
   background-color: rgb(0, 0, 0);
   border-radius: 0.2rem;
 }
-.primary-button {
-  padding: 1rem 1.5rem;
-  background-color: #6c63ff;
-  color: #ffffff;
-  outline: none;
-  border: none;
-  border-radius: 1.5rem;
-  font-size: 1rem;
-  cursor: pointer;
-  font-weight: 500;
-  transition: 0.2s;
-}
+
 .primary-button:hover {
   background-color: #4640ad;
 }

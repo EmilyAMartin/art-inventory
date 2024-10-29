@@ -1,8 +1,6 @@
 import React from 'react'
 import SignUpBtn from '../components/SignUpBtn'
 import LoginBtn from '../components/LoginBtn'
-import Form from '../components/Form'
-
 
 const Home = () => {
   return (
@@ -11,7 +9,7 @@ const Home = () => {
         <div className="home-banner-container">
           <div className="home-bannerImage-container"></div>
           <div className="home-text-section">
-            <Form />
+
             <div className="home-heading">Welcome to Portfolio</div>
             <div className="home-primary-text">
               Your vibrant online platform where artists of all levels can showcase

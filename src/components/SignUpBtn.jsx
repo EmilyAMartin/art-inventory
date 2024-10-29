@@ -26,23 +26,35 @@ const SignUpBtn = () => {
     const handleMouseUpPassword = (event) => {
         event.preventDefault();
     };
+    const [isHover, setIsHover] = useState(false);
+    const handleMouseEnter = () => {
+        setIsHover(true);
+    };
+    const handleMouseLeave = () => {
+        setIsHover(false);
+    };
+    const buttonStyle = {
+        marginTop: '1.5rem',
+        padding: '0.6rem',
+        hover: '#6c63ff50',
+        color: '#ffffff',
+        outline: 'none',
+        border: 'none',
+        borderRadius: '0.5rem',
+        fontSize: '1rem',
+        fontWeight: 500,
+        cursor: 'pointer',
+        transition: '0.2s',
+        width: 150,
+        backgroundColor: isHover ? '#4640ad' : '#6c63ff',
+        color: isHover ? 'white' : 'white',
+    }
 
     return (
         <>
-            <button style={{
-                padding: '0.6rem',
-                backgroundColor: '#6c63ff',
-                color: '#ffffff',
-                outline: 'none',
-                border: 'none',
-                borderRadius: '0.5rem',
-                fontSize: '1rem',
-                fontWeight: 500,
-                cursor: 'pointer',
-                transition: '0.2s',
-                width: 150,
-            }}
-                onClick={() => setModalOpen(true)}>
+            <button style={buttonStyle}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}>
                 Sign Up
             </button>
 
