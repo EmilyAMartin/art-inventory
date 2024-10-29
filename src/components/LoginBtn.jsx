@@ -35,7 +35,6 @@ const LoginBtn = () => {
     };
     const buttonStyle = {
         marginTop: '1.5rem',
-        padding: '0.6rem',
         hover: '#6c63ff50',
         color: '#ffffff',
         outline: 'none',

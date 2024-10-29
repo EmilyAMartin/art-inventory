@@ -9,7 +9,6 @@ const Home = () => {
         <div className="home-banner-container">
           <div className="home-bannerImage-container"></div>
           <div className="home-text-section">
-
             <div className="home-heading">Welcome to Portfolio</div>
             <div className="home-primary-text">
               Your vibrant online platform where artists of all levels can showcase
