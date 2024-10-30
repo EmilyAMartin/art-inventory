@@ -54,7 +54,8 @@ const SignUpBtn = () => {
         <>
             <button style={buttonStyle}
                 onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}>
+                onMouseLeave={handleMouseLeave}
+                onClick={() => setModalOpen(true)}>
                 Sign Up
             </button>
 
