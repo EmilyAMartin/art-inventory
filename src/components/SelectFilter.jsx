@@ -1,26 +1,37 @@
-import React from 'react'
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import React, { useState } from 'react'
+import Data from '../components/ArtData.json'
 
 const BasicSelect = () => {
-  const [filter, setFilter] = React.useState('');
-  const handleChange = (event) => {
-    setFilter(event.target.value);
-  };
-
+  const [value, setValue] = useState('')
+  const options = [
+    { label: "Recently Added", value: 100 },
+    { label: "Favorites", value: JSON.parse(localStorage.getItem('favoritesList')) },
+  ]
+  function handleSelect(e) {
+    setValue(e.target.value)
+  }
   return (
-    <FormControl sx={{ m: 1, maxWidth: 250 }}>
-      <Select
-        value={filter}
-        onChange={handleChange}
-        displayEmpty
-        inputProps={{ 'aria-label': 'Without label' }}
-      >
-        <MenuItem value="">Recently Added</MenuItem>
-        <MenuItem value={'Favorites'}>Favorites</MenuItem>
-      </Select>
-    </FormControl>
+    < div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignContent: 'center'
+    }}>
+      <select
+        style={{
+          borderColor: 'lightgrey',
+          borderRadius: '0.3rem',
+          width: '25rem',
+          height: '3rem',
+          fontSize: '1rem',
+        }}
+        onChange={handleSelect}>
+        {options.map(option => (
+          <option value={option.value}>{option.label}</option>
+        ))}
+      </select>
+      <p>{value}</p>
+    </div>
   )
 }
 

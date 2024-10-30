@@ -206,8 +206,16 @@ const Gallery = () => {
                     )}
 
                     <div className='learn-more-modal'>
-                      <button style={{ color: "black" }} onClick={() => setModalOpen(true)}>
-                        Learn More
+                      <button
+                        style={{
+                          color: "black",
+                          outline: 'none',
+                          border: 'none',
+                          backgroundColor: 'white',
+                          cursor: 'pointer'
+                        }}
+                        onClick={() => setModalOpen(true)}>
+                        <Typography variant='h7' fontWeight={400}> LEARN MORE </Typography>
                       </button>
                       {modalOpen && (
                         createPortal(
