@@ -1,13 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { TextField } from '@mui/material'
 import { Typography } from '@mui/material'
 
 const Form = () => {
+
+    const [fullname, setFullname] = useState('')
+    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
+    const [bio, setBio] = useState('')
     const submitForm = (e) => {
         e.preventDefault()
-        const formData = new FormData(e.target)
-        const payload = Object.fromEntries(formData)
     }
+
     const [isHover, setIsHover] = useState(false);
     const handleMouseEnter = () => {
         setIsHover(true);
@@ -15,6 +19,7 @@ const Form = () => {
     const handleMouseLeave = () => {
         setIsHover(false);
     };
+
     const buttonStyle = {
         marginTop: '1.5rem',
         padding: '0.6rem',
@@ -32,16 +37,22 @@ const Form = () => {
         color: isHover ? 'white' : 'white',
     }
 
+    useEffect(() => {
+        window.localStorage.setItem('form-data', JSON.stringify())
+    });
+
     return (
-        <form onSubmit={submitForm}>
+
+        <form>
             <Typography variant="h6">Profile</Typography>
             <TextField
                 fullWidth
                 margin='normal'
                 label="Full Name"
                 type='text'
-                name="fullName"
+                name="fullname"
                 placeholder='Full Name'
+                onChange={(e) => { setFullname(e.target.value) }}
             />
             <TextField
                 fullWidth
@@ -50,6 +61,7 @@ const Form = () => {
                 name="username"
                 type='text'
                 placeholder='Username'
+                onChange={(e) => { setUsername(e.target.value) }}
             />
             <TextField
                 fullWidth
@@ -58,6 +70,7 @@ const Form = () => {
                 name="email"
                 type='email'
                 placeholder='Email'
+                onChange={(e) => { setEmail(e.target.value) }}
             />
             <TextField
                 fullWidth
@@ -68,6 +81,7 @@ const Form = () => {
                 name="bio"
                 type='text'
                 placeholder='Bio'
+                onChange={(e) => { setBio(e.target.value) }}
             />
             <Typography variant="h6">Password and Security</Typography>
             <TextField
@@ -101,6 +115,7 @@ const Form = () => {
                 paddingBottom: 30,
             }}>
                 <button style={buttonStyle}
+                    onClick={submitForm}
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}>
                     Submit
