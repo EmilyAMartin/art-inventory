@@ -16,9 +16,19 @@ import TextField from "@mui/material/TextField";
 import { Favorite } from '@mui/icons-material';
 import { FavoriteBorder } from '@mui/icons-material';
 
-import { createPortal } from 'react-dom'
-import LearnMoreModal from '../components/LearnMoreModal';
 import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 const Gallery = () => {
   const BASE_URL = "https://api.artic.edu/api/v1/artworks";
@@ -30,10 +40,9 @@ const Gallery = () => {
   const [popoverImageId, setPopoverImageId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [modalOpen, setModalOpen] = useState(false)
-  const handleModalButtonClick = (event) => {
-    setModalOpen(false);
-  };
+  const [openModal, setOpenModal] = useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
 
   const handleFavClick = (id) => {
     const updateArtwork = artwork.map((item) => {
@@ -204,40 +213,35 @@ const Gallery = () => {
                         onClick={() => { handleFavClick(art.id) }}
                       />
                     )}
-
-                    <div className='learn-more-modal'>
-                      <button
-                        style={{
-                          color: "black",
-                          outline: 'none',
-                          border: 'none',
-                          backgroundColor: 'white',
-                          cursor: 'pointer'
-                        }}
-                        onClick={() => setModalOpen(true)}>
-                        <Typography variant='h7' fontWeight={400}> LEARN MORE </Typography>
-                      </button>
-                      {modalOpen && (
-                        createPortal(
-                          <LearnMoreModal
-                            onClose={handleModalButtonClick}>
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-                              <div>
-                                <Typography gutterBottom variant="h5" component="div" paddingBottom={2} paddingLeft={12}>Description</Typography>
-                                <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.description}</Typography>
-                              </div>
-                            </Box>
-                          </LearnMoreModal>, document.body)
-                      )}
-                    </div>
                   </div>
+
+                  <div>
+                    <Button onClick={() => { handleOpenModal(art.id) }}>Open modal</Button>
+                  </div>
+
                 </CardActionArea>
               </Card>
+              <Modal
+                open={openModal}
+                onClose={handleCloseModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={style}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2">
+                    Text in a modal
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.description}</Typography>
+                </Box>
+              </Modal>
             </Grid2>
           ))}
         </Grid2>
+
+
+
       </div>
-    </div>
+    </div >
   )
 }
 export default Gallery
