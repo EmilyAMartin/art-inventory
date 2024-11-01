@@ -218,22 +218,21 @@ const Gallery = () => {
                   <div>
                     <Button onClick={() => { handleOpenModal(art.id) }}>Open modal</Button>
                   </div>
-
+                  <Modal
+                    open={openModal}
+                    onClose={handleCloseModal}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                  >
+                    <Box sx={style}>
+                      <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Text in a modal
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.description}</Typography>
+                    </Box>
+                  </Modal>
                 </CardActionArea>
               </Card>
-              <Modal
-                open={openModal}
-                onClose={handleCloseModal}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-              >
-                <Box sx={style}>
-                  <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Text in a modal
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.description}</Typography>
-                </Box>
-              </Modal>
             </Grid2>
           ))}
         </Grid2>

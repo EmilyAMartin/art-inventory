@@ -4,6 +4,7 @@ import LoginBtn from '../components/LoginBtn'
 
 const Home = () => {
   return (
+
     <div className="App">
       <div className="home-container">
         <div className="home-banner-container">

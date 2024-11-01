@@ -1,32 +1,27 @@
-import React from 'react'
-import Modal from '../components/Modal';
+import React, { useState } from 'react'
+import { styled } from '@mui/material/styles';
+import { green } from '@mui/material/colors';
+import { red } from '@mui/material/colors';
+import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { useState } from 'react'
-import { createPortal } from 'react-dom'
-import { styled } from '@mui/material/styles';
 
 const AddArtworkBtn = () => {
-    const [modalOpen, setModalOpen] = useState(false)
-    const handleButtonClick = () => {
-        setModalOpen(false);
-    };
+    const [open, setOpen] = useState(false);
     const [isHover, setIsHover] = useState(false);
-    const handleMouseEnter = () => {
-        setIsHover(true);
-    };
-    const handleMouseLeave = () => {
-        setIsHover(false);
-    };
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    const handleMouseEnter = () => { setIsHover(true); };
+    const handleMouseLeave = () => { setIsHover(false); };
+
     const buttonStyle = {
-        marginTop: '1.5rem',
-        padding: '0.6rem',
+        padding: '0.5rem',
         hover: '#6c63ff50',
         color: '#ffffff',
         outline: 'none',
@@ -40,6 +35,33 @@ const AddArtworkBtn = () => {
         backgroundColor: isHover ? '#4640ad' : '#6c63ff',
         color: isHover ? 'white' : 'white',
     }
+    const modalStyle = {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignContent: 'center',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 600,
+        bgcolor: 'background.paper',
+        p: 4,
+    };
+    const SubmitButton = styled(Button)(({ theme }) => ({
+        color: theme.palette.getContrastText(green[500]),
+        backgroundColor: green[400],
+        '&:hover': {
+            backgroundColor: green[700],
+        },
+    }));
+    const CancelButton = styled(Button)(({ theme }) => ({
+        color: theme.palette.getContrastText(red[500]),
+        backgroundColor: red[500],
+        '&:hover': {
+            backgroundColor: red[700],
+        },
+    }));
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
         clipPath: 'inset(50%)',
@@ -52,100 +74,103 @@ const AddArtworkBtn = () => {
         width: 1,
     });
     return (
-        <>
+        <div>
             <button style={buttonStyle}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                onClick={() => setModalOpen(true)}>
+                onClick={handleOpen}>
                 Add New Artwork
             </button>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={modalStyle}>
+                    <div>
+                        <Typography variant="h5" paddingBottom={2} paddingLeft={22} >Add New Artwork</Typography>
+                        <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+                            <InputLabel htmlFor="outlined-adornment- Title">Title</InputLabel>
+                            <OutlinedInput
+                                id="outlined-adornment-title"
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                    </InputAdornment>
+                                }
+                                label="title"
+                            />
+                        </FormControl>
 
-            {modalOpen && (
-                createPortal(<Modal onSubmit={handleButtonClick} onCancel={handleButtonClick} onClose={handleButtonClick}>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-                        <div>
-                            <Typography gutterBottom variant="h5" component="div" paddingBottom={2} >Add New Artwork</Typography>
-                        </div>
-                        <div>
+                        <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+                            <InputLabel htmlFor="outlined-adornment-date">Date</InputLabel>
+                            <OutlinedInput
+                                id="outlined-adornment-date"
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                    </InputAdornment>
+                                }
+                                label="date"
+                            />
+                        </FormControl>
+                        <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+                            <InputLabel htmlFor="outlined-adornment-medium">Medium</InputLabel>
+                            <OutlinedInput
+                                id="outlined-adornment-date"
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                    </InputAdornment>
+                                }
+                                label="medium"
+                            />
+                        </FormControl>
 
-                            <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
-                                <InputLabel htmlFor="outlined-adornment- Title">Title</InputLabel>
-                                <OutlinedInput
-                                    id="outlined-adornment-title"
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                        </InputAdornment>
-                                    }
-                                    label="title"
-                                />
-                            </FormControl>
+                        <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+                            <InputLabel htmlFor="outlined-adornment-location">Location</InputLabel>
+                            <OutlinedInput
+                                id="outlined-adornment-date"
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                    </InputAdornment>
+                                }
+                                label="location"
+                            />
+                        </FormControl>
 
-                            <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
-                                <InputLabel htmlFor="outlined-adornment-date">Date</InputLabel>
-                                <OutlinedInput
-                                    id="outlined-adornment-date"
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                        </InputAdornment>
-                                    }
-                                    label="date"
-                                />
-                            </FormControl>
-                            <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
-                                <InputLabel htmlFor="outlined-adornment-medium">Medium</InputLabel>
-                                <OutlinedInput
-                                    id="outlined-adornment-date"
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                        </InputAdornment>
-                                    }
-                                    label="medium"
-                                />
-                            </FormControl>
-
-                            <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
-                                <InputLabel htmlFor="outlined-adornment-location">Location</InputLabel>
-                                <OutlinedInput
-                                    id="outlined-adornment-date"
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                        </InputAdornment>
-                                    }
-                                    label="location"
-                                />
-                            </FormControl>
-
-                            <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
-                                <InputLabel htmlFor="outlined-adornment-quantity">Quantity</InputLabel>
-                                <OutlinedInput
-                                    id="outlined-adornment-date"
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                        </InputAdornment>
-                                    }
-                                    label="quantity"
-                                />
-                            </FormControl>
-                            <Button
-                                sx={{ display: 'flex', justifyContent: 'center', m: 1, width: '100%' }}
-                                component="label"
-                                role={undefined}
-                                variant="contained"
-                                tabIndex={-1}
-                                startIcon={<CloudUploadIcon />}
-                            >
-                                Upload files
-                                <VisuallyHiddenInput
-                                    type="file"
-                                    onChange={(event) => console.log(event.target.files)}
-                                    multiple
-                                />
-                            </Button>
-                        </div>
-                    </Box>
-                </Modal>, document.body)
-            )}
-        </>
+                        <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+                            <InputLabel htmlFor="outlined-adornment-quantity">Quantity</InputLabel>
+                            <OutlinedInput
+                                id="outlined-adornment-date"
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                    </InputAdornment>
+                                }
+                                label="quantity"
+                            />
+                        </FormControl>
+                        <Button
+                            sx={{ display: 'flex', justifyContent: 'center', m: 1, width: '100%' }}
+                            component="label"
+                            role={undefined}
+                            variant="contained"
+                            tabIndex={-1}
+                            startIcon={<CloudUploadIcon />}
+                        >
+                            Upload files
+                            <VisuallyHiddenInput
+                                type="file"
+                                onChange={(event) => console.log(event.target.files)}
+                                multiple
+                            />
+                        </Button>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: 50, marginTop: 25 }}>
+                        <SubmitButton sx={{ color: 'white' }} variant="contained" onClick={handleClose}>Submit</SubmitButton>
+                        <CancelButton sx={{ color: 'white' }} variant="contained" onClick={handleClose}>Cancel</CancelButton>
+                    </div>
+                </Box>
+            </Modal>
+        </div>
     )
 }
 
