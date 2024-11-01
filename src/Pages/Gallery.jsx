@@ -16,21 +16,49 @@ import TextField from "@mui/material/TextField";
 import { Favorite } from '@mui/icons-material';
 import { FavoriteBorder } from '@mui/icons-material';
 
-import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
+import Box from '@mui/material/Box';
+
+
 
 const Gallery = () => {
+
+  const [openModal, setOpenModal] = useState(false);
+  const [isHover, setIsHover] = useState(false);
+  const handleModalOpen = () => setOpenModal(true);
+  const handleModalClose = () => setOpenModal(false);
+  const handleMouseEnter = () => { setIsHover(true); };
+  const handleMouseLeave = () => { setIsHover(false); };
+
+  const buttonStyle = {
+    padding: '0.5rem',
+    hover: '#6c63ff50',
+    color: '#ffffff',
+    outline: 'none',
+    border: 'none',
+    borderRadius: '0.5rem',
+    fontSize: '1rem',
+    fontWeight: 500,
+    cursor: 'pointer',
+    transition: '0.2s',
+    width: 150,
+    backgroundColor: isHover ? '#4640ad' : '#6c63ff',
+    color: isHover ? 'white' : 'white',
+  }
+  const modalStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignContent: 'center',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 600,
+    bgcolor: 'background.paper',
+    p: 4,
+  };
+
   const BASE_URL = "https://api.artic.edu/api/v1/artworks";
   const [artwork, setArtwork] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,10 +67,6 @@ const Gallery = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [popoverImageId, setPopoverImageId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-
-  const [openModal, setOpenModal] = useState(false);
-  const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
 
   const handleFavClick = (id) => {
     const updateArtwork = artwork.map((item) => {
@@ -213,24 +237,28 @@ const Gallery = () => {
                         onClick={() => { handleFavClick(art.id) }}
                       />
                     )}
-                  </div>
 
-                  <div>
-                    <Button onClick={() => { handleOpenModal(art.id) }}>Open modal</Button>
+                    <div>
+                      <button style={buttonStyle}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                        onClick={handleModalOpen}>
+                        Learn More
+                      </button>
+                      <Modal
+                        open={openModal}
+                        onClose={handleModalClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                      >
+                        <Box sx={modalStyle}>
+                          <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.description}</Typography>
+                        </Box>
+                      </Modal>
+                    </div>
+
+
                   </div>
-                  <Modal
-                    open={openModal}
-                    onClose={handleCloseModal}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                  >
-                    <Box sx={style}>
-                      <Typography id="modal-modal-title" variant="h6" component="h2">
-                        Text in a modal
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.description}</Typography>
-                    </Box>
-                  </Modal>
                 </CardActionArea>
               </Card>
             </Grid2>
