@@ -46,15 +46,16 @@ const SignUpBtn = () => {
     const modalStyle = {
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
-        alignContent: 'center',
         position: 'absolute',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
         width: 600,
         bgcolor: 'background.paper',
-        p: 4,
+        paddingLeft: '2rem',
+        paddingRight: '3rem',
+        paddingBottom: '2.5rem',
+        paddingTop: '2rem',
     };
     const SubmitButton = styled(Button)(({ theme }) => ({
         color: theme.palette.getContrastText(green[500]),
