@@ -85,10 +85,10 @@ const Form = () => {
             <TextField
                 fullWidth
                 margin='normal'
-                label="Current Password"
+                label='Current Password'
                 name="current-password"
                 type='text'
-                placeholder='Current Password'
+                value={'**********'}
             />
             <TextField
                 fullWidth
