@@ -4,21 +4,7 @@
   max-width: 1900px;
   margin: 0rem auto;
 }
-.primary-button {
-  padding: 1rem 1.5rem;
-  background-color: #6c63ff;
-  color: #ffffff;
-  outline: none;
-  border: none;
-  border-radius: 1.5rem;
-  font-size: 1rem;
-  cursor: pointer;
-  font-weight: 500;
-  transition: 0.2s;
-}
-.primary-button:hover {
-  background-color: #4640ad;
-}
+
 img {
   max-width: 100%;
   height: auto;
@@ -26,7 +12,6 @@ img {
 .home-banner-container {
   position: relative;
   display: flex;
-  padding-top: 1.5rem;
 }
 .home-bannerImage-container {
   position: absolute;

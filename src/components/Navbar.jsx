@@ -17,8 +17,9 @@ export const Navbar = () => {
         <li><NavLink to="Artwork">Artwork</NavLink></li>
         <li><NavLink to="Gallery">Gallery</NavLink></li>
         <li><NavLink to="Account">Account</NavLink></li>
-        <LoginBtn />
+        <li style={{ marginTop: 6 }}><LoginBtn /></li>
       </ul>
+
     </nav >
   );
 };
