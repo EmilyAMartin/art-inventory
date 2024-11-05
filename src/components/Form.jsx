@@ -3,7 +3,6 @@ import { TextField } from '@mui/material'
 import { Typography } from '@mui/material'
 
 const Form = () => {
-
     const [fullname, setFullname] = useState('')
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
@@ -11,7 +10,6 @@ const Form = () => {
     const submitForm = (e) => {
         e.preventDefault()
     }
-
     const [isHover, setIsHover] = useState(false);
     const handleMouseEnter = () => {
         setIsHover(true);

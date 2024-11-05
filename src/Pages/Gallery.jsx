@@ -19,32 +19,16 @@ import { FavoriteBorder } from '@mui/icons-material';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 
-
-
 const Gallery = () => {
-
+  const BASE_URL = "https://api.artic.edu/api/v1/artworks";
+  const [artwork, setArtwork] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [popoverImageId, setPopoverImageId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const [openModal, setOpenModal] = useState(false);
-  const [isHover, setIsHover] = useState(false);
-  const handleModalOpen = () => setOpenModal(true);
-  const handleModalClose = () => setOpenModal(false);
-  const handleMouseEnter = () => { setIsHover(true); };
-  const handleMouseLeave = () => { setIsHover(false); };
-
-  const buttonStyle = {
-    padding: '0.5rem',
-    hover: '#6c63ff50',
-    color: '#ffffff',
-    outline: 'none',
-    border: 'none',
-    borderRadius: '0.5rem',
-    fontSize: '1rem',
-    fontWeight: 500,
-    cursor: 'pointer',
-    transition: '0.2s',
-    width: 150,
-    backgroundColor: isHover ? '#4640ad' : '#6c63ff',
-    color: isHover ? 'white' : 'white',
-  }
   const modalStyle = {
     display: 'flex',
     flexDirection: 'column',
@@ -59,14 +43,21 @@ const Gallery = () => {
     p: 4,
   };
 
-  const BASE_URL = "https://api.artic.edu/api/v1/artworks";
-  const [artwork, setArtwork] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [page, setPage] = useState(1);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [popoverImageId, setPopoverImageId] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
+
+
+
+
+  const handleModalOpen = (event) => {
+    setOpenModal(true);
+    setAnchorEl(event.currentTarget);
+    setPopoverImageId(event.target.src)
+  }
+
+  const handleModalClose = () => {
+    setAnchorEl(null);
+    setPopoverImageId(null)
+    setOpenModal(false);
+  }
 
   const handleFavClick = (id) => {
     const updateArtwork = artwork.map((item) => {
@@ -237,14 +228,11 @@ const Gallery = () => {
                         onClick={() => { handleFavClick(art.id) }}
                       />
                     )}
-
                     <div>
-                      <button style={buttonStyle}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                        onClick={handleModalOpen}>
+                      <Button color='black'
+                        onClick={() => { handleModalOpen(art.id) }}>
                         Learn More
-                      </button>
+                      </Button>
                       <Modal
                         open={openModal}
                         onClose={handleModalClose}
