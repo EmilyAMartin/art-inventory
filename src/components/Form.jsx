@@ -1,6 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { TextField } from '@mui/material'
 import { Typography } from '@mui/material'
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import FormControl from '@mui/material/FormControl';
 
 const Form = () => {
     const [name, setName] = useState('')
@@ -9,10 +16,18 @@ const Form = () => {
     const [bio, setBio] = useState('')
     const [newpassword, setNewPassword] = useState('')
     const [reppassword, setRepPassword] = useState('')
-
     const [isHover, setIsHover] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const handleMouseEnter = () => { setIsHover(true); };
     const handleMouseLeave = () => { setIsHover(false); };
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
+    const handleMouseUpPassword = (event) => {
+        event.preventDefault();
+    };
+
 
     const buttonStyle = {
         marginTop: '1.5rem',
@@ -45,7 +60,6 @@ const Form = () => {
         window.location.reload();
     }
     return (
-
         <form>
             <Typography variant="h6">Profile</Typography>
             <TextField
@@ -86,7 +100,7 @@ const Form = () => {
                 placeholder='Bio'
                 onChange={(e) => setBio(e.target.value)}
             />
-            <Typography variant="h6">Password and Security</Typography>
+            <Typography marginTop="1rem" variant="h6">Password and Security</Typography>
             <TextField
                 fullWidth
                 margin='normal'
@@ -95,24 +109,59 @@ const Form = () => {
                 type='text'
                 value={'**********'}
             />
-            <TextField
-                fullWidth
-                margin='normal'
-                label="New Password"
-                name="new-password"
-                type='text'
-                placeholder='New Password'
-                onChange={(e) => setNewPassword(e.target.value)}
-            />
-            <TextField
-                fullWidth
-                margin='normal'
-                label="Re-Type Password"
-                name="re-type-password"
-                type='text'
-                placeholder='Re-Type Password'
-                onChange={(e) => setRepPassword(e.target.value)}
-            />
+            <FormControl fullWidth margin='normal' variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-password"> New Password</InputLabel>
+                <OutlinedInput
+                    id="outlined-adornment-password"
+                    label="New Password"
+                    name="new-password"
+                    placeholder='New Password'
+                    type={showPassword ? 'text' : 'password'}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    endAdornment={
+                        <InputAdornment position="end">
+                            <IconButton
+                                aria-label={
+                                    showPassword ? 'hide the password' : 'display the password'
+                                }
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                onMouseUp={handleMouseUpPassword}
+                                edge="end"
+                            >
+                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                        </InputAdornment>
+                    }
+                />
+            </FormControl>
+            <FormControl fullWidth margin='normal' variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-reppassword"> Re-Type Password</InputLabel>
+                <OutlinedInput
+                    id="outlined-adornment-reppassword"
+                    label="Re=Type Password"
+                    name="reppassword"
+                    placeholder='Re-Type Password'
+                    type={showPassword ? 'text' : 'password'}
+                    onChange={(e) => setRepPassword(e.target.value)}
+                    endAdornment={
+                        <InputAdornment position="end">
+                            <IconButton
+                                aria-label={
+                                    showPassword ? 'hide the password' : 'display the password'
+                                }
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                onMouseUp={handleMouseUpPassword}
+                                edge="end"
+                            >
+                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                        </InputAdornment>
+                    }
+                />
+            </FormControl>
+
             <div style={{
                 display: 'flex',
                 justifyContent: 'center',

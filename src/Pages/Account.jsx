@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import Typography from '@mui/material/Typography';
 import { BsPersonCircle } from "react-icons/bs";
 import Form from '../components/Form';
@@ -24,7 +24,7 @@ const Account = () => {
           ref={hiddenFileInput}
           style={{ display: 'none' }} // Make the file input element invisible
         />
-        <Typography variant="h6">Jane Doe</Typography>
+        <Typography variant="h6">Username</Typography>
       </div>
       <Form />
     </>
