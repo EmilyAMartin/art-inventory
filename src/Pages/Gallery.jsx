@@ -190,7 +190,7 @@ const Gallery = () => {
                   <CardMedia
                     style={{ width: 300, height: 300 }}
                     component="img"
-                    image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
+                    image={`https://www.artic.edu/iiif/2/${art.image_id, art.alt_image_ids}/full/843,/0/default.jpg`}
                     alt=""
                     onClick={handlePopClick}
                   />

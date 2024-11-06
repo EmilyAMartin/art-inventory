@@ -3,20 +3,16 @@ import { TextField } from '@mui/material'
 import { Typography } from '@mui/material'
 
 const Form = () => {
-    const [fullname, setFullname] = useState('')
+    const [name, setName] = useState('')
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [bio, setBio] = useState('')
-    const submitForm = (e) => {
-        e.preventDefault()
-    }
+    const [newpassword, setNewPassword] = useState('')
+    const [reppassword, setRepPassword] = useState('')
+
     const [isHover, setIsHover] = useState(false);
-    const handleMouseEnter = () => {
-        setIsHover(true);
-    };
-    const handleMouseLeave = () => {
-        setIsHover(false);
-    };
+    const handleMouseEnter = () => { setIsHover(true); };
+    const handleMouseLeave = () => { setIsHover(false); };
 
     const buttonStyle = {
         marginTop: '1.5rem',
@@ -34,11 +30,20 @@ const Form = () => {
         backgroundColor: isHover ? '#4640ad' : '#6c63ff',
         color: isHover ? 'white' : 'white',
     }
-
-    useEffect(() => {
-        window.localStorage.setItem('form-data', JSON.stringify())
-    });
-
+    function handleSubmission() {
+        localStorage.clear();
+        let userData = {
+            Name: name,
+            Username: username,
+            Email: email,
+            Bio: bio,
+            NewPassword: newpassword,
+            RepPassword: reppassword,
+        };
+        localStorage.setItem("userInfo", JSON.stringify(userData));
+        alert("Form Submitted");
+        window.location.reload();
+    }
     return (
 
         <form>
@@ -48,9 +53,9 @@ const Form = () => {
                 margin='normal'
                 label="Full Name"
                 type='text'
-                name="fullname"
+                name="name"
                 placeholder='Full Name'
-                onChange={(e) => { setFullname(e.target.value) }}
+                onChange={(e) => setName(e.target.value)}
             />
             <TextField
                 fullWidth
@@ -59,7 +64,7 @@ const Form = () => {
                 name="username"
                 type='text'
                 placeholder='Username'
-                onChange={(e) => { setUsername(e.target.value) }}
+                onChange={(e) => setUsername(e.target.value)}
             />
             <TextField
                 fullWidth
@@ -68,7 +73,7 @@ const Form = () => {
                 name="email"
                 type='email'
                 placeholder='Email'
-                onChange={(e) => { setEmail(e.target.value) }}
+                onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
                 fullWidth
@@ -79,7 +84,7 @@ const Form = () => {
                 name="bio"
                 type='text'
                 placeholder='Bio'
-                onChange={(e) => { setBio(e.target.value) }}
+                onChange={(e) => setBio(e.target.value)}
             />
             <Typography variant="h6">Password and Security</Typography>
             <TextField
@@ -97,6 +102,7 @@ const Form = () => {
                 name="new-password"
                 type='text'
                 placeholder='New Password'
+                onChange={(e) => setNewPassword(e.target.value)}
             />
             <TextField
                 fullWidth
@@ -105,6 +111,7 @@ const Form = () => {
                 name="re-type-password"
                 type='text'
                 placeholder='Re-Type Password'
+                onChange={(e) => setRepPassword(e.target.value)}
             />
             <div style={{
                 display: 'flex',
@@ -113,7 +120,7 @@ const Form = () => {
                 paddingBottom: 30,
             }}>
                 <button style={buttonStyle}
-                    onClick={submitForm}
+                    onClick={handleSubmission}
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}>
                     Submit
