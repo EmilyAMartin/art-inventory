@@ -1,59 +1,59 @@
 [
     {
-        "title": "Untitled 1", 
+        "title": "Terra Nova 1", 
         "artist_title":"Emily Martin",
         "date_end": "2023",
         "place_of_origin": "Canada",
-        "image_id": "/Images/img3.jpg"
+        "image_id": "/Images/1.jpg"
     },
     {
-        "title": "Untitled 2", 
-        "artist_title":"Ben Cole",
-        "date_end": "2024",
+        "title": "Terra Nova 2", 
+        "artist_title":"Emily Martin",
+        "date_end": "2023",
         "place_of_origin": "Canada",
-        "image_id": "/Images/img4.jpg"
+        "image_id": "/Images/2.jpg"
     },
     {
-        "title": "Untitled 3", 
-        "artist_title":"Linn White",
-        "date_end": "2025",
+        "title": "Iris", 
+        "artist_title":"Emily Martin",
+        "date_end": "2014",
         "place_of_origin": "Canada",
-        "image_id": "/Images/img5.jpg"
+        "image_id": "/Images/3.jpg"
     },
     {
-        "title": "Untitled 4", 
-        "artist_title":"Krista Carry",
-        "date_end": "2026",
+        "title": "Leaves", 
+        "artist_title":"Emily Martin",
+        "date_end": "2014",
         "place_of_origin": "Canada",
-        "image_id": "/Images/img5.jpg"
+        "image_id": "/Images/4.jpg"
     },
     {
-        "title": "Untitled 5", 
-        "artist_title":"Owen Barron",
-        "date_end": "2027",
+        "title": "Blue Beetle", 
+        "artist_title":"Emily Martin",
+        "date_end": "2018",
         "place_of_origin": "Canada",
-        "image_id": "/Images/img5.jpg"
+        "image_id": "/Images/5.jpg"
     },
     {
-        "title": "Untitled 6", 
-        "artist_title":"James Cole",
-        "date_end": "2028",
+        "title": "Skull", 
+        "artist_title":"Emily Martin",
+        "date_end": "2018",
         "place_of_origin": "Canada",
-        "image_id": "/Images/img5.jpg"
+        "image_id": "/Images/6.jpg"
     },
     {
-        "title": "Untitled 7", 
-        "artist_title":"Mike Bennett",
-        "date_end": "2029",
+        "title": "Coy Fish", 
+        "artist_title":"Emily Martin",
+        "date_end": "2019",
         "place_of_origin": "Canada",
-        "image_id": "/Images/img5.jpg"
+        "image_id": "/Images/7.jpg"
     },
     {
-        "title": "Untitled 8", 
-        "artist_title":"Amanda Lee",
-        "date_end": "2012",
+        "title": "Newfoundland Iris", 
+        "artist_title":"Emily Martin",
+        "date_end": "2019",
         "place_of_origin": "Canada",
-        "image_id": "/Images/img5.jpg"
+        "image_id": "/Images/8.jpg"
     }
 ]
 

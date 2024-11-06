@@ -21,13 +21,8 @@ const Form = () => {
     const handleMouseEnter = () => { setIsHover(true); };
     const handleMouseLeave = () => { setIsHover(false); };
     const handleClickShowPassword = () => setShowPassword((show) => !show);
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
-    const handleMouseUpPassword = (event) => {
-        event.preventDefault();
-    };
-
+    const handleMouseDownPassword = (event) => { event.preventDefault(); };
+    const handleMouseUpPassword = (event) => { event.preventDefault(); };
 
     const buttonStyle = {
         marginTop: '1.5rem',
