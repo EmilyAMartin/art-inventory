@@ -13,6 +13,7 @@ import { FavoriteBorder } from '@mui/icons-material';
 
 const Artwork = () => {
   const [filter, setFilter] = useState([]);
+  console.log(filter)
   const [artwork, setArtwork] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [popoverImageId, setPopoverImageId] = useState(null);
@@ -59,7 +60,6 @@ const Artwork = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 15, marginTop: 25, }}>
       <AddArtworkBtn />
-
       < div className="select-filter"
         style={{
           display: 'flex',

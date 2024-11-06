@@ -43,19 +43,11 @@ const Gallery = () => {
     p: 4,
   };
 
-
-
-
-
-  const handleModalOpen = (event) => {
+  const handleModalOpen = () => {
     setOpenModal(true);
-    setAnchorEl(event.currentTarget);
-    setPopoverImageId(event.target.src)
   }
 
   const handleModalClose = () => {
-    setAnchorEl(null);
-    setPopoverImageId(null)
     setOpenModal(false);
   }
 
@@ -230,31 +222,26 @@ const Gallery = () => {
                     )}
                     <div>
                       <Button color='black'
-                        onClick={() => { handleModalOpen(art.id) }}>
+                        onClick={handleModalOpen}>
                         Learn More
                       </Button>
-                      <Modal
-                        open={openModal}
-                        onClose={handleModalClose}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                      >
-                        <Box sx={modalStyle}>
-                          <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.description}</Typography>
-                        </Box>
-                      </Modal>
                     </div>
-
-
                   </div>
                 </CardActionArea>
               </Card>
             </Grid2>
           ))}
         </Grid2>
-
-
-
+        <Modal
+          open={openModal}
+          onClose={handleModalClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={modalStyle}>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>Hello World</Typography>
+          </Box>
+        </Modal>
       </div>
     </div >
   )
