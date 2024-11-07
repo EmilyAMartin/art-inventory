@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -22,6 +23,7 @@ import Box from '@mui/material/Box';
 const Gallery = () => {
   const BASE_URL = "https://api.artic.edu/api/v1/artworks";
   const [artwork, setArtwork] = useState([]);
+  const [selectArtwork, setSelectArtwork] = useState([])
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
@@ -43,14 +45,25 @@ const Gallery = () => {
     p: 4,
   };
 
-  const handleModalOpen = () => {
+  const handleModalOpen = (id) => {
     setOpenModal(true);
+    const selectArtwork = artwork.find((art) => art.id === id);
+    setSelectArtwork(selectArtwork)
   }
-
   const handleModalClose = () => {
     setOpenModal(false);
   }
+  const handlePopClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    setPopoverImageId(event.target.src)
+  };
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
 
+  const handleClose = () => {
+    setAnchorEl(null);
+    setPopoverImageId(null)
+  };
   const handleFavClick = (id) => {
     const updateArtwork = artwork.map((item) => {
       return item.id === id ? { ...item, favorite: !item.favorite } : item;
@@ -74,19 +87,6 @@ const Gallery = () => {
       );
     }
   };
-
-  const handlePopClick = (event) => {
-    setAnchorEl(event.currentTarget);
-    setPopoverImageId(event.target.src)
-  };
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
-
-  const handleClose = () => {
-    setAnchorEl(null);
-    setPopoverImageId(null)
-  };
-
   const fetchDataByKeyword = async () => {
     setIsLoading(true);
     const response = await axios.get(`${BASE_URL}/search?q=${searchQuery}`);
@@ -182,7 +182,7 @@ const Gallery = () => {
                   <CardMedia
                     style={{ width: 300, height: 300 }}
                     component="img"
-                    image={`https://www.artic.edu/iiif/2/${art.image_id, art.alt_image_ids}/full/843,/0/default.jpg`}
+                    image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
                     alt=""
                     onClick={handlePopClick}
                   />
@@ -239,7 +239,9 @@ const Gallery = () => {
           aria-describedby="modal-modal-description"
         >
           <Box sx={modalStyle}>
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>Hello World</Typography>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              Title:{setSelectArtwork.description}
+            </Typography>
           </Box>
         </Modal>
       </div>
