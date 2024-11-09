@@ -187,13 +187,19 @@ const Gallery = () => {
                     onClick={handlePopClick}
                   />
                   <Popover
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}
                     id={id}
                     open={open}
                     anchorEl={anchorEl}
+                    anchorReference="none"
                     onClose={handleClose}
                     anchorOrigin={{
-                      vertical: 'center',
-                      horizontal: 'center',
+                      vertical: 'bottom',
+                      horizontal: 'left',
                     }}
                   >
                     <CardMedia
