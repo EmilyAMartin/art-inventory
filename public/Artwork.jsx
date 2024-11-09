@@ -28,9 +28,9 @@ const Artwork = () => {
   };
 
   const handleFilterChange = (e) => {
-    if (e.target.value === "recent") {
+    if (e.target.value === handleFilterChange(e.target.value)) {
       setArtwork(Data);
-    } else if (e.target.value === "favorites") {
+    } else if (e.target.value === handleFilterChange(e.target.value)) {
       setArtwork(JSON.parse(localStorage.getItem('favoritesList')));
     }
     console.log(e.target.value)
