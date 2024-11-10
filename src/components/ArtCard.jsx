@@ -1,0 +1,212 @@
+
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+import Grid2 from '@mui/material/Grid2';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import CardActionArea from '@mui/material/CardActionArea';
+import Button from '@mui/material/Button';
+import Popover from '@mui/material/Popover';
+
+import { Favorite } from '@mui/icons-material';
+import { FavoriteBorder } from '@mui/icons-material';
+
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+
+const ArtCard = () => {
+    const BASE_URL = "https://api.artic.edu/api/v1/artworks";
+    const [artwork, setArtwork] = useState([]);
+    const [selectArtwork, setSelectArtwork] = useState([])
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [page, setPage] = useState(1);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [popoverImageId, setPopoverImageId] = useState(null);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [openModal, setOpenModal] = useState(false);
+
+    const modalStyle = {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignContent: 'center',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 600,
+        bgcolor: 'background.paper',
+        p: 4,
+    };
+
+    const handleModalOpen = (id) => {
+        setOpenModal(true);
+        const selectArtwork = artwork.find((art) => art.id === id);
+        setSelectArtwork(selectArtwork)
+    }
+    const handleModalClose = () => {
+        setOpenModal(false);
+    }
+    const handlePopClick = (event) => {
+        setAnchorEl(event.currentTarget);
+        setPopoverImageId(event.target.src)
+    };
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+
+    const handleClose = () => {
+        setAnchorEl(null);
+        setPopoverImageId(null)
+    };
+    const handleFavClick = (id) => {
+        const updateArtwork = artwork.map((item) => {
+            return item.id === id ? { ...item, favorite: !item.favorite } : item;
+        })
+        setArtwork(updateArtwork);
+        const selectedArtwork = updateArtwork.find((art) => art.id === id);
+        if (selectedArtwork.favorite === true) {
+            const favoritesList =
+                JSON.parse(localStorage.getItem("favoritesList")) ?? [];
+            favoritesList.push(selectedArtwork);
+            localStorage.setItem("favoritesList", JSON.stringify(favoritesList));
+        } else if (selectedArtwork.favorite === false) {
+            const favoritesList =
+                JSON.parse(localStorage.getItem("favoritesList")) ?? [];
+            const updatedFavoritesList = favoritesList.filter(
+                (art) => art.id !== selectedArtwork.id
+            );
+            localStorage.setItem(
+                "favoritesList",
+                JSON.stringify(updatedFavoritesList)
+            );
+        }
+    };
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+            setIsLoading(true);
+            try {
+                const { data } = await axios.get(`${BASE_URL}?page=${page}`);
+                const favoritesList = JSON.parse(localStorage.getItem("favoritesList"));
+                const dataWithFavorites = data.data.map((art) => {
+                    const isFavorite = favoritesList?.some((fav) => fav.id === art.id)
+                    return { ...art, favorite: isFavorite };
+                })
+                setArtwork(dataWithFavorites);
+                setError(null);
+
+            } catch (error) {
+                if (axios.isCancel(error)) {
+                    return;
+                }
+                setError(error.message);
+
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        if (page > 0) {
+            fetchData()
+        }
+        return () => {
+            setIsLoading(true);
+        };
+    }, [page]);
+
+    return (
+        <div id='galley-container' style={{ display: 'flex', flexDirection: 'column' }}>
+            {page > 0 && (
+                <div id='page-navigation'>
+                    <Button disabled={page === 1} color='black' onClick={() => setPage(page - 1)} > Prev</Button>
+                    <Button color='black' onClick={() => setPage(page + 1)}> Next</Button>
+                    {error && <div>{error}</div>}
+                </div>
+            )}
+            <div className='galley-artwork'>
+                {isLoading === true && <div>Loading...</div>}
+                <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px", justifyContent: 'space-around' }}>
+                    {artwork.map(art => (
+                        <Grid2 item xs={12} ms={5} key={art.id}>
+                            <Card sx={{ maxWidth: 300, maxHeight: 600, display: "flex" }}>
+                                <CardActionArea>
+                                    <CardMedia
+                                        style={{ width: 300, height: 300 }}
+                                        component="img"
+                                        image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
+                                        alt=""
+                                        onClick={handlePopClick}
+                                    />
+                                    <Popover
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center'
+                                        }}
+                                        id={id}
+                                        open={open}
+                                        anchorEl={anchorEl}
+                                        anchorReference="none"
+                                        onClose={handleClose}
+                                        anchorOrigin={{
+                                            vertical: 'bottom',
+                                            horizontal: 'left',
+                                        }}
+                                    >
+                                        <CardMedia
+                                            component="img"
+                                            height="140"
+                                            image={popoverImageId}
+                                            alt=""
+                                        />
+                                    </Popover>
+                                    <CardContent style={{ width: 300, height: 200 }}>
+                                        <Typography gutterBottom fontSize={16} fontWeight={500} component="div">{art.title}</Typography>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.place_of_origin}</Typography>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_end}</Typography>
+                                    </CardContent>
+                                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', margin: 25 }}>
+                                        {art.favorite === true && (
+                                            <Favorite
+                                                onClick={() => { handleFavClick(art.id) }}
+                                            />
+                                        )}
+                                        {(art.favorite === undefined || art.favorite === false) && (
+                                            <FavoriteBorder
+                                                onClick={() => { handleFavClick(art.id) }}
+                                            />
+                                        )}
+                                        <div>
+                                            <Button color='black'
+                                                onClick={handleModalOpen}>
+                                                Learn More
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </CardActionArea>
+                            </Card>
+                        </Grid2>
+                    ))}
+                </Grid2>
+                <Modal
+                    open={openModal}
+                    onClose={handleModalClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={modalStyle}>
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                            Title:{setSelectArtwork.description}
+                        </Typography>
+                    </Box>
+                </Modal>
+            </div>
+        </div >
+    )
+}
+export default ArtCard

@@ -63,10 +63,14 @@ function Form() {
             [event.target.name]: event.target.value,
         }));
     }
-
     return (
-
         <main>
+            <Typography
+                onChange={handleChange}
+                value={values.username}
+                variant='h6'
+                style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 10 }}> Username
+            </Typography>
             <form style={{ display: 'flex', flexDirection: 'column', gap: 25 }} onSubmit={handleSubmit}>
                 <Typography variant="h6">Profile</Typography>
                 <TextField

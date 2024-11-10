@@ -24,7 +24,7 @@ const Account = () => {
           ref={hiddenFileInput}
           style={{ display: 'none' }} // Make the file input element invisible
         />
-        <Typography variant="h6">Username</Typography>
+
       </div>
       <Form />
     </>
