@@ -15,7 +15,6 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Checkbox from '@mui/material/Checkbox';
 
-
 const LoginBtn = () => {
     const [open, setOpen] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -46,18 +45,13 @@ const LoginBtn = () => {
     const modalStyle = {
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
-        alignContent: 'center',
         position: 'absolute',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 600,
         bgcolor: 'background.paper',
-        paddingLeft: '2rem',
-        paddingRight: '3rem',
-        paddingBottom: '2.5rem',
-        paddingTop: '2rem',
+
+
     };
     const SubmitButton = styled(Button)(({ theme }) => ({
         color: theme.palette.getContrastText(green[500]),
@@ -81,6 +75,7 @@ const LoginBtn = () => {
                 onClick={handleOpen}>
                 Login
             </button>
+
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -88,10 +83,20 @@ const LoginBtn = () => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={modalStyle}>
-                    <div>
-                        <Typography variant="h5" paddingBottom={2} paddingLeft={30}>Login</Typography>
-                        <Typography variant="h7" paddingLeft={20} marginBottom={10}>Welcome, please login to continue</Typography>
-                        <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 25,
+                        width: '75vw',
+                        padding: 50
+
+                    }}>
+                        <Typography variant="h5">Login</Typography>
+                        <Typography variant="h7">Welcome, please login to continue</Typography>
+                        <FormControl sx={{ width: '100%' }} variant="outlined">
                             <InputLabel htmlFor="outlined-adornment-email"> Email</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-email"
@@ -101,8 +106,7 @@ const LoginBtn = () => {
                                 }
                                 label="Email"
                             />
-                        </FormControl>
-                        <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+                        </FormControl>              <FormControl sx={{ width: '100%' }} variant="outlined">
                             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-password"
@@ -122,15 +126,20 @@ const LoginBtn = () => {
                                 }
                                 label="Password"
                             />
+                            <div style={{
+                                display: 'flex', flexDirection: 'row', alignItems: 'center',
+                            }} >
+                                <Checkbox /> Remember Password
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'center', gap: 50, marginTop: 25 }}>
+                                <SubmitButton sx={{ color: 'white' }} variant="contained" onClick={handleClose}>Submit</SubmitButton>
+                                <CancelButton sx={{ color: 'white' }} variant="contained" onClick={handleClose}>Cancel</CancelButton>
+                            </div>
                         </FormControl>
-                        <Checkbox /> Remember Password
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: 50, marginTop: 25 }}>
-                        <SubmitButton sx={{ color: 'white' }} variant="contained" onClick={handleClose}>Submit</SubmitButton>
-                        <CancelButton sx={{ color: 'white' }} variant="contained" onClick={handleClose}>Cancel</CancelButton>
                     </div>
                 </Box>
             </Modal>
+
         </div>
     )
 }
