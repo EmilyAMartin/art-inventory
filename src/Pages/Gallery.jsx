@@ -231,25 +231,25 @@ const Gallery = () => {
                         onClick={handleModalOpen}>
                         Learn More
                       </Button>
+                      <Modal
+                        open={openModal}
+                        onClose={handleModalClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                      >
+                        <Box sx={modalStyle}>
+                          <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.description}</Typography>
+                        </Box>
+                      </Modal>
                     </div>
                   </div>
                 </CardActionArea>
               </Card>
+
             </Grid2>
           ))}
         </Grid2>
-        <Modal
-          open={openModal}
-          onClose={handleModalClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={modalStyle}>
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              Title:{setSelectArtwork.description}
-            </Typography>
-          </Box>
-        </Modal>
+
       </div>
     </div >
   )
