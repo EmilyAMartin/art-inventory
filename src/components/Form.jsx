@@ -54,7 +54,7 @@ function Form() {
 
     function handleSubmit(event) {
         event.preventDefault();
-        alert('An error occurred on the server. Please try again!!!');
+        alert('Your form was submitted');
     }
 
     function handleChange(event) {

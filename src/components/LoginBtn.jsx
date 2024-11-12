@@ -90,7 +90,7 @@ const LoginBtn = () => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: 25,
-                        width: '75vw',
+                        width: '90vw',
                         padding: 50
 
                     }}>

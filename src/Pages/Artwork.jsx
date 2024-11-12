@@ -8,6 +8,9 @@ import CardActionArea from '@mui/material/CardActionArea';
 import Data from '../components/ArtData.json'
 import Popover from '@mui/material/Popover';
 import AddArtworkBtn from "../components/AddArtworkBtn";
+import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
 import { Favorite } from '@mui/icons-material';
 import { FavoriteBorder } from '@mui/icons-material';
 
@@ -15,13 +18,39 @@ const Artwork = () => {
   const [artwork, setArtwork] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [popoverImageId, setPopoverImageId] = useState(null);
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
+  const [openModal, setOpenModal] = useState(false);
+  const [selectArtwork, setSelectArtwork] = useState([])
+  const [isLoading, setIsLoading] = useState(true);
+  const modalStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignContent: 'center',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 600,
+    bgcolor: 'background.paper',
+    p: 4,
+  };
+
+  const handleModalOpen = (id) => {
+    setOpenModal(true);
+    const selectArtwork = artwork.find((art) => art.id === id);
+    setSelectArtwork(selectArtwork)
+  }
+  const handleModalClose = () => {
+    setOpenModal(false);
+  }
 
   const handlePopClick = (event) => {
     setAnchorEl(event.currentTarget);
     setPopoverImageId(event.target.src)
   };
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+
   const handleClose = () => {
     setAnchorEl(null);
     setPopoverImageId(null)
@@ -33,7 +62,6 @@ const Artwork = () => {
     } else if (e.target.value === "favorites") {
       setArtwork(JSON.parse(localStorage.getItem('favoritesList')));
     }
-    console.log(e.target.value)
   }
 
 
@@ -62,6 +90,7 @@ const Artwork = () => {
   };
 
   useEffect(() => {
+    setIsLoading(false)
     setArtwork(Data)
   }, [])
 
@@ -89,6 +118,7 @@ const Artwork = () => {
         </select>
 
         <div>
+          {isLoading === true && <div>Loading...</div>}
           <Grid2 margin='auto' container spacing={8} style={{ marginTop: "25px", justifyContent: 'space-around' }}>
             {artwork.map(art => (
               <Grid2 item xs={12} ms={5} key={art.id}>
@@ -129,23 +159,41 @@ const Artwork = () => {
                       <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.place_of_origin}</Typography>
                       <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_end}</Typography>
                     </CardContent>
-                    {art.favorite === true && (
-                      <Favorite
-                        style={{ margin: 10 }}
-                        onClick={() => { handleFavClick(art.id) }}
-                      />
-                    )}
-                    {art.favorite === false && (
-                      <FavoriteBorder
-                        style={{ margin: 10 }}
-                        onClick={() => { handleFavClick(art.id) }}
-                      />
-                    )}
+                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', margin: 25 }}>
+                      {art.favorite === true && (
+                        <Favorite
+                          onClick={() => { handleFavClick(art.id) }}
+                        />
+                      )}
+                      {(art.favorite === undefined || art.favorite === false) && (
+                        <FavoriteBorder
+                          onClick={() => { handleFavClick(art.id) }}
+                        />
+                      )}
+                      <div>
+                        <Button color='black'
+                          onClick={handleModalOpen}>
+                          Learn More
+                        </Button>
+                      </div>
+                    </div>
                   </CardActionArea>
                 </Card>
               </Grid2>
             ))}
           </Grid2>
+          <Modal
+            open={openModal}
+            onClose={handleModalClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={modalStyle}>
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                Title:{setSelectArtwork.description}
+              </Typography>
+            </Box>
+          </Modal>
         </div>
       </div>
     </div>

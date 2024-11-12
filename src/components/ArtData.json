@@ -4,56 +4,72 @@
         "artist_title":"Emily Martin",
         "date_end": "2023",
         "place_of_origin": "Canada",
-        "image_path": "/Images/1.jpg"
+        "image_path": "/Images/1.jpg",
+        "description": "This work was made during the year of 2023",
+        "favorite": false
     },
     {
         "title": "Terra Nova 2", 
         "artist_title":"Emily Martin",
         "date_end": "2023",
         "place_of_origin": "Canada",
-        "image_path": "/Images/2.jpg"
+        "image_path": "/Images/2.jpg",
+        "description": "This work was made during the year of 2023",
+        "favorite": false
     },
     {
         "title": "Iris", 
         "artist_title":"Emily Martin",
         "date_end": "2014",
         "place_of_origin": "Canada",
-        "image_path": "/Images/3.jpg"
+        "image_path": "/Images/3.jpg",
+        "description": "This work was made during the year of 2023",
+        "favorite": false
     },
     {
         "title": "Leaves", 
         "artist_title":"Emily Martin",
         "date_end": "2014",
         "place_of_origin": "Canada",
-        "image_path": "/Images/4.jpg"
+        "image_path": "/Images/4.jpg",
+        "description": "This work was made during the year of 2023",
+        "favorite": false
     },
     {
         "title": "Blue Beetle", 
         "artist_title":"Emily Martin",
         "date_end": "2018",
         "place_of_origin": "Canada",
-        "image_path": "/Images/5.jpg"
+        "image_path": "/Images/5.jpg",
+        "description": "This work was made during the year of 2023",
+        "favorite": false
     },
     {
         "title": "Skull", 
         "artist_title":"Emily Martin",
         "date_end": "2018",
         "place_of_origin": "Canada",
-        "image_path": "/Images/6.jpg"
+        "image_path": "/Images/6.jpg",
+        "description": "This work was made during the year of 2023",
+        "favorite": false
     },
     {
         "title": "Coy Fish", 
         "artist_title":"Emily Martin",
         "date_end": "2019",
         "place_of_origin": "Canada",
-        "image_path": "/Images/7.jpg"
+        "image_path": "/Images/7.jpg",
+        "description": "This work was made during the year of 2023",
+        "favorite": false
     },
     {
         "title": "Newfoundland Iris", 
         "artist_title":"Emily Martin",
         "date_end": "2019",
         "place_of_origin": "Canada",
-        "image_path": "/Images/8.jpg"
+        "image_path": "/Images/8.jpg",
+        "description": "This work was made during the year of 2023",
+        "favorite": false
     }
 ]
 

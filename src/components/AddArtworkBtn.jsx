@@ -38,18 +38,11 @@ const AddArtworkBtn = () => {
     const modalStyle = {
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
-        alignContent: 'center',
         position: 'absolute',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 600,
         bgcolor: 'background.paper',
-        paddingLeft: '2rem',
-        paddingRight: '3rem',
-        paddingBottom: '2.5rem',
-        paddingTop: '2rem',
     };
     const SubmitButton = styled(Button)(({ theme }) => ({
         color: theme.palette.getContrastText(green[500]),
@@ -91,9 +84,18 @@ const AddArtworkBtn = () => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={modalStyle}>
-                    <div>
-                        <Typography variant="h5" paddingBottom={2} paddingLeft={22} >Add New Artwork</Typography>
-                        <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 25,
+                        width: '90vw',
+                        padding: 50
+
+                    }}>
+                        <Typography variant="h5" >Add New Artwork</Typography>
+                        <FormControl sx={{ width: '100%' }} variant="outlined">
                             <InputLabel htmlFor="outlined-adornment- Title">Title</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-title"
@@ -105,7 +107,7 @@ const AddArtworkBtn = () => {
                             />
                         </FormControl>
 
-                        <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+                        <FormControl sx={{ width: '100%' }} variant="outlined">
                             <InputLabel htmlFor="outlined-adornment-date">Date</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-date"
@@ -116,7 +118,7 @@ const AddArtworkBtn = () => {
                                 label="date"
                             />
                         </FormControl>
-                        <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+                        <FormControl sx={{ width: '100%' }} variant="outlined">
                             <InputLabel htmlFor="outlined-adornment-medium">Medium</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-date"
@@ -128,7 +130,7 @@ const AddArtworkBtn = () => {
                             />
                         </FormControl>
 
-                        <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+                        <FormControl sx={{ width: '100%' }} variant="outlined">
                             <InputLabel htmlFor="outlined-adornment-location">Location</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-date"
@@ -140,7 +142,7 @@ const AddArtworkBtn = () => {
                             />
                         </FormControl>
 
-                        <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+                        <FormControl sx={{ width: '100%' }} variant="outlined">
                             <InputLabel htmlFor="outlined-adornment-quantity">Quantity</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-date"
@@ -150,26 +152,25 @@ const AddArtworkBtn = () => {
                                 }
                                 label="quantity"
                             />
+                            <Button
+                                sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '15%', marginTop: 3 }}
+                                component="label"
+                                role={undefined}
+                                variant="contained"
+                                tabIndex={-1}
+                            >
+                                Upload files
+                                <VisuallyHiddenInput
+                                    type="file"
+                                    onChange={(event) => console.log(event.target.files)}
+                                    multiple
+                                />
+                            </Button>
+                            <div style={{ display: 'flex', justifyContent: 'center', gap: 50, marginTop: 25 }}>
+                                <SubmitButton sx={{ color: 'white' }} variant="contained" onClick={handleClose}>Submit</SubmitButton>
+                                <CancelButton sx={{ color: 'white' }} variant="contained" onClick={handleClose}>Cancel</CancelButton>
+                            </div>
                         </FormControl>
-                        <Button
-                            sx={{ display: 'flex', justifyContent: 'center', m: 1, width: '100%' }}
-                            component="label"
-                            role={undefined}
-                            variant="contained"
-                            tabIndex={-1}
-                            startIcon={<CloudUploadIcon />}
-                        >
-                            Upload files
-                            <VisuallyHiddenInput
-                                type="file"
-                                onChange={(event) => console.log(event.target.files)}
-                                multiple
-                            />
-                        </Button>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: 50, marginTop: 25 }}>
-                        <SubmitButton sx={{ color: 'white' }} variant="contained" onClick={handleClose}>Submit</SubmitButton>
-                        <CancelButton sx={{ color: 'white' }} variant="contained" onClick={handleClose}>Cancel</CancelButton>
                     </div>
                 </Box>
             </Modal>
