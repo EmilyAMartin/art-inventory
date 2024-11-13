@@ -11,7 +11,7 @@ import AddArtworkBtn from "../components/AddArtworkBtn";
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import { Favorite, InsertEmoticon } from '@mui/icons-material';
+import { Favorite } from '@mui/icons-material';
 import { FavoriteBorder } from '@mui/icons-material';
 
 const Artwork = () => {
@@ -19,7 +19,6 @@ const Artwork = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [popoverImageId, setPopoverImageId] = useState(null);
   const [openModal, setOpenModal] = useState(false);
-  const [selectArtwork, setSelectArtwork] = useState([])
   const [isLoading, setIsLoading] = useState(true);
   const modalStyle = {
     display: 'flex',
@@ -65,12 +64,12 @@ const Artwork = () => {
       setArtwork(JSON.parse(localStorage.getItem('favoritesList')));
     }
   }
-
-
   const handleFavClick = (id) => {
+
     const updateArtwork = artwork.map((item) => {
       return item.id === id ? { ...item, favorite: !item.favorite } : item;
     })
+    console.log(id)
     setArtwork(updateArtwork);
     const selectedArtwork = updateArtwork.find((art) => art.id === id);
     if (selectedArtwork.favorite === true) {
@@ -90,7 +89,6 @@ const Artwork = () => {
       );
     }
   };
-
   useEffect(() => {
     setIsLoading(false)
     setArtwork(Data)

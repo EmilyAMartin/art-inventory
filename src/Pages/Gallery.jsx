@@ -23,7 +23,6 @@ import Box from '@mui/material/Box';
 const Gallery = () => {
   const BASE_URL = "https://api.artic.edu/api/v1/artworks";
   const [artwork, setArtwork] = useState([]);
-  const [selectArtwork, setSelectArtwork] = useState([])
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
@@ -47,8 +46,6 @@ const Gallery = () => {
 
   const handleModalOpen = (id) => {
     setOpenModal(true);
-    const selectArtwork = artwork.find((art) => art.id === id);
-    setSelectArtwork(selectArtwork)
   }
   const handleModalClose = () => {
     setOpenModal(false);
@@ -65,9 +62,11 @@ const Gallery = () => {
     setPopoverImageId(null)
   };
   const handleFavClick = (id) => {
+
     const updateArtwork = artwork.map((item) => {
       return item.id === id ? { ...item, favorite: !item.favorite } : item;
     })
+    console.log(id)
     setArtwork(updateArtwork);
     const selectedArtwork = updateArtwork.find((art) => art.id === id);
     if (selectedArtwork.favorite === true) {
@@ -238,7 +237,7 @@ const Gallery = () => {
                         aria-describedby="modal-modal-description"
                       >
                         <Box sx={modalStyle}>
-                          <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.description}</Typography>
+                          <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
                         </Box>
                       </Modal>
                     </div>
