@@ -61,6 +61,7 @@ const Artwork = () => {
     } else if (e.target.value === "favorites") {
       setIsLoading(true);
       setArtwork(JSON.parse(localStorage.getItem('favoritesList')));
+      setIsLoading(false)
     }
   }
   const handleFavClick = (id) => {
@@ -117,7 +118,7 @@ const Artwork = () => {
         </select>
 
         <div>
-          {isLoading === true && <div>Loading...</div>}
+          {isLoading === true && <div style={{ marginTop: 25 }} >No Favorites Added</div>}
           <Grid2 margin='auto' container spacing={8} style={{ marginTop: "25px", justifyContent: 'space-around' }}>
             {artwork.map(art => (
               <Grid2 item xs={12} ms={5} key={art.id}>

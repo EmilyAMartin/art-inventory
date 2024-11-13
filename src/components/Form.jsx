@@ -69,7 +69,9 @@ function Form() {
                 onChange={handleChange}
                 value={values.username}
                 variant='h6'
-                style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 10 }}> Username
+                style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                {""}
+                {values.username || "Username"}
             </Typography>
             <form style={{ display: 'flex', flexDirection: 'column', gap: 25 }} onSubmit={handleSubmit}>
                 <Typography variant="h6">Profile</Typography>

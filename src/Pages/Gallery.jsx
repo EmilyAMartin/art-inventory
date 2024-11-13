@@ -44,8 +44,9 @@ const Gallery = () => {
     p: 4,
   };
 
-  const handleModalOpen = () => {
+  const handleModalOpen = (id) => {
     setOpenModal(true);
+    console.log(id)
   }
   const handleModalClose = () => {
     setOpenModal(false);
@@ -236,9 +237,9 @@ const Gallery = () => {
                         aria-describedby="modal-modal-description"
                       >
                         <Box sx={modalStyle}>
-                          <Typography variant="body1" sx={{ color: 'text.secondary' }}>Title: {art.title}</Typography>
-                          <Typography variant="body1" sx={{ color: 'text.secondary' }}>Artist: {art.artist_title}</Typography>
-                          <Typography variant="body1" sx={{ color: 'text.secondary' }}>Description: {art.description}</Typography>
+                          <Typography variant="body2" sx={{ color: 'text.secondary' }}>Title: {art.title}</Typography>
+                          <Typography variant="body2" sx={{ color: 'text.secondary' }}>Artist: {art.artist_title}</Typography>
+                          <Typography variant="body2" sx={{ color: 'text.secondary' }}>Description: {art.description}</Typography>
                         </Box>
                       </Modal>
                     </div>
