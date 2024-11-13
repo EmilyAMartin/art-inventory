@@ -35,9 +35,8 @@ const Artwork = () => {
   };
 
   const handleModalOpen = (id) => {
+    console.log(id)
     setOpenModal(true);
-    const selectArtwork = artwork.find((art) => art.id === id);
-    setSelectArtwork(selectArtwork)
   }
   const handleModalClose = () => {
     setOpenModal(false);

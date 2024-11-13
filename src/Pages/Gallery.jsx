@@ -44,7 +44,7 @@ const Gallery = () => {
     p: 4,
   };
 
-  const handleModalOpen = (id) => {
+  const handleModalOpen = () => {
     setOpenModal(true);
   }
   const handleModalClose = () => {
@@ -66,7 +66,6 @@ const Gallery = () => {
     const updateArtwork = artwork.map((item) => {
       return item.id === id ? { ...item, favorite: !item.favorite } : item;
     })
-    console.log(id)
     setArtwork(updateArtwork);
     const selectedArtwork = updateArtwork.find((art) => art.id === id);
     if (selectedArtwork.favorite === true) {
@@ -237,7 +236,9 @@ const Gallery = () => {
                         aria-describedby="modal-modal-description"
                       >
                         <Box sx={modalStyle}>
-                          <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
+                          <Typography variant="body1" sx={{ color: 'text.secondary' }}>Title: {art.title}</Typography>
+                          <Typography variant="body1" sx={{ color: 'text.secondary' }}>Artist: {art.artist_title}</Typography>
+                          <Typography variant="body1" sx={{ color: 'text.secondary' }}>Description: {art.description}</Typography>
                         </Box>
                       </Modal>
                     </div>
