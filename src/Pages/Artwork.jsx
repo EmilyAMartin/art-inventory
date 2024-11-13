@@ -11,7 +11,7 @@ import AddArtworkBtn from "../components/AddArtworkBtn";
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import { Favorite } from '@mui/icons-material';
+import { Favorite, InsertEmoticon } from '@mui/icons-material';
 import { FavoriteBorder } from '@mui/icons-material';
 
 const Artwork = () => {
@@ -59,7 +59,9 @@ const Artwork = () => {
   const handleFilterChange = (e) => {
     if (e.target.value === "recent") {
       setArtwork(Data);
+      setIsLoading(false);
     } else if (e.target.value === "favorites") {
+      setIsLoading(true);
       setArtwork(JSON.parse(localStorage.getItem('favoritesList')));
     }
   }
@@ -175,6 +177,16 @@ const Artwork = () => {
                           onClick={handleModalOpen}>
                           Learn More
                         </Button>
+                        <Modal
+                          open={openModal}
+                          onClose={handleModalClose}
+                          aria-labelledby="modal-modal-title"
+                          aria-describedby="modal-modal-description"
+                        >
+                          <Box sx={modalStyle}>
+                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.description}</Typography>
+                          </Box>
+                        </Modal>
                       </div>
                     </div>
                   </CardActionArea>
@@ -182,18 +194,7 @@ const Artwork = () => {
               </Grid2>
             ))}
           </Grid2>
-          <Modal
-            open={openModal}
-            onClose={handleModalClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={modalStyle}>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                Title:{setSelectArtwork.description}
-              </Typography>
-            </Box>
-          </Modal>
+
         </div>
       </div>
     </div>
