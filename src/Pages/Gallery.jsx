@@ -17,8 +17,6 @@ import TextField from "@mui/material/TextField";
 import { Favorite } from '@mui/icons-material';
 import { FavoriteBorder } from '@mui/icons-material';
 
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
 
 const Gallery = () => {
   const BASE_URL = "https://api.artic.edu/api/v1/artworks";
@@ -29,28 +27,8 @@ const Gallery = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [popoverImageId, setPopoverImageId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [openModal, setOpenModal] = useState(false);
-  const modalStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignContent: 'center',
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 600,
-    bgcolor: 'background.paper',
-    p: 4,
-  };
 
-  const handleModalOpen = (id) => {
-    setOpenModal(true);
-    console.log(id)
-  }
-  const handleModalClose = () => {
-    setOpenModal(false);
-  }
+
   const handlePopClick = (event) => {
     setAnchorEl(event.currentTarget);
     setPopoverImageId(event.target.src)
@@ -63,7 +41,6 @@ const Gallery = () => {
     setPopoverImageId(null)
   };
   const handleFavClick = (id) => {
-
     const updateArtwork = artwork.map((item) => {
       return item.id === id ? { ...item, favorite: !item.favorite } : item;
     })
@@ -86,6 +63,7 @@ const Gallery = () => {
       );
     }
   };
+
   const fetchDataByKeyword = async () => {
     setIsLoading(true);
     const response = await axios.get(`${BASE_URL}/search?q=${searchQuery}`);
@@ -226,22 +204,12 @@ const Gallery = () => {
                       />
                     )}
                     <div>
-                      <Button color='black'
-                        onClick={handleModalOpen}>
-                        Learn More
-                      </Button>
-                      <Modal
-                        open={openModal}
-                        onClose={handleModalClose}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                      >
-                        <Box sx={modalStyle}>
-                          <Typography variant="body2" sx={{ color: 'text.secondary' }}>Title: {art.title}</Typography>
-                          <Typography variant="body2" sx={{ color: 'text.secondary' }}>Artist: {art.artist_title}</Typography>
-                          <Typography variant="body2" sx={{ color: 'text.secondary' }}>Description: {art.description}</Typography>
-                        </Box>
-                      </Modal>
+                      <Button color='black'>Learn More</Button>
+                      <div className='card-back'>
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>Title: {art.title}</Typography>
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>Artist: {art.artist_title}</Typography>
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>Description: {art.description}</Typography>
+                      </div>
                     </div>
                   </div>
                 </CardActionArea>
