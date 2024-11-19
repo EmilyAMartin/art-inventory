@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Favorite } from '@mui/icons-material';
 import { FavoriteBorder } from '@mui/icons-material';
 import ReactCardFlip from "react-card-flip";
@@ -10,13 +10,12 @@ import CardActionArea from '@mui/material/CardActionArea';
 import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
 
-const ArtCard = ({ art, id }) => {
+const ArtCard = (art) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [popoverImageId, setPopoverImageId] = useState(null);
     const [flip, setFlip] = useState(false);
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
-
     const handlePopClick = (event) => {
         setAnchorEl(event.currentTarget);
         setPopoverImageId(event.target.src)
@@ -114,5 +113,4 @@ const ArtCard = ({ art, id }) => {
         </ReactCardFlip>
     )
 }
-
 export default ArtCard

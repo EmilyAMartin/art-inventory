@@ -1,22 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
 import Grid2 from '@mui/material/Grid2';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import CardActionArea from '@mui/material/CardActionArea';
 import Button from '@mui/material/Button';
-import Popover from '@mui/material/Popover';
-
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
-import { Favorite } from '@mui/icons-material';
-import { FavoriteBorder } from '@mui/icons-material';
-import ReactCardFlip from "react-card-flip";
+import { Card } from '@mui/material';
+
 
 const Gallery = () => {
   const BASE_URL = "https://api.artic.edu/api/v1/artworks";
@@ -24,45 +15,7 @@ const Gallery = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [popoverImageId, setPopoverImageId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [flip, setFlip] = useState(false);
-
-  const handlePopClick = (event) => {
-    setAnchorEl(event.currentTarget);
-    setPopoverImageId(event.target.src)
-  };
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
-
-  const handleClose = () => {
-    setAnchorEl(null);
-    setPopoverImageId(null)
-  };
-  const handleFavClick = (id) => {
-    const updateArtwork = artwork.map((item) => {
-      return item.id === id ? { ...item, favorite: !item.favorite } : item;
-    })
-    setArtwork(updateArtwork);
-    const selectedArtwork = updateArtwork.find((art) => art.id === id);
-    if (selectedArtwork.favorite === true) {
-      const favoritesList =
-        JSON.parse(localStorage.getItem("favoritesList")) ?? [];
-      favoritesList.push(selectedArtwork);
-      localStorage.setItem("favoritesList", JSON.stringify(favoritesList));
-    } else if (selectedArtwork.favorite === false) {
-      const favoritesList =
-        JSON.parse(localStorage.getItem("favoritesList")) ?? [];
-      const updatedFavoritesList = favoritesList.filter(
-        (art) => art.id !== selectedArtwork.id
-      );
-      localStorage.setItem(
-        "favoritesList",
-        JSON.stringify(updatedFavoritesList)
-      );
-    }
-  };
 
   const fetchDataByKeyword = async () => {
     setIsLoading(true);
@@ -89,7 +42,6 @@ const Gallery = () => {
   }
 
   useEffect(() => {
-
     const fetchData = async () => {
       setIsLoading(true);
       try {
@@ -154,69 +106,7 @@ const Gallery = () => {
         <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px", justifyContent: 'space-around' }}>
           {artwork.map(art => (
             <Grid2 item xs={12} ms={5} key={art.id}>
-              <ReactCardFlip isFlipped={flip} flipDirection="vertical">
-                <Card className="card-font" sx={{ maxWidth: 300, maxHeight: 600, display: "flex" }}>
-                  <CardActionArea>
-                    <CardMedia
-                      style={{ width: 300, height: 300 }}
-                      component="img"
-                      image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
-                      alt=""
-                      onClick={handlePopClick}
-                    />
-                    <Popover
-                      sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                      }}
-                      id={id}
-                      open={open}
-                      anchorEl={anchorEl}
-                      anchorReference="none"
-                      onClose={handleClose}
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                      }}
-                    >
-                      <CardMedia
-                        component="img"
-                        height="140"
-                        image={popoverImageId}
-                        alt=""
-                      />
-                    </Popover>
-                    <CardContent style={{ width: 300, height: 200 }}>
-                      <Typography gutterBottom fontSize={16} fontWeight={500} component="div">{art.title}</Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.artist_title}</Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.place_of_origin}</Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>{art.date_end}</Typography>
-                    </CardContent>
-                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', margin: 25 }}>
-                      {art.favorite === true && (
-                        <Favorite
-                          onClick={() => { handleFavClick(art.id) }}
-                        />
-                      )}
-                      {(art.favorite === undefined || art.favorite === false) && (
-                        <FavoriteBorder
-                          onClick={() => { handleFavClick(art.id) }}
-                        />
-                      )}
-                      <Button color='black' onClick={() => setFlip(!flip)}> Learn More</Button>
-                    </div>
-                  </CardActionArea>
-                </Card>
-
-                <Card className='card-back' sx={{ maxWidth: 300, maxHeight: 600, display: "flex" }}>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>Title: {art.title}</Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>Artist: {art.artist_title}</Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>Description: {art.description}</Typography>
-                  <Button color='black' onClick={() => setFlip(!flip)}>Back</Button>
-                </Card>
-
-              </ReactCardFlip>
+              <div>Add Card</div>
             </Grid2>
           ))}
         </Grid2>
