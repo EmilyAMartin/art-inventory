@@ -9,8 +9,6 @@ import Data from '../components/ArtData.json'
 import Popover from '@mui/material/Popover';
 import AddArtworkBtn from "../components/AddArtworkBtn";
 import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
 import { Favorite } from '@mui/icons-material';
 import { FavoriteBorder } from '@mui/icons-material';
 import ReactCardFlip from "react-card-flip";

@@ -47,7 +47,6 @@ const ArtCard = (art) => {
             );
         }
     };
-
     return (
         <ReactCardFlip isFlipped={flip} flipDirection="vertical">
             <Card className="card-font" sx={{ maxWidth: 300, maxHeight: 600, display: "flex" }}>

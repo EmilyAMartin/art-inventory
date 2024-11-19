@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
-import { Card } from '@mui/material';
+import ArtCard from '../components/ArtCard';
 
 
 const Gallery = () => {
@@ -74,6 +74,7 @@ const Gallery = () => {
 
   return (
     <div id='galley-container' style={{ display: 'flex', flexDirection: 'column' }}>
+
       <div className='search-bar' style={{ display: 'flex', justifyContent: 'center' }}>
         <TextField
           id="search-bar"
@@ -106,11 +107,10 @@ const Gallery = () => {
         <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px", justifyContent: 'space-around' }}>
           {artwork.map(art => (
             <Grid2 item xs={12} ms={5} key={art.id}>
-              <div>Add Card</div>
+              <ArtCard art={setArtwork} />
             </Grid2>
           ))}
         </Grid2>
-
       </div>
     </div >
   )
