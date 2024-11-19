@@ -215,7 +215,7 @@ const Gallery = () => {
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>Description: {art.description}</Typography>
                   <Button color='black' onClick={() => setFlip(!flip)}>Back</Button>
                 </Card>
-                
+
               </ReactCardFlip>
             </Grid2>
           ))}
