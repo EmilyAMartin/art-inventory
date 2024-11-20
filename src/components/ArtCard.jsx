@@ -10,7 +10,8 @@ import CardActionArea from '@mui/material/CardActionArea';
 import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
 
-const ArtCard = (art) => {
+const ArtCard = ({ art }) => {
+    const [artwork, setArtwork] = useState([]);
     const [anchorEl, setAnchorEl] = useState(null);
     const [popoverImageId, setPopoverImageId] = useState(null);
     const [flip, setFlip] = useState(false);
@@ -46,7 +47,9 @@ const ArtCard = (art) => {
                 JSON.stringify(updatedFavoritesList)
             );
         }
+        console.log(handleFavClick)
     };
+
     return (
         <ReactCardFlip isFlipped={flip} flipDirection="vertical">
             <Card className="card-font" sx={{ maxWidth: 300, maxHeight: 600, display: "flex" }}>
@@ -104,8 +107,6 @@ const ArtCard = (art) => {
             </Card>
 
             <Card className='card-back' sx={{ maxWidth: 300, maxHeight: 600, display: "flex" }}>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>Title: {art.title}</Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>Artist: {art.artist_title}</Typography>
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>Description: {art.description}</Typography>
                 <Button color='black' onClick={() => setFlip(!flip)}>Back</Button>
             </Card>

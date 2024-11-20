@@ -9,7 +9,7 @@ import TextField from "@mui/material/TextField";
 import ArtCard from '../components/ArtCard';
 
 
-const Gallery = () => {
+const Gallery = ({ art }) => {
   const BASE_URL = "https://api.artic.edu/api/v1/artworks";
   const [artwork, setArtwork] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -101,13 +101,12 @@ const Gallery = () => {
           {error && <div>{error}</div>}
         </div>
       )}
-
       <div className='galley-artwork'>
         {isLoading === true && <div>Loading...</div>}
         <Grid2 margin='auto' container spacing={8} style={{ marginTop: "10px", justifyContent: 'space-around' }}>
           {artwork.map(art => (
             <Grid2 item xs={12} ms={5} key={art.id}>
-              <ArtCard art={setArtwork} />
+              <ArtCard art={art} />
             </Grid2>
           ))}
         </Grid2>
