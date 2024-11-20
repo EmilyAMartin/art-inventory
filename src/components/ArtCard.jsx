@@ -12,6 +12,7 @@ import Popover from '@mui/material/Popover';
 
 const ArtCard = ({ art, id }) => {
     const [artwork, setArtwork] = useState([]);
+    const [reload, setReload] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const [popoverImageId, setPopoverImageId] = useState(null);
     const [flip, setFlip] = useState(false);
@@ -25,11 +26,8 @@ const ArtCard = ({ art, id }) => {
         setPopoverImageId(null)
     };
     const handleFavClick = (id) => {
-        const updateArtwork = artwork.map((item) => {
-            return item.id === id ? { ...item, favorite: !item.favorite } : item;
-        })
-        setArtwork(updateArtwork);
-        const selectedArtwork = updateArtwork.find((art) => art.id === id);
+        const selectedArtwork = art
+        selectedArtwork.favorite = !art.favorite
         if (selectedArtwork.favorite === true) {
             const favoritesList =
                 JSON.parse(localStorage.getItem("favoritesList")) ?? [];
@@ -46,10 +44,11 @@ const ArtCard = ({ art, id }) => {
                 JSON.stringify(updatedFavoritesList)
             );
         }
+        setReload(true)
     };
 
     return (
-        <ReactCardFlip isFlipped={flip} flipDirection="vertical">
+        <ReactCardFlip isFlipped={flip} flipDirection="horizontal">
             <Card className="card-font" sx={{ maxWidth: 300, maxHeight: 600, display: "flex" }}>
                 <CardActionArea>
                     <CardMedia
