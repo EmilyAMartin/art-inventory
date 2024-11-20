@@ -20,6 +20,7 @@ function getFormValues() {
         };
     return JSON.parse(storedValues);
 }
+
 function Form() {
     const [values, setValues] = useState(getFormValues);
     const [newpassword, setNewPassword] = useState('')
@@ -54,7 +55,7 @@ function Form() {
 
     function handleSubmit(event) {
         event.preventDefault();
-        alert('Your form was submitted');
+        alert('Form was submitted');
     }
 
     function handleChange(event) {

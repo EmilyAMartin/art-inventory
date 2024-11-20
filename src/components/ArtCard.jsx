@@ -10,13 +10,12 @@ import CardActionArea from '@mui/material/CardActionArea';
 import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
 
-const ArtCard = ({ art }) => {
+const ArtCard = ({ art, id }) => {
     const [artwork, setArtwork] = useState([]);
     const [anchorEl, setAnchorEl] = useState(null);
     const [popoverImageId, setPopoverImageId] = useState(null);
     const [flip, setFlip] = useState(false);
     const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
     const handlePopClick = (event) => {
         setAnchorEl(event.currentTarget);
         setPopoverImageId(event.target.src)
@@ -47,7 +46,6 @@ const ArtCard = ({ art }) => {
                 JSON.stringify(updatedFavoritesList)
             );
         }
-        console.log(handleFavClick)
     };
 
     return (
@@ -57,7 +55,7 @@ const ArtCard = ({ art }) => {
                     <CardMedia
                         style={{ width: 300, height: 300 }}
                         component="img"
-                        image={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
+                        image={art.image_path ? art.image_path : `https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
                         alt=""
                         onClick={handlePopClick}
                     />

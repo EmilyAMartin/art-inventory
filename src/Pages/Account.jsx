@@ -1,12 +1,11 @@
 import React, { useRef } from 'react';
-import Typography from '@mui/material/Typography';
 import { BsPersonCircle } from "react-icons/bs";
 import Form from '../components/Form';
-const Account = () => {
 
-  const hiddenFileInput = useRef(null);
-  const handleClick = event => {
-    hiddenFileInput.current.click();
+const Account = () => {
+  const addNewPhoto = useRef(null);
+  const handleClick = (event) => {
+    addNewPhoto.current.click(event);
   };
   const handleChange = event => {
     const fileUploaded = event.target.files[0];
@@ -21,10 +20,9 @@ const Account = () => {
         <input
           type="file"
           onChange={handleChange}
-          ref={hiddenFileInput}
-          style={{ display: 'none' }} // Make the file input element invisible
+          ref={addNewPhoto}
+          style={{ display: 'none' }}
         />
-
       </div>
       <Form />
     </>
