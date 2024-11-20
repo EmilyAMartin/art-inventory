@@ -43,7 +43,6 @@ const Artwork = () => {
               </Grid2>
             ))}
           </Grid2>
-
         </div>
       </div>
     </div>

@@ -11,7 +11,7 @@ const Account = () => {
     const fileUploaded = event.target.files[0];
     handleFile(fileUploaded);
   };
-
+ 
   return (
     <>
       <div className='profile-header' style={{ marginTop: 50, gap: 25, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
@@ -28,4 +28,5 @@ const Account = () => {
     </>
   )
 }
+
 export default Account

@@ -1,12 +1,10 @@
 import React from 'react'
 import SignUpBtn from '../components/SignUpBtn'
 import LoginBtn from '../components/LoginBtn'
-import Test from '../components/Test'
 
 const Home = () => {
   return (
     <div className="App">
-      <Test />
       <div className="home-container">
         <div className="home-banner-container">
           <div className="home-bannerImage-container"></div>
