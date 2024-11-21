@@ -7,12 +7,10 @@ const Account = () => {
 	const handleClick = (event) => {
 		addNewPhoto.current.click(event);
 	};
-
 	const handleChange = (event) => {
 		const fileUploaded = event.target.files[0];
 		handleFile(fileUploaded);
 	};
-
 	const handleFile = () => {
 		//Upload new profile picture feature.To be completed in next module//
 	};

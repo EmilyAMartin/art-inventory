@@ -60,17 +60,7 @@ const AddArtworkBtn = () => {
 			backgroundColor: red[700],
 		},
 	}));
-	const VisuallyHiddenInput = styled('input')({
-		clip: 'rect(0 0 0 0)',
-		clipPath: 'inset(50%)',
-		height: 1,
-		overflow: 'hidden',
-		position: 'absolute',
-		bottom: 0,
-		left: 0,
-		whiteSpace: 'nowrap',
-		width: 1,
-	});
+
 	return (
 		<div>
 			<button
@@ -157,26 +147,6 @@ const AddArtworkBtn = () => {
 								endAdornment={<InputAdornment position='end'></InputAdornment>}
 								label='quantity'
 							/>
-							<Button
-								sx={{
-									display: 'flex',
-									justifyContent: 'center',
-									alignItems: 'center',
-									width: '15%',
-									marginTop: 3,
-								}}
-								component='label'
-								role={undefined}
-								variant='contained'
-								tabIndex={-1}
-							>
-								Upload files
-								<VisuallyHiddenInput
-									type='file'
-									onChange={(event) => console.log(event.target.files)}
-									multiple
-								/>
-							</Button>
 							<div
 								style={{
 									display: 'flex',

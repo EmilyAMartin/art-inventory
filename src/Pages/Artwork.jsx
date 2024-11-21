@@ -7,7 +7,6 @@ import ArtCard from '../components/ArtCard';
 const Artwork = () => {
 	const [artwork, setArtwork] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
-
 	const handleFilterChange = (e) => {
 		if (e.target.value === 'recent') {
 			setArtwork(Data);
@@ -18,7 +17,6 @@ const Artwork = () => {
 			setIsLoading(false);
 		}
 	};
-
 	useEffect(() => {
 		setIsLoading(false);
 		setArtwork(Data);

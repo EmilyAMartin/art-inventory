@@ -14,7 +14,6 @@ const Gallery = () => {
 	const [error, setError] = useState(null);
 	const [page, setPage] = useState(1);
 	const [searchQuery, setSearchQuery] = useState('');
-
 	const fetchDataByKeyword = async () => {
 		setIsLoading(true);
 		const response = await axios.get(`${BASE_URL}/search?q=${searchQuery}`);
@@ -28,17 +27,14 @@ const Gallery = () => {
 		setArtwork(fetchedData);
 		setPage(0);
 	};
-
 	const fetchDataById = async (id) => {
 		const response = await axios.get(`${BASE_URL}/${id}`);
 		return response.data.data;
 	};
-
 	const handleReset = () => {
 		setPage(1);
 		setSearchQuery('');
 	};
-
 	useEffect(() => {
 		const fetchData = async () => {
 			setIsLoading(true);
