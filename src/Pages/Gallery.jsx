@@ -10,10 +10,11 @@ import ArtCard from '../components/ArtCard';
 const Gallery = () => {
 	const BASE_URL = 'https://api.artic.edu/api/v1/artworks';
 	const [artwork, setArtwork] = useState([]);
-	const [isLoading, setIsLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
 	const [page, setPage] = useState(1);
 	const [searchQuery, setSearchQuery] = useState('');
+
 	const fetchDataByKeyword = async () => {
 		setIsLoading(true);
 		const response = await axios.get(`${BASE_URL}/search?q=${searchQuery}`);
@@ -23,9 +24,9 @@ const Gallery = () => {
 				return await fetchDataById(art.id);
 			})
 		);
-		setIsLoading(false);
 		setArtwork(fetchedData);
 		setPage(0);
+		setIsLoading(false);
 	};
 	const fetchDataById = async (id) => {
 		const response = await axios.get(`${BASE_URL}/${id}`);
@@ -37,8 +38,8 @@ const Gallery = () => {
 	};
 	useEffect(() => {
 		const fetchData = async () => {
-			setIsLoading(true);
 			try {
+				setIsLoading(true);
 				const { data } = await axios.get(`${BASE_URL}?page=${page}`);
 				const favoritesList = JSON.parse(localStorage.getItem('favoritesList'));
 				const dataWithFavorites = data.data.map((art) => {
@@ -59,9 +60,7 @@ const Gallery = () => {
 		if (page > 0) {
 			fetchData();
 		}
-		return () => {
-			setIsLoading(true);
-		};
+		return () => {};
 	}, [page]);
 
 	return (

@@ -6,19 +6,16 @@ import ArtCard from '../components/ArtCard';
 
 const Artwork = () => {
 	const [artwork, setArtwork] = useState([]);
-	const [isLoading, setIsLoading] = useState(true);
+	const [addFav, setAddFav] = useState(false);
 	const handleFilterChange = (e) => {
 		if (e.target.value === 'recent') {
 			setArtwork(Data);
-			setIsLoading(false);
 		} else if (e.target.value === 'favorites') {
-			setIsLoading(true);
 			setArtwork(JSON.parse(localStorage.getItem('favoritesList')));
-			setIsLoading(false);
+			setAddFav(true);
 		}
 	};
 	useEffect(() => {
-		setIsLoading(false);
 		setArtwork(Data);
 	}, []);
 
@@ -56,9 +53,7 @@ const Artwork = () => {
 				</select>
 
 				<div>
-					{isLoading === true && (
-						<div style={{ marginTop: 25 }}>No Favorites Added</div>
-					)}
+					{addFav === true && <div style={{ marginTop: 25 }}>Add Favorites</div>}
 					<Grid2
 						margin='auto'
 						container
@@ -75,7 +70,6 @@ const Artwork = () => {
 								ms={5}
 								key={art.id}
 							>
-								{' '}
 								<ArtCard art={art} />
 							</Grid2>
 						))}
