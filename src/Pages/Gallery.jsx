@@ -60,7 +60,6 @@ const Gallery = () => {
 		if (page > 0) {
 			fetchData();
 		}
-		return () => {};
 	}, [page]);
 
 	return (
@@ -121,7 +120,7 @@ const Gallery = () => {
 					container
 					spacing={8}
 					style={{
-						marginTop: '10px',
+						marginTop: '25px',
 						marginBottom: '50px',
 						justifyContent: 'space-around',
 					}}

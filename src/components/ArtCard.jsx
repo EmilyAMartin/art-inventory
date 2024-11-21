@@ -105,12 +105,6 @@ const ArtCard = ({ art, id }) => {
 							variant='body2'
 							sx={{ color: 'text.secondary' }}
 						>
-							{art.place_of_origin}
-						</Typography>
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
 							{art.date_end}
 						</Typography>
 					</CardContent>
@@ -160,23 +154,47 @@ const ArtCard = ({ art, id }) => {
 						>
 							{art.title}
 						</Typography>
+						<br></br>
 						<Typography
 							variant='body2'
 							sx={{ color: 'text.secondary' }}
 						>
-							{art.artist_title}
+							Artist: {art.artist_title}
 						</Typography>
+						<br></br>
 						<Typography
 							variant='body2'
 							sx={{ color: 'text.secondary' }}
 						>
-							{art.place_of_origin}
+							Date: {art.date_end}
 						</Typography>
+						<br></br>
 						<Typography
 							variant='body2'
 							sx={{ color: 'text.secondary' }}
 						>
-							{art.date_end}
+							Place of Origin: {art.place_of_origin}
+						</Typography>
+						<br></br>
+						<Typography
+							variant='body2'
+							sx={{ color: 'text.secondary' }}
+						>
+							Type: {art.artwork_type_title}
+						</Typography>
+						<br></br>
+						<Typography
+							variant='body2'
+							sx={{ color: 'text.secondary' }}
+						>
+							Medium: {art.medium_display}
+						</Typography>
+						<br></br>
+						<Typography
+							variant='body2'
+							sx={{ color: 'text.secondary' }}
+						>
+							Credit: {art.credit_line}
 						</Typography>
 					</CardContent>
 					<div

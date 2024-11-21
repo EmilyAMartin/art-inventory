@@ -13,7 +13,7 @@ const Home = () => {
 						<div className='home-primary-text'>
 							Your vibrant online platform where artists of all levels can showcase
 							their own artworks, delve into an extensive gallery of masterpieces from
-							renowned artists, and find endless inspiratSion for their next project.
+							renowned artists, and find endless inspiration for their next project.
 							Whether you are looking to exhibit your creations, connect with fellow
 							art enthusiasts, or explore the styles and techniques of the greats,
 							Portfolio is your go-to platform for artistic expression and discovery.
