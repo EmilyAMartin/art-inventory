@@ -10,9 +10,10 @@ const Artwork = () => {
 	const handleFilterChange = (e) => {
 		if (e.target.value === 'recent') {
 			setArtwork(Data);
+			setAddFav(false);
 		} else if (e.target.value === 'favorites') {
-			setArtwork(JSON.parse(localStorage.getItem('favoritesList')));
 			setAddFav(true);
+			setArtwork(JSON.parse(localStorage.getItem('favoritesList')));
 		}
 	};
 	useEffect(() => {
@@ -53,7 +54,9 @@ const Artwork = () => {
 				</select>
 
 				<div>
-					{addFav === true && <div style={{ marginTop: 25 }}>Add Favorites</div>}
+					{addFav === true && (
+						<div style={{ marginTop: 25 }}>No Favorites Added</div>
+					)}
 					<Grid2
 						margin='auto'
 						container

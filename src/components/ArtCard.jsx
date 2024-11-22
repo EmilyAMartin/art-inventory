@@ -10,7 +10,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import Popover from '@mui/material/Popover';
 
 const ArtCard = ({ art, id }) => {
-	const [reload, setReload] = useState(false);
+	const [artwork, setArtwork] = useState(art);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
 	const [flip, setFlip] = useState(false);
@@ -24,8 +24,8 @@ const ArtCard = ({ art, id }) => {
 		setPopoverImageId(null);
 	};
 	const handleFavClick = (id) => {
-		const selectedArtwork = art;
-		selectedArtwork.favorite = !art.favorite;
+		const selectedArtwork = artwork;
+		selectedArtwork.favorite = !artwork.favorite;
 		if (selectedArtwork.favorite === true) {
 			const favoritesList =
 				JSON.parse(localStorage.getItem('favoritesList')) ?? [];
@@ -39,7 +39,6 @@ const ArtCard = ({ art, id }) => {
 			);
 			localStorage.setItem('favoritesList', JSON.stringify(updatedFavoritesList));
 		}
-		setReload(true);
 	};
 
 	return (
@@ -116,7 +115,7 @@ const ArtCard = ({ art, id }) => {
 							margin: 25,
 						}}
 					>
-						{art.favorite === true && (
+						{artwork.favorite === true && (
 							<Favorite
 								onClick={() => {
 									handleFavClick(art.id);
@@ -124,7 +123,7 @@ const ArtCard = ({ art, id }) => {
 							/>
 						)}
 
-						{art.favorite === false && (
+						{artwork.favorite === false && (
 							<FavoriteBorder
 								onClick={() => {
 									handleFavClick(art.id);
