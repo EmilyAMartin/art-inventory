@@ -57,6 +57,7 @@ const SignUpBtn = () => {
 		left: '50%',
 		transform: 'translate(-50%, -50%)',
 		bgcolor: 'background.paper',
+		maxWidth: 600,
 	};
 	const SubmitButton = styled(Button)(({ theme }) => ({
 		color: theme.palette.getContrastText(green[500]),
@@ -97,7 +98,7 @@ const SignUpBtn = () => {
 							alignItems: 'center',
 							justifyContent: 'center',
 							gap: 25,
-							width: '90vw',
+							maxWidth: 600,
 							padding: 50,
 						}}
 					>
