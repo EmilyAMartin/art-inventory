@@ -5,21 +5,74 @@ import AddArtworkBtn from '../components/AddArtworkBtn';
 import ArtCard from '../components/ArtCard';
 
 const Artwork = () => {
-	const [artwork, setArtwork] = useState([]);
-	const [addFav, setAddFav] = useState(false);
+	const [artwork, setArtwork] = useState(null); // Initialize as null
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
 	const handleFilterChange = (e) => {
 		if (e.target.value === 'recent') {
 			setArtwork(Data);
-			setAddFav(false);
 		} else if (e.target.value === 'favorites') {
-			setAddFav(true);
 			setArtwork(JSON.parse(localStorage.getItem('favoritesList')));
 		}
 	};
+
 	useEffect(() => {
-		setArtwork(Data);
+		const fetchData = async () => {
+			try {
+				setArtwork(Data);
+			} catch (err) {
+				setError(err);
+			} finally {
+				setLoading(false);
+			}
+		};
+		fetchData();
 	}, []);
 
+	if (loading) {
+		return <div>Loading artwork...</div>;
+	}
+	if (error) {
+		return <div>Error: {error.message}</div>;
+	}
+	if (!artwork || artwork.length === 0) {
+		return (
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					gap: 15,
+					marginTop: 25,
+				}}
+			>
+				<AddArtworkBtn />
+				<div
+					className='select-filter'
+					style={{
+						display: 'flex',
+						flexDirection: 'column',
+						justifyContent: 'center',
+						alignContent: 'center',
+					}}
+				>
+					<select
+						style={{
+							borderColor: 'lightgrey',
+							borderRadius: '0.3rem',
+							width: '25rem',
+							height: '3rem',
+							fontSize: '1rem',
+						}}
+						onChange={(e) => handleFilterChange(e)}
+					>
+						<option value='recent'>Recently Added</option>
+						<option value='favorites'>Favorites</option>
+					</select>
+				</div>
+				<div>No Favorites Added</div>
+			</div>
+		);
+	}
 	return (
 		<div
 			style={{
@@ -54,9 +107,6 @@ const Artwork = () => {
 				</select>
 
 				<div>
-					{addFav === true && (
-						<div style={{ marginTop: 25 }}>No Favorites Added</div>
-					)}
 					<Grid2
 						margin='auto'
 						container

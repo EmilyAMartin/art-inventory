@@ -10,6 +10,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import Popover from '@mui/material/Popover';
 
 const ArtCard = ({ art, id }) => {
+	const [reload, setReload] = useState(false);
 	const [artwork, setArtwork] = useState(art);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
@@ -31,9 +32,11 @@ const ArtCard = ({ art, id }) => {
 				JSON.parse(localStorage.getItem('favoritesList')) ?? [];
 			favoritesList.push(selectedArtwork);
 			localStorage.setItem('favoritesList', JSON.stringify(favoritesList));
+			setReload(true);
 		} else if (selectedArtwork.favorite === false) {
 			const favoritesList =
 				JSON.parse(localStorage.getItem('favoritesList')) ?? [];
+			setReload(true);
 			const updatedFavoritesList = favoritesList.filter(
 				(art) => art.id !== selectedArtwork.id
 			);
