@@ -25,6 +25,7 @@ const ArtCard = ({ art, id }) => {
 		setPopoverImageId(null);
 	};
 	const handleFavClick = (id) => {
+		setReload(true);
 		const selectedArtwork = artwork;
 		selectedArtwork.favorite = !artwork.favorite;
 		if (selectedArtwork.favorite === true) {
@@ -32,18 +33,15 @@ const ArtCard = ({ art, id }) => {
 				JSON.parse(localStorage.getItem('favoritesList')) ?? [];
 			favoritesList.push(selectedArtwork);
 			localStorage.setItem('favoritesList', JSON.stringify(favoritesList));
-			setReload(true);
 		} else if (selectedArtwork.favorite === false) {
 			const favoritesList =
 				JSON.parse(localStorage.getItem('favoritesList')) ?? [];
-			setReload(true);
 			const updatedFavoritesList = favoritesList.filter(
 				(art) => art.id !== selectedArtwork.id
 			);
 			localStorage.setItem('favoritesList', JSON.stringify(updatedFavoritesList));
 		}
 	};
-
 	return (
 		<ReactCardFlip
 			isFlipped={flip}
@@ -125,7 +123,6 @@ const ArtCard = ({ art, id }) => {
 								}}
 							/>
 						)}
-
 						{artwork.favorite === false && (
 							<FavoriteBorder
 								onClick={() => {
