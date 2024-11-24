@@ -59,7 +59,7 @@ const Artwork = () => {
 						style={{
 							borderColor: 'lightgrey',
 							borderRadius: '0.3rem',
-							width: '25rem',
+							width: '20rem',
 							height: '3rem',
 							fontSize: '1rem',
 						}}
@@ -96,7 +96,7 @@ const Artwork = () => {
 					style={{
 						borderColor: 'lightgrey',
 						borderRadius: '0.3rem',
-						width: '25rem',
+						width: '20rem',
 						height: '3rem',
 						fontSize: '1rem',
 					}}
