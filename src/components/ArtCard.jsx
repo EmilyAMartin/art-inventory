@@ -194,6 +194,13 @@ const ArtCard = ({ art, id }) => {
 							variant='body2'
 							sx={{ color: 'text.secondary' }}
 						>
+							Description:
+						</Typography>
+						<br></br>
+						<Typography
+							variant='body2'
+							sx={{ color: 'text.secondary' }}
+						>
 							Credit: {art.credit_line}
 						</Typography>
 					</CardContent>
