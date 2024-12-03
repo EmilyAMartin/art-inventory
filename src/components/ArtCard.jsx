@@ -10,7 +10,6 @@ import CardActionArea from '@mui/material/CardActionArea';
 import Popover from '@mui/material/Popover';
 
 const ArtCard = ({ art, id }) => {
-	const [reload, setReload] = useState(false);
 	const [artwork, setArtwork] = useState(art);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
@@ -25,24 +24,24 @@ const ArtCard = ({ art, id }) => {
 		setPopoverImageId(null);
 	};
 	const handleFavClick = (id) => {
-		const selectedArtwork = artwork;
-		selectedArtwork.favorite = !artwork.favorite;
-		if (selectedArtwork.favorite === true) {
+		const updatedArtwork = { ...artwork };
+		updatedArtwork.favorite = !updatedArtwork.favorite;
+		setArtwork(updatedArtwork);
+		if (updatedArtwork.favorite === true) {
 			const favoritesList =
 				JSON.parse(localStorage.getItem('favoritesList')) ?? [];
-			favoritesList.push(selectedArtwork);
+			favoritesList.push(updatedArtwork);
 			localStorage.setItem('favoritesList', JSON.stringify(favoritesList));
-		} else if (selectedArtwork.favorite === false) {
+		} else {
 			const favoritesList =
 				JSON.parse(localStorage.getItem('favoritesList')) ?? [];
-
 			const updatedFavoritesList = favoritesList.filter(
-				(art) => art.id !== selectedArtwork.id
+				(art) => art.id !== updatedArtwork.id
 			);
 			localStorage.setItem('favoritesList', JSON.stringify(updatedFavoritesList));
 		}
-		setReload(true);
 	};
+
 	return (
 		<ReactCardFlip
 			isFlipped={flip}
@@ -117,20 +116,12 @@ const ArtCard = ({ art, id }) => {
 							margin: 25,
 						}}
 					>
-						{artwork.favorite === true && (
-							<Favorite
-								onClick={() => {
-									handleFavClick(art.id);
-								}}
-							/>
+						{artwork.favorite === true ? (
+							<Favorite onClick={() => handleFavClick(art.id)} />
+						) : (
+							<FavoriteBorder onClick={() => handleFavClick(art.id)} />
 						)}
-						{artwork.favorite === false && (
-							<FavoriteBorder
-								onClick={() => {
-									handleFavClick(art.id);
-								}}
-							/>
-						)}
+
 						<div
 							style={{ fontSize: 15, fontWeight: 600 }}
 							onClick={() => setFlip(!flip)}
