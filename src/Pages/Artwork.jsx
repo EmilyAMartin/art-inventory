@@ -15,7 +15,6 @@ const Artwork = () => {
 			setArtwork(JSON.parse(localStorage.getItem('favoritesList')));
 		}
 	};
-
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
