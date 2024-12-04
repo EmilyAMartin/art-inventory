@@ -11,13 +11,10 @@ const Home = () => {
 					<div className='home-text-section'>
 						<div className='home-heading'>Welcome to Portfolio</div>
 						<div className='home-primary-text'>
-							Your vibrant online platform where artists of all levels can showcase
-							their own artworks, delve into an extensive gallery of masterpieces from
-							renowned artists, and find endless inspiration for their next project.
-							Whether you are looking to exhibit your creations, connect with fellow
-							art enthusiasts, or explore the styles and techniques of the greats,
-							Portfolio is your go-to platform for artistic expression and discovery.
-							Join us in celebrating creativity and igniting your passion for art!
+							Portfolio is a dynamic platform where artists can showcase their work,
+							explore a curated gallery of masterpieces, and gain inspiration for their
+							next project. Connect with fellow enthusiasts, discover new techniques,
+							and celebrate creativity. Join us and ignite your passion for art!
 						</div>
 						<div style={{ display: 'flex', flexDirection: 'row', gap: 25 }}>
 							<SignUpBtn />

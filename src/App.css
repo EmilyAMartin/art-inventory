@@ -44,10 +44,10 @@ img {
 	max-width: 600px;
 }
 .home-primary-text {
-	font-size: clamp(1rem, 3vw, 1.3rem);
+	font-size: clamp(1rem, 3vw, 1.5rem);
 	max-width: 500px;
 	color: #000000;
-	margin: 1.5rem 0rem;
+	margin: 1rem 0rem;
 }
 
 @media (max-width: 1000px) {
