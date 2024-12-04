@@ -185,7 +185,7 @@ const ArtCard = ({ art, id }) => {
 							variant='body2'
 							sx={{ color: 'text.secondary' }}
 						>
-							Description:
+							Description:{art?.thumbnail?.alt_text}
 						</Typography>
 						<br></br>
 						<Typography
