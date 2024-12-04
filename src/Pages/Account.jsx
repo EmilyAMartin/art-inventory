@@ -12,7 +12,7 @@ const Account = () => {
 		handleFile(fileUploaded);
 	};
 	const handleFile = () => {
-		//Upload new profile picture feature.To be completed in next module//
+		//Upload new profile picture feature.To be completed in module 3//
 	};
 
 	return (
