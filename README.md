@@ -17,12 +17,17 @@ This project was inspired by my personal need for a platform to catalog my own a
 ## Key Features
 
 Search for inspiration using the Art Institute of Chicago's API.
+<br>
 Create an account and catalog personal artwork (coming soon).
+<br>
 Use the new project feature to brainstorm art projects (coming soon).
 
 ## Technology Stack
 
 Layout: Figma
+<br>
 Frontend: React JS
+<br>
 Component Library: MUI
+<br>
 API: Art Institute of Chicago
