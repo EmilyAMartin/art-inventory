@@ -8,7 +8,7 @@
 		"artwork_type_title": "Photograph",
 		"medium_display":"Scanned silver gelatin print",
 		"credit_line":"Personal Collection",
-		"image_path": "public/Images/1.jpg",
+		"image_path": "Images/1.jpg",
 		"favorite": false,
 		"thumbnail": {
 			"alt_text":"This image was take during the summer of 2022. The photograph is of the inside of the Terra Nova Sulphite Mill in Glovertown, NL"
@@ -23,7 +23,7 @@
 		"artwork_type_title": "Photograph",
 		"medium_display":"Scanned silver gelatin print",
 		"credit_line":"Personal Collection",
-		"image_path": "public/Images/2.jpg",
+		"image_path": "Images/2.jpg",
 		"favorite": false,
 		"thumbnail": {
 			"alt_text":"This image was take during the summer of 2022. The photograph is of the inside of the Terra Nova Sulphite Mill in Glovertown, NL"
@@ -38,7 +38,7 @@
 		"artwork_type_title": "Photograph",
 		"medium_display":"Printed silver gelatin print",
 		"credit_line":"Personal Collection",
-		"image_path": "public/Images/3.jpg",
+		"image_path": "Images/3.jpg",
 		"favorite": false,
 		"thumbnail": {
 			"alt_text":"This image was made in 2014 using ink on glass. It is an abstract photograph meant to play on the idea of viewer perception and the meaning of an artwork"
@@ -53,7 +53,7 @@
 		"artwork_type_title": "Photograph",
 		"medium_display":"Printed silver gelatin print",
 		"credit_line":"Personal Collection",
-		"image_path": "public/Images/4.jpg",
+		"image_path": "Images/4.jpg",
 		"favorite": false,
 			"thumbnail": {
 			"alt_text":"This image was made in 2014 using ink on glass. It is an abstract photograph meant to play on the idea of viewer perception and the meaning of an artwork"
@@ -68,7 +68,7 @@
 		"artwork_type_title": "Digital",
 		"medium_display":"Digital artwork printed on mat paper",
 		"credit_line":"Personal Collection",
-		"image_path": "public/Images/5.jpg",
+		"image_path": "Images/5.jpg",
 		"favorite": false,
 			"thumbnail": {
 			"alt_text":"This image was made in 2018 using photoshop. The artist used images taken from the Newfoundland insectarium to create colorful bug illustrations"
@@ -83,7 +83,7 @@
 		"artwork_type_title": "Digital",
 		"medium_display":"Digital artwork printed on mat paper",
 		"credit_line":"Personal Collection",
-		"image_path": "public/Images/6.jpg",
+		"image_path": "Images/6.jpg",
 		"favorite": false,
 			"thumbnail": {
 			"alt_text":"This image was made in 2018 using ink on glass. The artist used images of a local hunters animal skulls to create colorful illustrations"
@@ -98,7 +98,7 @@
 		"artwork_type_title": "Printmaking",
 		"medium_display":"Lino print printed on mat paper",
 		"credit_line":"Personal Collection",
-		"image_path": "public/Images/7.jpg",
+		"image_path": "Images/7.jpg",
 		"favorite": false,
 			"thumbnail": {
 			"alt_text":"This image was made in 2019. The artist made serval editions of this print using different color schemes"
@@ -113,7 +113,7 @@
 		"artwork_type_title": "Painting",
 		"medium_display":"Watercolor painting scanned and printed on mat paper",
 		"credit_line":"Personal Collection",
-		"image_path": "public/Images/8.jpg",
+		"image_path": "Images/8.jpg",
 		"favorite": false,
 			"thumbnail": {
 			"alt_text":"This image was made in 2019. It is one of three watercolor paintings the artist made of Newfoundland flowers"
