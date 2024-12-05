@@ -6,6 +6,10 @@ import LoginBtn from './LoginBtn';
 
 export const Navbar = () => {
 	const [menuOpen, setMenuOpen] = useState(false);
+	const handleLinkClick = () => {
+		setMenuOpen(false);
+	};
+
 	return (
 		<nav>
 			<Link
@@ -25,16 +29,36 @@ export const Navbar = () => {
 			</div>
 			<ul className={menuOpen ? 'open' : ''}>
 				<li>
-					<NavLink to='/'>Home</NavLink>
+					<NavLink
+						to='/'
+						onClick={handleLinkClick}
+					>
+						Home
+					</NavLink>
 				</li>
 				<li>
-					<NavLink to='Artwork'>Artwork</NavLink>
+					<NavLink
+						to='/Artwork'
+						onClick={handleLinkClick}
+					>
+						Artwork
+					</NavLink>
 				</li>
 				<li>
-					<NavLink to='Gallery'>Gallery</NavLink>
+					<NavLink
+						to='/Gallery'
+						onClick={handleLinkClick}
+					>
+						Gallery
+					</NavLink>
 				</li>
 				<li>
-					<NavLink to='Account'>Account</NavLink>
+					<NavLink
+						to='/Account'
+						onClick={handleLinkClick}
+					>
+						Account
+					</NavLink>
 				</li>
 				<li style={{ marginTop: 6 }}>
 					<LoginBtn />

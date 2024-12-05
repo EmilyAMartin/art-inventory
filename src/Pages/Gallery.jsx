@@ -78,6 +78,12 @@ const Gallery = () => {
 					onInput={(e) => {
 						setSearchQuery(e.target.value);
 					}}
+					onKeyDown={(e) => {
+						if (e.key === 'Enter') {
+							e.preventDefault(); // Prevent form submission
+							fetchDataByKeyword(); // Trigger search
+						}
+					}}
 					label='Search Keyword'
 					variant='outlined'
 					placeholder='Search...'
