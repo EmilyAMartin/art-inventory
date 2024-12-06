@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import Popover from '@mui/material/Popover';
 
-const ArtCard = ({ art, id }) => {
+const ArtCard = ({ art, id, onUnfavorite }) => {
 	const [artwork, setArtwork] = useState(art);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
