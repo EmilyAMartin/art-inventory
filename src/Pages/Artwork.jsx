@@ -15,7 +15,15 @@ const Artwork = () => {
 			setLoading(true);
 			try {
 				if (filter === 'recent') {
-					setArtwork(Data);
+					const favoritesList =
+						JSON.parse(localStorage.getItem('favoritesList')) || [];
+					const artworkWithFavorites = Data.map((art) => {
+						return {
+							...art,
+							favorite: favoritesList.some((fav) => fav.id === art.id),
+						};
+					});
+					setArtwork(artworkWithFavorites);
 				} else if (filter === 'favorites') {
 					const favoritesList =
 						JSON.parse(localStorage.getItem('favoritesList')) || [];
@@ -48,8 +56,17 @@ const Artwork = () => {
 			}
 		}
 		localStorage.setItem('favoritesList', JSON.stringify(favoritesList));
+
 		if (filter === 'favorites') {
 			setArtwork(favoritesList);
+		} else {
+			setArtwork((prevArtwork) =>
+				prevArtwork.map((art) =>
+					art.id === updatedArtwork.id
+						? { ...art, favorite: updatedArtwork.favorite }
+						: art
+				)
+			);
 		}
 	};
 
@@ -98,6 +115,7 @@ const Artwork = () => {
 			</div>
 		);
 	}
+
 	return (
 		<div
 			style={{

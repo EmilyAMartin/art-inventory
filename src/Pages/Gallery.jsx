@@ -111,7 +111,12 @@ const Gallery = () => {
 				>
 					<SearchIcon style={{ fill: 'black' }} />
 				</IconButton>
-				<Button onClick={handleReset}>Reset </Button>
+				<Button
+					color='black'
+					onClick={handleReset}
+				>
+					Reset
+				</Button>
 			</div>
 
 			{page > 0 && (
