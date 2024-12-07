@@ -2,19 +2,20 @@ import React, { useState } from 'react';
 import { Favorite } from '@mui/icons-material';
 import { FavoriteBorder } from '@mui/icons-material';
 import ReactCardFlip from 'react-card-flip';
+import Popover from '@mui/material/Popover';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
-import Popover from '@mui/material/Popover';
 
-const ArtCard = ({ art, id, onUnfavorite }) => {
-	const [artwork, setArtwork] = useState(art);
+const ArtCard = ({ id, art, handleFavUpdate }) => {
+	const [artwork, setArtworkState] = useState(art);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
 	const [flip, setFlip] = useState(false);
 	const open = Boolean(anchorEl);
+
 	const handlePopClick = (event) => {
 		setAnchorEl(event.currentTarget);
 		setPopoverImageId(event.target.src);
@@ -23,23 +24,12 @@ const ArtCard = ({ art, id, onUnfavorite }) => {
 		setAnchorEl(null);
 		setPopoverImageId(null);
 	};
-	const handleFavClick = (id) => {
+
+	const handleFavClick = () => {
 		const updatedArtwork = { ...artwork };
 		updatedArtwork.favorite = !updatedArtwork.favorite;
-		setArtwork(updatedArtwork);
-		if (updatedArtwork.favorite === true) {
-			const favoritesList =
-				JSON.parse(localStorage.getItem('favoritesList')) ?? [];
-			favoritesList.push(updatedArtwork);
-			localStorage.setItem('favoritesList', JSON.stringify(favoritesList));
-		} else {
-			const favoritesList =
-				JSON.parse(localStorage.getItem('favoritesList')) ?? [];
-			const updatedFavoritesList = favoritesList.filter(
-				(art) => art.id !== updatedArtwork.id
-			);
-			localStorage.setItem('favoritesList', JSON.stringify(updatedFavoritesList));
-		}
+		setArtworkState(updatedArtwork);
+		handleFavUpdate(updatedArtwork);
 	};
 
 	return (
@@ -60,7 +50,7 @@ const ArtCard = ({ art, id, onUnfavorite }) => {
 								? art.image_path
 								: `https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`
 						}
-						alt=''
+						alt='Artwork'
 						onClick={handlePopClick}
 					/>
 					<Popover
@@ -86,6 +76,7 @@ const ArtCard = ({ art, id, onUnfavorite }) => {
 							alt=''
 						/>
 					</Popover>
+
 					<CardContent style={{ width: 300, height: 200 }}>
 						<Typography
 							gutterBottom
@@ -116,10 +107,10 @@ const ArtCard = ({ art, id, onUnfavorite }) => {
 							margin: 25,
 						}}
 					>
-						{artwork.favorite === true ? (
-							<Favorite onClick={() => handleFavClick(art.id)} />
+						{artwork.favorite ? (
+							<Favorite onClick={handleFavClick} />
 						) : (
-							<FavoriteBorder onClick={() => handleFavClick(art.id)} />
+							<FavoriteBorder onClick={handleFavClick} />
 						)}
 
 						<div

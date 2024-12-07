@@ -15,6 +15,21 @@ const Gallery = () => {
 	const [page, setPage] = useState(1);
 	const [searchQuery, setSearchQuery] = useState('');
 
+	const handleFavUpdate = (updatedArtwork) => {
+		const favoritesList = JSON.parse(localStorage.getItem('favoritesList')) || [];
+		const index = favoritesList.findIndex((art) => art.id === updatedArtwork.id);
+		if (updatedArtwork.favorite) {
+			if (index === -1) {
+				favoritesList.push(updatedArtwork);
+			}
+		} else {
+			if (index !== -1) {
+				favoritesList.splice(index, 1);
+			}
+		}
+		localStorage.setItem('favoritesList', JSON.stringify(favoritesList));
+	};
+
 	const fetchDataByKeyword = async () => {
 		setIsLoading(true);
 		const response = await axios.get(`${BASE_URL}/search?q=${searchQuery}`);
@@ -80,8 +95,8 @@ const Gallery = () => {
 					}}
 					onKeyDown={(e) => {
 						if (e.key === 'Enter') {
-							e.preventDefault(); // Prevent form submission
-							fetchDataByKeyword(); // Trigger search
+							e.preventDefault();
+							fetchDataByKeyword();
 						}
 					}}
 					label='Search Keyword'
@@ -137,7 +152,10 @@ const Gallery = () => {
 							ms={5}
 							key={art.id}
 						>
-							<ArtCard art={art} />
+							<ArtCard
+								art={art}
+								handleFavUpdate={handleFavUpdate}
+							/>
 						</Grid2>
 					))}
 				</Grid2>

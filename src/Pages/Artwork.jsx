@@ -5,28 +5,53 @@ import AddArtworkBtn from '../components/AddArtworkBtn';
 import ArtCard from '../components/ArtCard';
 
 const Artwork = () => {
-	const [artwork, setArtwork] = useState(null); // Initialize as null
+	const [artwork, setArtwork] = useState([]);
+	const [filter, setFilter] = useState('recent');
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
-	const handleFilterChange = (e) => {
-		if (e.target.value === 'recent') {
-			setArtwork(Data);
-		} else if (e.target.value === 'favorites') {
-			setArtwork(JSON.parse(localStorage.getItem('favoritesList')));
-		}
-	};
+
 	useEffect(() => {
-		const fetchData = async () => {
+		const fetchData = () => {
+			setLoading(true);
 			try {
-				setArtwork(Data);
+				if (filter === 'recent') {
+					setArtwork(Data);
+				} else if (filter === 'favorites') {
+					const favoritesList =
+						JSON.parse(localStorage.getItem('favoritesList')) || [];
+					setArtwork(favoritesList);
+				}
 			} catch (err) {
 				setError(err);
 			} finally {
 				setLoading(false);
 			}
 		};
+
 		fetchData();
-	}, []);
+	}, [filter]);
+
+	const handleFilterChange = (e) => {
+		setFilter(e.target.value);
+	};
+
+	const handleFavUpdate = (updatedArtwork) => {
+		const favoritesList = JSON.parse(localStorage.getItem('favoritesList')) || [];
+		const index = favoritesList.findIndex((art) => art.id === updatedArtwork.id);
+		if (updatedArtwork.favorite) {
+			if (index === -1) {
+				favoritesList.push(updatedArtwork);
+			}
+		} else {
+			if (index !== -1) {
+				favoritesList.splice(index, 1);
+			}
+		}
+		localStorage.setItem('favoritesList', JSON.stringify(favoritesList));
+		if (filter === 'favorites') {
+			setArtwork(favoritesList);
+		}
+	};
 
 	if (loading) {
 		return <div>Loading artwork...</div>;
@@ -62,7 +87,8 @@ const Artwork = () => {
 							height: '3rem',
 							fontSize: '1rem',
 						}}
-						onChange={(e) => handleFilterChange(e)}
+						onChange={handleFilterChange}
+						value={filter}
 					>
 						<option value='recent'>Recently Added</option>
 						<option value='favorites'>Favorites</option>
@@ -99,7 +125,8 @@ const Artwork = () => {
 						height: '3rem',
 						fontSize: '1rem',
 					}}
-					onChange={(e) => handleFilterChange(e)}
+					onChange={handleFilterChange}
+					value={filter}
 				>
 					<option value='recent'>Recently Added</option>
 					<option value='favorites'>Favorites</option>
@@ -122,7 +149,10 @@ const Artwork = () => {
 								ms={5}
 								key={art.id}
 							>
-								<ArtCard art={art} />
+								<ArtCard
+									art={art}
+									handleFavUpdate={handleFavUpdate}
+								/>
 							</Grid2>
 						))}
 					</Grid2>
