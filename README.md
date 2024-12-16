@@ -39,3 +39,7 @@ Frontend: React JS
 Component Library: MUI
 <br>
 API: Art Institute of Chicago
+
+## Credits
+My coach, Lucas Hillier, has been an incredible source of support and guidance throughout the development of this project. His insightful suggestions were crucial in transforming my idea into reality. This project would not have been possible without him and I am truly grateful for all his help.
+
