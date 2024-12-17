@@ -20,10 +20,10 @@ In Module 3, I will be focusing on developing the sign-up, login, and artwork up
 
 ## Images
 
-<img src="Images/9.jpg" alt="img of homescreen" width="500"/>
-<img src="Images/10.jpg" alt="img of artwork page" width="500"/>
-<img src="Images/11.jpg" alt="img of gallery page" width="500"/>
-<img src="Images/12.jpg" alt="img of account page" width="500"/>
+<img src="public/Images/9.jpg" alt="img of home screen" width="500"/>
+<img src="public/Images/10.jpg" alt="img of artwork page" width="500"/>
+<img src="public/Images/11.jpg" alt="img of gallery page" width="500"/>
+<img src="public/Images/12.jpg" alt="img of account page" width="500"/>
 
 ## Motivation
 
