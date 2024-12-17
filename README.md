@@ -21,6 +21,9 @@ In Module 3, I will be focusing on developing the sign-up, login, and artwork up
 ## Images
 
 <img src="Images/9.jpg" alt="img of homescreen" width="500"/>
+<img src="Images/10.jpg" alt="img of artwork page" width="500"/>
+<img src="Images/11.jpg" alt="img of gallery page" width="500"/>
+<img src="Images/12.jpg" alt="img of account page" width="500"/>
 
 ## Motivation
 
@@ -43,3 +46,7 @@ Frontend: React JS
 Component Library: MUI
 <br>
 API: Art Institute of Chicago
+
+## Credits
+
+My coach, Lucas Hillier, has been an incredible source of support and guidance throughout the development of this project. His insightful suggestions were crucial in transforming my idea into reality. This project would not have been possible without him and I am truly grateful for all his help.
