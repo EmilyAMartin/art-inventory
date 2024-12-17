@@ -18,13 +18,6 @@ Accounts Page: Enables users to create and manage personal profiles and accounts
 <br>
 In Module 3, I will be focusing on developing the sign-up, login, and artwork upload features. Additionally, I plan to introduce a new page that allows users to upload project ideas. This feature will enable users to upload color palettes, images, sketches, and notes to inspire future projects.
 
-## Preview
-
-<img src="public/Images/9.jpg" alt="img of home screen" width="500"/>
-<img src="public/Images/10.jpg" alt="img of artwork page" width="500"/>
-<img src="public/Images/11.jpg" alt="img of gallery page" width="500"/>
-<img src="public/Images/12.jpg" alt="img of account page" width="500"/>
-
 ## Motivation
 
 This project was inspired by my personal need for a platform to catalog my own artworks. I wanted to create a space where I, as well as other creators, could easily document their artworks, search for inspiration and brainstorm ideas all in one unified platform.
@@ -50,3 +43,10 @@ API: Art Institute of Chicago
 ## Credits
 
 My coach, Lucas Hillier, has been an incredible source of support and guidance throughout the development of this project. His insightful suggestions were crucial in transforming my idea into reality. This project would not have been possible without him and I am truly grateful for all his help.
+
+## Preview
+
+<img src="public/Images/9.jpg" alt="img of home screen" width="500"/>
+<img src="public/Images/10.jpg" alt="img of artwork page" width="500"/>
+<img src="public/Images/11.jpg" alt="img of gallery page" width="500"/>
+<img src="public/Images/12.jpg" alt="img of account page" width="500"/>
