@@ -18,6 +18,10 @@ Accounts Page: Enables users to create and manage personal profiles and accounts
 <br>
 In Module 3, I will be focusing on developing the sign-up, login, and artwork upload features. Additionally, I plan to introduce a new page that allows users to upload project ideas. This feature will enable users to upload color palettes, images, sketches, and notes to inspire future projects.
 
+## Images
+
+<img src="Images/9.jpg" alt="img of homescreen" width="500"/>
+
 ## Motivation
 
 This project was inspired by my personal need for a platform to catalog my own artworks. I wanted to create a space where I, as well as other creators, could easily document their artworks, search for inspiration and brainstorm ideas all in one unified platform.
