@@ -5,6 +5,7 @@ import Home from './Pages/Home';
 import Artwork from './Pages/Artwork';
 import Account from './Pages/Account';
 import Gallery from './Pages/Gallery';
+import Projects from './Pages/Projects';
 
 function App() {
 	return (
@@ -18,6 +19,10 @@ function App() {
 				<Route
 					path='/Artwork'
 					element={<Artwork />}
+				/>
+				<Route
+					path='/Projects'
+					element={<Projects />}
 				/>
 				<Route
 					path='/Gallery'
