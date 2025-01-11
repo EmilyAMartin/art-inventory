@@ -50,3 +50,7 @@ My coach, Lucas Hillier, has been an incredible source of support and guidance t
 <img src="public/Images/10.jpg" alt="img of artwork page" width="500"/>
 <img src="public/Images/11.jpg" alt="img of gallery page" width="500"/>
 <img src="public/Images/12.jpg" alt="img of account page" width="500"/>
+
+## Resources
+
+Project Page Photo's by Geordanna Cordero on Unsplash
