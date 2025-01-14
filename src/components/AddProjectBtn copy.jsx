@@ -89,7 +89,6 @@ const AddProjectBtn = () => {
 		setCurrentIndex(0);
 	};
 
-	// Button hover style
 	const buttonStyle = {
 		padding: '0.5rem',
 		hover: '#6c63ff50',
@@ -164,7 +163,6 @@ const AddProjectBtn = () => {
 					>
 						<Typography variant='h5'>Add New Artwork</Typography>
 
-						{/* Title Input */}
 						<FormControl
 							sx={{ width: '100%' }}
 							variant='outlined'
@@ -179,7 +177,6 @@ const AddProjectBtn = () => {
 							/>
 						</FormControl>
 
-						{/* Medium Input */}
 						<FormControl
 							sx={{ width: '100%' }}
 							variant='outlined'
@@ -193,6 +190,7 @@ const AddProjectBtn = () => {
 								label='Medium'
 							/>
 						</FormControl>
+
 						<TextField
 							sx={{ width: '100%' }}
 							id='outlined-multiline-flexible'
@@ -202,49 +200,59 @@ const AddProjectBtn = () => {
 							multiline
 							maxRows={4}
 						/>
-						<FormControl
-							sx={{ width: '100%' }}
-							variant='outlined'
+
+						<Button
+							component='label'
+							role={undefined}
+							variant='contained'
+							startIcon={<CloudUploadIcon />}
+							type='file'
+							id='image-upload'
+							accept='image/*'
+							multiple
+							onChange={handleImageChange}
+							style={{
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+								backgroundColor: '#6c63ff',
+								padding: '8px',
+								fontSize: '0.9rem',
+								width: '100%',
+							}}
+						>
+							Upload files
+							<VisuallyHiddenInput
+								type='file'
+								onChange={(event) => console.log(event.target.files)}
+								multiple
+							/>
+						</Button>
+						<div
+							style={{
+								display: 'flex',
+								flexDirection: 'row',
+								justifyContent: 'center',
+							}}
 						>
 							<Button
-								component='label'
-								role={undefined}
-								variant='contained'
-								startIcon={<CloudUploadIcon />}
-								type='file'
-								id='image-upload'
-								accept='image/*'
-								multiple
-								onChange={handleImageChange}
-								style={{
-									display: 'flex',
-									justifyContent: 'center',
-									alignItems: 'center',
-									backgroundColor: '#6c63ff',
-									padding: '8px',
-									fontSize: '0.9rem',
-									width: '100%',
-								}}
+								onClick={handlePrev}
+								disabled={currentIndex === 0}
+								color='black'
 							>
-								Upload files
-								<VisuallyHiddenInput
-									type='file'
-									onChange={(event) => console.log(event.target.files)}
-									multiple
-								/>
+								Previous
 							</Button>
-						</FormControl>
-
+							<Button
+								onClick={handleNext}
+								disabled={currentIndex === images.length - 1}
+								color='black'
+							>
+								Next
+							</Button>
+						</div>
 						{images.length > 0 && (
-							<div style={{ marginTop: 20, textAlign: 'center' }}>
+							<div style={{ textAlign: 'center' }}>
 								<div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
-									<Button
-										onClick={handlePrev}
-										disabled={currentIndex === 0}
-										color='black'
-									>
-										Previous
-									</Button>
 									<img
 										src={images[currentIndex]}
 										alt={`Image ${currentIndex + 1}`}
@@ -254,20 +262,12 @@ const AddProjectBtn = () => {
 											objectFit: 'cover',
 										}}
 									/>
-									<Button
-										onClick={handleNext}
-										disabled={currentIndex === images.length - 1}
-										color='black'
-									>
-										Next
-									</Button>
 								</div>
 								<p>
 									{currentIndex + 1} / {images.length}
 								</p>
 							</div>
 						)}
-
 						<FormControl
 							sx={{ width: '50%' }}
 							variant='outlined'
