@@ -10,6 +10,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
+import { TextField } from '@mui/material';
 
 const AddProjectBtn = () => {
 	const [open, setOpen] = useState(false);
@@ -70,7 +71,7 @@ const AddProjectBtn = () => {
 				onMouseLeave={handleMouseLeave}
 				onClick={handleOpen}
 			>
-				Add New Project
+				Add New Artwork
 			</button>
 			<Modal
 				open={open}
@@ -107,17 +108,6 @@ const AddProjectBtn = () => {
 							sx={{ width: '100%' }}
 							variant='outlined'
 						>
-							<InputLabel htmlFor='outlined-adornment-date'>Date</InputLabel>
-							<OutlinedInput
-								id='outlined-adornment-date'
-								endAdornment={<InputAdornment position='end'></InputAdornment>}
-								label='date'
-							/>
-						</FormControl>
-						<FormControl
-							sx={{ width: '100%' }}
-							variant='outlined'
-						>
 							<InputLabel htmlFor='outlined-adornment-medium'>Medium</InputLabel>
 							<OutlinedInput
 								id='outlined-adornment-date'
@@ -125,29 +115,18 @@ const AddProjectBtn = () => {
 								label='medium'
 							/>
 						</FormControl>
+						<TextField
+							sx={{ width: '100%' }}
+							id='outlined-multiline-flexible'
+							label='Multiline'
+							multiline
+							maxRows={4}
+						/>
 
 						<FormControl
 							sx={{ width: '100%' }}
 							variant='outlined'
 						>
-							<InputLabel htmlFor='outlined-adornment-location'>Location</InputLabel>
-							<OutlinedInput
-								id='outlined-adornment-date'
-								endAdornment={<InputAdornment position='end'></InputAdornment>}
-								label='location'
-							/>
-						</FormControl>
-
-						<FormControl
-							sx={{ width: '100%' }}
-							variant='outlined'
-						>
-							<InputLabel htmlFor='outlined-adornment-quantity'>Quantity</InputLabel>
-							<OutlinedInput
-								id='outlined-adornment-date'
-								endAdornment={<InputAdornment position='end'></InputAdornment>}
-								label='quantity'
-							/>
 							<div
 								style={{
 									display: 'flex',
