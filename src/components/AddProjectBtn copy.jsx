@@ -104,7 +104,6 @@ const AddProjectBtn = () => {
 		backgroundColor: isHover ? '#4640ad' : '#6c63ff',
 	};
 
-	// Modal style with responsive adjustments
 	const modalStyle = {
 		display: 'flex',
 		flexDirection: 'column',
@@ -113,9 +112,9 @@ const AddProjectBtn = () => {
 		left: '50%',
 		transform: 'translate(-50%, -50%)',
 		bgcolor: 'background.paper',
-		maxWidth: '90%', // Adjust for smaller screens
-		width: '600px', // Max width for larger screens (desktop)
-		padding: '2rem', // Add padding for mobile
+		maxWidth: '90%',
+		width: '600px',
+		padding: '2rem',
 	};
 
 	const SubmitButton = styled(Button)(({ theme }) => ({
@@ -142,7 +141,7 @@ const AddProjectBtn = () => {
 				onMouseLeave={handleMouseLeave}
 				onClick={handleOpen}
 			>
-				Add New Artwork
+				Add New Project
 			</button>
 			<Modal
 				open={open}
@@ -157,11 +156,11 @@ const AddProjectBtn = () => {
 							flexDirection: 'column',
 							alignItems: 'center',
 							justifyContent: 'center',
-							gap: 20, // Adjusted gap for mobile view
+							gap: 20,
 							width: '100%',
 						}}
 					>
-						<Typography variant='h5'>Add New Artwork</Typography>
+						<Typography variant='h5'>Add New Project</Typography>
 
 						<FormControl
 							sx={{ width: '100%' }}
@@ -276,9 +275,9 @@ const AddProjectBtn = () => {
 								style={{
 									display: 'flex',
 									justifyContent: 'center',
-									gap: 30, // Adjust gap for mobile
+									gap: 30,
 									marginTop: 25,
-									flexDirection: 'row', // Stack buttons on mobile
+									flexDirection: 'row',
 								}}
 							>
 								<SubmitButton
