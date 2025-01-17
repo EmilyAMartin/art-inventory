@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -9,6 +9,16 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 export default function ProjectCard() {
+	const [projects, setProjects] = useState([]);
+
+	useEffect(() => {
+		// Get project data from localStorage
+		const storedProjectData = JSON.parse(localStorage.getItem('projectData'));
+		if (storedProjectData && Array.isArray(storedProjectData)) {
+			setProjects(storedProjectData); // Set the array of projects
+		}
+	}, []);
+
 	const settings = {
 		dots: true,
 		infinite: true,
@@ -17,67 +27,74 @@ export default function ProjectCard() {
 		slidesToScroll: 1,
 	};
 
-	return (
-		<Card sx={{ maxWidth: 345 }}>
-			<CardActionArea>
-				<Slider {...settings}>
-					<CardMedia
-						component='img'
-						height='150'
-						src='./Images/13.jpg'
-						alt='artwork'
-					/>
-					<CardMedia
-						component='img'
-						height='150'
-						src='./Images/14.jpg'
-						alt='artwork'
-					/>
-					<CardMedia
-						component='img'
-						height='150'
-						src='./Images/15.jpg'
-						alt='artwork'
-					/>
-					<CardMedia
-						component='img'
-						height='150'
-						src='./Images/16.jpg'
-						alt='artwork'
-					/>
-					<CardMedia
-						component='img'
-						height='150'
-						src='./Images/17.jpg'
-						alt='artwork'
-					/>
-				</Slider>
+	if (projects.length === 0) {
+		return <Typography variant='h6'>No projects available</Typography>;
+	}
 
-				<CardContent>
-					<Typography
-						gutterBottom
-						variant='h5'
-						component='div'
-					>
-						Title
-					</Typography>
-					<Typography
-						variant='body1'
-						sx={{ color: 'text.secondary' }}
-					>
-						Medium
-					</Typography>
-					<br />
-					<Typography
-						variant='body2'
-						sx={{ color: 'text.secondary' }}
-					>
-						Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste esse nobis
-						veritatis voluptates voluptatum necessitatibus, doloremque eaque natus sed
-						quod ut blanditiis atque a ea rem corporis laudantium sint ex.
-					</Typography>
-				</CardContent>
-			</CardActionArea>
-		</Card>
+	return (
+		<div>
+			{projects.map((project, index) => (
+				<Card
+					sx={{ maxWidth: 345 }}
+					key={index}
+				>
+					<CardActionArea>
+						{/* If there's only one image, do not use Slider */}
+						{project.images && project.images.length === 1 ? (
+							<CardMedia
+								component='img'
+								height='150'
+								src={project.images[0]} // Show only the first image if there is only one
+								alt='Project Image'
+							/>
+						) : (
+							<Slider {...settings}>
+								{/* Render images conditionally inside Slider */}
+								{project.images && project.images.length > 0 ? (
+									project.images.map((image, imgIndex) => (
+										<CardMedia
+											component='img'
+											height='150'
+											src={image}
+											alt={`Project Image ${imgIndex + 1}`}
+											key={imgIndex}
+										/>
+									))
+								) : (
+									<Typography
+										variant='body2'
+										sx={{ color: 'text.secondary' }}
+									>
+										No images available for this project.
+									</Typography>
+								)}
+							</Slider>
+						)}
+						<CardContent>
+							<Typography
+								gutterBottom
+								variant='h5'
+								component='div'
+							>
+								{project.title}
+							</Typography>
+							<Typography
+								variant='body1'
+								sx={{ color: 'text.secondary' }}
+							>
+								{project.medium}
+							</Typography>
+							<br />
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								{project.description}
+							</Typography>
+						</CardContent>
+					</CardActionArea>
+				</Card>
+			))}
+		</div>
 	);
 }

@@ -75,12 +75,25 @@ const AddProjectBtn = () => {
 			setCurrentIndex(currentIndex - 1);
 		}
 	};
-
 	const handleSubmit = () => {
+		const projectData = {
+			title,
+			medium,
+			description,
+			images: images, // Directly store the images array (which should contain only one image)
+		};
+
+		const existingProjects =
+			JSON.parse(localStorage.getItem('projectData')) || [];
+		existingProjects.push(projectData);
+
+		// Save the updated list of projects into localStorage
+		localStorage.setItem('projectData', JSON.stringify(existingProjects));
+
+		// Reset the form and close the modal
 		resetForm();
 		setOpen(false);
 	};
-
 	const resetForm = () => {
 		setTitle('');
 		setMedium('');

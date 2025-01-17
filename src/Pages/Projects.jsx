@@ -20,9 +20,6 @@ const Projects = () => {
 				}}
 			>
 				<ProjectCard />
-				<ProjectCard />
-				<ProjectCard />
-				<ProjectCard />
 			</Grid2>
 		</div>
 	);
