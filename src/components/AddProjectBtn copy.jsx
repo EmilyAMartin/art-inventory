@@ -24,8 +24,7 @@ const VisuallyHiddenInput = styled('input')({
 	whiteSpace: 'nowrap',
 	width: 1,
 });
-
-const AddProjectBtn = () => {
+const AddProjectBtn = ({ onProjectAdded }) => {
 	const [open, setOpen] = useState(false);
 	const [isHover, setIsHover] = useState(false);
 	const [images, setImages] = useState([]);
@@ -34,20 +33,29 @@ const AddProjectBtn = () => {
 	const [medium, setMedium] = useState('');
 	const [description, setDescription] = useState('');
 
+	const handleSubmit = () => {
+		const projectData = {
+			title,
+			medium,
+			description,
+			images: images,
+		};
+		onProjectAdded(projectData);
+		resetForm();
+		setOpen(false);
+	};
+
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => {
 		resetForm();
 		setOpen(false);
 	};
-
 	const handleMouseEnter = () => {
 		setIsHover(true);
 	};
-
 	const handleMouseLeave = () => {
 		setIsHover(false);
 	};
-
 	const handleImageChange = (e) => {
 		const files = Array.from(e.target.files);
 		const newImages = files.map((file) => {
@@ -63,37 +71,17 @@ const AddProjectBtn = () => {
 			setImages((prevImages) => [...prevImages, ...imageData]);
 		});
 	};
-
 	const handleNext = () => {
 		if (currentIndex < images.length - 1) {
 			setCurrentIndex(currentIndex + 1);
 		}
 	};
-
 	const handlePrev = () => {
 		if (currentIndex > 0) {
 			setCurrentIndex(currentIndex - 1);
 		}
 	};
-	const handleSubmit = () => {
-		const projectData = {
-			title,
-			medium,
-			description,
-			images: images, // Directly store the images array (which should contain only one image)
-		};
 
-		const existingProjects =
-			JSON.parse(localStorage.getItem('projectData')) || [];
-		existingProjects.push(projectData);
-
-		// Save the updated list of projects into localStorage
-		localStorage.setItem('projectData', JSON.stringify(existingProjects));
-
-		// Reset the form and close the modal
-		resetForm();
-		setOpen(false);
-	};
 	const resetForm = () => {
 		setTitle('');
 		setMedium('');
@@ -101,7 +89,6 @@ const AddProjectBtn = () => {
 		setImages([]);
 		setCurrentIndex(0);
 	};
-
 	const buttonStyle = {
 		padding: '0.5rem',
 		hover: '#6c63ff50',

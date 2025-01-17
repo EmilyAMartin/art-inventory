@@ -1,28 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import AddProjectBtn from '../components/AddProjectBtn copy';
 import ProjectCard from '../components/ProjectCard';
-import Grid2 from '@mui/material/Grid2';
 
-const Projects = () => {
+const ProjectPage = () => {
+	const [projects, setProjects] = useState([]);
+
+	const fetchProjects = () => {
+		const storedProjects = JSON.parse(localStorage.getItem('projectData')) || [];
+		setProjects(storedProjects);
+	};
+	useEffect(() => {
+		fetchProjects();
+	}, []);
+
+	const handleProjectAdded = (newProject) => {
+		const updatedProjects = [...projects, newProject];
+		localStorage.setItem('projectData', JSON.stringify(updatedProjects));
+		setProjects(updatedProjects);
+	};
+
 	return (
 		<div>
-			<AddProjectBtn />
-			<Grid2
-				margin='auto'
-				container
-				spacing={8}
-				style={{
-					marginTop: '25px',
-					marginBottom: '50px',
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'space-around',
-				}}
-			>
-				<ProjectCard />
-			</Grid2>
+			<AddProjectBtn onProjectAdded={handleProjectAdded} />
+			<ProjectCard projects={projects} />
 		</div>
 	);
 };
 
-export default Projects;
+export default ProjectPage;

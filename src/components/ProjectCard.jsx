@@ -8,17 +8,7 @@ import CardMedia from '@mui/material/CardMedia';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-export default function ProjectCard() {
-	const [projects, setProjects] = useState([]);
-
-	useEffect(() => {
-		// Get project data from localStorage
-		const storedProjectData = JSON.parse(localStorage.getItem('projectData'));
-		if (storedProjectData && Array.isArray(storedProjectData)) {
-			setProjects(storedProjectData); // Set the array of projects
-		}
-	}, []);
-
+export default function ProjectCard({ projects }) {
 	const settings = {
 		dots: true,
 		infinite: true,
@@ -39,17 +29,15 @@ export default function ProjectCard() {
 					key={index}
 				>
 					<CardActionArea>
-						{/* If there's only one image, do not use Slider */}
 						{project.images && project.images.length === 1 ? (
 							<CardMedia
 								component='img'
 								height='150'
-								src={project.images[0]} // Show only the first image if there is only one
+								src={project.images[0]}
 								alt='Project Image'
 							/>
 						) : (
 							<Slider {...settings}>
-								{/* Render images conditionally inside Slider */}
 								{project.images && project.images.length > 0 ? (
 									project.images.map((image, imgIndex) => (
 										<CardMedia
