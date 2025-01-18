@@ -22,7 +22,9 @@ export default function ProjectCard({ projects }) {
 	}
 
 	return (
-		<div>
+		<div
+			style={{ marginTop: 25, display: 'flex', flexDirection: 'row', gap: 25 }}
+		>
 			{projects.map((project, index) => (
 				<Card
 					sx={{ maxWidth: 345 }}
