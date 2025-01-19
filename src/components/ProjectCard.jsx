@@ -5,6 +5,8 @@ import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import Slider from 'react-slick';
 import CardMedia from '@mui/material/CardMedia';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
@@ -81,6 +83,15 @@ export default function ProjectCard({ projects }) {
 							>
 								{project.description}
 							</Typography>
+							{/* Delete Button */}
+							<IconButton
+								aria-label='delete'
+								color='black'
+								sx={{ position: 'absolute', bottom: 10, right: 10 }}
+								onClick={() => handleDelete(index)}
+							>
+								<DeleteIcon />
+							</IconButton>
 						</CardContent>
 					</CardActionArea>
 				</Card>
