@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -10,7 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-export default function ProjectCard({ projects }) {
+export default function ProjectCard({ projects, handleDelete }) {
 	const settings = {
 		dots: true,
 		infinite: true,

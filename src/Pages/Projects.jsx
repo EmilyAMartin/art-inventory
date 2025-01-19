@@ -19,12 +19,21 @@ const ProjectPage = () => {
 		setProjects(updatedProjects);
 	};
 
+	const handleDeleteProject = (index) => {
+		setProjects((prevProjects) => {
+			return prevProjects.filter((_, i) => i !== index);
+		});
+	};
+
 	return (
 		<div
 			style={{ marginTop: 25, display: 'flex', flexDirection: 'column', gap: 25 }}
 		>
 			<AddProjectBtn onProjectAdded={handleProjectAdded} />
-			<ProjectCard projects={projects} />
+			<ProjectCard
+				projects={projects}
+				handleDelete={handleDeleteProject}
+			/>
 		</div>
 	);
 };
