@@ -35,6 +35,7 @@ export default function ProjectCard({ projects, handleDelete }) {
 					<CardActionArea>
 						{project.images && project.images.length === 1 ? (
 							<CardMedia
+								style={{ width: 300, height: 400 }}
 								component='img'
 								height='150'
 								src={project.images[0]}

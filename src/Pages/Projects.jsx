@@ -28,7 +28,12 @@ const ProjectPage = () => {
 
 	return (
 		<div
-			style={{ marginTop: 25, display: 'flex', flexDirection: 'column', gap: 25 }}
+			style={{
+				marginTop: 25,
+				display: 'flex',
+				flexDirection: 'column',
+				justifyContent: 'space-between',
+			}}
 		>
 			<AddProjectBtn onProjectAdded={handleProjectAdded} />
 			<ProjectCard
