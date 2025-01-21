@@ -9,6 +9,7 @@ const ProjectPage = () => {
 		const storedProjects = JSON.parse(localStorage.getItem('projectData')) || [];
 		setProjects(storedProjects);
 	};
+
 	useEffect(() => {
 		fetchProjects();
 	}, []);
@@ -20,9 +21,9 @@ const ProjectPage = () => {
 	};
 
 	const handleDeleteProject = (index) => {
-		setProjects((prevProjects) => {
-			return prevProjects.filter((_, i) => i !== index);
-		});
+		const updatedProjects = projects.filter((_, i) => i !== index);
+		setProjects(updatedProjects);
+		localStorage.setItem('projectData', JSON.stringify(updatedProjects));
 	};
 
 	return (
