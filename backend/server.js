@@ -1,29 +1,26 @@
-const express = require('express');
 const mysql = require('mysql2');
-const app = express();
-const port = 3000;
 
 const connection = mysql.createConnection({
 	host: 'localhost',
 	user: 'root',
 	password: '',
-	database: '',
+	database: ' art_gallery',
 });
-connection.connect();
 
-connection.query('SELECT 1 + 1 AS solution', (err, rows, fields) => {
-	if (err) throw err;
+connection.query('USE art_gallery', (err) => {
+	if (err) {
+		console.error('Error selecting database:', err.stack);
+		return;
+	}
+	console.log('Database selected');
 
-	console.log('The solution is: ', rows[0].solution);
+	connection.query('SELECT * FROM artist', (err, results) => {
+		if (err) {
+			console.error('Error executing query:', err.stack);
+			return;
+		}
+		console.log(results);
+	});
 });
 
 connection.end();
-// Default route
-app.get('/', (req, res) => {
-	res.send('Hello World!');
-});
-
-// Start the server
-app.listen(port, () => {
-	console.log(`Example app listening on port ${port}`);
-});
