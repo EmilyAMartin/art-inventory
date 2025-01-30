@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Grid2 from '@mui/material/Grid2';
-import Data from '../components/ArtData.json';
 import AddArtworkBtn from '../components/AddArtworkBtn';
 import ArtCard from '../components/ArtCard';
 
@@ -11,13 +10,19 @@ const Artwork = () => {
 	const [error, setError] = useState(null);
 
 	useEffect(() => {
-		const fetchData = () => {
+		const fetchData = async () => {
 			setLoading(true);
 			try {
+				const response = await fetch('http://localhost:3000/artworks');
+				if (!response.ok) {
+					throw new Error('Network response was not ok');
+				}
+				const data = await response.json();
+
 				if (filter === 'recent') {
 					const favoritesList =
 						JSON.parse(localStorage.getItem('favoritesList')) || [];
-					const artworkWithFavorites = Data.map((art) => {
+					const artworkWithFavorites = data.map((art) => {
 						return {
 							...art,
 							favorite: favoritesList.some((fav) => fav.id === art.id),
