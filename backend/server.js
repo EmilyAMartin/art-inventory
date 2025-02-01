@@ -5,14 +5,16 @@ const app = express();
 
 app.use(cors());
 
-const db = mysql.createConnection({
+//Server Info/
+const server = mysql.createConnection({
 	host: 'localhost',
 	user: 'root',
-	password: '*****',
+	password: 'casio1935',
 	database: 'artwork',
 });
 
-db.connect((err) => {
+//Connecting and Selecting Table//
+server.connect((err) => {
 	if (err) {
 		console.error('Database connection failed: ' + err.stack);
 		return;
@@ -21,7 +23,7 @@ db.connect((err) => {
 });
 
 app.get('/artworks', (req, res) => {
-	db.query('SELECT * FROM artworks', (err, results) => {
+	server.query('SELECT * FROM artworks', (err, results) => {
 		if (err) {
 			res.status(500).send('Error retrieving data from the database.');
 			return;
@@ -30,6 +32,7 @@ app.get('/artworks', (req, res) => {
 	});
 });
 
+//Selecting Port//
 const port = 3000;
 app.listen(port, () => {
 	console.log(`Server is running on http://localhost:${port}`);
