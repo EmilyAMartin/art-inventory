@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AddProjectBtn from '../components/AddProjectBtn copy';
+import AddProjectBtn from '../components/AddProjectBtn';
 import ProjectCard from '../components/ProjectCard';
 
 const ProjectPage = () => {

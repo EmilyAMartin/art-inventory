@@ -3,7 +3,32 @@ import Grid2 from '@mui/material/Grid2';
 import AddArtworkBtn from '../components/AddArtworkBtn';
 import ArtCard from '../components/ArtCard';
 
+import AddNewBtn from '../components/AddNewBtn';
+import { Typography } from '@mui/material';
+
 const Artwork = () => {
+	//New Section//
+	const [newArtwork, setNewArtwork] = useState([]);
+	const fetchNewArtwork = () => {
+		const storedNewArtwork =
+			JSON.parse(localStorage.getItem('artworkData')) || [];
+		setNewArtwork(storedNewArtwork);
+	};
+	useEffect(() => {
+		fetchNewArtwork();
+	}, []);
+	const handleNewArtworkAdded = (newNewArtwork) => {
+		const updatedNewArtwork = [...newArtwork, newNewArtwork];
+		localStorage.setItem('artworkData', JSON.stringify(updatedNewArtwork));
+		setNewArtwork(updatedNewArtwork);
+	};
+	const handleDeleteNewArtwork = (index) => {
+		const updatedNewArtwork = newArtwork.filter((_, i) => i !== index);
+		setNewArtwork(updatedNewArtwork);
+		localStorage.setItem('artworkData', JSON.stringify(updatedNewArtwork));
+	};
+	//New Section//
+
 	const [artwork, setArtwork] = useState([]);
 	const [filter, setFilter] = useState('recent');
 	const [loading, setLoading] = useState(true);
@@ -179,6 +204,18 @@ const Artwork = () => {
 							</Grid2>
 						))}
 					</Grid2>
+				</div>
+
+				<Typography>Test Section</Typography>
+				<div
+					style={{
+						marginTop: 25,
+						display: 'flex',
+						flexDirection: 'column',
+						justifyContent: 'space-between',
+					}}
+				>
+					<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
 				</div>
 			</div>
 		</div>
