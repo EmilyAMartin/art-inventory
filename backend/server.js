@@ -7,10 +7,9 @@ import * as artwork from './artwork.js';
 import * as users from './users.js';
 
 const app = express();
-
 app.use(cors());
 
-// Initialize database and setup routes
+//Initialize Database//
 const initDb = () => {
 	artist.createTable();
 	artwork.createTable();
@@ -20,9 +19,9 @@ const initDb = () => {
 	artwork.createTestData();
 	users.createTestData();
 };
-
 initDb();
 
+//Setup Routes//
 artist.setupRoutes(app);
 artwork.setupRoutes(app);
 users.setupRoutes(app);

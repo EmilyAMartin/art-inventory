@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import SignUpBtn from '../components/SignUpBtn';
 import LoginBtn from '../components/LoginBtn';
+import { AuthContext } from './Context';
 
 const Home = () => {
+	const { currentUser } = useContext(AuthContext);
 	return (
 		<div className='App'>
 			<div className='home-container'>
 				<div className='home-banner-container'>
 					<div className='home-bannerImage-container'></div>
 					<div className='home-text-section'>
-						<div className='home-heading'>Welcome to Portfolio</div>
+						<div className='home-heading'>
+							Welcome to Portfolio, {currentUser.name}
+						</div>
 						<div className='home-primary-text'>
 							Portfolio is a dynamic platform where artists can showcase their work,
 							explore a curated gallery of masterpieces, and gain inspiration for their
