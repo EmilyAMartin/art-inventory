@@ -5,6 +5,7 @@ import ArtCard from '../components/ArtCard';
 
 import AddNewBtn from '../components/AddNewBtn';
 import { Typography } from '@mui/material';
+import NewArtCard from '../components/NewArtCard';
 
 const Artwork = () => {
 	//New Section//
@@ -207,6 +208,7 @@ const Artwork = () => {
 				</div>
 
 				<Typography>Test Section</Typography>
+				<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
 				<div
 					style={{
 						marginTop: 25,
@@ -215,7 +217,10 @@ const Artwork = () => {
 						justifyContent: 'space-between',
 					}}
 				>
-					<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
+					<NewArtCard
+						newArtwork={newArtwork}
+						handleDelete={handleDeleteNewArtwork}
+					/>
 				</div>
 			</div>
 		</div>
