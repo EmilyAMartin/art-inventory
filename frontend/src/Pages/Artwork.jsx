@@ -8,28 +8,34 @@ import { Typography } from '@mui/material';
 import NewArtCard from '../components/NewArtCard';
 
 const Artwork = () => {
-	//New Section//
-	const [newArtwork, setNewArtwork] = useState([]);
+	// New Section //
+	const [newAddedArtwork, setNewAddedArtwork] = useState([]);
 	const fetchNewArtwork = () => {
 		const storedNewArtwork =
 			JSON.parse(localStorage.getItem('artworkData')) || [];
-		setNewArtwork(storedNewArtwork);
+		console.log(storedNewArtwork); // Add this line to see the content of the stored data
+		setNewAddedArtwork(storedNewArtwork);
 	};
-	useEffect(() => {
-		fetchNewArtwork();
-	}, []);
-	const handleNewArtworkAdded = (newNewArtwork) => {
-		const updatedNewArtwork = [...newArtwork, newNewArtwork];
-		localStorage.setItem('artworkData', JSON.stringify(updatedNewArtwork));
-		setNewArtwork(updatedNewArtwork);
-	};
-	const handleDeleteNewArtwork = (index) => {
-		const updatedNewArtwork = newArtwork.filter((_, i) => i !== index);
-		setNewArtwork(updatedNewArtwork);
-		localStorage.setItem('artworkData', JSON.stringify(updatedNewArtwork));
-	};
-	//New Section//
 
+	useEffect(() => {
+		console.log(newAddedArtwork); // Debugging step
+		fetchNewArtwork();
+	}, []); // Ensure this fetches data once when the component mounts
+
+	const handleNewArtworkAdded = (newNewArtwork) => {
+		const updatedNewArtwork = [...newAddedArtwork, newNewArtwork];
+		localStorage.setItem('artworkData', JSON.stringify(updatedNewArtwork));
+		setNewAddedArtwork(updatedNewArtwork);
+	};
+
+	const handleDeleteNewArtwork = (index) => {
+		const updatedNewArtwork = newAddedArtwork.filter((_, i) => i !== index);
+		setNewAddedArtwork(updatedNewArtwork);
+		localStorage.setItem('artworkData', JSON.stringify(updatedNewArtwork));
+	};
+	// New Section //
+
+	// Main artwork state
 	const [artwork, setArtwork] = useState([]);
 	const [filter, setFilter] = useState('recent');
 	const [loading, setLoading] = useState(true);
@@ -181,47 +187,62 @@ const Artwork = () => {
 					<option value='favorites'>Favorites</option>
 				</select>
 
-				<div>
-					<Grid2
-						style={{
-							marginTop: 25,
-							display: 'flex',
-							flexDirection: 'row',
-							justifyContent: 'space-between',
-						}}
-						container
-						spacing={8}
-					>
-						{artwork.map((art) => (
+				{/* First Grid */}
+				<Grid2
+					style={{
+						marginTop: 25,
+						display: 'flex',
+						flexDirection: 'row',
+						justifyContent: 'space-between',
+					}}
+					container
+					spacing={8}
+				>
+					{artwork.map((art) => (
+						<Grid2
+							xs={12}
+							ms={5}
+							key={art.id}
+						>
+							<ArtCard
+								art={art}
+								handleFavUpdate={handleFavUpdate}
+							/>
+						</Grid2>
+					))}
+				</Grid2>
+
+				<Typography>Test Section</Typography>
+				<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
+				<Grid2
+					style={{
+						marginTop: 25,
+						display: 'flex',
+						flexDirection: 'row',
+						justifyContent: 'space-between',
+					}}
+					container
+					spacing={8}
+				>
+					{newAddedArtwork.length === 0 ? (
+						<div>No New Artwork Available</div>
+					) : (
+						newAddedArtwork.map((art, index) => (
 							<Grid2
 								xs={12}
 								ms={5}
 								key={art.id}
 							>
-								<ArtCard
-									art={art}
+								<NewArtCard
+									newAddedArtwork={newAddedArtwork}
+									handleDelete={handleDeleteNewArtwork}
 									handleFavUpdate={handleFavUpdate}
+									index={index} // Pass index here explicitly
 								/>
 							</Grid2>
-						))}
-					</Grid2>
-				</div>
-
-				<Typography>Test Section</Typography>
-				<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
-				<div
-					style={{
-						marginTop: 25,
-						display: 'flex',
-						flexDirection: 'column',
-						justifyContent: 'space-between',
-					}}
-				>
-					<NewArtCard
-						newArtwork={newArtwork}
-						handleDelete={handleDeleteNewArtwork}
-					/>
-				</div>
+						))
+					)}
+				</Grid2>
 			</div>
 		</div>
 	);
