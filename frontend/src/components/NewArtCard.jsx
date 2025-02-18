@@ -21,22 +21,15 @@ const NewArtCard = ({
 	const [flip, setFlip] = useState(false);
 	const open = Boolean(anchorEl);
 
-	// Ensure the artwork exists before trying to access its properties
-	const artwork = newAddedArtwork[index]; // Directly use index
-
-	// Check if artwork exists
+	const artwork = newAddedArtwork[index];
 	if (!artwork) {
 		console.error('Artwork not found at index', index);
-		return <div>Artwork not found at index {index}</div>; // Provide feedback on index
+		return <div>Artwork not found at index {index}</div>;
 	}
-
-	// Check if the artwork has the images property
 	if (!artwork.images) {
 		console.error("Artwork missing 'images' property:", artwork);
 		return <div>No image available for this artwork</div>;
 	}
-
-	// Handle popover for image preview
 	const handlePopClick = (event) => {
 		setAnchorEl(event.currentTarget);
 		setPopoverImageId(event.target.src);
@@ -45,12 +38,10 @@ const NewArtCard = ({
 		setAnchorEl(null);
 		setPopoverImageId(null);
 	};
-
-	// Handle favorite click
 	const handleFavClick = () => {
 		const updatedArtwork = { ...artwork };
 		updatedArtwork.favorite = !updatedArtwork.favorite;
-		handleFavUpdate(updatedArtwork); // Update favorite status in parent
+		handleFavUpdate(updatedArtwork);
 	};
 
 	if (newAddedArtwork.length === 0) {
@@ -67,10 +58,9 @@ const NewArtCard = ({
 			>
 				<CardActionArea>
 					<CardMedia
-						style={{ width: 300, height: 400 }}
+						style={{ width: 300, height: 300 }}
 						component='img'
-						height='150'
-						src={artwork.images || 'default-image.jpg'} // Use a fallback image if no image exists
+						image={artwork.images}
 						alt='Artwork Image'
 						onClick={handlePopClick}
 					/>
@@ -99,7 +89,7 @@ const NewArtCard = ({
 							aria-label='delete'
 							color='black'
 							sx={{ position: 'absolute', top: 10, right: 10 }}
-							onClick={() => handleDelete(index)} // Pass the index to handleDelete
+							onClick={() => handleDelete(index)}
 						>
 							<DeleteIcon />
 						</IconButton>

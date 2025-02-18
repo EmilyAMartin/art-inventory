@@ -13,14 +13,14 @@ const Artwork = () => {
 	const fetchNewArtwork = () => {
 		const storedNewArtwork =
 			JSON.parse(localStorage.getItem('artworkData')) || [];
-		console.log(storedNewArtwork); // Add this line to see the content of the stored data
+		console.log(storedNewArtwork);
 		setNewAddedArtwork(storedNewArtwork);
 	};
 
 	useEffect(() => {
-		console.log(newAddedArtwork); // Debugging step
+		console.log(newAddedArtwork);
 		fetchNewArtwork();
-	}, []); // Ensure this fetches data once when the component mounts
+	}, []);
 
 	const handleNewArtworkAdded = (newNewArtwork) => {
 		const updatedNewArtwork = [...newAddedArtwork, newNewArtwork];
@@ -35,7 +35,6 @@ const Artwork = () => {
 	};
 	// New Section //
 
-	// Main artwork state
 	const [artwork, setArtwork] = useState([]);
 	const [filter, setFilter] = useState('recent');
 	const [loading, setLoading] = useState(true);
