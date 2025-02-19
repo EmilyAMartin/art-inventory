@@ -9,13 +9,9 @@ import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ReactCardFlip from 'react-card-flip';
 
-const NewArtCard = ({
-	newAddedArtwork,
-	handleFavUpdate,
-	handleDelete,
-	index,
-}) => {
+const NewArtCard = ({ newAddedArtwork, handleDelete, index }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
 	const [flip, setFlip] = useState(false);
@@ -38,11 +34,6 @@ const NewArtCard = ({
 		setAnchorEl(null);
 		setPopoverImageId(null);
 	};
-	const handleFavClick = () => {
-		const updatedArtwork = { ...artwork };
-		updatedArtwork.favorite = !updatedArtwork.favorite;
-		handleFavUpdate(updatedArtwork);
-	};
 
 	if (newAddedArtwork.length === 0) {
 		return <div style={{ marginTop: 25 }}>No newAddedArtwork available</div>;
@@ -52,95 +43,162 @@ const NewArtCard = ({
 		<div
 			style={{ marginTop: 25, display: 'flex', flexDirection: 'row', gap: 25 }}
 		>
-			<Card
-				sx={{ maxWidth: 345 }}
-				key={index}
+			<ReactCardFlip
+				isFlipped={flip}
+				flipDirection='horizontal'
 			>
-				<CardActionArea>
-					<CardMedia
-						style={{ width: 300, height: 300 }}
-						component='img'
-						image={artwork.images}
-						alt='Artwork Image'
-						onClick={handlePopClick}
-					/>
-
-					<Popover
-						sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-						open={open}
-						anchorEl={anchorEl}
-						anchorReference='none'
-						onClose={handleClose}
-						anchorOrigin={{
-							vertical: 'bottom',
-							horizontal: 'left',
-						}}
-					>
+				<Card
+					className='card-font'
+					sx={{ maxWidth: 300, maxHeight: 600, display: 'flex' }}
+				>
+					<CardActionArea>
 						<CardMedia
+							style={{ width: 300, height: 300 }}
 							component='img'
-							height='140'
-							image={popoverImageId}
-							alt=''
+							image={artwork.images}
+							alt='Artwork Image'
+							onClick={handlePopClick}
 						/>
-					</Popover>
 
-					<CardContent style={{ width: 300, height: 200 }}>
-						<IconButton
-							aria-label='delete'
-							color='black'
-							sx={{ position: 'absolute', top: 10, right: 10 }}
-							onClick={() => handleDelete(index)}
+						<Popover
+							sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+							open={open}
+							anchorEl={anchorEl}
+							anchorReference='none'
+							onClose={handleClose}
+							anchorOrigin={{
+								vertical: 'bottom',
+								horizontal: 'left',
+							}}
 						>
-							<DeleteIcon />
-						</IconButton>
+							<CardMedia
+								component='img'
+								height='140'
+								image={popoverImageId}
+								alt=''
+							/>
+						</Popover>
 
-						<Typography
-							gutterBottom
-							fontSize={16}
-							fontWeight={500}
-							component='div'
-						>
-							{artwork.title}
-						</Typography>
+						<CardContent style={{ width: 300, height: 200 }}>
+							<IconButton
+								aria-label='delete'
+								color='black'
+								sx={{ position: 'absolute', top: 10, right: 10 }}
+								onClick={() => handleDelete(index)}
+							>
+								<DeleteIcon />
+							</IconButton>
 
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							{artwork.artist}
-						</Typography>
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							{artwork.date}
-						</Typography>
-					</CardContent>
+							<Typography
+								gutterBottom
+								fontSize={16}
+								fontWeight={500}
+								component='div'
+							>
+								{artwork.title}
+							</Typography>
 
-					<div
-						className='favorites-more'
-						style={{
-							display: 'flex',
-							flexDirection: 'row',
-							justifyContent: 'space-between',
-							margin: 25,
-						}}
-					>
-						{artwork.favorite ? (
-							<Favorite onClick={handleFavClick} />
-						) : (
-							<FavoriteBorder onClick={handleFavClick} />
-						)}
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								{artwork.artist}
+							</Typography>
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								{artwork.date}
+							</Typography>
+						</CardContent>
 
 						<div
-							style={{ fontSize: 15, fontWeight: 600 }}
-							onClick={() => setFlip(!flip)}
+							className='favorites-more'
+							style={{
+								display: 'flex',
+								flexDirection: 'row',
+								justifyContent: 'space-between',
+								margin: 25,
+							}}
 						>
-							Learn More
+							<div
+								style={{ fontSize: 15, fontWeight: 600 }}
+								onClick={() => setFlip(!flip)}
+							>
+								Learn More
+							</div>
 						</div>
-					</div>
-				</CardActionArea>
-			</Card>
+					</CardActionArea>
+				</Card>
+				<Card
+					className='card-back'
+					sx={{ maxWidth: 300, maxHeight: 600, display: 'flex' }}
+				>
+					<CardActionArea>
+						<CardContent style={{ width: 300, height: 500 }}>
+							<Typography
+								gutterBottom
+								fontSize={16}
+								fontWeight={500}
+								component='div'
+							>
+								{artwork.title}
+							</Typography>
+							<br></br>
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								Artist: {artwork.artist}
+							</Typography>
+							<br></br>
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								Date: {artwork.date}
+							</Typography>
+							<br></br>
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								Place of Origin: {artwork.location}
+							</Typography>
+							<br></br>
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								Medium: {artwork.medium}
+							</Typography>
+							<br></br>
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								Description: {artwork.description}
+							</Typography>
+						</CardContent>
+
+						<div
+							style={{
+								display: 'flex',
+								flexDirection: 'row',
+								justifyContent: 'space-between',
+								margin: 25,
+							}}
+						>
+							<div
+								style={{ fontSize: 15, fontWeight: 600 }}
+								onClick={() => setFlip(!flip)}
+							>
+								Back
+							</div>
+						</div>
+					</CardActionArea>
+				</Card>
+			</ReactCardFlip>
 		</div>
 	);
 };

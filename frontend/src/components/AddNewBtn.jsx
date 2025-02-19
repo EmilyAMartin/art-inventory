@@ -30,6 +30,7 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 	const [images, setImages] = useState([]);
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [title, setTitle] = useState('');
+	const [artist, setArtist] = useState('');
 	const [date, setDate] = useState('');
 	const [medium, setMedium] = useState('');
 	const [location, setLocation] = useState('');
@@ -38,6 +39,7 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 	const handleSubmit = () => {
 		const artworkData = {
 			title,
+			artist,
 			date,
 			medium,
 			location,
@@ -88,6 +90,7 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 
 	const resetForm = () => {
 		setTitle('');
+		setArtist('');
 		setDate('');
 		setMedium('');
 		setLocation('');
@@ -181,6 +184,19 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 								onChange={(e) => setTitle(e.target.value)}
 								endAdornment={<InputAdornment position='end'></InputAdornment>}
 								label='Title'
+							/>
+						</FormControl>
+						<FormControl
+							sx={{ width: '100%' }}
+							variant='outlined'
+						>
+							<InputLabel htmlFor='outlined-adornment-artist'>Artist</InputLabel>
+							<OutlinedInput
+								id='outlined-adornment-artist'
+								value={artist}
+								onChange={(e) => setArtist(e.target.value)}
+								endAdornment={<InputAdornment position='end'></InputAdornment>}
+								label='Artist'
 							/>
 						</FormControl>
 

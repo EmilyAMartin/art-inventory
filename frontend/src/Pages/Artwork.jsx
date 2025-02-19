@@ -33,6 +33,7 @@ const Artwork = () => {
 		setNewAddedArtwork(updatedNewArtwork);
 		localStorage.setItem('artworkData', JSON.stringify(updatedNewArtwork));
 	};
+
 	// New Section //
 
 	const [artwork, setArtwork] = useState([]);
