@@ -1,12 +1,4 @@
-import mysql from 'mysql2';
-
-//DB Connection//
-const server = mysql.createConnection({
-	host: 'localhost',
-	user: 'root',
-	password: process.env.DB_PASSWORD,
-	database: 'artworks',
-});
+import { server } from './db';
 
 //User Table//
 export const createTable = () => {
@@ -25,8 +17,8 @@ export const createTable = () => {
 export const createTestData = () => {
 	server.query(
 		`
-    INSERT INTO users (name, email, password_hash)
-    VALUES ("John Doe", "john@doe.com", "password_hash")
+    INSERT INTO users (id, name, email, password_hash)
+    VALUES (1, "John Doe", "john@doe.com", "password_hash")
   `,
 		(err, result) => {
 			if (err) {

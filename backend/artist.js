@@ -1,14 +1,6 @@
-import mysql from 'mysql2';
-
-//DB Connection//
-const server = mysql.createConnection({
-	host: 'localhost',
-	user: 'root',
-	password: process.env.DB_PASSWORD,
-	database: 'artworks',
-});
-
+import { server } from './db';
 //Artist Table//
+
 export const createTable = () => {
 	server.query(`
     CREATE TABLE IF NOT EXISTS artist (
