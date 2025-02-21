@@ -20,7 +20,7 @@ export default function ProjectCard({ projects, handleDelete }) {
 	};
 
 	if (projects.length === 0) {
-		return <div style={{ marginTop: 25 }}>No projects available</div>;
+		return <div style={{ marginTop: 25 }}>No projects added</div>;
 	}
 
 	return (
