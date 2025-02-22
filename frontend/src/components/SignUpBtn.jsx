@@ -13,14 +13,19 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Checkbox from '@mui/material/Checkbox';
+import axios from 'axios';
 
 const SignUpBtn = () => {
 	const [open, setOpen] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
 	const [isHover, setIsHover] = useState(false);
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [repeatPassword, setRepeatPassword] = useState('');
+
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
+
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 	const handleMouseDownPassword = (event) => {
 		event.preventDefault();
@@ -33,6 +38,29 @@ const SignUpBtn = () => {
 	};
 	const handleMouseLeave = () => {
 		setIsHover(false);
+	};
+
+	//API Request to Backend//
+	const handleSubmit = async () => {
+		if (password !== repeatPassword) {
+			alert('Passwords do not match!');
+			return;
+		}
+		try {
+			const response = await axios.post('http://localhost:3000/register', {
+				name: email,
+				email: email,
+				password: password,
+			});
+
+			alert(response.data.message);
+			handleClose();
+		} catch (error) {
+			console.error('Error registering user:', error);
+			alert(
+				error.response?.data?.message || 'An error occurred during registration.'
+			);
+		}
 	};
 
 	const buttonStyle = {
@@ -49,6 +77,7 @@ const SignUpBtn = () => {
 		width: 150,
 		backgroundColor: isHover ? '#4640ad' : '#6c63ff',
 	};
+
 	const modalStyle = {
 		display: 'flex',
 		flexDirection: 'column',
@@ -59,6 +88,7 @@ const SignUpBtn = () => {
 		bgcolor: 'background.paper',
 		maxWidth: 600,
 	};
+
 	const SubmitButton = styled(Button)(({ theme }) => ({
 		color: theme.palette.getContrastText(green[500]),
 		backgroundColor: green[400],
@@ -66,6 +96,7 @@ const SignUpBtn = () => {
 			backgroundColor: green[700],
 		},
 	}));
+
 	const CancelButton = styled(Button)(({ theme }) => ({
 		color: theme.palette.getContrastText(red[500]),
 		backgroundColor: red[500],
@@ -73,6 +104,7 @@ const SignUpBtn = () => {
 			backgroundColor: red[700],
 		},
 	}));
+
 	return (
 		<div>
 			<button
@@ -108,13 +140,15 @@ const SignUpBtn = () => {
 							sx={{ width: '100%' }}
 							variant='outlined'
 						>
-							<InputLabel htmlFor='outlined-adornment-email'> Email</InputLabel>
+							<InputLabel htmlFor='outlined-adornment-email'>Email</InputLabel>
 							<OutlinedInput
 								id='outlined-adornment-email'
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
 								endAdornment={<InputAdornment position='end'></InputAdornment>}
 								label='Email'
 							/>
-						</FormControl>{' '}
+						</FormControl>
 						<FormControl
 							sx={{ width: '100%' }}
 							variant='outlined'
@@ -122,6 +156,8 @@ const SignUpBtn = () => {
 							<InputLabel htmlFor='outlined-adornment-password'>Password</InputLabel>
 							<OutlinedInput
 								id='outlined-adornment-password'
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
 								type={showPassword ? 'text' : 'password'}
 								endAdornment={
 									<InputAdornment position='end'>
@@ -143,11 +179,13 @@ const SignUpBtn = () => {
 							sx={{ width: '100%' }}
 							variant='outlined'
 						>
-							<InputLabel htmlFor='outlined-adornment-password'>
+							<InputLabel htmlFor='outlined-adornment-repeat-password'>
 								Repeat Password
 							</InputLabel>
 							<OutlinedInput
-								id='outlined-adornment-password'
+								id='outlined-adornment-repeat-password'
+								value={repeatPassword}
+								onChange={(e) => setRepeatPassword(e.target.value)}
 								type={showPassword ? 'text' : 'password'}
 								endAdornment={
 									<InputAdornment position='end'>
@@ -162,42 +200,32 @@ const SignUpBtn = () => {
 										</IconButton>
 									</InputAdornment>
 								}
-								label='Password'
+								label='Repeat Password'
 							/>
-							<div
-								style={{
-									display: 'flex',
-									flexDirection: 'row',
-									alignItems: 'center',
-								}}
-							>
-								<Checkbox /> Remember Password
-							</div>
-
-							<div
-								style={{
-									display: 'flex',
-									justifyContent: 'center',
-									gap: 50,
-									marginTop: 25,
-								}}
-							>
-								<SubmitButton
-									sx={{ color: 'white' }}
-									variant='contained'
-									onClick={handleClose}
-								>
-									Submit
-								</SubmitButton>
-								<CancelButton
-									sx={{ color: 'white' }}
-									variant='contained'
-									onClick={handleClose}
-								>
-									Cancel
-								</CancelButton>
-							</div>
 						</FormControl>
+						<div
+							style={{
+								display: 'flex',
+								justifyContent: 'center',
+								gap: 50,
+								marginTop: 25,
+							}}
+						>
+							<SubmitButton
+								sx={{ color: 'white' }}
+								variant='contained'
+								onClick={handleSubmit}
+							>
+								Submit
+							</SubmitButton>
+							<CancelButton
+								sx={{ color: 'white' }}
+								variant='contained'
+								onClick={handleClose}
+							>
+								Cancel
+							</CancelButton>
+						</div>
 					</div>
 				</Box>
 			</Modal>

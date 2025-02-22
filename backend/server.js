@@ -8,14 +8,15 @@ import mysql from 'mysql2/promise';
 import session from 'express-session';
 import MySQLStore from 'express-mysql-session';
 import bcrypt from 'bcryptjs';
+import cors from 'cors';
 
 const url = process.env.MYSQL_URL;
 const connection = mysql.createPool(url);
 const sessionStore = new MySQLStore({}, connection);
 const app = express();
 
+app.use(cors());
 app.use(express.json());
-
 app.use(
 	session({
 		secret: process.env.SESSION_SECRET || 'your-default-secret',

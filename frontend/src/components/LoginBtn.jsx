@@ -18,26 +18,45 @@ import Checkbox from '@mui/material/Checkbox';
 const LoginBtn = () => {
 	const [open, setOpen] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
-	const [isHover, setIsHover] = useState(false);
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [error, setError] = useState('');
+
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
+
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
-	const handleMouseDownPassword = (event) => {
+	const handleMouseDownPassword = (event) => event.preventDefault();
+	const handleMouseUpPassword = (event) => event.preventDefault();
+
+	//API Request to Backend//
+	const handleLogin = async (event) => {
 		event.preventDefault();
-	};
-	const handleMouseUpPassword = (event) => {
-		event.preventDefault();
-	};
-	const handleMouseEnter = () => {
-		setIsHover(true);
-	};
-	const handleMouseLeave = () => {
-		setIsHover(false);
+		setError('');
+		try {
+			const response = await fetch('/login', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ email, password }),
+			});
+
+			if (response.ok) {
+				handleClose();
+				alert('Logged in successfully!');
+			} else {
+				const data = await response.json();
+				setError(data.message || 'Login failed');
+			}
+		} catch (error) {
+			console.error('Error:', error);
+			setError('An error occurred. Please try again later.');
+		}
 	};
 
 	const buttonStyle = {
 		padding: '0.5rem',
-		hover: '#6c63ff50',
 		color: '#ffffff',
 		outline: 'none',
 		border: 'none',
@@ -47,8 +66,9 @@ const LoginBtn = () => {
 		cursor: 'pointer',
 		transition: '0.2s',
 		width: 150,
-		backgroundColor: isHover ? '#4640ad' : '#6c63ff',
+		backgroundColor: '#6c63ff',
 	};
+
 	const modalStyle = {
 		display: 'flex',
 		flexDirection: 'column',
@@ -59,6 +79,7 @@ const LoginBtn = () => {
 		bgcolor: 'background.paper',
 		maxWidth: 600,
 	};
+
 	const SubmitButton = styled(Button)(({ theme }) => ({
 		color: theme.palette.getContrastText(green[500]),
 		backgroundColor: green[400],
@@ -66,6 +87,7 @@ const LoginBtn = () => {
 			backgroundColor: green[700],
 		},
 	}));
+
 	const CancelButton = styled(Button)(({ theme }) => ({
 		color: theme.palette.getContrastText(red[500]),
 		backgroundColor: red[500],
@@ -73,12 +95,11 @@ const LoginBtn = () => {
 			backgroundColor: red[700],
 		},
 	}));
+
 	return (
 		<div>
 			<button
 				style={buttonStyle}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
 				onClick={handleOpen}
 			>
 				Login
@@ -108,13 +129,14 @@ const LoginBtn = () => {
 							sx={{ width: '100%' }}
 							variant='outlined'
 						>
-							<InputLabel htmlFor='outlined-adornment-email'> Email</InputLabel>
+							<InputLabel htmlFor='outlined-adornment-email'>Email</InputLabel>
 							<OutlinedInput
 								id='outlined-adornment-email'
-								endAdornment={<InputAdornment position='end'></InputAdornment>}
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
 								label='Email'
 							/>
-						</FormControl>{' '}
+						</FormControl>
 						<FormControl
 							sx={{ width: '100%' }}
 							variant='outlined'
@@ -123,6 +145,8 @@ const LoginBtn = () => {
 							<OutlinedInput
 								id='outlined-adornment-password'
 								type={showPassword ? 'text' : 'password'}
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
 								endAdornment={
 									<InputAdornment position='end'>
 										<IconButton
@@ -138,39 +162,40 @@ const LoginBtn = () => {
 								}
 								label='Password'
 							/>
-							<div
-								style={{
-									display: 'flex',
-									flexDirection: 'row',
-									alignItems: 'center',
-								}}
-							>
-								<Checkbox /> Remember Password
-							</div>
-							<div
-								style={{
-									display: 'flex',
-									justifyContent: 'center',
-									gap: 50,
-									marginTop: 25,
-								}}
-							>
-								<SubmitButton
-									sx={{ color: 'white' }}
-									variant='contained'
-									onClick={handleClose}
-								>
-									Submit
-								</SubmitButton>
-								<CancelButton
-									sx={{ color: 'white' }}
-									variant='contained'
-									onClick={handleClose}
-								>
-									Cancel
-								</CancelButton>
-							</div>
 						</FormControl>
+						{error && <Typography color='error'>{error}</Typography>}
+						<div
+							style={{
+								display: 'flex',
+								flexDirection: 'row',
+								alignItems: 'center',
+							}}
+						>
+							<Checkbox /> Remember Password
+						</div>
+						<div
+							style={{
+								display: 'flex',
+								justifyContent: 'center',
+								gap: 50,
+								marginTop: 25,
+							}}
+						>
+							<SubmitButton
+								sx={{ color: 'white' }}
+								variant='contained'
+								onClick={handleLogin}
+							>
+								Submit
+							</SubmitButton>
+							<CancelButton
+								sx={{ color: 'white' }}
+								variant='contained'
+								onClick={handleClose}
+							>
+								Cancel
+							</CancelButton>
+						</div>
 					</div>
 				</Box>
 			</Modal>
