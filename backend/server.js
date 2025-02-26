@@ -25,60 +25,72 @@ app.use(
 		saveUninitialized: false,
 	})
 );
+
 // Login Route
 app.post('/login', async (req, res) => {
 	const { email, password } = req.body;
-	const [usersResult] = await connection.query(
-		'SELECT * FROM users WHERE email = ?',
-		[email]
-	);
+	try {
+		const [usersResult] = await connection.query(
+			'SELECT * FROM users WHERE email = ?',
+			[email]
+		);
 
-	if (usersResult.length === 0) {
-		return res.status(400).json({ message: 'User not found' });
+		if (usersResult.length === 0) {
+			return res.status(400).json({ message: 'User not found' });
+		}
+
+		const user = usersResult[0];
+		const passwordMatch = await bcrypt.compare(password, user.password);
+
+		if (!passwordMatch) {
+			return res.status(400).json({ message: 'Incorrect password' });
+		}
+
+		req.session.user = { id: user.id, name: user.name, email: user.email };
+		res.json({ message: 'Logged in successfully' });
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ message: 'Internal Server Error' });
 	}
-
-	const user = usersResult[0];
-	const passwordMatch = await bcrypt.compare(password, user.password);
-
-	if (!passwordMatch) {
-		return res.status(400).json({ message: 'Incorrect password' });
-	}
-
-	req.session.user = { id: user.id, name: user.name, email: user.email };
-	res.json({ message: 'Logged in successfully' });
 });
 
 // Register Route
 app.post('/register', async (req, res) => {
 	const { name, email, password } = req.body;
+	try {
+		const [existingUserResult] = await connection.query(
+			'SELECT * FROM users WHERE email = ?',
+			[email]
+		);
 
-	const [existingUserResult] = await connection.query(
-		'SELECT * FROM users WHERE email = ?',
-		[email]
-	);
+		if (existingUserResult.length > 0) {
+			return res.status(400).json({ message: 'User already exists' });
+		}
 
-	if (existingUserResult.length > 0) {
-		return res.status(400).json({ message: 'User already exists' });
+		const hashedPassword = await bcrypt.hash(password, 10);
+
+		await connection.query(
+			'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
+			[name, email, hashedPassword]
+		);
+
+		const [newUserResult] = await connection.query(
+			'SELECT * FROM users WHERE email = ?',
+			[email]
+		);
+		const newUser = newUserResult[0];
+
+		req.session.user = {
+			id: newUser.id,
+			name: newUser.name,
+			email: newUser.email,
+		};
+
+		res.json({ message: 'Registered successfully' });
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ message: 'Internal Server Error' });
 	}
-	const hashedPassword = await bcrypt.hash(password, 10);
-
-	await connection.query(
-		'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
-		[name, email, hashedPassword]
-	);
-	const [newUserResult] = await connection.query(
-		'SELECT * FROM users WHERE email = ?',
-		[email]
-	);
-	const newUser = newUserResult[0];
-
-	req.session.user = {
-		id: newUser.id,
-		name: newUser.name,
-		email: newUser.email,
-	};
-
-	res.json({ message: 'Registered successfully' });
 });
 
 // Profile Route
@@ -91,15 +103,21 @@ app.get('/profile', (req, res) => {
 });
 
 // Initialize Database
-const initDb = () => {
-	artist.createTable();
-	artwork.createTable();
-	users.createTable();
+const initDb = async () => {
+	try {
+		// Using async functions for table creation and test data insertion
+		await artist.createTable(connection);
+		await artwork.createTable(connection);
+		await users.createTable(connection);
 
-	artist.createTestData();
-	artwork.createTestData();
-	users.createTestData();
+		await artist.createTestData(connection);
+		await artwork.createTestData(connection);
+		await users.createTestData(connection);
+	} catch (err) {
+		console.error('Error initializing database:', err);
+	}
 };
+
 initDb();
 
 // Setup Routes
