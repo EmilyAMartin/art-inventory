@@ -40,7 +40,7 @@ app.post('/login', async (req, res) => {
 		}
 
 		const user = usersResult[0];
-		const passwordMatch = await bcrypt.compare(password, user.password);
+		const passwordMatch = await bcrypt.compare(password, user.password_hash);
 
 		if (!passwordMatch) {
 			return res.status(400).json({ message: 'Incorrect password' });
@@ -70,7 +70,7 @@ app.post('/register', async (req, res) => {
 		const hashedPassword = await bcrypt.hash(password, 10);
 
 		await connection.query(
-			'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
+			'INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)',
 			[name, email, hashedPassword]
 		);
 
@@ -124,6 +124,12 @@ initDb();
 artist.setupRoutes(app);
 artwork.setupRoutes(app);
 users.setupRoutes(app);
+
+// Global error handler (last middleware)
+app.use((err, req, res, next) => {
+	console.error('Unhandled Error:', err);
+	res.status(500).json({ message: 'Internal Server Error' });
+});
 
 const port = 3000;
 app.listen(port, () => {
