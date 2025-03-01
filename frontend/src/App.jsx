@@ -7,11 +7,25 @@ import Account from './Pages/Account';
 import Gallery from './Pages/Gallery';
 import Projects from './Pages/Projects';
 import { AuthContext } from './Pages/Context';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function App() {
-	// Initialize currentUser as null to indicate no user is logged in initially
 	const [currentUser, setCurrentUser] = useState(null);
+
+	useEffect(() => {
+		// Check if the user is logged in (check localStorage)
+		const storedUser = JSON.parse(localStorage.getItem('currentUser'));
+		if (storedUser) {
+			setCurrentUser(storedUser); // If the user exists in localStorage, set them in context
+		}
+	}, []);
+
+	// This useEffect ensures that when currentUser is set, it also gets saved to localStorage
+	useEffect(() => {
+		if (currentUser) {
+			localStorage.setItem('currentUser', JSON.stringify(currentUser));
+		}
+	}, [currentUser]);
 
 	return (
 		<div className='App'>

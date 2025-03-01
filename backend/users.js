@@ -83,7 +83,12 @@ export const loginUser = async (email, password, connection) => {
 			throw new Error('Incorrect password');
 		}
 
-		return user;
+		// Return the user data after successful login
+		return {
+			id: user.id,
+			name: user.name,
+			email: user.email,
+		};
 	} catch (err) {
 		throw new Error('Error logging in user: ' + err.message);
 	}
@@ -108,14 +113,20 @@ export const setupRoutes = (app, connection) => {
 		}
 	});
 
-	// Login Route
 	app.post('/login', async (req, res) => {
 		const { email, password } = req.body;
 
 		try {
 			const user = await loginUser(email, password, connection);
+
+			// Set session and return the user data
 			req.session.user = { id: user.id, name: user.name, email: user.email };
-			res.json({ message: 'Logged in successfully' });
+
+			// Ensure this JSON structure is being returned
+			res.json({
+				message: 'Logged in successfully',
+				user: user, // Returning user data here
+			});
 		} catch (err) {
 			res.status(400).json({ message: err.message });
 		}
