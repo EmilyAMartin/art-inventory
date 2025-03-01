@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './Navbar.css';
 import { Link, NavLink } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
+import { AuthContext } from '../Pages/Context'; // Import the AuthContext
 import LoginBtn from './LoginBtn';
 
 export const Navbar = () => {
+	const { currentUser } = useContext(AuthContext); // Access the currentUser from context
 	const [menuOpen, setMenuOpen] = useState(false);
 	const handleLinkClick = () => {
 		setMenuOpen(false);
@@ -36,22 +38,37 @@ export const Navbar = () => {
 						Home
 					</NavLink>
 				</li>
-				<li>
-					<NavLink
-						to='/Artwork'
-						onClick={handleLinkClick}
-					>
-						Artwork
-					</NavLink>
-				</li>
-				<li>
-					<NavLink
-						to='/Projects'
-						onClick={handleLinkClick}
-					>
-						Projects
-					</NavLink>
-				</li>
+
+				{/* Conditionally render based on user status */}
+				{currentUser?.name && (
+					<>
+						<li>
+							<NavLink
+								to='/Artwork'
+								onClick={handleLinkClick}
+							>
+								Artwork
+							</NavLink>
+						</li>
+						<li>
+							<NavLink
+								to='/Projects'
+								onClick={handleLinkClick}
+							>
+								Projects
+							</NavLink>
+						</li>
+						<li>
+							<NavLink
+								to='/Account'
+								onClick={handleLinkClick}
+							>
+								Account
+							</NavLink>
+						</li>
+					</>
+				)}
+
 				<li>
 					<NavLink
 						to='/Gallery'
@@ -60,17 +77,9 @@ export const Navbar = () => {
 						Gallery
 					</NavLink>
 				</li>
-				<li>
-					<NavLink
-						to='/Account'
-						onClick={handleLinkClick}
-					>
-						Account
-					</NavLink>
-				</li>
-				<li style={{ marginTop: 6 }}>
-					<LoginBtn />
-				</li>
+
+				{/* Show Login button if no user is signed in */}
+				<li style={{ marginTop: 6 }}>{!currentUser?.name && <LoginBtn />}</li>
 			</ul>
 		</nav>
 	);

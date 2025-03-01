@@ -10,7 +10,9 @@ import { AuthContext } from './Pages/Context';
 import { useState } from 'react';
 
 function App() {
-	const [currentUser, setCurrentUser] = useState({ name: 'Username' });
+	// Initialize currentUser as null to indicate no user is logged in initially
+	const [currentUser, setCurrentUser] = useState(null);
+
 	return (
 		<div className='App'>
 			<AuthContext.Provider value={{ currentUser, setCurrentUser }}>
@@ -41,4 +43,5 @@ function App() {
 		</div>
 	);
 }
+
 export default App;
