@@ -1,5 +1,4 @@
-import React, { useState, useContext } from 'react';
-import { AuthContext } from '../Pages/Context'; // Import AuthContext
+import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { green } from '@mui/material/colors';
 import { red } from '@mui/material/colors';
@@ -23,8 +22,6 @@ const LoginBtn = () => {
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
 
-	const { setCurrentUser } = useContext(AuthContext); // Access setCurrentUser from context
-
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 
@@ -32,6 +29,7 @@ const LoginBtn = () => {
 	const handleMouseDownPassword = (event) => event.preventDefault();
 	const handleMouseUpPassword = (event) => event.preventDefault();
 
+	//API Request to Backend//
 	const handleLogin = async (event) => {
 		event.preventDefault();
 		setError('');
@@ -44,26 +42,12 @@ const LoginBtn = () => {
 				body: JSON.stringify({ email, password }),
 			});
 
-			// Check if the response is a valid JSON type
-			const contentType = response.headers.get('Content-Type');
-			if (!contentType || !contentType.includes('application/json')) {
-				throw new Error('Invalid JSON response');
-			}
-
-			const data = await response.json();
-			console.log('Response Data:', data);
-
-			// Check if the response contains user data
-			if (data && data.user) {
-				// Save user to context
-				setCurrentUser(data.user);
-
-				// Save user data to localStorage
-				localStorage.setItem('currentUser', JSON.stringify(data.user));
-
+			if (response.ok) {
+				handleClose();
 				alert('Logged in successfully!');
 			} else {
-				setError('No user data returned from backend');
+				const data = await response.json();
+				setError(data.message || 'Login failed');
 			}
 		} catch (error) {
 			console.error('Error:', error);
