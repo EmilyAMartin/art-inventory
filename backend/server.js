@@ -14,12 +14,7 @@ const connection = mysql.createPool(url);
 const sessionStore = new MySQLStore({}, connection);
 const app = express();
 
-app.use(
-	cors({
-		origin: 'http://localhost:3000',
-		credentials: true,
-	})
-);
+app.use(cors());
 app.use(express.json());
 app.use(
 	session({
@@ -45,10 +40,13 @@ const initDb = async () => {
 };
 
 initDb();
+
+// Setup Routes
 artist.setupRoutes(app);
 artwork.setupRoutes(app);
-users.setupRoutes(app, connection);
+users.setupRoutes(app, connection); // Pass connection here
 
+// Global error handler (last middleware)
 app.use((err, req, res, next) => {
 	console.error('Unhandled Error:', err);
 	res.status(500).json({ message: 'Internal Server Error' });
@@ -59,4 +57,5 @@ app.listen(port, () => {
 	console.log(`Server is running on http://localhost:${port}`);
 });
 
+// Serve static files
 app.use(express.static('public'));

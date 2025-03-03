@@ -7,26 +7,11 @@ import Account from './Pages/Account';
 import Gallery from './Pages/Gallery';
 import Projects from './Pages/Projects';
 import { AuthContext } from './Pages/Context';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
 
 function App() {
+	// Initialize currentUser as null to indicate no user is logged in initially
 	const [currentUser, setCurrentUser] = useState(null);
-
-	useEffect(() => {
-		console.log('Checking login status...');
-		axios
-			.get('http://localhost:3306/check-login')
-			.then((response) => {
-				console.log('Login check response:', response.data);
-				if (response.data.loggedIn) {
-					setCurrentUser(response.data.user);
-				}
-			})
-			.catch((error) => {
-				console.error('Error checking login status:', error);
-			});
-	}, []);
 
 	return (
 		<div className='App'>
@@ -51,7 +36,7 @@ function App() {
 					/>
 					<Route
 						path='/Account'
-						element={currentUser ? <Account /> : <Home />}
+						element={<Account />}
 					/>
 				</Routes>
 			</AuthContext.Provider>

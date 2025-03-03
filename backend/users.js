@@ -1,44 +1,35 @@
 import { server } from './db.js';
 import bcrypt from 'bcryptjs';
 
-// User Table Creation
-export const createTable = (connection) => {
-	connection.query(
-		`
-        CREATE TABLE IF NOT EXISTS users (
-            id INT NOT NULL AUTO_INCREMENT,
-            name VARCHAR(255) NOT NULL,
-            email VARCHAR(255) NOT NULL,
-            password_hash VARCHAR(255) NOT NULL,
-            PRIMARY KEY (id)
-        )
-    `,
-		(err, result) => {
-			if (err) {
-				console.error('Error creating users table:', err);
-				return;
-			}
-			console.log('Users table created or already exists');
-		}
-	);
+// User Table//
+export const createTable = () => {
+	server.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id INT NOT NULL AUTO_INCREMENT,
+      name VARCHAR(255) NOT NULL,
+      email VARCHAR(255) NOT NULL,
+      password_hash VARCHAR(255) NOT NULL,
+      PRIMARY KEY (id)
+    )
+  `);
 };
 
-// User Data Insertion
-export const createTestData = (connection) => {
-	connection.query(
+// User Data //
+export const createTestData = () => {
+	server.query(
 		`
-        INSERT INTO users (id, name, email, password_hash)
-        VALUES (1, "John Doe", "john@doe.com", "password_hash")
-    `,
+    INSERT INTO users (id, name, email, password_hash)
+    VALUES (1, "John Doe", "john@doe.com", "password_hash")
+  `,
 		(err, result) => {
 			if (err) {
 				if (err.code === 'ER_DUP_ENTRY') {
 					console.log('Duplicate entry found, ignoring...');
 					return;
 				}
-				console.error('Error inserting user:', err);
+				console.log('Error inserting user:', err);
 			} else {
-				console.log('User inserted successfully');
+				console.log('Users inserted successfully');
 			}
 		}
 	);
@@ -92,11 +83,7 @@ export const loginUser = async (email, password, connection) => {
 			throw new Error('Incorrect password');
 		}
 
-		return {
-			id: user.id,
-			name: user.name,
-			email: user.email,
-		};
+		return user;
 	} catch (err) {
 		throw new Error('Error logging in user: ' + err.message);
 	}
@@ -121,33 +108,16 @@ export const setupRoutes = (app, connection) => {
 		}
 	});
 
+	// Login Route
 	app.post('/login', async (req, res) => {
 		const { email, password } = req.body;
 
 		try {
 			const user = await loginUser(email, password, connection);
 			req.session.user = { id: user.id, name: user.name, email: user.email };
-			console.log('Session after login:', req.session);
-
-			res.json({
-				message: 'Logged in successfully',
-				user: user,
-			});
+			res.json({ message: 'Logged in successfully' });
 		} catch (err) {
 			res.status(400).json({ message: err.message });
-		}
-	});
-
-	app.get('/check-login', (req, res) => {
-		if (req.session.user) {
-			res.json({
-				loggedIn: true,
-				user: req.session.user,
-			});
-		} else {
-			res.json({
-				loggedIn: false,
-			});
 		}
 	});
 
@@ -160,10 +130,11 @@ export const setupRoutes = (app, connection) => {
 		}
 	});
 
+	// Get All Users Route (for testing, you may remove this later)
 	app.get('/users', (req, res) => {
 		connection.query('SELECT * FROM users', (error, results) => {
 			if (error) {
-				console.error('Error fetching users:', error);
+				console.error(error);
 				res.status(500).json({ error: 'Internal Server Error' });
 				return;
 			}
