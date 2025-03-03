@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { styled } from '@mui/material/styles';
 import { green } from '@mui/material/colors';
 import { red } from '@mui/material/colors';
@@ -14,6 +14,7 @@ import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Checkbox from '@mui/material/Checkbox';
+import { AuthContext } from '../Pages/Context';
 
 const LoginBtn = () => {
 	const [open, setOpen] = useState(false);
@@ -21,6 +22,7 @@ const LoginBtn = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
+	const { setCurrentUser } = useContext(AuthContext); // Access setCurrentUser from context
 
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
@@ -29,7 +31,7 @@ const LoginBtn = () => {
 	const handleMouseDownPassword = (event) => event.preventDefault();
 	const handleMouseUpPassword = (event) => event.preventDefault();
 
-	//API Request to Backend//
+	// API Request to Backend for login
 	const handleLogin = async (event) => {
 		event.preventDefault();
 		setError('');
@@ -43,8 +45,17 @@ const LoginBtn = () => {
 			});
 
 			if (response.ok) {
-				handleClose();
-				alert('Logged in successfully!');
+				// After successful login, fetch user profile and update context
+				const userResponse = await fetch('http://localhost:3000/profile');
+				const userData = await userResponse.json();
+
+				if (userResponse.ok) {
+					setCurrentUser(userData.user); // Update context with the user data
+					handleClose(); // Close the modal after successful login
+					alert('Logged in successfully!');
+				} else {
+					setError('Error fetching user profile');
+				}
 			} else {
 				const data = await response.json();
 				setError(data.message || 'Login failed');

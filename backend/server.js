@@ -23,6 +23,11 @@ app.use(
 		store: sessionStore,
 		resave: false,
 		saveUninitialized: false,
+		cookie: {
+			httpOnly: true, // Ensures cookies are not accessible via JS
+			secure: process.env.NODE_ENV === 'production', // Only set cookies over HTTPS in production
+			maxAge: 24 * 60 * 60 * 1000, // 1 day
+		},
 	})
 );
 
@@ -93,8 +98,8 @@ app.post('/register', async (req, res) => {
 	}
 });
 
-// Profile Route
 app.get('/profile', (req, res) => {
+	console.log('Session Data:', req.session.user); // Add this line to check session data
 	if (req.session.user) {
 		res.json({ user: req.session.user });
 	} else {
