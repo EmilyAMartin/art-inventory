@@ -15,7 +15,12 @@ const connection = mysql.createPool(url);
 const sessionStore = new MySQLStore({}, connection);
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+	origin: 'http://localhost:5173',
+	credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(
 	session({
@@ -23,12 +28,18 @@ app.use(
 		store: sessionStore,
 		resave: false,
 		saveUninitialized: false,
+		cookie: {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === 'production',
+			maxAge: 24 * 60 * 60 * 1000,
+		},
 	})
 );
 
 // Login Route
 app.post('/login', async (req, res) => {
 	const { email, password } = req.body;
+
 	try {
 		const [usersResult] = await connection.query(
 			'SELECT * FROM users WHERE email = ?',
@@ -45,7 +56,6 @@ app.post('/login', async (req, res) => {
 		if (!passwordMatch) {
 			return res.status(400).json({ message: 'Incorrect password' });
 		}
-
 		req.session.user = { id: user.id, name: user.name, email: user.email };
 		res.json({ message: 'Logged in successfully' });
 	} catch (err) {
@@ -57,6 +67,7 @@ app.post('/login', async (req, res) => {
 // Register Route
 app.post('/register', async (req, res) => {
 	const { name, email, password } = req.body;
+
 	try {
 		const [existingUserResult] = await connection.query(
 			'SELECT * FROM users WHERE email = ?',
@@ -80,6 +91,7 @@ app.post('/register', async (req, res) => {
 		);
 		const newUser = newUserResult[0];
 
+		// Store user in session
 		req.session.user = {
 			id: newUser.id,
 			name: newUser.name,
@@ -102,10 +114,9 @@ app.get('/profile', (req, res) => {
 	}
 });
 
-// Initialize Database
+// Initialize Database (create tables and insert test data)
 const initDb = async () => {
 	try {
-		// Using async functions for table creation and test data insertion
 		await artist.createTable(connection);
 		await artwork.createTable(connection);
 		await users.createTable(connection);
@@ -120,7 +131,7 @@ const initDb = async () => {
 
 initDb();
 
-// Setup Routes
+// Setup Routes for Artist and Artwork
 artist.setupRoutes(app);
 artwork.setupRoutes(app);
 users.setupRoutes(app);
@@ -131,10 +142,10 @@ app.use((err, req, res, next) => {
 	res.status(500).json({ message: 'Internal Server Error' });
 });
 
+app.use(express.static('public'));
+
+// Start the server
 const port = 3000;
 app.listen(port, () => {
 	console.log(`Server is running on http://localhost:${port}`);
 });
-
-// Serve static files
-app.use(express.static('public'));

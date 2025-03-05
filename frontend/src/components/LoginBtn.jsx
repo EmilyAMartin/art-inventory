@@ -22,7 +22,7 @@ const LoginBtn = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
-	const { setCurrentUser } = useContext(AuthContext); // Access setCurrentUser from context
+	const { setCurrentUser } = useContext(AuthContext);
 
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
@@ -35,6 +35,7 @@ const LoginBtn = () => {
 	const handleLogin = async (event) => {
 		event.preventDefault();
 		setError('');
+
 		try {
 			const response = await fetch('http://localhost:3000/login', {
 				method: 'POST',
@@ -45,13 +46,15 @@ const LoginBtn = () => {
 			});
 
 			if (response.ok) {
-				// After successful login, fetch user profile and update context
-				const userResponse = await fetch('http://localhost:3000/profile');
-				const userData = await userResponse.json();
+				const userResponse = await fetch('http://localhost:3000/profile', {
+					method: 'GET',
+					credentials: 'include',
+				});
 
 				if (userResponse.ok) {
-					setCurrentUser(userData.user); // Update context with the user data
-					handleClose(); // Close the modal after successful login
+					const userData = await userResponse.json();
+					setCurrentUser(userData.user);
+					handleClose();
 					alert('Logged in successfully!');
 				} else {
 					setError('Error fetching user profile');
