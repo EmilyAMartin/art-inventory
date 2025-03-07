@@ -51,13 +51,10 @@ const initDb = async () => {
 };
 
 initDb();
-
-// Setup Routes for Artist, Artwork, and Users
 artist.setupRoutes(app);
 artwork.setupRoutes(app);
 users.setupRoutes(app, connection, session);
 
-// Global error handler (last middleware)
 app.use((err, req, res, next) => {
 	console.error('Unhandled Error:', err);
 	res.status(500).json({ message: 'Internal Server Error' });
@@ -65,7 +62,7 @@ app.use((err, req, res, next) => {
 
 app.use(express.static('public'));
 
-// Start the server
+//Start the server//
 const port = 3000;
 app.listen(port, () => {
 	console.log(`Server is running on http://localhost:${port}`);

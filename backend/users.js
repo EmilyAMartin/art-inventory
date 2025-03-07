@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { server } from './db.js'; // Ensure the database connection is available
+import { server } from './db.js';
 
 // User Table
 export const createTable = () => {
@@ -41,6 +41,8 @@ export const setupRoutes = (app, connection, session) => {
 	app.post('/login', async (req, res) => {
 		const { email, password } = req.body;
 
+		console.log('Login attempt:', { email });
+
 		try {
 			const [usersResult] = await connection.query(
 				'SELECT * FROM users WHERE email = ?',
@@ -48,6 +50,7 @@ export const setupRoutes = (app, connection, session) => {
 			);
 
 			if (usersResult.length === 0) {
+				console.log('User not found');
 				return res.status(400).json({ message: 'User not found' });
 			}
 
@@ -55,12 +58,15 @@ export const setupRoutes = (app, connection, session) => {
 			const passwordMatch = await bcrypt.compare(password, user.password_hash);
 
 			if (!passwordMatch) {
+				console.log('Incorrect password');
 				return res.status(400).json({ message: 'Incorrect password' });
 			}
+
 			req.session.user = { id: user.id, name: user.name, email: user.email };
+			console.log('Logged in successfully:', req.session.user);
 			res.json({ message: 'Logged in successfully' });
 		} catch (err) {
-			console.error(err);
+			console.error('Error in login:', err);
 			res.status(500).json({ message: 'Internal Server Error' });
 		}
 	});
@@ -92,7 +98,7 @@ export const setupRoutes = (app, connection, session) => {
 			);
 			const newUser = newUserResult[0];
 
-			// Store user in session
+			// Store user in session//
 			req.session.user = {
 				id: newUser.id,
 				name: newUser.name,
