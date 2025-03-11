@@ -4,6 +4,7 @@ import { Link, NavLink } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import { AuthContext } from '../Pages/Context'; // Import the AuthContext
 import LoginBtn from './LoginBtn';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export const Navbar = () => {
 	const { currentUser } = useContext(AuthContext); // Access the currentUser from context
@@ -38,6 +39,14 @@ export const Navbar = () => {
 						Home
 					</NavLink>
 				</li>
+				<li>
+					<NavLink
+						to='/Gallery'
+						onClick={handleLinkClick}
+					>
+						Gallery
+					</NavLink>
+				</li>
 
 				{/* Conditionally render based on user status */}
 				{currentUser?.name && (
@@ -63,20 +72,11 @@ export const Navbar = () => {
 								to='/Account'
 								onClick={handleLinkClick}
 							>
-								Account
+								<AccountCircleIcon />
 							</NavLink>
 						</li>
 					</>
 				)}
-
-				<li>
-					<NavLink
-						to='/Gallery'
-						onClick={handleLinkClick}
-					>
-						Gallery
-					</NavLink>
-				</li>
 
 				{/* Show Login button if no user is signed in */}
 				<li style={{ marginTop: 6 }}>{!currentUser?.name && <LoginBtn />}</li>
