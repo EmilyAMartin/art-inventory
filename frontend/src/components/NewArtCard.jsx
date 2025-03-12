@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { Favorite } from '@mui/icons-material';
-import { FavoriteBorder } from '@mui/icons-material';
 import Popover from '@mui/material/Popover';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';

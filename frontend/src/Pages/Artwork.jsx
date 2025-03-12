@@ -10,28 +10,13 @@ import NewArtCard from '../components/NewArtCard';
 const Artwork = () => {
 	// New Section //
 	const [newAddedArtwork, setNewAddedArtwork] = useState([]);
-	const fetchNewArtwork = () => {
-		const storedNewArtwork =
-			JSON.parse(localStorage.getItem('artworkData')) || [];
-		console.log(storedNewArtwork);
-		setNewAddedArtwork(storedNewArtwork);
-	};
-
-	useEffect(() => {
-		console.log(newAddedArtwork);
-		fetchNewArtwork();
-	}, []);
 
 	const handleNewArtworkAdded = (newNewArtwork) => {
-		const updatedNewArtwork = [...newAddedArtwork, newNewArtwork];
-		localStorage.setItem('artworkData', JSON.stringify(updatedNewArtwork));
-		setNewAddedArtwork(updatedNewArtwork);
+		setNewAddedArtwork((prevState) => [...prevState, newNewArtwork]);
 	};
 
 	const handleDeleteNewArtwork = (index) => {
-		const updatedNewArtwork = newAddedArtwork.filter((_, i) => i !== index);
-		setNewAddedArtwork(updatedNewArtwork);
-		localStorage.setItem('artworkData', JSON.stringify(updatedNewArtwork));
+		setNewAddedArtwork((prevState) => prevState.filter((_, i) => i !== index));
 	};
 
 	// New Section //
@@ -50,22 +35,7 @@ const Artwork = () => {
 					throw new Error('Network response was not ok');
 				}
 				const data = await response.json();
-
-				if (filter === 'recent') {
-					const favoritesList =
-						JSON.parse(localStorage.getItem('favoritesList')) || [];
-					const artworkWithFavorites = data.map((art) => {
-						return {
-							...art,
-							favorite: favoritesList.some((fav) => fav.id === art.id),
-						};
-					});
-					setArtwork(artworkWithFavorites);
-				} else if (filter === 'favorites') {
-					const favoritesList =
-						JSON.parse(localStorage.getItem('favoritesList')) || [];
-					setArtwork(favoritesList);
-				}
+				setArtwork(data);
 			} catch (err) {
 				setError(err);
 			} finally {
@@ -81,30 +51,13 @@ const Artwork = () => {
 	};
 
 	const handleFavUpdate = (updatedArtwork) => {
-		const favoritesList = JSON.parse(localStorage.getItem('favoritesList')) || [];
-		const index = favoritesList.findIndex((art) => art.id === updatedArtwork.id);
-		if (updatedArtwork.favorite) {
-			if (index === -1) {
-				favoritesList.push(updatedArtwork);
-			}
-		} else {
-			if (index !== -1) {
-				favoritesList.splice(index, 1);
-			}
-		}
-		localStorage.setItem('favoritesList', JSON.stringify(favoritesList));
-
-		if (filter === 'favorites') {
-			setArtwork(favoritesList);
-		} else {
-			setArtwork((prevArtwork) =>
-				prevArtwork.map((art) =>
-					art.id === updatedArtwork.id
-						? { ...art, favorite: updatedArtwork.favorite }
-						: art
-				)
-			);
-		}
+		setArtwork((prevArtwork) =>
+			prevArtwork.map((art) =>
+				art.id === updatedArtwork.id
+					? { ...art, favorite: updatedArtwork.favorite }
+					: art
+			)
+		);
 	};
 
 	if (loading) {

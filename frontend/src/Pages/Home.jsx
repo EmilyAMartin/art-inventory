@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AuthContext } from './Context'; // Import your AuthContext
 import SignUpBtn from '../components/SignUpBtn';
 import LoginBtn from '../components/LoginBtn';
 
 const Home = () => {
+	// Get currentUser from AuthContext
+	const { currentUser } = useContext(AuthContext);
+
 	return (
 		<div className='App'>
 			<div className='home-container'>
@@ -16,10 +20,12 @@ const Home = () => {
 							next project. Connect with fellow enthusiasts, discover new techniques,
 							and celebrate creativity. Join us and ignite your passion for art!
 						</div>
-						<div style={{ display: 'flex', flexDirection: 'row', gap: 25 }}>
-							<SignUpBtn />
-							<LoginBtn />
-						</div>
+						{!currentUser && ( // Only show buttons if user is not logged in
+							<div style={{ display: 'flex', flexDirection: 'row', gap: 25 }}>
+								<SignUpBtn />
+								<LoginBtn />
+							</div>
+						)}
 					</div>
 					<div className='home-image-section'>
 						<img
@@ -32,4 +38,5 @@ const Home = () => {
 		</div>
 	);
 };
+
 export default Home;
