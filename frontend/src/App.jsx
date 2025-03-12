@@ -7,11 +7,38 @@ import Account from './Pages/Account';
 import Gallery from './Pages/Gallery';
 import Projects from './Pages/Projects';
 import { AuthContext } from './Pages/Context';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function App() {
-	// Initialize currentUser as null to indicate no user is logged in initially
 	const [currentUser, setCurrentUser] = useState(null);
+
+	const refreshCurrentUser = async () => {
+		const userResponse = await fetch('http://localhost:3000/profile', {
+			method: 'GET',
+			credentials: 'include',
+		});
+		if (userResponse.ok) {
+			const userData = await userResponse.json();
+			setCurrentUser(userData.user);
+			return true;
+		} else {
+			setCurrentUser(undefined);
+			if (userResponse.status === 401) {
+				return false;
+			} else {
+				console.error('Failed to fetch user', userResponse);
+				return false;
+			}
+		}
+	};
+
+	useEffect(() => {
+		refreshCurrentUser();
+	}, []);
+
+	if (currentUser === null) {
+		return <p>Loading...</p>;
+	}
 
 	return (
 		<div className='App'>
