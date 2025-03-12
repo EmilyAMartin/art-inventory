@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { TextField } from '@mui/material';
 import { Typography } from '@mui/material';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -9,24 +9,18 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import FormControl from '@mui/material/FormControl';
 
-function getFormValues() {
-	const storedValues = localStorage.getItem('form');
-	if (!storedValues)
-		return {
-			email: '',
-			bio: '',
-			name: '',
-			username: '',
-		};
-	return JSON.parse(storedValues);
-}
-
 function Form() {
-	const [values, setValues] = useState(getFormValues);
+	const [values, setValues] = useState({
+		email: '',
+		bio: '',
+		name: '',
+		username: '',
+	});
 	const [newpassword, setNewPassword] = useState('');
 	const [reppassword, setRepPassword] = useState('');
 	const [isHover, setIsHover] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
+
 	const handleMouseEnter = () => {
 		setIsHover(true);
 	};
@@ -40,6 +34,7 @@ function Form() {
 	const handleMouseUpPassword = (event) => {
 		event.preventDefault();
 	};
+
 	const buttonStyle = {
 		marginTop: '1.5rem',
 		padding: '0.6rem',
@@ -56,10 +51,6 @@ function Form() {
 		backgroundColor: isHover ? '#4640ad' : '#6c63ff',
 	};
 
-	useEffect(() => {
-		localStorage.setItem('form', JSON.stringify(values));
-	}, [values]);
-
 	function handleSubmit(event) {
 		event.preventDefault();
 		alert('Form was submitted');
@@ -71,6 +62,7 @@ function Form() {
 			[event.target.name]: event.target.value,
 		}));
 	}
+
 	return (
 		<main>
 			<Typography
@@ -196,7 +188,7 @@ function Form() {
 					</InputLabel>
 					<OutlinedInput
 						id='outlined-adornment-reppassword'
-						label='Re=Type Password'
+						label='Re-Type Password'
 						name='reppassword'
 						placeholder='Re-Type Password'
 						type={showPassword ? 'text' : 'password'}
