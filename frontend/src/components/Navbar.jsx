@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import './Navbar.css';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom'; // Import useNavigate for redirect
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { AuthContext } from '../Pages/Context';
@@ -8,9 +8,10 @@ import LoginBtn from './LoginBtn';
 import { Menu, MenuItem, IconButton } from '@mui/material';
 
 export const Navbar = () => {
-	const { currentUser } = useContext(AuthContext);
+	const { currentUser, logout } = useContext(AuthContext); // Get the logout function from context
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);
+	const navigate = useNavigate(); // Get navigate function to redirect
 
 	const handleLinkClick = () => {
 		setMenuOpen(false);
@@ -22,6 +23,25 @@ export const Navbar = () => {
 
 	const handleMenuClose = () => {
 		setAnchorEl(null);
+	};
+
+	const handleLogout = async () => {
+		try {
+			const response = await fetch('http://localhost:3000/logout', {
+				method: 'POST',
+				credentials: 'include',
+			});
+
+			if (!response.ok) {
+				throw new Error('Failed to log out');
+			}
+
+			logout();
+			setMenuOpen(false);
+			navigate('/');
+		} catch (err) {
+			console.error('Logout error:', err);
+		}
 	};
 
 	return (
@@ -59,7 +79,7 @@ export const Navbar = () => {
 					</NavLink>
 				</li>
 
-				{/* Conditionally Login */}
+				{/* Conditionally show menu items if the user is logged in */}
 				{currentUser?.name && (
 					<>
 						<li>
@@ -118,7 +138,7 @@ export const Navbar = () => {
 									</NavLink>
 								</MenuItem>
 								<MenuItem
-									onClick={handleMenuClose}
+									onClick={handleLogout} // Call the backend logout route
 									sx={{
 										textAlign: 'center',
 										'&:hover': {
@@ -126,12 +146,7 @@ export const Navbar = () => {
 										},
 									}}
 								>
-									<NavLink
-										to='/Logout'
-										className='dropdown-link'
-									>
-										Logout
-									</NavLink>
+									Logout
 								</MenuItem>
 							</Menu>
 						</li>

@@ -71,6 +71,21 @@ export const setupRoutes = (app, connection, session) => {
 		}
 	});
 
+	// Backend logout route
+	app.post('/logout', (req, res) => {
+		if (req.session.user) {
+			req.session.destroy((err) => {
+				if (err) {
+					return res.status(500).json({ message: 'Failed to log out' });
+				}
+				res.clearCookie('connect.sid'); // Clear session cookie (if needed)
+				res.json({ message: 'Logged out successfully' });
+			});
+		} else {
+			res.status(400).json({ message: 'No user is logged in' });
+		}
+	});
+
 	// Register Route
 	app.post('/register', async (req, res) => {
 		const { name, email, password } = req.body;
