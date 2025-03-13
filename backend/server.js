@@ -13,7 +13,6 @@ const url = process.env.MYSQL_URL;
 const connection = mysql.createPool(url);
 const sessionStore = new MySQLStore({}, connection);
 const app = express();
-
 const corsOptions = {
 	origin: 'http://localhost:5173',
 	credentials: true,
@@ -35,13 +34,11 @@ app.use(
 	})
 );
 
-// Initialize Database (create tables and insert test data)
 const initDb = async () => {
 	try {
 		await artist.createTable(connection);
 		await artwork.createTable(connection);
 		await users.createTable(connection);
-
 		await artist.createTestData(connection);
 		await artwork.createTestData(connection);
 		await users.createTestData(connection);
@@ -54,7 +51,6 @@ initDb();
 artist.setupRoutes(app);
 artwork.setupRoutes(app);
 users.setupRoutes(app, connection, session);
-
 app.use((err, req, res, next) => {
 	console.error('Unhandled Error:', err);
 	res.status(500).json({ message: 'Internal Server Error' });
@@ -62,7 +58,6 @@ app.use((err, req, res, next) => {
 
 app.use(express.static('public'));
 
-//Start the server//
 const port = 3000;
 app.listen(port, () => {
 	console.log(`Server is running on http://localhost:${port}`);

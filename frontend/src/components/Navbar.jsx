@@ -1,17 +1,17 @@
 import React, { useContext, useState } from 'react';
 import './Navbar.css';
-import { Link, NavLink, useNavigate } from 'react-router-dom'; // Import useNavigate for redirect
-import MenuIcon from '@mui/icons-material/Menu';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import MenuIcon from '@mui/icons-material/Menu'; // Add this line
 import { AuthContext } from '../Pages/Context';
 import LoginBtn from './LoginBtn';
 import { Menu, MenuItem, IconButton } from '@mui/material';
 
 export const Navbar = () => {
-	const { currentUser, logout } = useContext(AuthContext); // Get the logout function from context
+	const { currentUser, logout } = useContext(AuthContext);
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);
-	const navigate = useNavigate(); // Get navigate function to redirect
+	const navigate = useNavigate();
 
 	const handleLinkClick = () => {
 		setMenuOpen(false);
@@ -138,7 +138,7 @@ export const Navbar = () => {
 									</NavLink>
 								</MenuItem>
 								<MenuItem
-									onClick={handleLogout} // Call the backend logout route
+									onClick={handleLogout}
 									sx={{
 										textAlign: 'center',
 										'&:hover': {

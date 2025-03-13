@@ -71,14 +71,14 @@ export const setupRoutes = (app, connection, session) => {
 		}
 	});
 
-	// Backend logout route
+	// Logout Route
 	app.post('/logout', (req, res) => {
 		if (req.session.user) {
 			req.session.destroy((err) => {
 				if (err) {
 					return res.status(500).json({ message: 'Failed to log out' });
 				}
-				res.clearCookie('connect.sid'); // Clear session cookie (if needed)
+				res.clearCookie('connect.sid');
 				res.json({ message: 'Logged out successfully' });
 			});
 		} else {
@@ -113,7 +113,7 @@ export const setupRoutes = (app, connection, session) => {
 			);
 			const newUser = newUserResult[0];
 
-			// Store user in session//
+			// Store user in session
 			req.session.user = {
 				id: newUser.id,
 				name: newUser.name,
