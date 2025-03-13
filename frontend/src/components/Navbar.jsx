@@ -2,15 +2,26 @@ import React, { useContext, useState } from 'react';
 import './Navbar.css';
 import { Link, NavLink } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
-import { AuthContext } from '../Pages/Context'; // Import the AuthContext
-import LoginBtn from './LoginBtn';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { AuthContext } from '../Pages/Context';
+import LoginBtn from './LoginBtn';
+import { Menu, MenuItem, IconButton } from '@mui/material';
 
 export const Navbar = () => {
-	const { currentUser } = useContext(AuthContext); // Access the currentUser from context
+	const { currentUser } = useContext(AuthContext);
 	const [menuOpen, setMenuOpen] = useState(false);
+	const [anchorEl, setAnchorEl] = useState(null);
+
 	const handleLinkClick = () => {
 		setMenuOpen(false);
+	};
+
+	const handleAccountClick = (event) => {
+		setAnchorEl(event.currentTarget);
+	};
+
+	const handleMenuClose = () => {
+		setAnchorEl(null);
 	};
 
 	return (
@@ -48,7 +59,7 @@ export const Navbar = () => {
 					</NavLink>
 				</li>
 
-				{/* Conditionally render based on user status */}
+				{/* Conditionally Login */}
 				{currentUser?.name && (
 					<>
 						<li>
@@ -67,18 +78,65 @@ export const Navbar = () => {
 								Projects
 							</NavLink>
 						</li>
-						<li>
-							<NavLink
-								to='/Account'
-								onClick={handleLinkClick}
+						<li className='account'>
+							<IconButton onClick={handleAccountClick}>
+								<AccountCircleIcon style={{ color: 'black', fontSize: '125%' }} />
+							</IconButton>
+
+							{/* Drop Down Menu */}
+							<Menu
+								anchorEl={anchorEl}
+								open={Boolean(anchorEl)}
+								onClose={handleMenuClose}
+								anchorOrigin={{
+									vertical: 'bottom',
+									horizontal: 'right',
+								}}
+								transformOrigin={{
+									vertical: 'top',
+									horizontal: 'right',
+								}}
+								sx={{
+									width: '160px',
+									padding: '0px',
+								}}
 							>
-								<AccountCircleIcon />
-							</NavLink>
+								<MenuItem
+									onClick={handleMenuClose}
+									sx={{
+										textAlign: 'center',
+										'&:hover': {
+											backgroundColor: 'transparent',
+										},
+									}}
+								>
+									<NavLink
+										to='/Account'
+										className='dropdown-link'
+									>
+										Account
+									</NavLink>
+								</MenuItem>
+								<MenuItem
+									onClick={handleMenuClose}
+									sx={{
+										textAlign: 'center',
+										'&:hover': {
+											backgroundColor: 'transparent',
+										},
+									}}
+								>
+									<NavLink
+										to='/Logout'
+										className='dropdown-link'
+									>
+										Logout
+									</NavLink>
+								</MenuItem>
+							</Menu>
 						</li>
 					</>
 				)}
-
-				{/* Show Login button if no user is signed in */}
 				<li style={{ marginTop: 6 }}>{!currentUser?.name && <LoginBtn />}</li>
 			</ul>
 		</nav>
