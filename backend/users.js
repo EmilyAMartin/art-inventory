@@ -78,7 +78,7 @@ export const setupRoutes = (app, connection, session) => {
 				if (err) {
 					return res.status(500).json({ message: 'Failed to log out' });
 				}
-				res.clearCookie('connect.sid');
+				res.clearCookie('connect.sid'); // Clear the session cookie
 				res.json({ message: 'Logged out successfully' });
 			});
 		} else {

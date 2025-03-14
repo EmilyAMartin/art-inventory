@@ -47,19 +47,22 @@ const LoginBtn = () => {
 			});
 
 			if (response.ok) {
-				const userResponse = await fetch('http://localhost:3000/profile', {
-					method: 'GET',
-					credentials: 'include',
-				});
+				// Wait for a brief moment before making the profile request
+				setTimeout(async () => {
+					const userResponse = await fetch('http://localhost:3000/profile', {
+						method: 'GET',
+						credentials: 'include',
+					});
 
-				if (userResponse.ok) {
-					const userData = await userResponse.json();
-					setCurrentUser(userData.user);
-					handleClose();
-					alert('Logged in successfully!');
-				} else {
-					setError('Error fetching user profile');
-				}
+					if (userResponse.ok) {
+						const userData = await userResponse.json();
+						setCurrentUser(userData.user);
+						handleClose();
+						alert('Logged in successfully!');
+					} else {
+						setError('Error fetching user profile');
+					}
+				}, 500); // 500ms delay
 			} else {
 				const data = await response.json();
 				setError(data.message || 'Login failed');

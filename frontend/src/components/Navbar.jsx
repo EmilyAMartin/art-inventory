@@ -2,13 +2,13 @@ import React, { useContext, useState } from 'react';
 import './Navbar.css';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import MenuIcon from '@mui/icons-material/Menu'; // Add this line
+import MenuIcon from '@mui/icons-material/Menu';
 import { AuthContext } from '../Pages/Context';
 import LoginBtn from './LoginBtn';
 import { Menu, MenuItem, IconButton } from '@mui/material';
 
 export const Navbar = () => {
-	const { currentUser, logout } = useContext(AuthContext);
+	const { currentUser } = useContext(AuthContext);
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const navigate = useNavigate();
@@ -27,18 +27,23 @@ export const Navbar = () => {
 
 	const handleLogout = async () => {
 		try {
+			// Call the backend logout API
 			const response = await fetch('http://localhost:3000/logout', {
 				method: 'POST',
-				credentials: 'include',
+				credentials: 'include', // Make sure cookies are included in the request
 			});
 
 			if (!response.ok) {
 				throw new Error('Failed to log out');
 			}
 
-			logout();
+			// Optionally clear any local storage or frontend state
+			// localStorage.removeItem('currentUser'); // Optional, if you store it in localStorage
+
 			setMenuOpen(false);
-			navigate('/');
+
+			// Redirect and reload the page to force the state change
+			window.location.href = '/'; // This will reload the page and redirect to the home page
 		} catch (err) {
 			console.error('Logout error:', err);
 		}
