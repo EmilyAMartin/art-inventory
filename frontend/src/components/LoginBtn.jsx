@@ -26,12 +26,9 @@ const LoginBtn = () => {
 
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
-
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 	const handleMouseDownPassword = (event) => event.preventDefault();
 	const handleMouseUpPassword = (event) => event.preventDefault();
-
-	// API Request to Backend for login
 	const handleLogin = async (event) => {
 		event.preventDefault();
 		setError('');
@@ -47,7 +44,6 @@ const LoginBtn = () => {
 			});
 
 			if (response.ok) {
-				// Wait for a brief moment before making the profile request
 				setTimeout(async () => {
 					const userResponse = await fetch('http://localhost:3000/profile', {
 						method: 'GET',
@@ -62,7 +58,7 @@ const LoginBtn = () => {
 					} else {
 						setError('Error fetching user profile');
 					}
-				}, 500); // 500ms delay
+				}, 500);
 			} else {
 				const data = await response.json();
 				setError(data.message || 'Login failed');

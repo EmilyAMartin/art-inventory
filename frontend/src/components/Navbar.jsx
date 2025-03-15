@@ -103,6 +103,14 @@ export const Navbar = () => {
 								Projects
 							</NavLink>
 						</li>
+						<li>
+							<NavLink
+								to='/Favorites'
+								onClick={handleLinkClick}
+							>
+								Favorites
+							</NavLink>
+						</li>
 						<li className='account'>
 							<IconButton onClick={handleAccountClick}>
 								<AccountCircleIcon style={{ color: 'black', fontSize: '125%' }} />

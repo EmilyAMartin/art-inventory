@@ -6,6 +6,7 @@ import Artwork from './Pages/Artwork';
 import Account from './Pages/Account';
 import Gallery from './Pages/Gallery';
 import Projects from './Pages/Projects';
+import Favorites from './Pages/Favorites';
 import { AuthContext } from './Pages/Context';
 import { useEffect, useState } from 'react';
 
@@ -56,6 +57,10 @@ function App() {
 					<Route
 						path='/Projects'
 						element={<Projects />}
+					/>
+					<Route
+						path='/Favorites'
+						element={<Favorites />}
 					/>
 					<Route
 						path='/Gallery'
