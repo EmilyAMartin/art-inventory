@@ -32,67 +32,25 @@ const Gallery = () => {
 
 	const fetchDataByKeyword = async () => {
 		setIsLoading(true);
-		try {
-			const response = await axios.get(`${BASE_URL}/search?q=${searchQuery}`);
-			const data = response.data.data;
-
-			// Use Promise.all to fetch details and validate image
-			const fetchedData = await Promise.all(
-				data.map(async (art) => {
-					const artDetail = await fetchDataById(art.id);
-
-					// Log the fetched artwork for debugging
-					console.log('Fetched artwork details:', artDetail);
-
-					// Check if the image is valid
-					const imageValid = await isImageValid(artDetail.imageUrl);
-
-					if (imageValid) {
-						return artDetail; // Return artwork if image is valid
-					}
-					return null; // Return null if image is invalid
-				})
-			);
-
-			// Filter out null values (i.e., artworks with invalid images)
-			const validArtwork = fetchedData.filter((art) => art !== null);
-
-			setArtwork(validArtwork); // Set valid artworks in the state
-			setPage(0);
-		} catch (error) {
-			setError(error.message);
-		} finally {
-			setIsLoading(false);
-		}
+		const response = await axios.get(`${BASE_URL}/search?q=${searchQuery}`);
+		const data = response.data.data;
+		const fetchedData = await Promise.all(
+			data.map(async (art) => {
+				return await fetchDataById(art.id);
+			})
+		);
+		setArtwork(fetchedData);
+		setPage(0);
+		setIsLoading(false);
 	};
-
-	const isImageValid = async (imageUrl) => {
-		if (!imageUrl) {
-			console.error('Image URL is missing or invalid:', imageUrl);
-			return false; // Return false if the image URL is missing
-		}
-
-		try {
-			const response = await axios.get(imageUrl, {
-				validateStatus: (status) => status === 200, // Only accept 200 responses
-			});
-			return response.status === 200; // Return true if the image is valid (200 OK)
-		} catch (error) {
-			console.error('Error loading image:', error);
-			return false; // Return false if the image fails to load
-		}
-	};
-
 	const fetchDataById = async (id) => {
 		const response = await axios.get(`${BASE_URL}/${id}`);
-		return response.data.data; // Assuming `data` contains the `imageUrl`
+		return response.data.data;
 	};
-
 	const handleReset = () => {
 		setPage(1);
 		setSearchQuery('');
 	};
-
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -103,10 +61,6 @@ const Gallery = () => {
 					const isFavorite = favoritesList?.some((fav) => fav.id === art.id);
 					return { ...art, favorite: isFavorite };
 				});
-
-				// Log fetched data before setting state
-				console.log('Fetched data with favorites:', dataWithFavorites);
-
 				setArtwork(dataWithFavorites);
 				setError(null);
 			} catch (error) {
@@ -118,7 +72,6 @@ const Gallery = () => {
 				setIsLoading(false);
 			}
 		};
-
 		if (page > 0) {
 			fetchData();
 		}
@@ -165,12 +118,12 @@ const Gallery = () => {
 					Reset
 				</Button>
 			</div>
+
 			<div className='galley-artwork'>
 				{isLoading === true && <div>Loading...</div>}
 				<Grid2
 					style={{
-						marginTop: 50,
-						marginBottom: 50,
+						marginTop: 25,
 						display: 'flex',
 						flexDirection: 'row',
 						justifyContent: 'space-between',
@@ -226,5 +179,4 @@ const Gallery = () => {
 		</div>
 	);
 };
-
 export default Gallery;
