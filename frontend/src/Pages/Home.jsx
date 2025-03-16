@@ -1,11 +1,28 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { AuthContext } from './Context'; // Import your AuthContext
 import SignUpBtn from '../components/SignUpBtn';
 import LoginBtn from '../components/LoginBtn';
 
+import { Grid2, Container } from '@mui/material';
+import ArtworkPost from '../components/ArtworkPost';
+
 const Home = () => {
 	// Get currentUser from AuthContext
 	const { currentUser } = useContext(AuthContext);
+
+	//New Test Section For Post//
+	const [comments, setComments] = useState([]);
+
+	const handleCommentSubmit = (comment) => {
+		setComments([...comments, comment]);
+	};
+
+	const artwork = {
+		title: 'Starry Night',
+		artist: 'Vincent van Gogh',
+		imageUrl: 'https://www.example.com/starry-night.jpg',
+	};
+	const posts = new Array(5).fill(artwork);
 
 	return (
 		<div className='App'>
@@ -35,6 +52,30 @@ const Home = () => {
 					</div>
 				</div>
 			</div>
+			{/* New Section */}
+			<Container sx={{ marginTop: '20px' }}>
+				<Grid2
+					container
+					spacing={4}
+					justifyContent='center'
+				>
+					{posts.map((artwork, index) => (
+						<Grid2
+							item
+							xs={12}
+							sm={6}
+							md={4}
+							lg={2}
+							key={index}
+						>
+							<ArtworkPost
+								artwork={artwork}
+								onSubmitComment={handleCommentSubmit}
+							/>
+						</Grid2>
+					))}
+				</Grid2>
+			</Container>
 		</div>
 	);
 };

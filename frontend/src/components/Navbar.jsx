@@ -51,6 +51,7 @@ export const Navbar = () => {
 				<img
 					src='./Images/Logo.png'
 					alt='logo portfolio'
+					width='85%'
 				/>
 			</Link>
 			<div
@@ -147,6 +148,7 @@ export const Navbar = () => {
 									onClick={handleLogout}
 									sx={{
 										textAlign: 'center',
+										justifyContent: 'center',
 										'&:hover': {
 											backgroundColor: 'transparent',
 										},
