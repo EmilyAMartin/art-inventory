@@ -11,12 +11,10 @@ const Favorites = () => {
 	useEffect(() => {
 		const storedFavorites = localStorage.getItem('favoritesList');
 		if (storedFavorites) {
-			// Parse the JSON data from localStorage
-			console.log('Loaded from localStorage:', storedFavorites); // Debugging
+			console.log('Loaded from localStorage:', storedFavorites);
 			setArtwork(JSON.parse(storedFavorites));
-			setLoading(false); // Stop loading if favorites are loaded from localStorage
+			setLoading(false);
 		} else {
-			// Fetch data from API if no favorites in localStorage
 			const fetchData = async () => {
 				setLoading(true);
 				try {
@@ -25,7 +23,7 @@ const Favorites = () => {
 						throw new Error('Network response was not ok');
 					}
 					const data = await response.json();
-					console.log('Fetched data from API:', data); // Debugging
+					console.log('Fetched data from API:', data);
 					setArtwork(data);
 				} catch (err) {
 					setError(err);
@@ -38,26 +36,21 @@ const Favorites = () => {
 		}
 	}, []);
 
-	// Update local storage and state when favorite is updated (or unfavorited)
 	const handleFavUpdate = (updatedArtwork) => {
 		setArtwork((prevArtwork) => {
-			// Update the artwork list by either updating or removing the artwork based on favorited status
 			const updatedArtworkList = prevArtwork
-				.filter((art) => art.id !== updatedArtwork.id || updatedArtwork.favorite) // Remove if unfavorited
+				.filter((art) => art.id !== updatedArtwork.id || updatedArtwork.favorite)
 				.map((art) =>
 					art.id === updatedArtwork.id
 						? { ...art, favorite: updatedArtwork.favorite }
 						: art
 				);
-
-			// Update localStorage with new artwork data under 'favoritesList' key
 			localStorage.setItem('favoritesList', JSON.stringify(updatedArtworkList));
 
 			return updatedArtworkList;
 		});
 	};
 
-	// Debugging Loading State
 	console.log('Loading state:', loading);
 	if (loading) {
 		return <div>Loading artwork...</div>;
@@ -90,7 +83,6 @@ const Favorites = () => {
 				marginTop: 25,
 			}}
 		>
-			{/* First Grid */}
 			<Grid2
 				style={{
 					marginTop: 25,

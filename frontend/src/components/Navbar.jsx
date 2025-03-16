@@ -27,23 +27,16 @@ export const Navbar = () => {
 
 	const handleLogout = async () => {
 		try {
-			// Call the backend logout API
 			const response = await fetch('http://localhost:3000/logout', {
 				method: 'POST',
-				credentials: 'include', // Make sure cookies are included in the request
+				credentials: 'include',
 			});
 
 			if (!response.ok) {
 				throw new Error('Failed to log out');
 			}
-
-			// Optionally clear any local storage or frontend state
-			// localStorage.removeItem('currentUser'); // Optional, if you store it in localStorage
-
 			setMenuOpen(false);
-
-			// Redirect and reload the page to force the state change
-			window.location.href = '/'; // This will reload the page and redirect to the home page
+			window.location.href = '/';
 		} catch (err) {
 			console.error('Logout error:', err);
 		}
