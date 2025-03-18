@@ -3,7 +3,7 @@ import { AuthContext } from './Context'; // Import your AuthContext
 import SignUpBtn from '../components/SignUpBtn';
 import LoginBtn from '../components/LoginBtn';
 
-import { Grid2, Container, Typography } from '@mui/material';
+import { Grid2, Typography } from '@mui/material';
 import ArtworkPost from '../components/ArtworkPost';
 
 const Home = () => {
@@ -18,9 +18,9 @@ const Home = () => {
 	};
 
 	const artwork = {
-		title: 'Starry Night',
-		artist: 'Vincent van Gogh',
-		imageUrl: 'https://www.example.com/starry-night.jpg',
+		title: 'Untitled',
+		artist: 'Emily Martin',
+		imageUrl: 'Images/13.jpg',
 	};
 	const posts = new Array(5).fill(artwork);
 
@@ -52,31 +52,36 @@ const Home = () => {
 					</div>
 				</div>
 			</div>
+
 			{/* New Section */}
-			<h2>What's new on Portfolio</h2>
-			<Container sx={{ marginTop: '20px' }}>
-				<Grid2
-					container
-					spacing={4}
-					justifyContent='center'
-				>
-					{posts.map((artwork, index) => (
-						<Grid2
-							item
-							xs={12}
-							sm={6}
-							md={4}
-							lg={2}
-							key={index}
-						>
-							<ArtworkPost
-								artwork={artwork}
-								onSubmitComment={handleCommentSubmit}
-							/>
-						</Grid2>
-					))}
-				</Grid2>
-			</Container>
+			<Typography>What's new on Portfolio</Typography>
+			<Grid2
+				style={{
+					marginTop: 25,
+					marginBottom: 25,
+					display: 'flex',
+					flexDirection: 'row',
+					justifyContent: 'center',
+					gap: '2rem',
+				}}
+				spacing={8}
+			>
+				{posts.map((artwork, index) => (
+					<Grid2
+						item
+						xs={12}
+						sm={6}
+						md={4}
+						lg={2}
+						key={index}
+					>
+						<ArtworkPost
+							artwork={artwork}
+							onSubmitComment={handleCommentSubmit}
+						/>
+					</Grid2>
+				))}
+			</Grid2>
 		</div>
 	);
 };

@@ -11,10 +11,12 @@ import {
 	IconButton,
 } from '@mui/material';
 import CommentIcon from '@mui/icons-material/Comment';
+import Avatar from '@mui/material/Avatar';
 
 const ArtworkPost = ({ artwork, onSubmitComment }) => {
 	const [comment, setComment] = useState('');
 	const [isCommentSectionVisible, setIsCommentSectionVisible] = useState(false);
+	const [comments, setComments] = useState([]); // State to hold all comments
 
 	const handleCommentChange = (event) => {
 		setComment(event.target.value);
@@ -22,8 +24,12 @@ const ArtworkPost = ({ artwork, onSubmitComment }) => {
 
 	const handleSubmitComment = () => {
 		if (comment.trim()) {
-			onSubmitComment(comment);
-			setComment('');
+			const newComment = {
+				text: comment,
+				profilePicture: 'https://www.example.com/default-profile-pic.jpg', // Placeholder profile picture URL
+			};
+			setComments((prevComments) => [...prevComments, newComment]); // Add the new comment to the list
+			setComment(''); // Reset comment input
 		}
 	};
 
@@ -32,10 +38,11 @@ const ArtworkPost = ({ artwork, onSubmitComment }) => {
 	};
 
 	return (
-		<Card sx={{ maxWidth: 400, margin: '20px auto', borderRadius: 2 }}>
+		<Card sx={{ maxWidth: 250 }}>
 			<CardMedia
 				component='img'
 				height='250'
+				width='250'
 				image={artwork.imageUrl}
 				alt={artwork.title}
 			/>
@@ -93,6 +100,35 @@ const ArtworkPost = ({ artwork, onSubmitComment }) => {
 							>
 								Submit Comment
 							</Button>
+						</Box>
+					</Box>
+				)}
+
+				{/* Display List of Comments */}
+				{comments.length > 0 && (
+					<Box sx={{ marginTop: '20px' }}>
+						<Typography variant='h6'>All Comments:</Typography>
+						<Box sx={{ marginTop: '10px' }}>
+							{comments.map((comment, index) => (
+								<Box
+									key={index}
+									display='flex'
+									alignItems='center'
+									sx={{ marginBottom: '10px' }}
+								>
+									<Avatar
+										alt='Profile Picture'
+										src={comment.profilePicture} // Profile picture URL
+										sx={{ width: 30, height: 30, marginRight: '10px' }}
+									/>
+									<Typography
+										variant='body2'
+										color='text.secondary'
+									>
+										{comment.text}
+									</Typography>
+								</Box>
+							))}
 						</Box>
 					</Box>
 				)}
