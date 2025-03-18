@@ -9,14 +9,15 @@ import {
 	Box,
 	Divider,
 	IconButton,
+	Badge,
+	Avatar,
 } from '@mui/material';
 import CommentIcon from '@mui/icons-material/Comment';
-import Avatar from '@mui/material/Avatar';
 
-const ArtworkPost = ({ artwork, onSubmitComment }) => {
+const ArtworkPost = ({ artwork }) => {
 	const [comment, setComment] = useState('');
+	const [comments, setComments] = useState([]);
 	const [isCommentSectionVisible, setIsCommentSectionVisible] = useState(false);
-	const [comments, setComments] = useState([]); // State to hold all comments
 
 	const handleCommentChange = (event) => {
 		setComment(event.target.value);
@@ -26,10 +27,11 @@ const ArtworkPost = ({ artwork, onSubmitComment }) => {
 		if (comment.trim()) {
 			const newComment = {
 				text: comment,
-				profilePicture: 'https://www.example.com/default-profile-pic.jpg', // Placeholder profile picture URL
+				profilePicture: 'https://www.example.com/default-profile-pic.jpg',
 			};
-			setComments((prevComments) => [...prevComments, newComment]); // Add the new comment to the list
-			setComment(''); // Reset comment input
+			setComments((prevComments) => [...prevComments, newComment]);
+			setComment('');
+			setIsCommentSectionVisible(false);
 		}
 	};
 
@@ -62,7 +64,6 @@ const ArtworkPost = ({ artwork, onSubmitComment }) => {
 				</Typography>
 				<Divider sx={{ margin: '10px 0' }} />
 
-				{/* Comment Bubble Icon */}
 				<Box
 					display='flex'
 					justifyContent='space-between'
@@ -70,13 +71,18 @@ const ArtworkPost = ({ artwork, onSubmitComment }) => {
 				>
 					<Typography variant='h6'>Comments</Typography>
 					<IconButton onClick={toggleCommentSection}>
-						<CommentIcon />
+						<Badge
+							badgeContent={comments.length}
+							color='primary'
+						>
+							<CommentIcon />
+						</Badge>
 					</IconButton>
 				</Box>
 
-				{/* Comment Section (Initially hidden) */}
 				{isCommentSectionVisible && (
 					<Box sx={{ marginTop: '10px' }}>
+						{/* Comment Input Box */}
 						<TextField
 							label='Write a comment'
 							variant='outlined'
@@ -101,35 +107,34 @@ const ArtworkPost = ({ artwork, onSubmitComment }) => {
 								Submit Comment
 							</Button>
 						</Box>
-					</Box>
-				)}
 
-				{/* Display List of Comments */}
-				{comments.length > 0 && (
-					<Box sx={{ marginTop: '20px' }}>
-						<Typography variant='h6'>All Comments:</Typography>
-						<Box sx={{ marginTop: '10px' }}>
-							{comments.map((comment, index) => (
-								<Box
-									key={index}
-									display='flex'
-									alignItems='center'
-									sx={{ marginBottom: '10px' }}
-								>
-									<Avatar
-										alt='Profile Picture'
-										src={comment.profilePicture} // Profile picture URL
-										sx={{ width: 30, height: 30, marginRight: '10px' }}
-									/>
-									<Typography
-										variant='body2'
-										color='text.secondary'
-									>
-										{comment.text}
-									</Typography>
+						{comments.length > 0 && (
+							<Box sx={{ marginTop: '20px' }}>
+								<Typography variant='h6'>All Comments:</Typography>
+								<Box sx={{ marginTop: '10px' }}>
+									{comments.map((comment, index) => (
+										<Box
+											key={index}
+											display='flex'
+											alignItems='center'
+											sx={{ marginBottom: '10px' }}
+										>
+											<Avatar
+												alt='Profile Picture'
+												src={comment.profilePicture}
+												sx={{ width: 30, height: 30, marginRight: '10px' }}
+											/>
+											<Typography
+												variant='body2'
+												color='text.secondary'
+											>
+												{comment.text}
+											</Typography>
+										</Box>
+									))}
 								</Box>
-							))}
-						</Box>
+							</Box>
+						)}
 					</Box>
 				)}
 			</CardContent>
