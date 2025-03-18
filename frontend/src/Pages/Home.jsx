@@ -3,7 +3,7 @@ import { AuthContext } from './Context'; // Import your AuthContext
 import SignUpBtn from '../components/SignUpBtn';
 import LoginBtn from '../components/LoginBtn';
 
-import { Grid2, Container } from '@mui/material';
+import { Grid2, Container, Typography } from '@mui/material';
 import ArtworkPost from '../components/ArtworkPost';
 
 const Home = () => {
@@ -53,6 +53,7 @@ const Home = () => {
 				</div>
 			</div>
 			{/* New Section */}
+			<h2>What's new on Portfolio</h2>
 			<Container sx={{ marginTop: '20px' }}>
 				<Grid2
 					container
