@@ -3,14 +3,15 @@ import { AuthContext } from './Context'; // Import your AuthContext
 import SignUpBtn from '../components/SignUpBtn';
 import LoginBtn from '../components/LoginBtn';
 
-import { Grid2, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import ArtworkPost from '../components/ArtworkPost';
+import Slider from 'react-slick'; // Import the carousel component
 
 const Home = () => {
 	// Get currentUser from AuthContext
 	const { currentUser } = useContext(AuthContext);
 
-	//New Test Section For Post//
+	// New Test Section For Post
 	const [comments, setComments] = useState([]);
 
 	const handleCommentSubmit = (comment) => {
@@ -22,7 +23,34 @@ const Home = () => {
 		artist: 'Emily Martin',
 		imageUrl: 'Images/13.jpg',
 	};
-	const posts = new Array(6).fill(artwork);
+	const posts = new Array(10).fill(artwork);
+
+	// Carousel settings
+	const settings = {
+		dots: true,
+		infinite: true,
+		speed: 500,
+		slidesToShow: 3,
+		slidesToScroll: 1,
+		centerMode: true, // Centers the active slide, optional
+		centerPadding: '0', // Optional: removes extra padding around the center slide
+		responsive: [
+			{
+				breakpoint: 1024,
+				settings: {
+					slidesToShow: 2,
+					slidesToScroll: 1,
+				},
+			},
+			{
+				breakpoint: 600,
+				settings: {
+					slidesToShow: 1,
+					slidesToScroll: 1,
+				},
+			},
+		],
+	};
 
 	return (
 		<div className='App'>
@@ -55,33 +83,45 @@ const Home = () => {
 
 			{/* New Section */}
 			<Typography>What's new on Portfolio</Typography>
-			<Grid2
-				style={{
-					marginTop: 25,
-					marginBottom: 25,
-					display: 'flex',
-					flexDirection: 'row',
-					justifyContent: 'center',
-					gap: '2rem',
-				}}
-				spacing={8}
-			>
+			{/* Carousel component */}
+			<Slider {...settings}>
 				{posts.map((artwork, index) => (
-					<Grid2
-						item
-						xs={12}
-						sm={6}
-						md={4}
-						lg={2}
+					<div
 						key={index}
+						style={{ padding: '0 1rem' }}
 					>
+						{' '}
+						{/* Add horizontal padding to each slide */}
 						<ArtworkPost
 							artwork={artwork}
 							onSubmitComment={handleCommentSubmit}
 						/>
-					</Grid2>
+					</div>
 				))}
-			</Grid2>
+			</Slider>
+			<br />
+			<br />
+			<br />
+			<Typography>Trending on Portfolio</Typography>
+			{/* Carousel component */}
+			<Slider {...settings}>
+				{posts.map((artwork, index) => (
+					<div
+						key={index}
+						style={{ padding: '0 1rem' }}
+					>
+						{' '}
+						{/* Add horizontal padding to each slide */}
+						<ArtworkPost
+							artwork={artwork}
+							onSubmitComment={handleCommentSubmit}
+						/>
+					</div>
+				))}
+			</Slider>
+			<br />
+			<br />
+			<br />
 		</div>
 	);
 };

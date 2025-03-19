@@ -9,6 +9,8 @@ import Projects from './Pages/Projects';
 import Favorites from './Pages/Favorites';
 import { AuthContext } from './Pages/Context';
 import { useEffect, useState } from 'react';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 function App() {
 	const [currentUser, setCurrentUser] = useState(null);
