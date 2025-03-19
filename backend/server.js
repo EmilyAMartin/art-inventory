@@ -1,5 +1,4 @@
 import 'dotenv/config';
-import * as artist from './artist.js';
 import * as artwork from './artwork.js';
 import * as users from './users.js';
 
@@ -36,10 +35,8 @@ app.use(
 
 const initDb = async () => {
 	try {
-		await artist.createTable(connection);
-		await artwork.createTable(connection);
 		await users.createTable(connection);
-		await artist.createTestData(connection);
+		await artwork.createTable(connection);
 		await artwork.createTestData(connection);
 		await users.createTestData(connection);
 	} catch (err) {
@@ -48,7 +45,6 @@ const initDb = async () => {
 };
 
 initDb();
-artist.setupRoutes(app);
 artwork.setupRoutes(app);
 users.setupRoutes(app, connection, session);
 app.use((err, req, res, next) => {

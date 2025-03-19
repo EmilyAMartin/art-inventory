@@ -88,7 +88,7 @@ const ArtworkPost = ({ artwork }) => {
 							variant='outlined'
 							fullWidth
 							multiline
-							rows={4}
+							rows={1}
 							value={comment}
 							onChange={handleCommentChange}
 							sx={{ marginBottom: '10px' }}

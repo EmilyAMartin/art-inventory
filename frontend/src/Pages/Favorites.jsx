@@ -68,7 +68,6 @@ const Favorites = () => {
 					marginTop: 25,
 				}}
 			>
-				<AddArtworkBtn />
 				<div>No Favorites Added</div>
 			</div>
 		);

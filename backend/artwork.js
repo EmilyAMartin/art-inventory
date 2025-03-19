@@ -14,7 +14,7 @@ export const createTable = () => {
       medium_display VARCHAR(255),
       credit_line VARCHAR(255),
       thumbnail JSON,
-      FOREIGN KEY (artist_id) REFERENCES artist(id)
+      FOREIGN KEY (artist_id) REFERENCES user(id)
     )
   `);
 };
@@ -54,9 +54,9 @@ export const setupRoutes = (app) => {
 	app.get('/artworks', (req, res) => {
 		server.query(
 			`SELECT artwork.id, artwork.title, artwork.date_end, artwork.image_path, artwork.place_of_origin, artwork.artwork_type_title, artwork.medium_display, artwork.credit_line, artwork.thumbnail, 
-        artist.artist_title AS artist 
+       users.name AS artist
       FROM artwork 
-      JOIN artist ON artwork.artist_id = artist.id`,
+      JOIN users ON artwork.artist_id = users.id`,
 			(error, results) => {
 				if (error) {
 					console.error(error);

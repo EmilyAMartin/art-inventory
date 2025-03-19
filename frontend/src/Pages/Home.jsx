@@ -22,7 +22,7 @@ const Home = () => {
 		artist: 'Emily Martin',
 		imageUrl: 'Images/13.jpg',
 	};
-	const posts = new Array(5).fill(artwork);
+	const posts = new Array(6).fill(artwork);
 
 	return (
 		<div className='App'>
