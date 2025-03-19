@@ -152,7 +152,7 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 				onMouseLeave={handleMouseLeave}
 				onClick={handleOpen}
 			>
-				Add New
+				Add New Artwork
 			</button>
 			<Modal
 				open={open}
