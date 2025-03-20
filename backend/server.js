@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import * as artwork from './artwork.js';
 import * as users from './users.js';
+import * as favorites from './favorites.js';
 
 import express from 'express';
 import mysql from 'mysql2/promise';
@@ -37,6 +38,7 @@ const initDb = async () => {
 	try {
 		await users.createTable(connection);
 		await artwork.createTable(connection);
+		await favorites.createFavoritesTable(connection);
 		await artwork.createTestData(connection);
 		await users.createTestData(connection);
 	} catch (err) {
@@ -47,6 +49,7 @@ const initDb = async () => {
 initDb();
 artwork.setupRoutes(app);
 users.setupRoutes(app, connection, session);
+favorites.setupFavoritesRoutes(app, connection, session);
 app.use((err, req, res, next) => {
 	console.error('Unhandled Error:', err);
 	res.status(500).json({ message: 'Internal Server Error' });

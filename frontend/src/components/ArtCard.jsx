@@ -26,10 +26,9 @@ const ArtCard = ({ id, art, handleFavUpdate }) => {
 	};
 
 	const handleFavClick = () => {
-		const updatedArtwork = { ...artwork };
-		updatedArtwork.favorite = !updatedArtwork.favorite;
+		const updatedArtwork = { ...artwork, favorite: !artwork.favorite };
 		setArtworkState(updatedArtwork);
-		handleFavUpdate(updatedArtwork);
+		handleFavUpdate(updatedArtwork.id, updatedArtwork.favorite);
 	};
 
 	return (
@@ -54,11 +53,7 @@ const ArtCard = ({ id, art, handleFavUpdate }) => {
 						onClick={handlePopClick}
 					/>
 					<Popover
-						sx={{
-							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'center',
-						}}
+						sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
 						id={id}
 						open={open}
 						anchorEl={anchorEl}
@@ -122,6 +117,7 @@ const ArtCard = ({ id, art, handleFavUpdate }) => {
 					</div>
 				</CardActionArea>
 			</Card>
+
 			<Card
 				className='card-back'
 				sx={{ maxWidth: 300, maxHeight: 600, display: 'flex' }}
@@ -136,49 +132,49 @@ const ArtCard = ({ id, art, handleFavUpdate }) => {
 						>
 							{art.title}
 						</Typography>
-						<br></br>
+						<br />
 						<Typography
 							variant='body2'
 							sx={{ color: 'text.secondary' }}
 						>
 							Artist: {art.artist_title}
 						</Typography>
-						<br></br>
+						<br />
 						<Typography
 							variant='body2'
 							sx={{ color: 'text.secondary' }}
 						>
 							Date: {art.date_end}
 						</Typography>
-						<br></br>
+						<br />
 						<Typography
 							variant='body2'
 							sx={{ color: 'text.secondary' }}
 						>
 							Place of Origin: {art.place_of_origin}
 						</Typography>
-						<br></br>
+						<br />
 						<Typography
 							variant='body2'
 							sx={{ color: 'text.secondary' }}
 						>
 							Type: {art.artwork_type_title}
 						</Typography>
-						<br></br>
+						<br />
 						<Typography
 							variant='body2'
 							sx={{ color: 'text.secondary' }}
 						>
 							Medium: {art.medium_display}
 						</Typography>
-						<br></br>
+						<br />
 						<Typography
 							variant='body2'
 							sx={{ color: 'text.secondary' }}
 						>
-							Description:{art?.thumbnail?.alt_text}
+							Description: {art?.thumbnail?.alt_text}
 						</Typography>
-						<br></br>
+						<br />
 						<Typography
 							variant='body2'
 							sx={{ color: 'text.secondary' }}
@@ -206,4 +202,5 @@ const ArtCard = ({ id, art, handleFavUpdate }) => {
 		</ReactCardFlip>
 	);
 };
+
 export default ArtCard;

@@ -1,25 +1,28 @@
 import { server } from './db.js';
 
-//Artwork Table//
-export const createTable = () => {
-	server.query(`
-    CREATE TABLE IF NOT EXISTS artwork (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      artist_id INT,
-      title VARCHAR(255),
-      date_end VARCHAR(50),
-      image_path VARCHAR(255),
-      place_of_origin VARCHAR(255),
-      artwork_type_title VARCHAR(255),
-      medium_display VARCHAR(255),
-      credit_line VARCHAR(255),
-      thumbnail JSON,
-      FOREIGN KEY (artist_id) REFERENCES user(id)
-    )
-  `);
+export const createTable = async (connection) => {
+	try {
+		await connection.query(`
+      CREATE TABLE IF NOT EXISTS artworks (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        artist_id INT,
+        title VARCHAR(255),
+        date_end VARCHAR(50),
+        image_path VARCHAR(255),
+        place_of_origin VARCHAR(255),
+        artwork_type_title VARCHAR(255),
+        medium_display VARCHAR(255),
+        credit_line VARCHAR(255),
+        thumbnail JSON,
+        FOREIGN KEY (artist_id) REFERENCES users(id) -- This line references the users table
+      );
+    `);
+		console.log('Artworks table created successfully.');
+	} catch (err) {
+		console.error('Error creating artworks table:', err);
+	}
 };
 
-//Artwork Data//
 export const createTestData = () => {
 	server.query(
 		`
@@ -48,9 +51,7 @@ export const createTestData = () => {
 	);
 };
 
-//Artwork Routes//
 export const setupRoutes = (app) => {
-	// Define artwork-specific routes here
 	app.get('/artworks', (req, res) => {
 		server.query(
 			`SELECT artwork.id, artwork.title, artwork.date_end, artwork.image_path, artwork.place_of_origin, artwork.artwork_type_title, artwork.medium_display, artwork.credit_line, artwork.thumbnail, 
