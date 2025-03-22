@@ -5,22 +5,24 @@ import { server } from './db.js';
 export const createTable = () => {
 	server.query(`
     CREATE TABLE IF NOT EXISTS users (
-       id INT NOT NULL AUTO_INCREMENT,
-       name VARCHAR(255) NOT NULL,
-       email VARCHAR(255) NOT NULL,
-       password_hash VARCHAR(255) NOT NULL,
-       PRIMARY KEY (id)
+      id INT NOT NULL AUTO_INCREMENT,
+      name VARCHAR(255) NOT NULL,
+      email VARCHAR(255) NOT NULL,
+      password_hash VARCHAR(255) NOT NULL,
+      username VARCHAR(255),  /* New column for username */
+      bio TEXT,               /* New column for bio */
+      PRIMARY KEY (id)
     )
   `);
 };
 
-// User Data
+// User Data - Sample test data for the users table
 export const createTestData = () => {
 	server.query(
 		`
-    INSERT INTO users (id, name, email, password_hash)
-    VALUES (1, "John Doe", "john@doe.com", "password_hash")
-  `,
+      INSERT INTO users (id, name, email, password_hash, username, bio)
+      VALUES (1, "John Doe", "john@doe.com", "password_hash", "johndoe", "This is John Doe's bio.")
+    `,
 		(err, result) => {
 			if (err) {
 				if (err.code === 'ER_DUP_ENTRY') {
@@ -62,7 +64,13 @@ export const setupRoutes = (app, connection, session) => {
 				return res.status(400).json({ message: 'Incorrect password' });
 			}
 
-			req.session.user = { id: user.id, name: user.name, email: user.email };
+			req.session.user = {
+				id: user.id,
+				name: user.name,
+				email: user.email,
+				username: user.username, // Include username
+				bio: user.bio, // Include bio
+			};
 			console.log('Logged in successfully:', req.session.user);
 			res.json({ message: 'Logged in successfully' });
 		} catch (err) {
@@ -88,7 +96,7 @@ export const setupRoutes = (app, connection, session) => {
 
 	// Register Route
 	app.post('/register', async (req, res) => {
-		const { name, email, password } = req.body;
+		const { name, email, password, username, bio } = req.body;
 
 		try {
 			const [existingUserResult] = await connection.query(
@@ -103,8 +111,8 @@ export const setupRoutes = (app, connection, session) => {
 			const hashedPassword = await bcrypt.hash(password, 10);
 
 			await connection.query(
-				'INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)',
-				[name, email, hashedPassword]
+				'INSERT INTO users (name, email, password_hash, username, bio) VALUES (?, ?, ?, ?, ?)',
+				[name, email, hashedPassword, username, bio]
 			);
 
 			const [newUserResult] = await connection.query(
@@ -118,6 +126,8 @@ export const setupRoutes = (app, connection, session) => {
 				id: newUser.id,
 				name: newUser.name,
 				email: newUser.email,
+				username: newUser.username,
+				bio: newUser.bio,
 			};
 
 			res.json({ message: 'Registered successfully' });
@@ -127,10 +137,59 @@ export const setupRoutes = (app, connection, session) => {
 		}
 	});
 
-	// Profile Route
+	// Profile Route - GET user info
 	app.get('/profile', (req, res) => {
 		if (req.session.user) {
 			res.json({ user: req.session.user });
+		} else {
+			res.status(401).json({ message: 'Not logged in' });
+		}
+	});
+
+	// Profile Route - UPDATE user info (username, bio)
+	app.put('/profile', async (req, res) => {
+		if (req.session.user) {
+			const { username, bio } = req.body;
+
+			try {
+				// Ensure that username and bio are provided in the request body
+				if (!username || !bio) {
+					return res.status(400).json({ message: 'Username and Bio are required' });
+				}
+
+				// Check if user exists
+				const [userResult] = await connection.query(
+					'SELECT id FROM users WHERE id = ?',
+					[req.session.user.id]
+				);
+
+				if (userResult.length === 0) {
+					return res.status(404).json({ message: 'User not found' });
+				}
+
+				// Update user profile details (username, bio)
+				await connection.query(
+					'UPDATE users SET username = ?, bio = ? WHERE id = ?',
+					[username, bio, req.session.user.id]
+				);
+
+				// Fetch the updated user data
+				const [updatedUserResult] = await connection.query(
+					'SELECT id, name, email, username, bio FROM users WHERE id = ?',
+					[req.session.user.id]
+				);
+
+				// Update session data
+				req.session.user = updatedUserResult[0];
+
+				res.json({
+					message: 'Profile updated successfully',
+					user: updatedUserResult[0],
+				});
+			} catch (err) {
+				console.error('Error updating user profile:', err);
+				res.status(500).json({ message: 'Internal Server Error' });
+			}
 		} else {
 			res.status(401).json({ message: 'Not logged in' });
 		}

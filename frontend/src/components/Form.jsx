@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
-import { TextField } from '@mui/material';
-import { Typography } from '@mui/material';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
+import React, { useState, useEffect } from 'react';
+import {
+	TextField,
+	Typography,
+	FormControl,
+	OutlinedInput,
+	InputLabel,
+	InputAdornment,
+	IconButton,
+} from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import FormControl from '@mui/material/FormControl';
+import axios from 'axios';
 
-function Form() {
+function Form({ userData }) {
 	const [values, setValues] = useState({
 		email: '',
 		bio: '',
@@ -18,22 +21,70 @@ function Form() {
 	});
 	const [newpassword, setNewPassword] = useState('');
 	const [reppassword, setRepPassword] = useState('');
-	const [isHover, setIsHover] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
+	const [isLoggedIn, setIsLoggedIn] = useState(true); // Track login status
 
-	const handleMouseEnter = () => {
-		setIsHover(true);
+	// Populate values when userData is available
+	useEffect(() => {
+		if (userData) {
+			setValues({
+				username: userData.username || '',
+				bio: userData.bio || '',
+				email: userData.email || '',
+				name: userData.name || '',
+			});
+		}
+
+		// Check if the user is logged in when the component mounts
+		const checkLoginStatus = async () => {
+			try {
+				const response = await axios.get('http://localhost:3000/profile', {
+					withCredentials: true, // Ensure cookies are sent
+				});
+				if (response.status === 200) {
+					setIsLoggedIn(true); // User is logged in
+				}
+			} catch (error) {
+				console.log('User is not logged in:', error);
+				setIsLoggedIn(false); // User is not logged in
+			}
+		};
+
+		checkLoginStatus();
+	}, [userData]);
+
+	const handleSubmit = async (event) => {
+		event.preventDefault();
+		console.log('Submitting form with values:', values); // Log form data
+
+		try {
+			const response = await axios.put('http://localhost:3000/profile', values, {
+				withCredentials: true, // Send credentials (cookies) with the request
+			});
+			console.log('Response:', response); // Log response for debugging
+			if (response.status === 200) {
+				alert('Profile updated successfully');
+			} else {
+				alert('Failed to update profile');
+			}
+		} catch (error) {
+			console.error('Error updating profile:', error);
+			alert(
+				'Error updating profile: ' +
+					(error.response?.data?.message || 'Something went wrong')
+			);
+		}
 	};
-	const handleMouseLeave = () => {
-		setIsHover(false);
+
+	const handleChange = (event) => {
+		setValues((previousValues) => ({
+			...previousValues,
+			[event.target.name]: event.target.value,
+		}));
 	};
+
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
-	const handleMouseDownPassword = (event) => {
-		event.preventDefault();
-	};
-	const handleMouseUpPassword = (event) => {
-		event.preventDefault();
-	};
+	const handleMouseDownPassword = (event) => event.preventDefault();
 
 	const buttonStyle = {
 		marginTop: '1.5rem',
@@ -48,26 +99,23 @@ function Form() {
 		cursor: 'pointer',
 		transition: '0.2s',
 		width: 150,
-		backgroundColor: isHover ? '#4640ad' : '#6c63ff',
+		backgroundColor: '#6c63ff',
 	};
 
-	function handleSubmit(event) {
-		event.preventDefault();
-		alert('Form was submitted');
-	}
-
-	function handleChange(event) {
-		setValues((previousValues) => ({
-			...previousValues,
-			[event.target.name]: event.target.value,
-		}));
+	if (!isLoggedIn) {
+		return (
+			<Typography
+				variant='h6'
+				style={{ textAlign: 'center' }}
+			>
+				You must be logged in to update your profile.
+			</Typography>
+		);
 	}
 
 	return (
 		<main>
 			<Typography
-				onChange={handleChange}
-				value={values.username}
 				variant='h6'
 				style={{
 					display: 'flex',
@@ -76,14 +124,16 @@ function Form() {
 					marginTop: 10,
 				}}
 			>
-				{''}
 				{values.username || 'Username'}
 			</Typography>
+
 			<form
 				style={{ display: 'flex', flexDirection: 'column', gap: 25 }}
 				onSubmit={handleSubmit}
 			>
 				<Typography variant='h6'>Profile</Typography>
+
+				{/* Full Name */}
 				<TextField
 					label='Full Name'
 					type='text'
@@ -95,6 +145,8 @@ function Form() {
 					fullWidth
 					margin='normal'
 				/>
+
+				{/* Username */}
 				<TextField
 					label='Username'
 					type='text'
@@ -106,6 +158,8 @@ function Form() {
 					fullWidth
 					margin='normal'
 				/>
+
+				{/* Email */}
 				<TextField
 					label='Email'
 					type='email'
@@ -117,6 +171,8 @@ function Form() {
 					fullWidth
 					margin='normal'
 				/>
+
+				{/* Bio */}
 				<TextField
 					label='Bio'
 					type='text'
@@ -130,29 +186,31 @@ function Form() {
 					rows={4}
 					margin='normal'
 				/>
+
 				<Typography
 					marginTop='1rem'
 					variant='h6'
 				>
 					Password and Security
 				</Typography>
+
+				{/* Current Password */}
 				<TextField
 					fullWidth
 					margin='normal'
 					label='Current Password'
 					name='current-password'
 					type='text'
-					value={'**********'}
+					value={'**********'} // Masked value for current password
 				/>
+
+				{/* New Password */}
 				<FormControl
 					fullWidth
 					margin='normal'
 					variant='outlined'
 				>
-					<InputLabel htmlFor='outlined-adornment-password'>
-						{' '}
-						New Password
-					</InputLabel>
+					<InputLabel htmlFor='outlined-adornment-password'>New Password</InputLabel>
 					<OutlinedInput
 						id='outlined-adornment-password'
 						label='New Password'
@@ -168,7 +226,6 @@ function Form() {
 									}
 									onClick={handleClickShowPassword}
 									onMouseDown={handleMouseDownPassword}
-									onMouseUp={handleMouseUpPassword}
 									edge='end'
 								>
 									{showPassword ? <VisibilityOff /> : <Visibility />}
@@ -177,13 +234,14 @@ function Form() {
 						}
 					/>
 				</FormControl>
+
+				{/* Re-Type Password */}
 				<FormControl
 					fullWidth
 					margin='normal'
 					variant='outlined'
 				>
 					<InputLabel htmlFor='outlined-adornment-reppassword'>
-						{' '}
 						Re-Type Password
 					</InputLabel>
 					<OutlinedInput
@@ -201,7 +259,6 @@ function Form() {
 									}
 									onClick={handleClickShowPassword}
 									onMouseDown={handleMouseDownPassword}
-									onMouseUp={handleMouseUpPassword}
 									edge='end'
 								>
 									{showPassword ? <VisibilityOff /> : <Visibility />}
@@ -210,6 +267,8 @@ function Form() {
 						}
 					/>
 				</FormControl>
+
+				{/* Submit Button */}
 				<div
 					style={{
 						display: 'flex',
@@ -220,8 +279,7 @@ function Form() {
 				>
 					<button
 						style={buttonStyle}
-						onMouseEnter={handleMouseEnter}
-						onMouseLeave={handleMouseLeave}
+						type='submit'
 					>
 						Submit
 					</button>

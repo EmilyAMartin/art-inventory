@@ -1,6 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { BsPersonCircle } from 'react-icons/bs';
 import Form from '../components/Form';
+import axios from 'axios'; // Assuming you're using axios for API requests
 
 const Account = () => {
 	const addNewPhoto = useRef(null);
@@ -12,8 +13,34 @@ const Account = () => {
 		handleFile(fileUploaded);
 	};
 	const handleFile = () => {
-		//Upload new profile picture feature.To be completed in module 3//
+		// Handle uploading a new profile picture
 	};
+
+	const [userData, setUserData] = useState(null);
+
+	// Fetch user data when the component loads
+	useEffect(() => {
+		const fetchUserData = async () => {
+			try {
+				const response = await axios.get('http://localhost:3000/profile', {
+					withCredentials: true, // Ensure cookies (sessions) are sent with the request
+				});
+				setUserData(response.data.user);
+			} catch (error) {
+				console.error('Error fetching user data:', error);
+			}
+		};
+
+		fetchUserData();
+	}, []);
+
+	// If user data is not yet loaded, show a loading message
+	if (userData === null) {
+		return <div>Loading...</div>;
+	}
+
+	// If the user doesn't have a username or bio, prompt them to fill it out
+	const hasCompleteProfile = userData.username && userData.bio;
 
 	return (
 		<>
@@ -32,7 +59,7 @@ const Account = () => {
 					fontSize={150}
 					className='button-upload'
 					onClick={handleClick}
-				></BsPersonCircle>
+				/>
 				<input
 					type='file'
 					onChange={handleChange}
@@ -40,7 +67,17 @@ const Account = () => {
 					style={{ display: 'none' }}
 				/>
 			</div>
-			<Form />
+
+			{/* Show the Form component if the profile is incomplete */}
+			{hasCompleteProfile ? (
+				<Form userData={userData} />
+			) : (
+				<div>
+					<h2>Your profile is incomplete</h2>
+					<p>Please complete your profile by providing a username and bio.</p>
+					<Form userData={userData} />
+				</div>
+			)}
 		</>
 	);
 };
