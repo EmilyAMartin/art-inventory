@@ -14,37 +14,42 @@ const Gallery = () => {
 	const [error, setError] = useState(null);
 	const [page, setPage] = useState(1);
 	const [searchQuery, setSearchQuery] = useState('');
-	const [favorites, setFavorites] = useState([]); // Store the user's favorites from the backend
+	const [favorites, setFavorites] = useState([]);
+	const [userId, setUserId] = useState(null);
 
-	// Fetch data from the backend
 	const fetchData = async () => {
 		setIsLoading(true);
 		try {
-			// Fetch gallery artwork
 			const { data } = await axios.get(`${BASE_URL}?page=${page}`);
 
 			const favoritesResponse = await fetch('http://localhost:3000/favorites', {
 				method: 'GET',
-				credentials: 'include', // Ensure user session is included
+				credentials: 'include',
 			});
 
-			// If the response for favorites is not successful, handle it gracefully
 			if (!favoritesResponse.ok) {
 				throw new Error('Failed to fetch favorite artworks');
 			}
 
 			const favoritesData = await favoritesResponse.json();
-			const favoritesList = favoritesData.map((art) => art.id);
+			console.log('favoritesData:', favoritesData);
 
-			// Map favorites status onto the fetched artwork
-			const dataWithFavorites = data.data.map((art) => {
-				const isFavorite = favoritesList.includes(art.id);
-				return { ...art, favorite: isFavorite };
-			});
+			const favoritesList = Array.isArray(favoritesData.favorites)
+				? favoritesData.favorites.map((art) => art.id)
+				: [];
+			const userId = favoritesData.userId || null;
+			console.log('userId from response:', userId);
 
-			// Set both the artwork and favorites list
+			const dataWithFavorites = Array.isArray(data.data)
+				? data.data.map((art) => {
+						const isFavorite = favoritesList.includes(art.id);
+						return { ...art, favorite: isFavorite };
+				  })
+				: [];
+
 			setArtwork(dataWithFavorites);
-			setFavorites(favoritesList); // Store the favorites list
+			setFavorites(favoritesList);
+			setUserId(userId);
 		} catch (err) {
 			setError(err.message);
 		} finally {
@@ -52,39 +57,39 @@ const Gallery = () => {
 		}
 	};
 
-	// Run the fetchData function when the component mounts or the page number changes
 	useEffect(() => {
 		fetchData();
 	}, [page]);
 
-	const handleFavUpdate = async (updatedArtwork) => {
-		try {
-			console.log('Sending request to server:', {
-				artworkId: updatedArtwork.id,
-				favorite: updatedArtwork.favorite, // true or false
-			});
+	const handleFavUpdate = (artworkId, isFavorite) => {
+		console.log('userId:', userId);
 
-			const response = await fetch('http://localhost:3000/favorites', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					artworkId: updatedArtwork.id,
-					favorite: updatedArtwork.favorite, // true or false
-				}),
-				credentials: 'include', // Ensure user session is included
-			});
-
-			if (!response.ok) {
-				throw new Error('Failed to update favorite status on the server');
-			}
-
-			// After updating the favorite, refetch the artwork to sync the UI
-			fetchData();
-		} catch (err) {
-			console.error('Error updating favorite status:', err);
+		if (!userId) {
+			alert('You must be logged in to favorite artwork');
+			return;
 		}
+
+		const body = {
+			artworkId,
+			favorite: isFavorite,
+			userId,
+		};
+
+		fetch('http://localhost:3000/favorites', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(body),
+			credentials: 'include',
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				console.log('Favorite added:', data);
+			})
+			.catch((error) => {
+				console.error('Error updating favorites:', error);
+			});
 	};
 
 	const handleReset = () => {

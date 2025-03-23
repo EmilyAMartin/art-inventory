@@ -9,7 +9,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 
-const ArtCard = ({ id, art, handleFavUpdate }) => {
+const ArtCard = ({ art, handleFavUpdate }) => {
 	const [artwork, setArtworkState] = useState(art);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
@@ -26,7 +26,10 @@ const ArtCard = ({ id, art, handleFavUpdate }) => {
 	};
 
 	const handleFavClick = () => {
+		console.log('Current artwork:', artwork);
 		const updatedArtwork = { ...artwork, favorite: !artwork.favorite };
+		console.log('Updated artwork:', updatedArtwork);
+
 		setArtworkState(updatedArtwork);
 		handleFavUpdate(updatedArtwork.id, updatedArtwork.favorite);
 	};
@@ -54,7 +57,7 @@ const ArtCard = ({ id, art, handleFavUpdate }) => {
 					/>
 					<Popover
 						sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-						id={id}
+						id={art.id}
 						open={open}
 						anchorEl={anchorEl}
 						anchorReference='none'

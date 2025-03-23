@@ -16,11 +16,10 @@ export const createFavoritesTable = async (connection) => {
 	}
 };
 export const setupFavoritesRoutes = (app, connection, session) => {
-	// GET: Fetch favorites
 	app.get('/favorites', async (req, res) => {
 		const userId = req.session.user?.id;
 		if (!userId) {
-			return res.status(401).json({ message: 'Not logged in' }); // Ensure user is logged in
+			return res.status(401).json({ message: 'Not logged in' });
 		}
 
 		try {
@@ -28,48 +27,28 @@ export const setupFavoritesRoutes = (app, connection, session) => {
 				'SELECT artworks.* FROM artworks INNER JOIN favorites ON artworks.id = favorites.artwork_id WHERE favorites.user_id = ?',
 				[userId]
 			);
-			res.json(favorites);
+			res.json({ userId, favorites });
 		} catch (err) {
 			console.error('Error fetching favorites:', err);
 			res.status(500).json({ message: 'Internal Server Error' });
 		}
 	});
 
-	app.post('/favorites', async (req, res) => {
-		const userId = req.session.user?.id;
+	app.post('/favorites', (req, res) => {
 		const { artworkId, favorite } = req.body;
-
-		console.log('Received favorite request:', { artworkId, favorite, userId });
+		const userId = req.session.userId;
 
 		if (!userId) {
-			console.log('User is not logged in');
-			return res.status(401).json({ message: 'Not logged in' });
+			return res.status(400).send('User not authenticated');
 		}
 
-		try {
-			if (favorite) {
-				console.log('Adding favorite:', artworkId);
-				await connection.query(
-					'INSERT INTO favorites (user_id, artwork_id) VALUES (?, ?)',
-					[userId, artworkId]
-				);
-			} else {
-				console.log('Removing favorite:', artworkId);
-				await connection.query(
-					'DELETE FROM favorites WHERE user_id = ? AND artwork_id = ?',
-					[userId, artworkId]
-				);
+		const sql = `INSERT INTO favorites (artworkId, userId, favorite) VALUES (?, ?, ?)`;
+		db.query(sql, [artworkId, userId, favorite], (err, result) => {
+			if (err) {
+				console.error('Error adding favorite:', err);
+				return res.status(500).send('Error adding favorite');
 			}
-
-			const [favorites] = await connection.query(
-				'SELECT artworks.* FROM artworks INNER JOIN favorites ON artworks.id = favorites.artwork_id WHERE favorites.user_id = ?',
-				[userId]
-			);
-			console.log('Favorites fetched:', favorites);
-			res.json(favorites);
-		} catch (err) {
-			console.error('Error updating favorites:', err);
-			res.status(500).json({ message: 'Internal Server Error' });
-		}
+			res.status(200).send({ message: 'Favorite added successfully' });
+		});
 	});
 };
