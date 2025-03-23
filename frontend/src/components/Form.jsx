@@ -16,37 +16,33 @@ function Form({ userData }) {
 	const [values, setValues] = useState({
 		email: '',
 		bio: '',
-		name: '',
 		username: '',
 	});
 	const [newpassword, setNewPassword] = useState('');
 	const [reppassword, setRepPassword] = useState('');
 	const [showPassword, setShowPassword] = useState(false);
-	const [isLoggedIn, setIsLoggedIn] = useState(true); // Track login status
+	const [isLoggedIn, setIsLoggedIn] = useState(true);
 
-	// Populate values when userData is available
 	useEffect(() => {
 		if (userData) {
 			setValues({
 				username: userData.username || '',
 				bio: userData.bio || '',
 				email: userData.email || '',
-				name: userData.name || '',
 			});
 		}
 
-		// Check if the user is logged in when the component mounts
 		const checkLoginStatus = async () => {
 			try {
 				const response = await axios.get('http://localhost:3000/profile', {
-					withCredentials: true, // Ensure cookies are sent
+					withCredentials: true,
 				});
 				if (response.status === 200) {
-					setIsLoggedIn(true); // User is logged in
+					setIsLoggedIn(true);
 				}
 			} catch (error) {
 				console.log('User is not logged in:', error);
-				setIsLoggedIn(false); // User is not logged in
+				setIsLoggedIn(false);
 			}
 		};
 
@@ -55,13 +51,13 @@ function Form({ userData }) {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		console.log('Submitting form with values:', values); // Log form data
+		console.log('Submitting form with values:', values);
 
 		try {
 			const response = await axios.put('http://localhost:3000/profile', values, {
-				withCredentials: true, // Send credentials (cookies) with the request
+				withCredentials: true,
 			});
-			console.log('Response:', response); // Log response for debugging
+			console.log('Response:', response);
 			if (response.status === 200) {
 				alert('Profile updated successfully');
 			} else {
@@ -133,19 +129,6 @@ function Form({ userData }) {
 			>
 				<Typography variant='h6'>Profile</Typography>
 
-				{/* Full Name */}
-				<TextField
-					label='Full Name'
-					type='text'
-					name='name'
-					id='name'
-					placeholder='Full Name'
-					onChange={handleChange}
-					value={values.name}
-					fullWidth
-					margin='normal'
-				/>
-
 				{/* Username */}
 				<TextField
 					label='Username'
@@ -201,7 +184,7 @@ function Form({ userData }) {
 					label='Current Password'
 					name='current-password'
 					type='text'
-					value={'**********'} // Masked value for current password
+					value={'**********'}
 				/>
 
 				{/* New Password */}

@@ -16,7 +16,6 @@ export const createTable = () => {
   `);
 };
 
-// User Data - Sample test data for the users table
 export const createTestData = () => {
 	server.query(
 		`
@@ -68,8 +67,8 @@ export const setupRoutes = (app, connection, session) => {
 				id: user.id,
 				name: user.name,
 				email: user.email,
-				username: user.username, // Include username
-				bio: user.bio, // Include bio
+				username: user.username,
+				bio: user.bio,
 			};
 			console.log('Logged in successfully:', req.session.user);
 			res.json({ message: 'Logged in successfully' });
@@ -121,7 +120,6 @@ export const setupRoutes = (app, connection, session) => {
 			);
 			const newUser = newUserResult[0];
 
-			// Store user in session
 			req.session.user = {
 				id: newUser.id,
 				name: newUser.name,
@@ -137,7 +135,6 @@ export const setupRoutes = (app, connection, session) => {
 		}
 	});
 
-	// Profile Route - GET user info
 	app.get('/profile', (req, res) => {
 		if (req.session.user) {
 			res.json({ user: req.session.user });
@@ -146,18 +143,15 @@ export const setupRoutes = (app, connection, session) => {
 		}
 	});
 
-	// Profile Route - UPDATE user info (username, bio)
 	app.put('/profile', async (req, res) => {
 		if (req.session.user) {
 			const { username, bio } = req.body;
 
 			try {
-				// Ensure that username and bio are provided in the request body
 				if (!username || !bio) {
 					return res.status(400).json({ message: 'Username and Bio are required' });
 				}
 
-				// Check if user exists
 				const [userResult] = await connection.query(
 					'SELECT id FROM users WHERE id = ?',
 					[req.session.user.id]
@@ -167,21 +161,15 @@ export const setupRoutes = (app, connection, session) => {
 					return res.status(404).json({ message: 'User not found' });
 				}
 
-				// Update user profile details (username, bio)
 				await connection.query(
 					'UPDATE users SET username = ?, bio = ? WHERE id = ?',
 					[username, bio, req.session.user.id]
 				);
-
-				// Fetch the updated user data
 				const [updatedUserResult] = await connection.query(
 					'SELECT id, name, email, username, bio FROM users WHERE id = ?',
 					[req.session.user.id]
 				);
-
-				// Update session data
 				req.session.user = updatedUserResult[0];
-
 				res.json({
 					message: 'Profile updated successfully',
 					user: updatedUserResult[0],

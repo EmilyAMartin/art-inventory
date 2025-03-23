@@ -14,72 +14,87 @@ const Gallery = () => {
 	const [error, setError] = useState(null);
 	const [page, setPage] = useState(1);
 	const [searchQuery, setSearchQuery] = useState('');
+	const [favorites, setFavorites] = useState([]); // Store the user's favorites from the backend
 
-	const handleFavUpdate = (updatedArtwork) => {
-		const favoritesList = JSON.parse(localStorage.getItem('favoritesList')) || [];
-		const index = favoritesList.findIndex((art) => art.id === updatedArtwork.id);
-		if (updatedArtwork.favorite) {
-			if (index === -1) {
-				favoritesList.push(updatedArtwork);
-			}
-		} else {
-			if (index !== -1) {
-				favoritesList.splice(index, 1);
-			}
-		}
-		localStorage.setItem('favoritesList', JSON.stringify(favoritesList));
-	};
-
-	const fetchDataByKeyword = async () => {
+	// Fetch data from the backend
+	const fetchData = async () => {
 		setIsLoading(true);
-		const response = await axios.get(`${BASE_URL}/search?q=${searchQuery}`);
-		const data = response.data.data;
-		const fetchedData = await Promise.all(
-			data.map(async (art) => {
-				return await fetchDataById(art.id);
-			})
-		);
-		setArtwork(fetchedData);
-		setPage(0);
-		setIsLoading(false);
+		try {
+			// Fetch gallery artwork
+			const { data } = await axios.get(`${BASE_URL}?page=${page}`);
+
+			const favoritesResponse = await fetch('http://localhost:3000/favorites', {
+				method: 'GET',
+				credentials: 'include', // Ensure user session is included
+			});
+
+			// If the response for favorites is not successful, handle it gracefully
+			if (!favoritesResponse.ok) {
+				throw new Error('Failed to fetch favorite artworks');
+			}
+
+			const favoritesData = await favoritesResponse.json();
+			const favoritesList = favoritesData.map((art) => art.id);
+
+			// Map favorites status onto the fetched artwork
+			const dataWithFavorites = data.data.map((art) => {
+				const isFavorite = favoritesList.includes(art.id);
+				return { ...art, favorite: isFavorite };
+			});
+
+			// Set both the artwork and favorites list
+			setArtwork(dataWithFavorites);
+			setFavorites(favoritesList); // Store the favorites list
+		} catch (err) {
+			setError(err.message);
+		} finally {
+			setIsLoading(false);
+		}
 	};
-	const fetchDataById = async (id) => {
-		const response = await axios.get(`${BASE_URL}/${id}`);
-		return response.data.data;
+
+	// Run the fetchData function when the component mounts or the page number changes
+	useEffect(() => {
+		fetchData();
+	}, [page]);
+
+	const handleFavUpdate = async (updatedArtwork) => {
+		try {
+			console.log('Sending request to server:', {
+				artworkId: updatedArtwork.id,
+				favorite: updatedArtwork.favorite, // true or false
+			});
+
+			const response = await fetch('http://localhost:3000/favorites', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					artworkId: updatedArtwork.id,
+					favorite: updatedArtwork.favorite, // true or false
+				}),
+				credentials: 'include', // Ensure user session is included
+			});
+
+			if (!response.ok) {
+				throw new Error('Failed to update favorite status on the server');
+			}
+
+			// After updating the favorite, refetch the artwork to sync the UI
+			fetchData();
+		} catch (err) {
+			console.error('Error updating favorite status:', err);
+		}
 	};
+
 	const handleReset = () => {
 		setPage(1);
 		setSearchQuery('');
 	};
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				setIsLoading(true);
-				const { data } = await axios.get(`${BASE_URL}?page=${page}`);
-				const favoritesList = JSON.parse(localStorage.getItem('favoritesList'));
-				const dataWithFavorites = data.data.map((art) => {
-					const isFavorite = favoritesList?.some((fav) => fav.id === art.id);
-					return { ...art, favorite: isFavorite };
-				});
-				setArtwork(dataWithFavorites);
-				setError(null);
-			} catch (error) {
-				if (axios.isCancel(error)) {
-					return;
-				}
-				setError(error.message);
-			} finally {
-				setIsLoading(false);
-			}
-		};
-		if (page > 0) {
-			fetchData();
-		}
-	}, [page]);
 
 	return (
 		<div
-			id='galley-container'
+			id='gallery-container'
 			style={{ display: 'flex', flexDirection: 'column' }}
 		>
 			<div
@@ -96,7 +111,7 @@ const Gallery = () => {
 					onKeyDown={(e) => {
 						if (e.key === 'Enter') {
 							e.preventDefault();
-							fetchDataByKeyword();
+							fetchData();
 						}
 					}}
 					label='Search Keyword'
@@ -106,7 +121,7 @@ const Gallery = () => {
 				/>
 				<IconButton
 					type='submit'
-					onClick={fetchDataByKeyword}
+					onClick={fetchData}
 					aria-label='search'
 				>
 					<SearchIcon style={{ fill: 'black' }} />
@@ -119,8 +134,8 @@ const Gallery = () => {
 				</Button>
 			</div>
 
-			<div className='galley-artwork'>
-				{isLoading === true && <div>Loading...</div>}
+			<div className='gallery-artwork'>
+				{isLoading && <div>Loading...</div>}
 				<Grid2
 					style={{
 						marginTop: 25,
@@ -145,6 +160,7 @@ const Gallery = () => {
 					))}
 				</Grid2>
 			</div>
+
 			{page > 0 && (
 				<div
 					id='page-navigation'
@@ -160,7 +176,6 @@ const Gallery = () => {
 						color='black'
 						onClick={() => setPage(page - 1)}
 					>
-						{' '}
 						Prev
 					</Button>
 					<Button
@@ -170,7 +185,6 @@ const Gallery = () => {
 							window.scrollTo(0, 0);
 						}}
 					>
-						{' '}
 						Next
 					</Button>
 					{error && <div>{error}</div>}
@@ -179,4 +193,5 @@ const Gallery = () => {
 		</div>
 	);
 };
+
 export default Gallery;

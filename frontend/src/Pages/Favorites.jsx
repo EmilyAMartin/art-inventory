@@ -21,7 +21,7 @@ const Favorites = () => {
 				}
 
 				const data = await response.json();
-				setArtwork(data);
+				setArtwork(data); // Store the fetched favorite artworks
 			} catch (err) {
 				setError(err);
 			} finally {
@@ -47,6 +47,8 @@ const Favorites = () => {
 			if (!response.ok) {
 				throw new Error('Failed to update favorite status');
 			}
+
+			// Fetch updated list from the server
 			const updatedResponse = await fetch('http://localhost:3000/favorites', {
 				method: 'GET',
 				credentials: 'include',
