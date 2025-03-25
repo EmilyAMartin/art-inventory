@@ -4,10 +4,9 @@ export const createFavoritesTable = async (connection) => {
       CREATE TABLE IF NOT EXISTS favorites (
         id INT NOT NULL AUTO_INCREMENT,
         user_id INT NOT NULL,
-        artwork_id INT NOT NULL,
+        artwork_external_id INT NOT NULL, -- Change here to store the API artwork id
         PRIMARY KEY (id),
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-        FOREIGN KEY (artwork_id) REFERENCES artworks(id) ON DELETE CASCADE
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       );
     `);
 		console.log('Favorites table created successfully.');
@@ -24,7 +23,7 @@ export const setupFavoritesRoutes = (app, connection, session) => {
 
 		try {
 			const [favorites] = await connection.query(
-				'SELECT artworks.* FROM artworks INNER JOIN favorites ON artworks.id = favorites.artwork_id WHERE favorites.user_id = ?',
+				'SELECT artworks.* FROM artworks INNER JOIN favorites ON artworks.id = favorites.artwork_external_id WHERE favorites.user_id = ?',
 				[userId]
 			);
 			res.json({ userId, favorites });
@@ -35,15 +34,15 @@ export const setupFavoritesRoutes = (app, connection, session) => {
 	});
 
 	app.post('/favorites', (req, res) => {
-		const { artworkId, favorite } = req.body;
+		const { artworkId, favorite } = req.body; // artworkId is the API id
 		const userId = req.session.userId;
 
 		if (!userId) {
 			return res.status(400).send('User not authenticated');
 		}
 
-		const sql = `INSERT INTO favorites (artworkId, userId, favorite) VALUES (?, ?, ?)`;
-		db.query(sql, [artworkId, userId, favorite], (err, result) => {
+		const sql = `INSERT INTO favorites (artwork_external_id, user_id) VALUES (?, ?)`;
+		db.query(sql, [artworkId, userId], (err, result) => {
 			if (err) {
 				console.error('Error adding favorite:', err);
 				return res.status(500).send('Error adding favorite');

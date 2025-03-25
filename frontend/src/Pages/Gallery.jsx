@@ -17,6 +17,7 @@ const Gallery = () => {
 	const [favorites, setFavorites] = useState([]);
 	const [userId, setUserId] = useState(null);
 
+	// Fetch data from the API
 	const fetchData = async () => {
 		setIsLoading(true);
 		try {
@@ -32,13 +33,10 @@ const Gallery = () => {
 			}
 
 			const favoritesData = await favoritesResponse.json();
-			console.log('favoritesData:', favoritesData);
-
 			const favoritesList = Array.isArray(favoritesData.favorites)
-				? favoritesData.favorites.map((art) => art.id)
+				? favoritesData.favorites.map((art) => art.artwork_id)
 				: [];
 			const userId = favoritesData.userId || null;
-			console.log('userId from response:', userId);
 
 			const dataWithFavorites = Array.isArray(data.data)
 				? data.data.map((art) => {
@@ -70,7 +68,7 @@ const Gallery = () => {
 		}
 
 		const body = {
-			artworkId,
+			artworkId, // Pass the API artwork ID here
 			favorite: isFavorite,
 			userId,
 		};
@@ -92,9 +90,11 @@ const Gallery = () => {
 			});
 	};
 
+	// Function to reset search query and page
 	const handleReset = () => {
-		setPage(1);
 		setSearchQuery('');
+		setPage(1); // Reset to the first page
+		fetchData(); // Reload the data with the reset query
 	};
 
 	return (
@@ -133,7 +133,7 @@ const Gallery = () => {
 				</IconButton>
 				<Button
 					color='black'
-					onClick={handleReset}
+					onClick={handleReset} // Call the handleReset function here
 				>
 					Reset
 				</Button>
@@ -158,8 +158,10 @@ const Gallery = () => {
 							key={art.id}
 						>
 							<ArtCard
+								key={art.id}
 								art={art}
 								handleFavUpdate={handleFavUpdate}
+								userId={userId} // Make sure userId is passed down here
 							/>
 						</Grid2>
 					))}
