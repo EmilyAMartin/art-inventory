@@ -17,7 +17,6 @@ const Gallery = () => {
 	const [favorites, setFavorites] = useState([]);
 	const [userId, setUserId] = useState(null);
 
-	// Fetch data from the API
 	const fetchData = async () => {
 		setIsLoading(true);
 		try {
@@ -68,7 +67,7 @@ const Gallery = () => {
 		}
 
 		const body = {
-			artworkId, // Pass the API artwork ID here
+			artworkId,
 			favorite: isFavorite,
 			userId,
 		};
@@ -90,11 +89,10 @@ const Gallery = () => {
 			});
 	};
 
-	// Function to reset search query and page
 	const handleReset = () => {
 		setSearchQuery('');
-		setPage(1); // Reset to the first page
-		fetchData(); // Reload the data with the reset query
+		setPage(1);
+		fetchData();
 	};
 
 	return (
@@ -133,7 +131,7 @@ const Gallery = () => {
 				</IconButton>
 				<Button
 					color='black'
-					onClick={handleReset} // Call the handleReset function here
+					onClick={handleReset}
 				>
 					Reset
 				</Button>
@@ -161,7 +159,7 @@ const Gallery = () => {
 								key={art.id}
 								art={art}
 								handleFavUpdate={handleFavUpdate}
-								userId={userId} // Make sure userId is passed down here
+								userId={userId}
 							/>
 						</Grid2>
 					))}

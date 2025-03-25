@@ -4,7 +4,7 @@ export const createFavoritesTable = async (connection) => {
       CREATE TABLE IF NOT EXISTS favorites (
         id INT NOT NULL AUTO_INCREMENT,
         user_id INT NOT NULL,
-        artwork_external_id INT NOT NULL, -- Change here to store the API artwork id
+        artwork_external_id INT NOT NULL, 
         PRIMARY KEY (id),
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       );
@@ -34,7 +34,7 @@ export const setupFavoritesRoutes = (app, connection, session) => {
 	});
 
 	app.post('/favorites', (req, res) => {
-		const { artworkId, favorite } = req.body; // artworkId is the API id
+		const { artworkId, favorite } = req.body;
 		const userId = req.session.userId;
 
 		if (!userId) {
