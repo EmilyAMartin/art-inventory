@@ -1,9 +1,4 @@
-import mysql from 'mysql2';
+import mysql from 'mysql2/promise';
 
-//DB Connection//
-export const server = mysql.createConnection({
-	host: 'localhost',
-	user: 'root',
-	password: process.env.DB_PASSWORD,
-	database: 'artworks',
-});
+const url = process.env.MYSQL_URL;
+export const dbPool = mysql.createPool(url);

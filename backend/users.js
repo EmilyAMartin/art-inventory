@@ -1,43 +1,46 @@
 import bcrypt from 'bcryptjs';
-import { server } from './db.js';
+import { dbPool } from './db.js';
 
 // User Table
-export const createTable = () => {
-	server.query(`
+export const createTable = async () => {
+	try {
+		await dbPool.query(`
     CREATE TABLE IF NOT EXISTS users (
       id INT NOT NULL AUTO_INCREMENT,
       name VARCHAR(255) NOT NULL,
       email VARCHAR(255) NOT NULL,
       password_hash VARCHAR(255) NOT NULL,
-      username VARCHAR(255),  /* New column for username */
-      bio TEXT,               /* New column for bio */
+      username VARCHAR(255),
+      bio TEXT,
       PRIMARY KEY (id)
     )
   `);
+		console.log('Users table created successfully.');
+	} catch (err) {
+		console.error('Error creating users table:', err);
+	}
 };
 
-export const createTestData = () => {
-	server.query(
-		`
+export const createTestData = async () => {
+	try {
+		await dbPool.query(
+			`
       INSERT INTO users (id, name, email, password_hash, username, bio)
       VALUES (1, "John Doe", "john@doe.com", "password_hash", "johndoe", "This is John Doe's bio.")
-    `,
-		(err, result) => {
-			if (err) {
-				if (err.code === 'ER_DUP_ENTRY') {
-					console.log('Duplicate entry found, ignoring...');
-					return;
-				}
-				console.log('Error inserting user:', err);
-			} else {
-				console.log('Users inserted successfully');
-			}
+    `
+		);
+		console.log('Users inserted successfully');
+	} catch (err) {
+		if (err.code === 'ER_DUP_ENTRY') {
+			console.log('Duplicate entry found, ignoring...');
+			return;
 		}
-	);
+		console.log('Error inserting user:', err);
+	}
 };
 
 // Users Routes
-export const setupRoutes = (app, connection, session) => {
+export const setupRoutes = (app) => {
 	// Login Route
 	app.post('/login', async (req, res) => {
 		const { email, password } = req.body;
@@ -45,7 +48,7 @@ export const setupRoutes = (app, connection, session) => {
 		console.log('Login attempt:', { email });
 
 		try {
-			const [usersResult] = await connection.query(
+			const [usersResult] = await dbPool.query(
 				'SELECT * FROM users WHERE email = ?',
 				[email]
 			);
@@ -98,7 +101,7 @@ export const setupRoutes = (app, connection, session) => {
 		const { name, email, password, username, bio } = req.body;
 
 		try {
-			const [existingUserResult] = await connection.query(
+			const [existingUserResult] = await dbPool.query(
 				'SELECT * FROM users WHERE email = ?',
 				[email]
 			);
@@ -109,12 +112,12 @@ export const setupRoutes = (app, connection, session) => {
 
 			const hashedPassword = await bcrypt.hash(password, 10);
 
-			await connection.query(
+			await dbPool.query(
 				'INSERT INTO users (name, email, password_hash, username, bio) VALUES (?, ?, ?, ?, ?)',
 				[name, email, hashedPassword, username, bio]
 			);
 
-			const [newUserResult] = await connection.query(
+			const [newUserResult] = await dbPool.query(
 				'SELECT * FROM users WHERE email = ?',
 				[email]
 			);
@@ -152,7 +155,7 @@ export const setupRoutes = (app, connection, session) => {
 					return res.status(400).json({ message: 'Username and Bio are required' });
 				}
 
-				const [userResult] = await connection.query(
+				const [userResult] = await dbPool.query(
 					'SELECT id FROM users WHERE id = ?',
 					[req.session.user.id]
 				);
@@ -161,11 +164,12 @@ export const setupRoutes = (app, connection, session) => {
 					return res.status(404).json({ message: 'User not found' });
 				}
 
-				await connection.query(
-					'UPDATE users SET username = ?, bio = ? WHERE id = ?',
-					[username, bio, req.session.user.id]
-				);
-				const [updatedUserResult] = await connection.query(
+				await dbPool.query('UPDATE users SET username = ?, bio = ? WHERE id = ?', [
+					username,
+					bio,
+					req.session.user.id,
+				]);
+				const [updatedUserResult] = await dbPool.query(
 					'SELECT id, name, email, username, bio FROM users WHERE id = ?',
 					[req.session.user.id]
 				);

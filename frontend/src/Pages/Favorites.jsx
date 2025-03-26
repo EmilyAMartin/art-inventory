@@ -21,7 +21,7 @@ const Favorites = () => {
 				}
 
 				const data = await response.json();
-				setArtwork(data);
+				setArtwork(data.favorites);
 			} catch (err) {
 				setError(err);
 			} finally {

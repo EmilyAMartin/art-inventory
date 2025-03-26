@@ -1,6 +1,8 @@
-export const createFavoritesTable = async (connection) => {
+import { dbPool } from './db.js';
+
+export const createFavoritesTable = async () => {
 	try {
-		await connection.query(`
+		await dbPool.query(`
       CREATE TABLE IF NOT EXISTS favorites (
         id INT NOT NULL AUTO_INCREMENT,
         user_id INT NOT NULL,
@@ -14,7 +16,8 @@ export const createFavoritesTable = async (connection) => {
 		console.error('Error creating favorites table:', err.message || err);
 	}
 };
-export const setupFavoritesRoutes = (app, connection, session) => {
+
+export const setupFavoritesRoutes = (app) => {
 	app.get('/favorites', async (req, res) => {
 		const userId = req.session.user?.id;
 		if (!userId) {
@@ -22,7 +25,7 @@ export const setupFavoritesRoutes = (app, connection, session) => {
 		}
 
 		try {
-			const [favorites] = await connection.query(
+			const [favorites] = await dbPool.query(
 				'SELECT artworks.* FROM artworks INNER JOIN favorites ON artworks.id = favorites.artwork_external_id WHERE favorites.user_id = ?',
 				[userId]
 			);
@@ -33,7 +36,7 @@ export const setupFavoritesRoutes = (app, connection, session) => {
 		}
 	});
 
-	app.post('/favorites', (req, res) => {
+	app.post('/favorites', async (req, res) => {
 		const { artworkId, favorite } = req.body;
 		const userId = req.session.userId;
 
@@ -41,13 +44,15 @@ export const setupFavoritesRoutes = (app, connection, session) => {
 			return res.status(400).send('User not authenticated');
 		}
 
-		const sql = `INSERT INTO favorites (artwork_external_id, user_id) VALUES (?, ?)`;
-		db.query(sql, [artworkId, userId], (err, result) => {
-			if (err) {
-				console.error('Error adding favorite:', err);
-				return res.status(500).send('Error adding favorite');
-			}
+		try {
+			await dbPool.query(
+				'INSERT INTO favorites (artwork_external_id, user_id) VALUES (?, ?)',
+				[artworkId, userId]
+			);
 			res.status(200).send({ message: 'Favorite added successfully' });
-		});
+		} catch (err) {
+			console.error('Error adding favorite:', err);
+			res.status(500).send('Error adding favorite');
+		}
 	});
 };
