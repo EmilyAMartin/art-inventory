@@ -61,7 +61,7 @@ const Favorites = () => {
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify({ artworkId, favorite: !currentFavoriteStatus }),
+				body: JSON.stringify({ artworkId, favorite: false }),
 				credentials: 'include',
 			});
 
@@ -69,8 +69,10 @@ const Favorites = () => {
 				throw new Error('Failed to update favorite status');
 			}
 
-			// Refresh the favorites list
-			await fetchFavorites();
+			// Remove the artwork from the local state immediately
+			setArtwork((prevArtwork) =>
+				prevArtwork.filter((art) => art.id !== artworkId)
+			);
 		} catch (err) {
 			setError(err.message);
 		}

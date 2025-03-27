@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Favorite } from '@mui/icons-material';
 import { FavoriteBorder } from '@mui/icons-material';
 import ReactCardFlip from 'react-card-flip';
@@ -10,7 +10,6 @@ import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 
 const ArtCard = ({ art, handleFavUpdate }) => {
-	const [artwork, setArtworkState] = useState(art);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
 	const [flip, setFlip] = useState(false);
@@ -20,18 +19,14 @@ const ArtCard = ({ art, handleFavUpdate }) => {
 		setAnchorEl(event.currentTarget);
 		setPopoverImageId(event.target.src);
 	};
+
 	const handleClose = () => {
 		setAnchorEl(null);
 		setPopoverImageId(null);
 	};
 
 	const handleFavClick = () => {
-		console.log('Current artwork:', artwork);
-		const updatedArtwork = { ...artwork, favorite: !artwork.favorite };
-		console.log('Updated artwork:', updatedArtwork);
-
-		setArtworkState(updatedArtwork);
-		handleFavUpdate(updatedArtwork.id, updatedArtwork.favorite);
+		handleFavUpdate(art.id, !art.favorite);
 	};
 
 	return (
@@ -105,7 +100,7 @@ const ArtCard = ({ art, handleFavUpdate }) => {
 							margin: 25,
 						}}
 					>
-						{artwork.favorite ? (
+						{art.favorite ? (
 							<Favorite onClick={handleFavClick} />
 						) : (
 							<FavoriteBorder onClick={handleFavClick} />
