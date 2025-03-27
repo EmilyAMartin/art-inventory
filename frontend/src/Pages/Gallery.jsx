@@ -33,15 +33,15 @@ const Gallery = () => {
 
 			const favoritesData = await favoritesResponse.json();
 			const favoritesList = Array.isArray(favoritesData.favorites)
-				? favoritesData.favorites.map((art) => art.artwork_id)
+				? favoritesData.favorites.map((fav) => fav.id)
 				: [];
 			const userId = favoritesData.userId || null;
 
 			const dataWithFavorites = Array.isArray(data.data)
-				? data.data.map((art) => {
-						const isFavorite = favoritesList.includes(art.id);
-						return { ...art, favorite: isFavorite };
-				  })
+				? data.data.map((art) => ({
+						...art,
+						favorite: favoritesList.includes(art.id),
+				  }))
 				: [];
 
 			setArtwork(dataWithFavorites);
@@ -58,35 +58,43 @@ const Gallery = () => {
 		fetchData();
 	}, [page]);
 
-	const handleFavUpdate = (artworkId, isFavorite) => {
-		console.log('userId:', userId);
-
+	const handleFavUpdate = async (artworkId, isFavorite) => {
 		if (!userId) {
 			alert('You must be logged in to favorite artwork');
 			return;
 		}
 
-		const body = {
-			artworkId,
-			favorite: isFavorite,
-			userId,
-		};
-
-		fetch('http://localhost:3000/favorites', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(body),
-			credentials: 'include',
-		})
-			.then((response) => response.json())
-			.then((data) => {
-				console.log('Favorite added:', data);
-			})
-			.catch((error) => {
-				console.error('Error updating favorites:', error);
+		try {
+			const response = await fetch('http://localhost:3000/favorites', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ artworkId, favorite: isFavorite }),
+				credentials: 'include',
 			});
+
+			if (!response.ok) {
+				throw new Error('Failed to update favorite status');
+			}
+
+			// Update the artwork state to reflect the new favorite status
+			setArtwork((prevArtwork) =>
+				prevArtwork.map((art) =>
+					art.id === artworkId ? { ...art, favorite: isFavorite } : art
+				)
+			);
+
+			// Update favorites list
+			setFavorites((prevFavorites) =>
+				isFavorite
+					? [...prevFavorites, artworkId]
+					: prevFavorites.filter((id) => id !== artworkId)
+			);
+		} catch (error) {
+			console.error('Error updating favorites:', error);
+			alert('Failed to update favorite status');
+		}
 	};
 
 	const handleReset = () => {

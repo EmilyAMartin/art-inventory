@@ -1,46 +1,67 @@
 import React, { useState, useEffect } from 'react';
 import Grid2 from '@mui/material/Grid2';
 import ArtCard from '../components/ArtCard';
+import axios from 'axios';
 
 const Favorites = () => {
 	const [artwork, setArtwork] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 
-	useEffect(() => {
-		const fetchFavorites = async () => {
-			setLoading(true);
-			try {
-				const response = await fetch('http://localhost:3000/favorites', {
-					method: 'GET',
-					credentials: 'include',
-				});
+	const fetchFavorites = async () => {
+		setLoading(true);
+		try {
+			// First get the list of favorite IDs
+			const response = await fetch('http://localhost:3000/favorites', {
+				method: 'GET',
+				credentials: 'include',
+			});
 
-				if (!response.ok) {
-					throw new Error('Failed to fetch favorite artworks');
-				}
-
-				const data = await response.json();
-				setArtwork(data.favorites);
-			} catch (err) {
-				setError(err);
-			} finally {
-				setLoading(false);
+			if (!response.ok) {
+				throw new Error('Failed to fetch favorite artworks');
 			}
-		};
 
+			const data = await response.json();
+			if (!Array.isArray(data.favorites)) {
+				setArtwork([]);
+				return;
+			}
+
+			// Then fetch the artwork details for each favorite
+			const artworkPromises = data.favorites.map(async (fav) => {
+				try {
+					const { data: artData } = await axios.get(
+						`https://api.artic.edu/api/v1/artworks/${fav.id}`
+					);
+					return { ...artData.data, favorite: true };
+				} catch (err) {
+					console.error(`Error fetching artwork ${fav.id}:`, err);
+					return null;
+				}
+			});
+
+			const artworkResults = await Promise.all(artworkPromises);
+			const validArtwork = artworkResults.filter((art) => art !== null);
+			setArtwork(validArtwork);
+		} catch (err) {
+			setError(err.message);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	useEffect(() => {
 		fetchFavorites();
 	}, []);
 
 	const handleFavUpdate = async (artworkId, currentFavoriteStatus) => {
-		const newFavoriteStatus = !currentFavoriteStatus;
 		try {
 			const response = await fetch('http://localhost:3000/favorites', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify({ artworkId, favorite: newFavoriteStatus }),
+				body: JSON.stringify({ artworkId, favorite: !currentFavoriteStatus }),
 				credentials: 'include',
 			});
 
@@ -48,15 +69,10 @@ const Favorites = () => {
 				throw new Error('Failed to update favorite status');
 			}
 
-			const updatedResponse = await fetch('http://localhost:3000/favorites', {
-				method: 'GET',
-				credentials: 'include',
-			});
-
-			const updatedData = await updatedResponse.json();
-			setArtwork(updatedData);
+			// Refresh the favorites list
+			await fetchFavorites();
 		} catch (err) {
-			setError(err);
+			setError(err.message);
 		}
 	};
 
@@ -65,7 +81,7 @@ const Favorites = () => {
 	}
 
 	if (error) {
-		return <div>Error: {error.message}</div>;
+		return <div>Error: {error}</div>;
 	}
 
 	if (artwork.length === 0) {
@@ -90,7 +106,7 @@ const Favorites = () => {
 						<ArtCard
 							art={art}
 							handleFavUpdate={handleFavUpdate}
-							favoriteStatus={art.favorite}
+							favoriteStatus={true}
 						/>
 					</Grid2>
 				))}

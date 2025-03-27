@@ -26,7 +26,7 @@ export const setupFavoritesRoutes = (app) => {
 
 		try {
 			const [favorites] = await dbPool.query(
-				'SELECT artworks.* FROM artworks INNER JOIN favorites ON artworks.id = favorites.artwork_external_id WHERE favorites.user_id = ?',
+				'SELECT artwork_external_id as id FROM favorites WHERE user_id = ?',
 				[userId]
 			);
 			res.json({ userId, favorites });
@@ -38,21 +38,31 @@ export const setupFavoritesRoutes = (app) => {
 
 	app.post('/favorites', async (req, res) => {
 		const { artworkId, favorite } = req.body;
-		const userId = req.session.userId;
+		const userId = req.session.user?.id;
 
 		if (!userId) {
-			return res.status(400).send('User not authenticated');
+			return res.status(401).json({ message: 'Not logged in' });
 		}
 
 		try {
-			await dbPool.query(
-				'INSERT INTO favorites (artwork_external_id, user_id) VALUES (?, ?)',
-				[artworkId, userId]
-			);
-			res.status(200).send({ message: 'Favorite added successfully' });
+			if (favorite) {
+				// Add favorite
+				await dbPool.query(
+					'INSERT INTO favorites (artwork_external_id, user_id) VALUES (?, ?)',
+					[artworkId, userId]
+				);
+				res.status(200).json({ message: 'Favorite added successfully' });
+			} else {
+				// Remove favorite
+				await dbPool.query(
+					'DELETE FROM favorites WHERE artwork_external_id = ? AND user_id = ?',
+					[artworkId, userId]
+				);
+				res.status(200).json({ message: 'Favorite removed successfully' });
+			}
 		} catch (err) {
-			console.error('Error adding favorite:', err);
-			res.status(500).send('Error adding favorite');
+			console.error('Error updating favorite:', err);
+			res.status(500).json({ message: 'Error updating favorite' });
 		}
 	});
 };
