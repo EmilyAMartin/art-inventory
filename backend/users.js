@@ -1,5 +1,8 @@
 import bcrypt from 'bcryptjs';
 import { dbPool } from './db.js';
+import upload from './fileUpload.js';
+import path from 'path';
+import fs from 'fs';
 
 // User Table
 export const createTable = async () => {
@@ -12,6 +15,7 @@ export const createTable = async () => {
       password_hash VARCHAR(255) NOT NULL,
       username VARCHAR(255),
       bio TEXT,
+      profile_image VARCHAR(255),
       PRIMARY KEY (id)
     )
   `);
@@ -72,6 +76,7 @@ export const setupRoutes = (app) => {
 				email: user.email,
 				username: user.username,
 				bio: user.bio,
+				profile_image: user.profile_image,
 			};
 			console.log('Logged in successfully:', req.session.user);
 			res.json({ message: 'Logged in successfully' });
@@ -129,6 +134,7 @@ export const setupRoutes = (app) => {
 				email: newUser.email,
 				username: newUser.username,
 				bio: newUser.bio,
+				profile_image: newUser.profile_image,
 			};
 
 			res.json({ message: 'Registered successfully' });
@@ -138,9 +144,23 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	app.get('/profile', (req, res) => {
+	app.get('/profile', async (req, res) => {
 		if (req.session.user) {
-			res.json({ user: req.session.user });
+			try {
+				const [userResult] = await dbPool.query(
+					'SELECT id, name, email, username, bio, profile_image FROM users WHERE id = ?',
+					[req.session.user.id]
+				);
+				if (userResult.length > 0) {
+					req.session.user = userResult[0];
+					res.json({ user: userResult[0] });
+				} else {
+					res.status(404).json({ message: 'User not found' });
+				}
+			} catch (err) {
+				console.error('Error fetching user profile:', err);
+				res.status(500).json({ message: 'Internal Server Error' });
+			}
 		} else {
 			res.status(401).json({ message: 'Not logged in' });
 		}
@@ -170,7 +190,7 @@ export const setupRoutes = (app) => {
 					req.session.user.id,
 				]);
 				const [updatedUserResult] = await dbPool.query(
-					'SELECT id, name, email, username, bio FROM users WHERE id = ?',
+					'SELECT id, name, email, username, bio, profile_image FROM users WHERE id = ?',
 					[req.session.user.id]
 				);
 				req.session.user = updatedUserResult[0];
@@ -184,6 +204,58 @@ export const setupRoutes = (app) => {
 			}
 		} else {
 			res.status(401).json({ message: 'Not logged in' });
+		}
+	});
+
+	// Update Profile Image Route
+	app.post('/profile/image', upload.single('image'), async (req, res) => {
+		if (!req.session.user) {
+			return res.status(401).json({ message: 'Not logged in' });
+		}
+
+		try {
+			if (!req.file) {
+				return res.status(400).json({ message: 'No image file provided' });
+			}
+
+			// Create the image URL
+			const imageUrl = `/uploads/${req.file.filename}`;
+
+			// Delete old profile image if it exists
+			const [userResult] = await dbPool.query(
+				'SELECT profile_image FROM users WHERE id = ?',
+				[req.session.user.id]
+			);
+
+			if (userResult[0].profile_image) {
+				const oldImagePath = path.join(
+					'uploads',
+					path.basename(userResult[0].profile_image)
+				);
+				if (fs.existsSync(oldImagePath)) {
+					fs.unlinkSync(oldImagePath);
+				}
+			}
+
+			await dbPool.query('UPDATE users SET profile_image = ? WHERE id = ?', [
+				imageUrl,
+				req.session.user.id,
+			]);
+
+			// Update session user data
+			const [updatedUserResult] = await dbPool.query(
+				'SELECT id, name, email, username, bio, profile_image FROM users WHERE id = ?',
+				[req.session.user.id]
+			);
+			req.session.user = updatedUserResult[0];
+
+			res.json({
+				message: 'Profile image updated successfully',
+				user: updatedUserResult[0],
+			});
+		} catch (err) {
+			console.error('Error updating profile image:', err);
+			res.status(500).json({ message: 'Internal Server Error' });
 		}
 	});
 };

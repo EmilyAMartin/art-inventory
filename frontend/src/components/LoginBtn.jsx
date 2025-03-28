@@ -52,6 +52,9 @@ const LoginBtn = () => {
 
 					if (userResponse.ok) {
 						const userData = await userResponse.json();
+						if (userData.user.profile_image) {
+							userData.user.profile_image = `http://localhost:3000${userData.user.profile_image}`;
+						}
 						setCurrentUser(userData.user);
 						handleClose();
 						alert('Logged in successfully!');

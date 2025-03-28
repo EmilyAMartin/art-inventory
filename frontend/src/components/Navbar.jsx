@@ -5,7 +5,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
 import { AuthContext } from '../Pages/Context';
 import LoginBtn from './LoginBtn';
-import { Menu, MenuItem, IconButton } from '@mui/material';
+import { Menu, MenuItem, IconButton, Avatar } from '@mui/material';
 
 export const Navbar = () => {
 	const { currentUser } = useContext(AuthContext);
@@ -107,7 +107,15 @@ export const Navbar = () => {
 						</li>
 						<li className='account'>
 							<IconButton onClick={handleAccountClick}>
-								<AccountCircleIcon style={{ color: 'black', fontSize: '125%' }} />
+								{currentUser.profile_image ? (
+									<Avatar
+										src={currentUser.profile_image}
+										alt={currentUser.name}
+										sx={{ width: 40, height: 40 }}
+									/>
+								) : (
+									<AccountCircleIcon style={{ color: 'black', fontSize: '125%' }} />
+								)}
 							</IconButton>
 
 							{/* Drop Down Menu */}

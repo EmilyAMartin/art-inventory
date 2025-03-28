@@ -8,6 +8,7 @@ import session from 'express-session';
 import MySQLStore from 'express-mysql-session';
 import cors from 'cors';
 import { dbPool } from './db.js';
+import path from 'path';
 
 const sessionStore = new MySQLStore({}, dbPool);
 const app = express();
@@ -32,6 +33,9 @@ app.use(
 		},
 	})
 );
+
+// Serve static files from uploads directory
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 const initDb = async () => {
 	try {
