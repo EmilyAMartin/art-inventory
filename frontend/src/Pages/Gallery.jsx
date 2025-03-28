@@ -17,6 +17,15 @@ const Gallery = () => {
 	const [favorites, setFavorites] = useState([]);
 	const [userId, setUserId] = useState(null);
 
+	const checkImageUrl = async (imageUrl) => {
+		try {
+			const response = await fetch(imageUrl, { method: 'HEAD' });
+			return response.ok;
+		} catch (error) {
+			return false;
+		}
+	};
+
 	const fetchData = async () => {
 		setIsLoading(true);
 		try {
@@ -37,14 +46,28 @@ const Gallery = () => {
 				: [];
 			const userId = favoritesData.userId || null;
 
-			const dataWithFavorites = Array.isArray(data.data)
-				? data.data.map((art) => ({
+			// Filter and process artwork data
+			const validArtwork = await Promise.all(
+				data.data.map(async (art) => {
+					// Check if the artwork has an image URL
+					if (!art.image_id) return null;
+
+					const imageUrl = `https://www.artic.edu/iiif/2/${art.image_id}/full/400,/0/default.jpg`;
+					const hasValidImage = await checkImageUrl(imageUrl);
+
+					if (!hasValidImage) return null;
+
+					return {
 						...art,
 						favorite: favoritesList.includes(art.id),
-				  }))
-				: [];
+					};
+				})
+			);
 
-			setArtwork(dataWithFavorites);
+			// Filter out null values (artworks with invalid images)
+			const filteredArtwork = validArtwork.filter((art) => art !== null);
+
+			setArtwork(filteredArtwork);
 			setFavorites(favoritesList);
 			setUserId(userId);
 		} catch (err) {
