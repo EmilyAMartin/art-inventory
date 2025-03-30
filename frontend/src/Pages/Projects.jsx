@@ -2,7 +2,6 @@ import { useState } from 'react';
 import AddProjectBtn from '../components/AddProjectBtn';
 import ProjectCard from '../components/ProjectCard';
 import AddNewBtn from '../components/AddNewBtn';
-import Grid2 from '@mui/material/Grid2';
 import NewArtCard from '../components/NewArtCard';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -99,30 +98,18 @@ const ProjectPage = () => {
 
 		if (newAddedArtwork.length <= 4) {
 			return (
-				<Grid2
-					style={{
-						marginTop: 25,
-						display: 'flex',
-						flexDirection: 'row',
-						justifyContent: 'space-between',
-					}}
-					container
-					spacing={8}
+				<div
+					style={{ marginTop: 25, display: 'flex', flexDirection: 'row', gap: 25 }}
 				>
 					{newAddedArtwork.map((art, index) => (
-						<Grid2
-							xs={12}
-							ms={5}
+						<NewArtCard
 							key={index}
-						>
-							<NewArtCard
-								newAddedArtwork={newAddedArtwork}
-								handleDelete={handleDeleteNewArtwork}
-								index={index}
-							/>
-						</Grid2>
+							newAddedArtwork={newAddedArtwork}
+							handleDelete={handleDeleteNewArtwork}
+							index={index}
+						/>
 					))}
-				</Grid2>
+				</div>
 			);
 		}
 
@@ -155,14 +142,14 @@ const ProjectPage = () => {
 		>
 			{/* Projects Section */}
 			<div>
-				<h2>Projects</h2>
+				<h2 style={{ marginBottom: '1rem' }}>Projects</h2>
 				<AddProjectBtn onProjectAdded={handleProjectAdded} />
 				{renderProjects()}
 			</div>
 
 			{/* Artwork Section */}
 			<div>
-				<h2>Artwork</h2>
+				<h2 style={{ marginBottom: '1rem' }}>Artwork</h2>
 				<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
 				{renderArtwork()}
 			</div>

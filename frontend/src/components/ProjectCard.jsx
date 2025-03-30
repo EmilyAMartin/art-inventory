@@ -29,15 +29,14 @@ export default function ProjectCard({ projects, handleDelete }) {
 		>
 			{projects.map((project, index) => (
 				<Card
-					sx={{ maxWidth: 345 }}
+					sx={{ maxWidth: 300, maxHeight: 600 }}
 					key={index}
 				>
 					<CardActionArea>
 						{project.images && project.images.length === 1 ? (
 							<CardMedia
-								style={{ width: 300, height: 400 }}
+								style={{ width: 300, height: 300 }}
 								component='img'
-								height='150'
 								src={project.images[0]}
 								alt='Project Image'
 							/>
@@ -47,7 +46,7 @@ export default function ProjectCard({ projects, handleDelete }) {
 									project.images.map((image, imgIndex) => (
 										<CardMedia
 											component='img'
-											height='150'
+											style={{ width: 300, height: 300 }}
 											src={image}
 											alt={`Project Image ${imgIndex + 1}`}
 											key={imgIndex}
@@ -63,10 +62,11 @@ export default function ProjectCard({ projects, handleDelete }) {
 								)}
 							</Slider>
 						)}
-						<CardContent>
+						<CardContent style={{ width: 300, height: 200 }}>
 							<Typography
 								gutterBottom
-								variant='h5'
+								fontSize={16}
+								fontWeight={500}
 								component='div'
 							>
 								{project.title}
@@ -88,8 +88,19 @@ export default function ProjectCard({ projects, handleDelete }) {
 							<IconButton
 								aria-label='delete'
 								color='black'
-								sx={{ position: 'absolute', bottom: 10, right: 10 }}
-								onClick={() => handleDelete(index)}
+								sx={{
+									position: 'absolute',
+									bottom: 10,
+									right: 10,
+									zIndex: 2,
+									'&:hover': {
+										backgroundColor: 'rgba(0, 0, 0, 0.04)',
+									},
+								}}
+								onClick={(e) => {
+									e.stopPropagation();
+									handleDelete(index);
+								}}
 							>
 								<DeleteIcon />
 							</IconButton>
