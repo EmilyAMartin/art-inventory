@@ -2,7 +2,6 @@ import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import { Navbar } from './components/Navbar';
 import Home from './Pages/Home';
-import Artwork from './Pages/Artwork';
 import Account from './Pages/Account';
 import Gallery from './Pages/Gallery';
 import Projects from './Pages/Projects';
@@ -54,10 +53,6 @@ function App() {
 					<Route
 						path='/'
 						element={<Home />}
-					/>
-					<Route
-						path='/Artwork'
-						element={<Artwork />}
 					/>
 					<Route
 						path='/Projects'

@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import AddProjectBtn from '../components/AddProjectBtn';
 import ProjectCard from '../components/ProjectCard';
+import AddNewBtn from '../components/AddNewBtn';
+import Grid2 from '@mui/material/Grid2';
+import NewArtCard from '../components/NewArtCard';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const ProjectPage = () => {
 	const [projects, setProjects] = useState([]);
+	const [newAddedArtwork, setNewAddedArtwork] = useState([]);
 
 	const handleProjectAdded = (newProject) => {
 		const updatedProjects = [...projects, newProject];
@@ -15,20 +22,150 @@ const ProjectPage = () => {
 		setProjects(updatedProjects);
 	};
 
+	const handleNewArtworkAdded = (newNewArtwork) => {
+		setNewAddedArtwork((prevState) => [...prevState, newNewArtwork]);
+	};
+
+	const handleDeleteNewArtwork = (index) => {
+		setNewAddedArtwork((prevState) => prevState.filter((_, i) => i !== index));
+	};
+
+	const settings = {
+		dots: true,
+		infinite: true,
+		speed: 500,
+		slidesToShow: 4,
+		slidesToScroll: 1,
+		responsive: [
+			{
+				breakpoint: 1024,
+				settings: {
+					slidesToShow: 3,
+					slidesToScroll: 1,
+				},
+			},
+			{
+				breakpoint: 600,
+				settings: {
+					slidesToShow: 2,
+					slidesToScroll: 1,
+				},
+			},
+		],
+	};
+
+	const renderProjects = () => {
+		if (projects.length === 0) {
+			return <div>No projects added</div>;
+		}
+
+		if (projects.length <= 4) {
+			return (
+				<div
+					style={{ marginTop: 25, display: 'flex', flexDirection: 'row', gap: 25 }}
+				>
+					{projects.map((project, index) => (
+						<ProjectCard
+							key={index}
+							projects={[project]}
+							handleDelete={() => handleDeleteProject(index)}
+						/>
+					))}
+				</div>
+			);
+		}
+
+		return (
+			<Slider {...settings}>
+				{projects.map((project, index) => (
+					<div
+						key={index}
+						style={{ padding: '0 10px' }}
+					>
+						<ProjectCard
+							projects={[project]}
+							handleDelete={() => handleDeleteProject(index)}
+						/>
+					</div>
+				))}
+			</Slider>
+		);
+	};
+
+	const renderArtwork = () => {
+		if (newAddedArtwork.length === 0) {
+			return <div>No New Artwork Available</div>;
+		}
+
+		if (newAddedArtwork.length <= 4) {
+			return (
+				<Grid2
+					style={{
+						marginTop: 25,
+						display: 'flex',
+						flexDirection: 'row',
+						justifyContent: 'space-between',
+					}}
+					container
+					spacing={8}
+				>
+					{newAddedArtwork.map((art, index) => (
+						<Grid2
+							xs={12}
+							ms={5}
+							key={index}
+						>
+							<NewArtCard
+								newAddedArtwork={newAddedArtwork}
+								handleDelete={handleDeleteNewArtwork}
+								index={index}
+							/>
+						</Grid2>
+					))}
+				</Grid2>
+			);
+		}
+
+		return (
+			<Slider {...settings}>
+				{newAddedArtwork.map((art, index) => (
+					<div
+						key={index}
+						style={{ padding: '0 10px' }}
+					>
+						<NewArtCard
+							newAddedArtwork={newAddedArtwork}
+							handleDelete={handleDeleteNewArtwork}
+							index={index}
+						/>
+					</div>
+				))}
+			</Slider>
+		);
+	};
+
 	return (
 		<div
 			style={{
 				marginTop: 25,
 				display: 'flex',
 				flexDirection: 'column',
-				justifyContent: 'space-between',
+				gap: 30,
 			}}
 		>
-			<AddProjectBtn onProjectAdded={handleProjectAdded} />
-			<ProjectCard
-				projects={projects}
-				handleDelete={handleDeleteProject}
-			/>
+			{/* Projects Section */}
+			<div>
+				<h2>Projects</h2>
+				<AddProjectBtn onProjectAdded={handleProjectAdded} />
+				{renderProjects()}
+			</div>
+
+			{/* Artwork Section */}
+			<div>
+				<h2>Artwork</h2>
+				<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
+				{renderArtwork()}
+			</div>
 		</div>
 	);
 };
