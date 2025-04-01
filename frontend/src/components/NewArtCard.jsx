@@ -20,10 +20,12 @@ const NewArtCard = ({ newAddedArtwork, handleDelete, index }) => {
 		console.error('Artwork not found at index', index);
 		return <div>Artwork not found at index {index}</div>;
 	}
-	if (!artwork.images) {
-		console.error("Artwork missing 'images' property:", artwork);
-		return <div>No image available for this artwork</div>;
-	}
+
+	// Get the first image from the images array or use a default image
+	const imageUrl =
+		artwork.images && artwork.images.length > 0
+			? artwork.images[0]
+			: 'https://via.placeholder.com/300x300?text=No+Image+Available';
 
 	const handlePopClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -36,7 +38,7 @@ const NewArtCard = ({ newAddedArtwork, handleDelete, index }) => {
 	};
 
 	if (newAddedArtwork.length === 0) {
-		return <div style={{ marginTop: 25 }}>No newAddedArtwork available</div>;
+		return <div style={{ marginTop: 25 }}>No artwork available</div>;
 	}
 
 	return (
@@ -53,7 +55,7 @@ const NewArtCard = ({ newAddedArtwork, handleDelete, index }) => {
 						<CardMedia
 							style={{ width: 300, height: 300 }}
 							component='img'
-							image={artwork.images}
+							image={imageUrl}
 							alt='Artwork Image'
 							onClick={handlePopClick}
 						/>
@@ -172,7 +174,7 @@ const NewArtCard = ({ newAddedArtwork, handleDelete, index }) => {
 							variant='body2'
 							sx={{ color: 'text.secondary' }}
 						>
-							Place of Origin: {artwork.location}
+							Location: {artwork.location}
 						</Typography>
 						<br />
 						<Typography

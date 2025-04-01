@@ -36,19 +36,95 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 	const [location, setLocation] = useState('');
 	const [description, setDescription] = useState('');
 
-	const handleSubmit = () => {
-		const artworkData = {
-			title,
-			artist,
-			date,
-			medium,
-			location,
-			description,
-			images: images,
-		};
-		onArtworkAdded(artworkData);
-		resetForm();
-		setOpen(false);
+	const handleSubmit = async () => {
+		try {
+			// Validate required fields
+			if (!title || !date || !medium || !location) {
+				alert(
+					'Please fill in all required fields: Title, Date, Medium, and Location'
+				);
+				return;
+			}
+
+			const artworkData = {
+				title,
+				artist,
+				date,
+				medium,
+				location,
+				description,
+				images: images,
+			};
+
+			console.log('Submitting artwork data:', artworkData);
+
+			const response = await fetch('http://localhost:3000/artworks', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(artworkData),
+				credentials: 'include', // This is important for sending cookies
+			});
+
+			console.log('Response status:', response.status);
+			console.log(
+				'Response headers:',
+				Object.fromEntries(response.headers.entries())
+			);
+
+			const responseText = await response.text(); // Get raw response text first
+			console.log('Raw response:', responseText);
+
+			let responseData;
+			try {
+				responseData = JSON.parse(responseText);
+				console.log('Parsed response data:', responseData);
+			} catch (e) {
+				console.error('Failed to parse response as JSON:', e);
+				console.error('Raw response that failed to parse:', responseText);
+				throw new Error(`Server returned invalid JSON response: ${responseText}`);
+			}
+
+			if (!response.ok) {
+				const errorMessage =
+					responseData.message ||
+					responseData.error ||
+					responseData.details ||
+					'Failed to add artwork';
+				console.error('Server returned error:', {
+					status: response.status,
+					message: errorMessage,
+					details: responseData.details,
+					stack: responseData.stack,
+					fullResponse: responseData,
+				});
+				throw new Error(`Server error: ${errorMessage}`);
+			}
+
+			if (!responseData.success) {
+				const errorMessage =
+					responseData.message || responseData.error || 'Failed to add artwork';
+				console.error('Server returned unsuccessful response:', responseData);
+				throw new Error(`Server returned unsuccessful response: ${errorMessage}`);
+			}
+
+			console.log('Artwork added successfully:', responseData.data);
+			onArtworkAdded(responseData.data);
+			resetForm();
+			setOpen(false);
+		} catch (error) {
+			console.error('Error adding artwork:', error);
+			console.error('Full error details:', {
+				message: error.message,
+				stack: error.stack,
+				name: error.name,
+				error: error,
+			});
+			alert(
+				`Failed to add artwork: ${error.message}\n\nPlease check the console for more details.`
+			);
+		}
 	};
 
 	const handleOpen = () => setOpen(true);
