@@ -35,9 +35,12 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 	const [medium, setMedium] = useState('');
 	const [location, setLocation] = useState('');
 	const [description, setDescription] = useState('');
+	const [isInitialLoad, setIsInitialLoad] = useState(true);
 
 	useEffect(() => {
 		const fetchArtworks = async () => {
+			if (!isInitialLoad) return; // Skip if not initial load
+
 			try {
 				const response = await fetch('http://localhost:3000/artworks', {
 					credentials: 'include',
@@ -73,17 +76,26 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 					};
 				});
 
-				// Add each artwork to the state
-				formattedArtworks.forEach((artwork) => {
-					onArtworkAdded(artwork);
-				});
+				// Always clear the state first
+				onArtworkAdded([]);
+
+				// Only add artworks if we have any
+				if (formattedArtworks && formattedArtworks.length > 0) {
+					formattedArtworks.forEach((artwork) => {
+						onArtworkAdded(artwork);
+					});
+				}
+
+				setIsInitialLoad(false); // Mark initial load as complete
 			} catch (error) {
 				console.error('Error fetching artworks:', error);
+				// On error, ensure the state is cleared
+				onArtworkAdded([]);
 			}
 		};
 
 		fetchArtworks();
-	}, []);
+	}, [isInitialLoad]); // Only depend on isInitialLoad
 
 	const handleSubmit = async () => {
 		try {
@@ -388,16 +400,7 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 							maxRows={4}
 						/>
 
-						<Button
-							component='label'
-							role={undefined}
-							variant='contained'
-							startIcon={<CloudUploadIcon />}
-							type='file'
-							id='image-upload'
-							accept='image/*'
-							multiple
-							onChange={handleImageChange}
+						<div
 							style={{
 								display: 'flex',
 								justifyContent: 'center',
@@ -406,37 +409,64 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 								padding: '8px',
 								fontSize: '0.9rem',
 								width: '100%',
+								cursor: 'pointer',
+								borderRadius: '4px',
 							}}
 						>
-							Upload files
+							<label
+								htmlFor='image-upload'
+								style={{
+									display: 'flex',
+									alignItems: 'center',
+									gap: '8px',
+									cursor: 'pointer',
+									color: 'white',
+								}}
+							>
+								<CloudUploadIcon />
+								Upload files
+							</label>
 							<input
+								id='image-upload'
 								type='file'
 								multiple
+								accept='image/*'
 								style={{ display: 'none' }}
 								onChange={handleImageChange}
 							/>
-						</Button>
+						</div>
 						<div
 							style={{
 								display: 'flex',
 								flexDirection: 'row',
 								justifyContent: 'center',
+								gap: '10px',
 							}}
 						>
-							<Button
+							<div
 								onClick={handlePrev}
-								disabled={currentIndex === 0}
-								color='black'
+								style={{
+									padding: '8px 16px',
+									cursor: currentIndex === 0 ? 'not-allowed' : 'pointer',
+									opacity: currentIndex === 0 ? 0.5 : 1,
+									backgroundColor: '#f0f0f0',
+									borderRadius: '4px',
+								}}
 							>
 								Previous
-							</Button>
-							<Button
+							</div>
+							<div
 								onClick={handleNext}
-								disabled={currentIndex === images.length - 1}
-								color='black'
+								style={{
+									padding: '8px 16px',
+									cursor: currentIndex === images.length - 1 ? 'not-allowed' : 'pointer',
+									opacity: currentIndex === images.length - 1 ? 0.5 : 1,
+									backgroundColor: '#f0f0f0',
+									borderRadius: '4px',
+								}}
 							>
 								Next
-							</Button>
+							</div>
 						</div>
 						{images.length > 0 && (
 							<div style={{ textAlign: 'center' }}>

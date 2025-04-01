@@ -22,7 +22,11 @@ const ProjectPage = () => {
 	};
 
 	const handleNewArtworkAdded = (newNewArtwork) => {
-		setNewAddedArtwork((prevState) => [...prevState, newNewArtwork]);
+		if (Array.isArray(newNewArtwork)) {
+			setNewAddedArtwork(newNewArtwork);
+		} else {
+			setNewAddedArtwork((prevState) => [...prevState, newNewArtwork]);
+		}
 	};
 
 	const handleDeleteNewArtwork = (index) => {
@@ -92,8 +96,10 @@ const ProjectPage = () => {
 	};
 
 	const renderArtwork = () => {
-		if (newAddedArtwork.length === 0) {
-			return <div>No New Artwork Available</div>;
+		if (!newAddedArtwork || newAddedArtwork.length === 0) {
+			return (
+				<div style={{ marginTop: '1rem', color: '#666' }}>No artwork available</div>
+			);
 		}
 
 		if (newAddedArtwork.length <= 4) {
@@ -103,7 +109,7 @@ const ProjectPage = () => {
 				>
 					{newAddedArtwork.map((art, index) => (
 						<NewArtCard
-							key={index}
+							key={art.id || index}
 							newAddedArtwork={newAddedArtwork}
 							handleDelete={handleDeleteNewArtwork}
 							index={index}
@@ -117,7 +123,7 @@ const ProjectPage = () => {
 			<Slider {...settings}>
 				{newAddedArtwork.map((art, index) => (
 					<div
-						key={index}
+						key={art.id || index}
 						style={{ padding: '0 10px' }}
 					>
 						<NewArtCard

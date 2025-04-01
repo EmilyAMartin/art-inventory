@@ -15,11 +15,17 @@ const NewArtCard = ({ newAddedArtwork, handleDelete, index }) => {
 	const [flip, setFlip] = useState(false);
 	const open = Boolean(anchorEl);
 
-	const artwork = newAddedArtwork[index];
-	if (!artwork) {
-		console.error('Artwork not found at index', index);
-		return <div>Artwork not found at index {index}</div>;
+	// Return early if there are no artworks or if the artwork at the given index is undefined
+	if (
+		!newAddedArtwork ||
+		!Array.isArray(newAddedArtwork) ||
+		newAddedArtwork.length === 0 ||
+		!newAddedArtwork[index]
+	) {
+		return null;
 	}
+
+	const artwork = newAddedArtwork[index];
 
 	const handleDeleteClick = async (e) => {
 		e.stopPropagation();
@@ -29,6 +35,9 @@ const NewArtCard = ({ newAddedArtwork, handleDelete, index }) => {
 				{
 					method: 'DELETE',
 					credentials: 'include',
+					headers: {
+						'Content-Type': 'application/json',
+					},
 				}
 			);
 
@@ -49,7 +58,7 @@ const NewArtCard = ({ newAddedArtwork, handleDelete, index }) => {
 	const imageUrl =
 		artwork.images && artwork.images.length > 0
 			? artwork.images[0]
-			: 'https://via.placeholder.com/300x300?text=No+Image+Available';
+			: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDMwMCAzMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbGw9IiNmMGYwZjAiLz4KICA8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE2IiBmaWxsPSIjNjY2Ij4KICAgIE5vIEltYWdlIEF2YWlsYWJsZQogIDwvdGV4dD4KPC9zdmc+';
 
 	const handlePopClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -60,10 +69,6 @@ const NewArtCard = ({ newAddedArtwork, handleDelete, index }) => {
 		setAnchorEl(null);
 		setPopoverImageId(null);
 	};
-
-	if (newAddedArtwork.length === 0) {
-		return <div style={{ marginTop: 25 }}>No artwork available</div>;
-	}
 
 	return (
 		<div style={{ marginTop: 25 }}>

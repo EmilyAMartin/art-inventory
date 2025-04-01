@@ -25,24 +25,6 @@ export const createTable = async () => {
 	}
 };
 
-export const createTestData = async () => {
-	try {
-		await dbPool.query(
-			`
-      INSERT INTO users (id, name, email, password_hash, username, bio)
-      VALUES (1, "John Doe", "john@doe.com", "password_hash", "johndoe", "This is John Doe's bio.")
-    `
-		);
-		console.log('Users inserted successfully');
-	} catch (err) {
-		if (err.code === 'ER_DUP_ENTRY') {
-			console.log('Duplicate entry found, ignoring...');
-			return;
-		}
-		console.log('Error inserting user:', err);
-	}
-};
-
 // Users Routes
 export const setupRoutes = (app) => {
 	// Login Route

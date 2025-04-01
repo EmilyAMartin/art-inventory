@@ -14,8 +14,9 @@ const sessionStore = new MySQLStore({}, dbPool);
 const app = express();
 const corsOptions = {
 	origin: 'http://localhost:5173',
-	methods: ['GET', 'POST', 'PUT'],
 	credentials: true,
+	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+	allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
 app.use(cors(corsOptions));
@@ -43,8 +44,6 @@ const initDb = async () => {
 		await users.createTable();
 		await artwork.createTable();
 		await favorites.createFavoritesTable();
-		await artwork.createTestData();
-		await users.createTestData();
 	} catch (err) {
 		console.error('Error initializing database:', err);
 	}

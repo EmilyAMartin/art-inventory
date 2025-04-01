@@ -88,7 +88,7 @@ export const Navbar = () => {
 							>
 								Projects
 							</NavLink>
-						</li>``
+						</li>
 						<li>
 							<NavLink
 								to='/Favorites'
