@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import { green } from '@mui/material/colors';
 import { red } from '@mui/material/colors';
@@ -35,6 +35,55 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 	const [medium, setMedium] = useState('');
 	const [location, setLocation] = useState('');
 	const [description, setDescription] = useState('');
+
+	useEffect(() => {
+		const fetchArtworks = async () => {
+			try {
+				const response = await fetch('http://localhost:3000/artworks', {
+					credentials: 'include',
+				});
+
+				if (!response.ok) {
+					throw new Error('Failed to fetch artworks');
+				}
+
+				const data = await response.json();
+				console.log('Fetched artworks:', data);
+
+				// Format the artwork data to match the expected structure
+				const formattedArtworks = data.map((artwork) => {
+					let thumbnail;
+					try {
+						thumbnail =
+							typeof artwork.thumbnail === 'string'
+								? JSON.parse(artwork.thumbnail)
+								: artwork.thumbnail;
+					} catch (parseError) {
+						console.error('Error parsing thumbnail:', parseError);
+						thumbnail = { alt_text: '', images: [] };
+					}
+
+					return {
+						...artwork,
+						images: thumbnail.images || [],
+						description: thumbnail.alt_text || '',
+						location: artwork.place_of_origin,
+						medium: artwork.medium_display,
+						date: artwork.date_end,
+					};
+				});
+
+				// Add each artwork to the state
+				formattedArtworks.forEach((artwork) => {
+					onArtworkAdded(artwork);
+				});
+			} catch (error) {
+				console.error('Error fetching artworks:', error);
+			}
+		};
+
+		fetchArtworks();
+	}, []);
 
 	const handleSubmit = async () => {
 		try {
@@ -360,10 +409,11 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 							}}
 						>
 							Upload files
-							<VisuallyHiddenInput
+							<input
 								type='file'
-								onChange={(event) => console.log(event.target.files)}
 								multiple
+								style={{ display: 'none' }}
+								onChange={handleImageChange}
 							/>
 						</Button>
 						<div

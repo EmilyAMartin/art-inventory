@@ -21,6 +21,30 @@ const NewArtCard = ({ newAddedArtwork, handleDelete, index }) => {
 		return <div>Artwork not found at index {index}</div>;
 	}
 
+	const handleDeleteClick = async (e) => {
+		e.stopPropagation();
+		try {
+			const response = await fetch(
+				`http://localhost:3000/artworks/${artwork.id}`,
+				{
+					method: 'DELETE',
+					credentials: 'include',
+				}
+			);
+
+			if (!response.ok) {
+				const errorData = await response.json();
+				throw new Error(errorData.message || 'Failed to delete artwork');
+			}
+
+			// If deletion was successful, call the parent's handleDelete
+			handleDelete(index);
+		} catch (error) {
+			console.error('Error deleting artwork:', error);
+			alert(`Failed to delete artwork: ${error.message}`);
+		}
+	};
+
 	// Get the first image from the images array or use a default image
 	const imageUrl =
 		artwork.images && artwork.images.length > 0
@@ -92,10 +116,7 @@ const NewArtCard = ({ newAddedArtwork, handleDelete, index }) => {
 										backgroundColor: 'rgba(0, 0, 0, 0.04)',
 									},
 								}}
-								onClick={(e) => {
-									e.stopPropagation();
-									handleDelete(index);
-								}}
+								onClick={handleDeleteClick}
 							>
 								<DeleteIcon />
 							</IconButton>

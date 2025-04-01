@@ -58,7 +58,31 @@ export const setupRoutes = (app) => {
       FROM artwork 
       JOIN users ON artwork.artist_id = users.id`
 			);
-			res.json(results);
+
+			// Format the artwork data
+			const formattedArtworks = results.map((artwork) => {
+				let thumbnail;
+				try {
+					thumbnail =
+						typeof artwork.thumbnail === 'string'
+							? JSON.parse(artwork.thumbnail)
+							: artwork.thumbnail;
+				} catch (parseError) {
+					console.error('Error parsing thumbnail:', parseError);
+					thumbnail = { alt_text: '', images: [] };
+				}
+
+				return {
+					...artwork,
+					images: thumbnail.images || [],
+					description: thumbnail.alt_text || '',
+					location: artwork.place_of_origin,
+					medium: artwork.medium_display,
+					date: artwork.date_end,
+				};
+			});
+
+			res.json(formattedArtworks);
 		} catch (error) {
 			console.error('Error fetching artworks:', error);
 			res.status(500).json({
@@ -235,6 +259,59 @@ export const setupRoutes = (app) => {
 				error: 'Internal Server Error',
 				details: error.message,
 				stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
+			});
+		}
+	});
+
+	// Delete artwork route
+	app.delete('/artworks/:id', async (req, res) => {
+		if (!req.session.user) {
+			console.log('No user session found');
+			return res.status(401).json({
+				success: false,
+				error: 'Not logged in',
+				message: 'You must be logged in to delete artwork',
+			});
+		}
+
+		try {
+			const artworkId = req.params.id;
+
+			// First check if the artwork exists and belongs to the user
+			const [artworkResult] = await dbPool.query(
+				'SELECT artist_id FROM artwork WHERE id = ?',
+				[artworkId]
+			);
+
+			if (artworkResult.length === 0) {
+				return res.status(404).json({
+					success: false,
+					error: 'Not found',
+					message: 'Artwork not found',
+				});
+			}
+
+			if (artworkResult[0].artist_id !== req.session.user.id) {
+				return res.status(403).json({
+					success: false,
+					error: 'Forbidden',
+					message: 'You can only delete your own artwork',
+				});
+			}
+
+			// Delete the artwork
+			await dbPool.query('DELETE FROM artwork WHERE id = ?', [artworkId]);
+
+			res.json({
+				success: true,
+				message: 'Artwork deleted successfully',
+			});
+		} catch (error) {
+			console.error('Error deleting artwork:', error);
+			res.status(500).json({
+				success: false,
+				error: 'Internal Server Error',
+				details: error.message,
 			});
 		}
 	});
