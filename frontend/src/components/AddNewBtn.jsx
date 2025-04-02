@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { styled } from '@mui/material/styles';
 import { green } from '@mui/material/colors';
 import { red } from '@mui/material/colors';
@@ -24,6 +24,7 @@ const VisuallyHiddenInput = styled('input')({
 	whiteSpace: 'nowrap',
 	width: 1,
 });
+
 const AddNewBtn = ({ onArtworkAdded }) => {
 	const [open, setOpen] = useState(false);
 	const [isHover, setIsHover] = useState(false);
@@ -35,70 +36,14 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 	const [medium, setMedium] = useState('');
 	const [location, setLocation] = useState('');
 	const [description, setDescription] = useState('');
-	const [isInitialLoad, setIsInitialLoad] = useState(true);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
-	useEffect(() => {
-		const fetchArtworks = async () => {
-			if (!isInitialLoad) return; // Skip if not initial load
+	const handleSubmit = useCallback(async () => {
+		if (isSubmitting) return; // Prevent duplicate submissions
 
-			try {
-				const response = await fetch('http://localhost:3000/artworks', {
-					credentials: 'include',
-				});
-
-				if (!response.ok) {
-					throw new Error('Failed to fetch artworks');
-				}
-
-				const data = await response.json();
-				console.log('Fetched artworks:', data);
-
-				// Format the artwork data to match the expected structure
-				const formattedArtworks = data.map((artwork) => {
-					let thumbnail;
-					try {
-						thumbnail =
-							typeof artwork.thumbnail === 'string'
-								? JSON.parse(artwork.thumbnail)
-								: artwork.thumbnail;
-					} catch (parseError) {
-						console.error('Error parsing thumbnail:', parseError);
-						thumbnail = { alt_text: '', images: [] };
-					}
-
-					return {
-						...artwork,
-						images: thumbnail.images || [],
-						description: thumbnail.alt_text || '',
-						location: artwork.place_of_origin,
-						medium: artwork.medium_display,
-						date: artwork.date_end,
-					};
-				});
-
-				// Always clear the state first
-				onArtworkAdded([]);
-
-				// Only add artworks if we have any
-				if (formattedArtworks && formattedArtworks.length > 0) {
-					formattedArtworks.forEach((artwork) => {
-						onArtworkAdded(artwork);
-					});
-				}
-
-				setIsInitialLoad(false); // Mark initial load as complete
-			} catch (error) {
-				console.error('Error fetching artworks:', error);
-				// On error, ensure the state is cleared
-				onArtworkAdded([]);
-			}
-		};
-
-		fetchArtworks();
-	}, [isInitialLoad]); // Only depend on isInitialLoad
-
-	const handleSubmit = async () => {
 		try {
+			setIsSubmitting(true); // Set submitting state
+
 			// Validate required fields
 			if (!title || !date || !medium || !location) {
 				alert(
@@ -107,99 +52,80 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 				return;
 			}
 
-			const artworkData = {
-				title,
-				artist,
-				date,
-				medium,
-				location,
-				description,
-				images: images,
-			};
+			// Create FormData object
+			const formData = new FormData();
+			formData.append('title', title);
+			formData.append('artist', artist);
+			formData.append('date', date);
+			formData.append('medium', medium);
+			formData.append('location', location);
+			formData.append('description', description);
 
-			console.log('Submitting artwork data:', artworkData);
+			// Add image file if exists
+			if (images.length > 0) {
+				const response = await fetch(images[0]);
+				const blob = await response.blob();
+				formData.append('image', blob, 'artwork.jpg');
+			}
 
 			const response = await fetch('http://localhost:3000/artworks', {
 				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(artworkData),
-				credentials: 'include', // This is important for sending cookies
+				body: formData,
+				credentials: 'include',
 			});
 
-			console.log('Response status:', response.status);
-			console.log(
-				'Response headers:',
-				Object.fromEntries(response.headers.entries())
-			);
-
-			const responseText = await response.text(); // Get raw response text first
-			console.log('Raw response:', responseText);
-
+			const responseText = await response.text();
 			let responseData;
 			try {
 				responseData = JSON.parse(responseText);
-				console.log('Parsed response data:', responseData);
 			} catch (e) {
-				console.error('Failed to parse response as JSON:', e);
-				console.error('Raw response that failed to parse:', responseText);
 				throw new Error(`Server returned invalid JSON response: ${responseText}`);
 			}
 
 			if (!response.ok) {
-				const errorMessage =
-					responseData.message ||
-					responseData.error ||
-					responseData.details ||
-					'Failed to add artwork';
-				console.error('Server returned error:', {
-					status: response.status,
-					message: errorMessage,
-					details: responseData.details,
-					stack: responseData.stack,
-					fullResponse: responseData,
-				});
-				throw new Error(`Server error: ${errorMessage}`);
+				throw new Error(
+					responseData.message || responseData.error || 'Failed to add artwork'
+				);
 			}
 
 			if (!responseData.success) {
-				const errorMessage =
-					responseData.message || responseData.error || 'Failed to add artwork';
-				console.error('Server returned unsuccessful response:', responseData);
-				throw new Error(`Server returned unsuccessful response: ${errorMessage}`);
+				throw new Error(
+					responseData.message || responseData.error || 'Failed to add artwork'
+				);
 			}
 
-			console.log('Artwork added successfully:', responseData.data);
+			// Only add the new artwork once and reset form
 			onArtworkAdded(responseData.data);
 			resetForm();
 			setOpen(false);
 		} catch (error) {
 			console.error('Error adding artwork:', error);
-			console.error('Full error details:', {
-				message: error.message,
-				stack: error.stack,
-				name: error.name,
-				error: error,
-			});
-			alert(
-				`Failed to add artwork: ${error.message}\n\nPlease check the console for more details.`
-			);
+			alert(`Failed to add artwork: ${error.message}`);
+		} finally {
+			setIsSubmitting(false); // Reset submitting state
 		}
-	};
+	}, [
+		title,
+		artist,
+		date,
+		medium,
+		location,
+		description,
+		images,
+		isSubmitting,
+		onArtworkAdded,
+	]);
 
-	const handleOpen = () => setOpen(true);
-	const handleClose = () => {
+	const handleOpen = useCallback(() => setOpen(true), []);
+	const handleClose = useCallback(() => {
 		resetForm();
 		setOpen(false);
-	};
-	const handleMouseEnter = () => {
-		setIsHover(true);
-	};
-	const handleMouseLeave = () => {
-		setIsHover(false);
-	};
-	const handleImageChange = (e) => {
+	}, []);
+
+	const handleMouseEnter = useCallback(() => setIsHover(true), []);
+	const handleMouseLeave = useCallback(() => setIsHover(false), []);
+
+	const handleImageChange = useCallback((e) => {
 		const files = Array.from(e.target.files);
 		const newImages = files.map((file) => {
 			const reader = new FileReader();
@@ -213,19 +139,21 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 		Promise.all(newImages).then((imageData) => {
 			setImages((prevImages) => [...prevImages, ...imageData]);
 		});
-	};
-	const handleNext = () => {
+	}, []);
+
+	const handleNext = useCallback(() => {
 		if (currentIndex < images.length - 1) {
 			setCurrentIndex(currentIndex + 1);
 		}
-	};
-	const handlePrev = () => {
+	}, [currentIndex, images.length]);
+
+	const handlePrev = useCallback(() => {
 		if (currentIndex > 0) {
 			setCurrentIndex(currentIndex - 1);
 		}
-	};
+	}, [currentIndex]);
 
-	const resetForm = () => {
+	const resetForm = useCallback(() => {
 		setTitle('');
 		setArtist('');
 		setDate('');
@@ -234,7 +162,8 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 		setDescription('');
 		setImages([]);
 		setCurrentIndex(0);
-	};
+	}, []);
+
 	const buttonStyle = {
 		padding: '0.5rem',
 		hover: '#6c63ff50',
@@ -261,8 +190,8 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 		maxWidth: '90%',
 		width: '600px',
 		padding: '2rem',
-		maxHeight: '90vh', // Limit height to 80% of viewport height
-		overflow: 'auto', // Make the content scrollable if it's too long
+		maxHeight: '90vh',
+		overflow: 'auto',
 	};
 
 	const SubmitButton = styled(Button)(({ theme }) => ({
@@ -283,14 +212,14 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 
 	return (
 		<div>
-			<button
+			<div
 				style={buttonStyle}
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
 				onClick={handleOpen}
 			>
 				Add New Artwork
-			</button>
+			</div>
 			<Modal
 				open={open}
 				onClose={handleClose}
@@ -503,13 +432,15 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 									sx={{ color: 'white' }}
 									variant='contained'
 									onClick={handleSubmit}
+									disabled={isSubmitting}
 								>
-									Submit
+									{isSubmitting ? 'Submitting...' : 'Submit'}
 								</SubmitButton>
 								<CancelButton
 									sx={{ color: 'white' }}
 									variant='contained'
 									onClick={handleClose}
+									disabled={isSubmitting}
 								>
 									Cancel
 								</CancelButton>

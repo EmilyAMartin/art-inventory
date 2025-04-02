@@ -1,7 +1,12 @@
 import { dbPool } from './db.js';
+import upload from './fileUpload.js';
+import path from 'path';
+import fs from 'fs';
+import express from 'express';
 
 export const createTable = async () => {
 	try {
+		// First create the table if it doesn't exist
 		await dbPool.query(`
       CREATE TABLE IF NOT EXISTS artwork (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -13,47 +18,73 @@ export const createTable = async () => {
         artwork_type_title VARCHAR(255),
         medium_display VARCHAR(255),
         credit_line VARCHAR(255),
-        thumbnail JSON,
+        description TEXT,
         FOREIGN KEY (artist_id) REFERENCES users(id)
       );
     `);
-		console.log('Artwork table created successfully.');
+
+		// Check if description column exists
+		const [columns] = await dbPool.query(`
+      SELECT COLUMN_NAME 
+      FROM INFORMATION_SCHEMA.COLUMNS 
+      WHERE TABLE_NAME = 'artwork' 
+      AND COLUMN_NAME = 'description';
+    `);
+
+		// Add description column if it doesn't exist
+		if (columns.length === 0) {
+			await dbPool.query(`
+        ALTER TABLE artwork 
+        ADD COLUMN description TEXT;
+      `);
+			console.log('Added description column to artwork table');
+		}
+
+		// Check if thumbnail column exists and remove it if it does
+		const [thumbnailColumns] = await dbPool.query(`
+      SELECT COLUMN_NAME 
+      FROM INFORMATION_SCHEMA.COLUMNS 
+      WHERE TABLE_NAME = 'artwork' 
+      AND COLUMN_NAME = 'thumbnail';
+    `);
+
+		if (thumbnailColumns.length > 0) {
+			await dbPool.query(`
+        ALTER TABLE artwork 
+        DROP COLUMN thumbnail;
+      `);
+			console.log('Removed thumbnail column from artwork table');
+		}
+
+		console.log('Artwork table schema updated successfully.');
 	} catch (err) {
-		console.error('Error creating artwork table:', err);
+		console.error('Error updating artwork table schema:', err);
 	}
 };
 
 export const setupRoutes = (app) => {
+	// Serve uploaded files
+	app.use('/uploads', express.static('uploads'));
+
 	app.get('/artworks', async (req, res) => {
 		try {
 			const [results] = await dbPool.query(
-				`SELECT artwork.id, artwork.title, artwork.date_end, artwork.image_path, artwork.place_of_origin, artwork.artwork_type_title, artwork.medium_display, artwork.credit_line, artwork.thumbnail
-      FROM artwork`
+				`SELECT artwork.id, artwork.title, artwork.date_end, artwork.image_path, 
+				artwork.place_of_origin, artwork.artwork_type_title, artwork.medium_display, 
+				artwork.credit_line, artwork.description
+				FROM artwork`
 			);
 
 			// Format the artwork data
-			const formattedArtworks = results.map((artwork) => {
-				let thumbnail;
-				try {
-					thumbnail =
-						typeof artwork.thumbnail === 'string'
-							? JSON.parse(artwork.thumbnail)
-							: artwork.thumbnail;
-				} catch (parseError) {
-					console.error('Error parsing thumbnail:', parseError);
-					thumbnail = { alt_text: '', images: [] };
-				}
-
-				return {
-					...artwork,
-					images: thumbnail.images || [],
-					description: thumbnail.alt_text || '',
-					location: artwork.place_of_origin,
-					medium: artwork.medium_display,
-					date: artwork.date_end,
-					artist: artwork.artist || 'Unknown Artist',
-				};
-			});
+			const formattedArtworks = results.map((artwork) => ({
+				...artwork,
+				location: artwork.place_of_origin,
+				medium: artwork.medium_display,
+				date: artwork.date_end,
+				artist: artwork.artist || 'Unknown Artist',
+				images: artwork.image_path ? [artwork.image_path] : [],
+				description: artwork.description || '',
+			}));
 
 			res.json(formattedArtworks);
 		} catch (error) {
@@ -66,12 +97,11 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	// Add new artwork route
-	app.post('/artworks', async (req, res) => {
+	// Add new artwork route with file upload
+	app.post('/artworks', upload.single('image'), async (req, res) => {
 		console.log('Received artwork creation request:', req.body);
+		console.log('Uploaded file:', req.file);
 		console.log('Session user:', req.session.user);
-		console.log('Session ID:', req.session.id);
-		console.log('Request headers:', req.headers);
 
 		if (!req.session.user) {
 			console.log('No user session found');
@@ -83,8 +113,8 @@ export const setupRoutes = (app) => {
 		}
 
 		try {
-			const { title, artist, date, medium, location, description, images } =
-				req.body;
+			const { title, artist, date, medium, location, description } = req.body;
+			const imagePath = req.file ? req.file.path : null;
 
 			console.log('Received data:', {
 				title,
@@ -93,7 +123,7 @@ export const setupRoutes = (app) => {
 				medium,
 				location,
 				description,
-				imagesLength: images?.length,
+				imagePath,
 				userId: req.session.user.id,
 			});
 
@@ -139,8 +169,9 @@ export const setupRoutes = (app) => {
 				artwork_type_title,
 				medium_display,
 				credit_line,
-				thumbnail
-			) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+				image_path,
+				description
+			) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
 			const values = [
 				req.session.user.id,
@@ -150,7 +181,8 @@ export const setupRoutes = (app) => {
 				medium,
 				medium,
 				'Personal Collection',
-				JSON.stringify({ alt_text: description, images: images }),
+				imagePath,
+				description,
 			];
 
 			console.log('Executing query:', query);
@@ -170,43 +202,29 @@ export const setupRoutes = (app) => {
 				});
 			}
 
-			// Get the newly created artwork with artist information
+			// Get the newly created artwork
 			let newArtwork;
 			try {
 				[newArtwork] = await dbPool.query(
 					`SELECT artwork.id, artwork.title, artwork.date_end, artwork.image_path, 
 					artwork.place_of_origin, artwork.artwork_type_title, artwork.medium_display, 
-					artwork.credit_line, artwork.thumbnail
+					artwork.credit_line, artwork.description
 					FROM artwork 
 					WHERE artwork.id = ?`,
 					[result.insertId]
 				);
 				console.log('Retrieved new artwork:', newArtwork[0]);
 
-				// Parse the thumbnail JSON and add it to the response
+				// Format the artwork for frontend
 				const artwork = newArtwork[0];
-				let thumbnail;
-				try {
-					thumbnail =
-						typeof artwork.thumbnail === 'string'
-							? JSON.parse(artwork.thumbnail)
-							: artwork.thumbnail;
-				} catch (parseError) {
-					console.error('Error parsing thumbnail:', parseError);
-					thumbnail = { alt_text: '', images: [] };
-				}
-
-				artwork.images = thumbnail.images || [];
-				artwork.description = thumbnail.alt_text || '';
+				artwork.images = artwork.image_path ? [artwork.image_path] : [];
 				artwork.location = artwork.place_of_origin;
 				artwork.medium = artwork.medium_display;
 				artwork.date = artwork.date_end;
 				artwork.artist = artist;
-				delete artwork.thumbnail;
 				delete artwork.place_of_origin;
 				delete artwork.medium_display;
 				delete artwork.date_end;
-				delete artwork.image_path;
 				delete artwork.credit_line;
 
 				console.log('Formatted artwork for frontend:', artwork);
@@ -252,7 +270,7 @@ export const setupRoutes = (app) => {
 
 			// First check if the artwork exists and belongs to the user
 			const [artworkResult] = await dbPool.query(
-				'SELECT artist_id FROM artwork WHERE id = ?',
+				'SELECT artist_id, image_path FROM artwork WHERE id = ?',
 				[artworkId]
 			);
 
@@ -272,7 +290,17 @@ export const setupRoutes = (app) => {
 				});
 			}
 
-			// Delete the artwork
+			// Delete the image file if it exists
+			if (artworkResult[0].image_path) {
+				try {
+					fs.unlinkSync(artworkResult[0].image_path);
+				} catch (unlinkError) {
+					console.error('Error deleting image file:', unlinkError);
+					// Continue with database deletion even if file deletion fails
+				}
+			}
+
+			// Delete the artwork from database
 			await dbPool.query('DELETE FROM artwork WHERE id = ?', [artworkId]);
 
 			res.json({

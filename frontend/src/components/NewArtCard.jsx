@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import Popover from '@mui/material/Popover';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -9,23 +9,16 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ReactCardFlip from 'react-card-flip';
 import CardActionArea from '@mui/material/CardActionArea';
 
-const NewArtCard = ({ newAddedArtwork, handleDelete, index }) => {
+const NewArtCard = memo(({ artwork, onDelete }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
 	const [flip, setFlip] = useState(false);
 	const open = Boolean(anchorEl);
 
-	// Return early if there are no artworks or if the artwork at the given index is undefined
-	if (
-		!newAddedArtwork ||
-		!Array.isArray(newAddedArtwork) ||
-		newAddedArtwork.length === 0 ||
-		!newAddedArtwork[index]
-	) {
+	// Return early if artwork is undefined
+	if (!artwork) {
 		return null;
 	}
-
-	const artwork = newAddedArtwork[index];
 
 	const handleDeleteClick = async (e) => {
 		e.stopPropagation();
@@ -46,8 +39,8 @@ const NewArtCard = ({ newAddedArtwork, handleDelete, index }) => {
 				throw new Error(errorData.message || 'Failed to delete artwork');
 			}
 
-			// If deletion was successful, call the parent's handleDelete
-			handleDelete(index);
+			// If deletion was successful, call the parent's onDelete
+			onDelete(artwork.id);
 		} catch (error) {
 			console.error('Error deleting artwork:', error);
 			alert(`Failed to delete artwork: ${error.message}`);
@@ -57,7 +50,7 @@ const NewArtCard = ({ newAddedArtwork, handleDelete, index }) => {
 	// Get the first image from the images array or use a default image
 	const imageUrl =
 		artwork.images && artwork.images.length > 0
-			? artwork.images[0]
+			? `http://localhost:3000/${artwork.images[0]}`
 			: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDMwMCAzMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbGw9IiNmMGYwZjAiLz4KICA8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE2IiBmaWxsPSIjNjY2Ij4KICAgIE5vIEltYWdlIEF2YWlsYWJsZQogIDwvdGV4dD4KPC9zdmc+';
 
 	const handlePopClick = (event) => {
@@ -237,6 +230,8 @@ const NewArtCard = ({ newAddedArtwork, handleDelete, index }) => {
 			</ReactCardFlip>
 		</div>
 	);
-};
+});
+
+NewArtCard.displayName = 'NewArtCard';
 
 export default NewArtCard;

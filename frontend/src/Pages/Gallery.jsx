@@ -173,6 +173,7 @@ const Gallery = () => {
 				<Grid2
 					style={{
 						marginTop: 25,
+						marginBottom: 25,
 						display: 'flex',
 						flexDirection: 'row',
 						justifyContent: 'space-between',
