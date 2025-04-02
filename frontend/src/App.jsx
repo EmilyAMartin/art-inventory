@@ -4,7 +4,7 @@ import { Navbar } from './components/Navbar';
 import Home from './Pages/Home';
 import Account from './Pages/Account';
 import Gallery from './Pages/Gallery';
-import Projects from './Pages/Projects';
+import Portfolio from './Pages/Portfolio';
 import Favorites from './Pages/Favorites';
 import { AuthContext } from './Pages/Context';
 import { useEffect, useState } from 'react';
@@ -55,8 +55,8 @@ function App() {
 						element={<Home />}
 					/>
 					<Route
-						path='/Projects'
-						element={<Projects />}
+						path='/Portfolio'
+						element={<Portfolio />}
 					/>
 					<Route
 						path='/Favorites'

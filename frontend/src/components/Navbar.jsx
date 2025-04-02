@@ -5,7 +5,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
 import { AuthContext } from '../Pages/Context';
 import LoginBtn from './LoginBtn';
-import { Menu, MenuItem, IconButton, Avatar } from '@mui/material';
+import { Menu, MenuItem, IconButton, Avatar, Button } from '@mui/material';
 
 export const Navbar = () => {
 	const { currentUser } = useContext(AuthContext);
@@ -83,10 +83,10 @@ export const Navbar = () => {
 					<>
 						<li>
 							<NavLink
-								to='/Projects'
+								to='/Portfolio'
 								onClick={handleLinkClick}
 							>
-								Projects
+								Portfolio
 							</NavLink>
 						</li>
 						<li>

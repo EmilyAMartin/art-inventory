@@ -9,11 +9,14 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ReactCardFlip from 'react-card-flip';
 import CardActionArea from '@mui/material/CardActionArea';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 
 const ProjectCard = memo(({ project, handleDelete }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
 	const [flip, setFlip] = useState(false);
+	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 	const open = Boolean(anchorEl);
 
 	// Return early if project is undefined
@@ -21,11 +24,10 @@ const ProjectCard = memo(({ project, handleDelete }) => {
 		return null;
 	}
 
-	// Get the first image from the images array or use a default image
 	const imageUrl =
 		project.images && project.images.length > 0
-			? `http://localhost:3000/uploads/${project.images[0]}`
-			: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDMwMCAzMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbGw9IiNmMGYwZjAiLz4KICA8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE2IiBmaWxsPSIjNjY2Ij4KICAgIE5vIEltYWdlIEF2YWlsYWJsZQogIDwvdGV4dD4KPC9zdmc+';
+			? `http://localhost:3000/uploads/${project.images[currentImageIndex]}`
+			: null;
 
 	const handlePopClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -35,6 +37,22 @@ const ProjectCard = memo(({ project, handleDelete }) => {
 	const handleClose = () => {
 		setAnchorEl(null);
 		setPopoverImageId(null);
+	};
+
+	const handleNextImage = () => {
+		if (project.images && project.images.length > 0) {
+			setCurrentImageIndex((prevIndex) =>
+				prevIndex === project.images.length - 1 ? 0 : prevIndex + 1
+			);
+		}
+	};
+
+	const handlePrevImage = () => {
+		if (project.images && project.images.length > 0) {
+			setCurrentImageIndex((prevIndex) =>
+				prevIndex === 0 ? project.images.length - 1 : prevIndex - 1
+			);
+		}
 	};
 
 	return (
@@ -48,13 +66,64 @@ const ProjectCard = memo(({ project, handleDelete }) => {
 					sx={{ maxWidth: 300, maxHeight: 600 }}
 				>
 					<CardActionArea>
-						<CardMedia
-							style={{ width: 300, height: 300 }}
-							component='img'
-							image={imageUrl}
-							alt='Project Image'
-							onClick={handlePopClick}
-						/>
+						<div style={{ position: 'relative', width: 300, height: 300 }}>
+							<CardMedia
+								style={{ width: 300, height: 300 }}
+								component='img'
+								image={imageUrl}
+								alt='Project Image'
+								onClick={handlePopClick}
+							/>
+							{project.images && project.images.length > 1 && (
+								<>
+									<IconButton
+										onClick={handlePrevImage}
+										sx={{
+											position: 'absolute',
+											left: 8,
+											top: '50%',
+											transform: 'translateY(-50%)',
+											backgroundColor: 'rgba(255, 255, 255, 0.7)',
+											'&:hover': {
+												backgroundColor: 'rgba(255, 255, 255, 0.9)',
+											},
+										}}
+									>
+										<NavigateBeforeIcon />
+									</IconButton>
+									<IconButton
+										onClick={handleNextImage}
+										sx={{
+											position: 'absolute',
+											right: 8,
+											top: '50%',
+											transform: 'translateY(-50%)',
+											backgroundColor: 'rgba(255, 255, 255, 0.7)',
+											'&:hover': {
+												backgroundColor: 'rgba(255, 255, 255, 0.9)',
+											},
+										}}
+									>
+										<NavigateNextIcon />
+									</IconButton>
+									<div
+										style={{
+											position: 'absolute',
+											bottom: 8,
+											left: '50%',
+											transform: 'translateX(-50%)',
+											backgroundColor: 'rgba(0, 0, 0, 0.5)',
+											color: 'white',
+											padding: '4px 8px',
+											borderRadius: '12px',
+											fontSize: '12px',
+										}}
+									>
+										{currentImageIndex + 1} / {project.images.length}
+									</div>
+								</>
+							)}
+						</div>
 
 						<Popover
 							sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}

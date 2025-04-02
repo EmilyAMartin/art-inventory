@@ -4,7 +4,7 @@ import ProjectCard from '../components/ProjectCard';
 import AddNewBtn from '../components/AddNewBtn';
 import NewArtCard from '../components/NewArtCard';
 
-const ProjectPage = () => {
+const PortfolioPage = () => {
 	const [projects, setProjects] = useState([]);
 	const [newAddedArtwork, setNewAddedArtwork] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
@@ -21,14 +21,18 @@ const ProjectPage = () => {
 			}
 
 			const data = await response.json();
+
 			// Format the project data to match artwork format
 			const formattedProjects = data.map((project) => ({
 				...project,
 				images: project.image_path ? [project.image_path] : [],
 			}));
+
 			setProjects(formattedProjects);
 		} catch (error) {
 			console.error('Error fetching projects:', error);
+		} finally {
+			setIsLoading(false);
 		}
 	}, []);
 
@@ -87,6 +91,7 @@ const ProjectPage = () => {
 			...newProject,
 			images: newProject.image_path ? [newProject.image_path] : [],
 		};
+
 		setProjects((prev) => [...prev, formattedProject]);
 	}, []);
 
@@ -136,12 +141,10 @@ const ProjectPage = () => {
 		return (
 			<div
 				style={{
-					width: '100%',
-					padding: '0 20px',
 					display: 'grid',
 					gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-					gap: '20px',
-					justifyContent: 'center',
+					gap: '2rem',
+					padding: '1rem',
 				}}
 			>
 				{projects.map((project) => (
@@ -189,18 +192,23 @@ const ProjectPage = () => {
 	return (
 		<div
 			style={{
-				marginTop: 25,
-				display: 'flex',
-				flexDirection: 'column',
-				gap: 30,
+				padding: '2rem',
+				maxWidth: '1200px',
+				margin: '0 auto',
 			}}
 		>
-			{/* Projects Section */}
-			<div>
-				<h2 style={{ marginBottom: '1rem' }}>Projects</h2>
-				<AddProjectBtn onProjectAdded={handleProjectAdded} />
-				{isLoading ? <div>Loading projects...</div> : renderProjects()}
+			<div
+				style={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					alignItems: 'center',
+					marginBottom: '2rem',
+				}}
+			>
+				<h2 style={{ marginBottom: '1rem' }}>Portfolio</h2>
 			</div>
+			<AddProjectBtn onProjectAdded={handleProjectAdded} />
+			{isLoading ? <div>Loading projects...</div> : renderProjects()}
 
 			{/* Artwork Section */}
 			<div>
@@ -212,4 +220,4 @@ const ProjectPage = () => {
 	);
 };
 
-export default ProjectPage;
+export default PortfolioPage;
