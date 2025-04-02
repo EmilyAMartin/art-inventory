@@ -2,6 +2,7 @@ import 'dotenv/config';
 import * as artwork from './artwork.js';
 import * as users from './users.js';
 import * as favorites from './favorites.js';
+import * as projects from './projects.js';
 
 import express from 'express';
 import session from 'express-session';
@@ -9,6 +10,7 @@ import MySQLStore from 'express-mysql-session';
 import cors from 'cors';
 import { dbPool } from './db.js';
 import path from 'path';
+import fs from 'fs';
 
 const sessionStore = new MySQLStore({}, dbPool);
 const app = express();
@@ -22,6 +24,16 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ limit: '5mb', extended: true }));
+
+// Create uploads directory if it doesn't exist
+const uploadDir = path.join(process.cwd(), 'uploads');
+if (!fs.existsSync(uploadDir)) {
+	fs.mkdirSync(uploadDir);
+}
+
+// Serve static files from uploads directory
+app.use('/uploads', express.static(uploadDir));
+
 app.use(
 	session({
 		secret: process.env.SESSION_SECRET || 'your-default-secret',
@@ -36,14 +48,12 @@ app.use(
 	})
 );
 
-// Serve static files from uploads directory
-app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
-
 const initDb = async () => {
 	try {
 		await users.createTable();
 		await artwork.createTable();
 		await favorites.createFavoritesTable();
+		await projects.createTable();
 	} catch (err) {
 		console.error('Error initializing database:', err);
 	}
@@ -53,6 +63,7 @@ initDb();
 artwork.setupRoutes(app);
 users.setupRoutes(app);
 favorites.setupFavoritesRoutes(app);
+projects.setupRoutes(app);
 
 app.use((err, req, res, next) => {
 	console.error('Unhandled Error:', err);

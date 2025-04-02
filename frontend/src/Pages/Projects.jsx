@@ -9,13 +9,103 @@ const ProjectPage = () => {
 	const [newAddedArtwork, setNewAddedArtwork] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 
-	// Memoize the handlers
-	const handleProjectAdded = useCallback((newProject) => {
-		setProjects((prev) => [...prev, newProject]);
+	// Fetch projects from backend
+	const fetchProjects = useCallback(async () => {
+		try {
+			const response = await fetch('http://localhost:3000/projects', {
+				credentials: 'include',
+			});
+
+			if (!response.ok) {
+				throw new Error('Failed to fetch projects');
+			}
+
+			const data = await response.json();
+			// Format the project data to match artwork format
+			const formattedProjects = data.map((project) => ({
+				...project,
+				images: project.image_path ? [project.image_path] : [],
+			}));
+			setProjects(formattedProjects);
+		} catch (error) {
+			console.error('Error fetching projects:', error);
+		}
 	}, []);
 
-	const handleDeleteProject = useCallback((index) => {
-		setProjects((prev) => prev.filter((_, i) => i !== index));
+	// Initial data fetch
+	useEffect(() => {
+		let isMounted = true;
+
+		const fetchData = async () => {
+			try {
+				setIsLoading(true);
+				await Promise.all([
+					fetchProjects(),
+					(async () => {
+						const response = await fetch('http://localhost:3000/artworks', {
+							credentials: 'include',
+						});
+
+						if (!response.ok) {
+							throw new Error('Failed to fetch artworks');
+						}
+
+						const data = await response.json();
+						const formattedArtworks = data.map((artwork) => ({
+							...artwork,
+							images: artwork.image_path ? [artwork.image_path] : [],
+							location: artwork.place_of_origin,
+							medium: artwork.medium_display,
+							date: artwork.date_end,
+						}));
+
+						if (isMounted) {
+							setNewAddedArtwork(formattedArtworks);
+						}
+					})(),
+				]);
+			} catch (error) {
+				console.error('Error fetching data:', error);
+			} finally {
+				if (isMounted) {
+					setIsLoading(false);
+				}
+			}
+		};
+
+		fetchData();
+
+		return () => {
+			isMounted = false;
+		};
+	}, [fetchProjects]);
+
+	// Memoize the handlers
+	const handleProjectAdded = useCallback((newProject) => {
+		// Format the new project data to match artwork format
+		const formattedProject = {
+			...newProject,
+			images: newProject.image_path ? [newProject.image_path] : [],
+		};
+		setProjects((prev) => [...prev, formattedProject]);
+	}, []);
+
+	const handleDeleteProject = useCallback(async (projectId) => {
+		try {
+			const response = await fetch(`http://localhost:3000/projects/${projectId}`, {
+				method: 'DELETE',
+				credentials: 'include',
+			});
+
+			if (!response.ok) {
+				throw new Error('Failed to delete project');
+			}
+
+			setProjects((prev) => prev.filter((project) => project.id !== projectId));
+		} catch (error) {
+			console.error('Error deleting project:', error);
+			alert('Failed to delete project');
+		}
 	}, []);
 
 	const handleNewArtworkAdded = useCallback((newArtwork) => {
@@ -54,11 +144,11 @@ const ProjectPage = () => {
 					justifyContent: 'center',
 				}}
 			>
-				{projects.map((project, index) => (
-					<div key={index}>
+				{projects.map((project) => (
+					<div key={project.id}>
 						<ProjectCard
-							projects={[project]}
-							handleDelete={() => handleDeleteProject(index)}
+							project={project}
+							handleDelete={() => handleDeleteProject(project.id)}
 						/>
 					</div>
 				))}
@@ -96,51 +186,6 @@ const ProjectPage = () => {
 		);
 	}, [newAddedArtwork, handleDeleteNewArtwork]);
 
-	// Initial data fetch
-	useEffect(() => {
-		let isMounted = true;
-
-		const fetchArtworks = async () => {
-			try {
-				const response = await fetch('http://localhost:3000/artworks', {
-					credentials: 'include',
-				});
-
-				if (!response.ok) {
-					throw new Error('Failed to fetch artworks');
-				}
-
-				const data = await response.json();
-				const formattedArtworks = data.map((artwork) => ({
-					...artwork,
-					images: artwork.image_path ? [artwork.image_path] : [],
-					location: artwork.place_of_origin,
-					medium: artwork.medium_display,
-					date: artwork.date_end,
-				}));
-
-				if (isMounted) {
-					setNewAddedArtwork(formattedArtworks);
-				}
-			} catch (error) {
-				console.error('Error fetching artworks:', error);
-				if (isMounted) {
-					setNewAddedArtwork([]);
-				}
-			} finally {
-				if (isMounted) {
-					setIsLoading(false);
-				}
-			}
-		};
-
-		fetchArtworks();
-
-		return () => {
-			isMounted = false;
-		};
-	}, []);
-
 	return (
 		<div
 			style={{
@@ -154,7 +199,7 @@ const ProjectPage = () => {
 			<div>
 				<h2 style={{ marginBottom: '1rem' }}>Projects</h2>
 				<AddProjectBtn onProjectAdded={handleProjectAdded} />
-				{renderProjects()}
+				{isLoading ? <div>Loading projects...</div> : renderProjects()}
 			</div>
 
 			{/* Artwork Section */}

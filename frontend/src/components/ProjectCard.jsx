@@ -1,90 +1,81 @@
-import React from 'react';
+import { useState, memo } from 'react';
+import PropTypes from 'prop-types';
+import Popover from '@mui/material/Popover';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import CardActionArea from '@mui/material/CardActionArea';
-import Slider from 'react-slick';
 import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import ReactCardFlip from 'react-card-flip';
+import CardActionArea from '@mui/material/CardActionArea';
 
-export default function ProjectCard({ projects, handleDelete }) {
-	const settings = {
-		dots: true,
-		infinite: true,
-		speed: 500,
-		slidesToShow: 1,
-		slidesToScroll: 1,
-	};
+const ProjectCard = memo(({ project, handleDelete }) => {
+	const [anchorEl, setAnchorEl] = useState(null);
+	const [popoverImageId, setPopoverImageId] = useState(null);
+	const [flip, setFlip] = useState(false);
+	const open = Boolean(anchorEl);
 
-	if (projects.length === 0) {
-		return <div style={{ marginTop: 25 }}>No projects added</div>;
+	// Return early if project is undefined
+	if (!project) {
+		return null;
 	}
 
+	// Get the first image from the images array or use a default image
+	const imageUrl =
+		project.images && project.images.length > 0
+			? `http://localhost:3000/uploads/${project.images[0]}`
+			: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDMwMCAzMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbGw9IiNmMGYwZjAiLz4KICA8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE2IiBmaWxsPSIjNjY2Ij4KICAgIE5vIEltYWdlIEF2YWlsYWJsZQogIDwvdGV4dD4KPC9zdmc+';
+
+	const handlePopClick = (event) => {
+		setAnchorEl(event.currentTarget);
+		setPopoverImageId(event.target.src);
+	};
+
+	const handleClose = () => {
+		setAnchorEl(null);
+		setPopoverImageId(null);
+	};
+
 	return (
-		<div
-			style={{ marginTop: 25, display: 'flex', flexDirection: 'row', gap: 25 }}
-		>
-			{projects.map((project, index) => (
+		<div style={{ marginTop: 25 }}>
+			<ReactCardFlip
+				isFlipped={flip}
+				flipDirection='horizontal'
+			>
 				<Card
+					className='card-font'
 					sx={{ maxWidth: 300, maxHeight: 600 }}
-					key={index}
 				>
 					<CardActionArea>
-						{project.images && project.images.length === 1 ? (
+						<CardMedia
+							style={{ width: 300, height: 300 }}
+							component='img'
+							image={imageUrl}
+							alt='Project Image'
+							onClick={handlePopClick}
+						/>
+
+						<Popover
+							sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+							open={open}
+							anchorEl={anchorEl}
+							anchorReference='none'
+							onClose={handleClose}
+							anchorOrigin={{
+								vertical: 'bottom',
+								horizontal: 'left',
+							}}
+						>
 							<CardMedia
-								style={{ width: 300, height: 300 }}
 								component='img'
-								src={project.images[0]}
-								alt='Project Image'
+								height='140'
+								image={popoverImageId}
+								alt=''
 							/>
-						) : (
-							<Slider {...settings}>
-								{project.images && project.images.length > 0 ? (
-									project.images.map((image, imgIndex) => (
-										<CardMedia
-											component='img'
-											style={{ width: 300, height: 300 }}
-											src={image}
-											alt={`Project Image ${imgIndex + 1}`}
-											key={imgIndex}
-										/>
-									))
-								) : (
-									<Typography
-										variant='body2'
-										sx={{ color: 'text.secondary' }}
-									>
-										No images available for this project.
-									</Typography>
-								)}
-							</Slider>
-						)}
+						</Popover>
+
 						<CardContent style={{ width: 300, height: 200 }}>
-							<Typography
-								gutterBottom
-								fontSize={16}
-								fontWeight={500}
-								component='div'
-							>
-								{project.title}
-							</Typography>
-							<Typography
-								variant='body1'
-								sx={{ color: 'text.secondary' }}
-							>
-								{project.medium}
-							</Typography>
-							<br />
-							<Typography
-								variant='body2'
-								sx={{ color: 'text.secondary' }}
-							>
-								{project.description}
-							</Typography>
-							{/* Delete Button */}
 							<IconButton
 								aria-label='delete'
 								color='black'
@@ -99,15 +90,110 @@ export default function ProjectCard({ projects, handleDelete }) {
 								}}
 								onClick={(e) => {
 									e.stopPropagation();
-									handleDelete(index);
+									handleDelete();
 								}}
 							>
 								<DeleteIcon />
 							</IconButton>
+
+							<Typography
+								gutterBottom
+								fontSize={16}
+								fontWeight={500}
+								component='div'
+							>
+								{project.title}
+							</Typography>
+
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								{project.medium}
+							</Typography>
 						</CardContent>
+
+						<div
+							className='favorites-more'
+							style={{
+								display: 'flex',
+								flexDirection: 'row',
+								justifyContent: 'space-between',
+								margin: 25,
+							}}
+						>
+							<div
+								style={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
+								onClick={() => setFlip(!flip)}
+							>
+								Learn More
+							</div>
+						</div>
 					</CardActionArea>
 				</Card>
-			))}
+
+				<Card
+					className='card-back'
+					sx={{ maxWidth: 300, maxHeight: 600 }}
+				>
+					<CardContent style={{ width: 300, height: 500 }}>
+						<Typography
+							gutterBottom
+							fontSize={16}
+							fontWeight={500}
+							component='div'
+						>
+							{project.title}
+						</Typography>
+						<br />
+						<Typography
+							variant='body2'
+							sx={{ color: 'text.secondary' }}
+						>
+							Medium: {project.medium}
+						</Typography>
+						<br />
+						<Typography
+							variant='body2'
+							sx={{ color: 'text.secondary' }}
+						>
+							Description: {project.description}
+						</Typography>
+					</CardContent>
+
+					<div
+						style={{
+							display: 'flex',
+							flexDirection: 'row',
+							justifyContent: 'space-between',
+							margin: 25,
+						}}
+					>
+						<div
+							style={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
+							onClick={() => setFlip(!flip)}
+						>
+							Back
+						</div>
+					</div>
+				</Card>
+			</ReactCardFlip>
 		</div>
 	);
-}
+});
+
+ProjectCard.propTypes = {
+	project: PropTypes.shape({
+		id: PropTypes.number.isRequired,
+		title: PropTypes.string.isRequired,
+		medium: PropTypes.string.isRequired,
+		description: PropTypes.string,
+		images: PropTypes.arrayOf(PropTypes.string),
+		image_path: PropTypes.string,
+	}).isRequired,
+	handleDelete: PropTypes.func.isRequired,
+};
+
+ProjectCard.displayName = 'ProjectCard';
+
+export default ProjectCard;

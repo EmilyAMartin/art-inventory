@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import { green } from '@mui/material/colors';
 import { red } from '@mui/material/colors';
@@ -24,6 +25,7 @@ const VisuallyHiddenInput = styled('input')({
 	whiteSpace: 'nowrap',
 	width: 1,
 });
+
 const AddProjectBtn = ({ onProjectAdded }) => {
 	const [open, setOpen] = useState(false);
 	const [isHover, setIsHover] = useState(false);
@@ -32,31 +34,98 @@ const AddProjectBtn = ({ onProjectAdded }) => {
 	const [title, setTitle] = useState('');
 	const [medium, setMedium] = useState('');
 	const [description, setDescription] = useState('');
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
-	const handleSubmit = () => {
-		const projectData = {
-			title,
-			medium,
-			description,
-			images: images,
-		};
-		onProjectAdded(projectData);
+	const handleSubmit = useCallback(async () => {
+		if (isSubmitting) return; // Prevent duplicate submissions
+
+		try {
+			setIsSubmitting(true); // Set submitting state
+
+			// Validate required fields
+			if (!title || !medium) {
+				alert('Please fill in all required fields: Title and Medium');
+				return;
+			}
+
+			// Create FormData object
+			const formData = new FormData();
+			formData.append('title', title);
+			formData.append('medium', medium);
+			formData.append('description', description);
+
+			// Add image file if exists
+			if (images.length > 0) {
+				console.log('Adding image to form data');
+				const response = await fetch(images[0]);
+				const blob = await response.blob();
+				formData.append('image', blob, 'project.jpg');
+			}
+
+			console.log('Submitting form data:', {
+				title,
+				medium,
+				description,
+				hasImage: images.length > 0,
+			});
+
+			const response = await fetch('http://localhost:3000/projects', {
+				method: 'POST',
+				body: formData,
+				credentials: 'include',
+			});
+
+			console.log('Response status:', response.status);
+			console.log(
+				'Response headers:',
+				Object.fromEntries(response.headers.entries())
+			);
+
+			const responseText = await response.text();
+			console.log('Raw response:', responseText);
+
+			let responseData;
+			try {
+				responseData = JSON.parse(responseText);
+			} catch (error) {
+				console.error('Error parsing response:', error);
+				throw new Error(`Server returned invalid JSON response: ${responseText}`);
+			}
+
+			if (!response.ok) {
+				throw new Error(
+					responseData.message || responseData.error || 'Failed to add project'
+				);
+			}
+
+			if (!responseData.success) {
+				throw new Error(
+					responseData.message || responseData.error || 'Failed to add project'
+				);
+			}
+
+			// Only add the new project once and reset form
+			onProjectAdded(responseData.data);
+			resetForm();
+			setOpen(false);
+		} catch (error) {
+			console.error('Error adding project:', error);
+			alert(`Failed to add project: ${error.message}`);
+		} finally {
+			setIsSubmitting(false); // Reset submitting state
+		}
+	}, [title, medium, description, images, isSubmitting, onProjectAdded]);
+
+	const handleOpen = useCallback(() => setOpen(true), []);
+	const handleClose = useCallback(() => {
 		resetForm();
 		setOpen(false);
-	};
+	}, []);
 
-	const handleOpen = () => setOpen(true);
-	const handleClose = () => {
-		resetForm();
-		setOpen(false);
-	};
-	const handleMouseEnter = () => {
-		setIsHover(true);
-	};
-	const handleMouseLeave = () => {
-		setIsHover(false);
-	};
-	const handleImageChange = (e) => {
+	const handleMouseEnter = useCallback(() => setIsHover(true), []);
+	const handleMouseLeave = useCallback(() => setIsHover(false), []);
+
+	const handleImageChange = useCallback((e) => {
 		const files = Array.from(e.target.files);
 		const newImages = files.map((file) => {
 			const reader = new FileReader();
@@ -70,25 +139,28 @@ const AddProjectBtn = ({ onProjectAdded }) => {
 		Promise.all(newImages).then((imageData) => {
 			setImages((prevImages) => [...prevImages, ...imageData]);
 		});
-	};
-	const handleNext = () => {
+	}, []);
+
+	const handleNext = useCallback(() => {
 		if (currentIndex < images.length - 1) {
 			setCurrentIndex(currentIndex + 1);
 		}
-	};
-	const handlePrev = () => {
+	}, [currentIndex, images.length]);
+
+	const handlePrev = useCallback(() => {
 		if (currentIndex > 0) {
 			setCurrentIndex(currentIndex - 1);
 		}
-	};
+	}, [currentIndex]);
 
-	const resetForm = () => {
+	const resetForm = useCallback(() => {
 		setTitle('');
 		setMedium('');
 		setDescription('');
 		setImages([]);
 		setCurrentIndex(0);
-	};
+	}, []);
+
 	const buttonStyle = {
 		padding: '0.5rem',
 		hover: '#6c63ff50',
@@ -115,6 +187,8 @@ const AddProjectBtn = ({ onProjectAdded }) => {
 		maxWidth: '90%',
 		width: '600px',
 		padding: '2rem',
+		maxHeight: '90vh',
+		overflow: 'auto',
 	};
 
 	const SubmitButton = styled(Button)(({ theme }) => ({
@@ -135,14 +209,14 @@ const AddProjectBtn = ({ onProjectAdded }) => {
 
 	return (
 		<div>
-			<button
+			<div
 				style={buttonStyle}
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
 				onClick={handleOpen}
 			>
 				Add New Project
-			</button>
+			</div>
 			<Modal
 				open={open}
 				onClose={handleClose}
@@ -200,16 +274,7 @@ const AddProjectBtn = ({ onProjectAdded }) => {
 							maxRows={4}
 						/>
 
-						<Button
-							component='label'
-							role={undefined}
-							variant='contained'
-							startIcon={<CloudUploadIcon />}
-							type='file'
-							id='image-upload'
-							accept='image/*'
-							multiple
-							onChange={handleImageChange}
+						<div
 							style={{
 								display: 'flex',
 								justifyContent: 'center',
@@ -218,36 +283,64 @@ const AddProjectBtn = ({ onProjectAdded }) => {
 								padding: '8px',
 								fontSize: '0.9rem',
 								width: '100%',
+								cursor: 'pointer',
+								borderRadius: '4px',
 							}}
 						>
-							Upload files
-							<VisuallyHiddenInput
+							<label
+								htmlFor='image-upload'
+								style={{
+									display: 'flex',
+									alignItems: 'center',
+									gap: '8px',
+									cursor: 'pointer',
+									color: 'white',
+								}}
+							>
+								<CloudUploadIcon />
+								Upload files
+							</label>
+							<input
+								id='image-upload'
 								type='file'
-								onChange={(event) => console.log(event.target.files)}
 								multiple
+								accept='image/*'
+								style={{ display: 'none' }}
+								onChange={handleImageChange}
 							/>
-						</Button>
+						</div>
 						<div
 							style={{
 								display: 'flex',
 								flexDirection: 'row',
 								justifyContent: 'center',
+								gap: '10px',
 							}}
 						>
-							<Button
+							<div
 								onClick={handlePrev}
-								disabled={currentIndex === 0}
-								color='black'
+								style={{
+									padding: '8px 16px',
+									cursor: currentIndex === 0 ? 'not-allowed' : 'pointer',
+									opacity: currentIndex === 0 ? 0.5 : 1,
+									backgroundColor: '#f0f0f0',
+									borderRadius: '4px',
+								}}
 							>
 								Previous
-							</Button>
-							<Button
+							</div>
+							<div
 								onClick={handleNext}
-								disabled={currentIndex === images.length - 1}
-								color='black'
+								style={{
+									padding: '8px 16px',
+									cursor: currentIndex === images.length - 1 ? 'not-allowed' : 'pointer',
+									opacity: currentIndex === images.length - 1 ? 0.5 : 1,
+									backgroundColor: '#f0f0f0',
+									borderRadius: '4px',
+								}}
 							>
 								Next
-							</Button>
+							</div>
 						</div>
 						{images.length > 0 && (
 							<div style={{ textAlign: 'center' }}>
@@ -284,13 +377,15 @@ const AddProjectBtn = ({ onProjectAdded }) => {
 									sx={{ color: 'white' }}
 									variant='contained'
 									onClick={handleSubmit}
+									disabled={isSubmitting}
 								>
-									Submit
+									{isSubmitting ? 'Submitting...' : 'Submit'}
 								</SubmitButton>
 								<CancelButton
 									sx={{ color: 'white' }}
 									variant='contained'
 									onClick={handleClose}
+									disabled={isSubmitting}
 								>
 									Cancel
 								</CancelButton>
@@ -301,6 +396,10 @@ const AddProjectBtn = ({ onProjectAdded }) => {
 			</Modal>
 		</div>
 	);
+};
+
+AddProjectBtn.propTypes = {
+	onProjectAdded: PropTypes.func.isRequired,
 };
 
 export default AddProjectBtn;
