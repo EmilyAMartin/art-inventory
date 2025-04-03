@@ -1,5 +1,4 @@
-import { useState, memo } from 'react';
-import PropTypes from 'prop-types';
+import { useState } from 'react';
 import Popover from '@mui/material/Popover';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -12,14 +11,13 @@ import CardActionArea from '@mui/material/CardActionArea';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 
-const ProjectCard = memo(({ project, handleDelete }) => {
+const ProjectCard = ({ project, handleDelete }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
 	const [flip, setFlip] = useState(false);
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 	const open = Boolean(anchorEl);
 
-	// Return early if project is undefined
 	if (!project) {
 		return null;
 	}
@@ -249,18 +247,6 @@ const ProjectCard = memo(({ project, handleDelete }) => {
 			</ReactCardFlip>
 		</div>
 	);
-});
-
-ProjectCard.propTypes = {
-	project: PropTypes.shape({
-		id: PropTypes.number.isRequired,
-		title: PropTypes.string.isRequired,
-		medium: PropTypes.string.isRequired,
-		description: PropTypes.string,
-		images: PropTypes.arrayOf(PropTypes.string),
-		image_path: PropTypes.string,
-	}).isRequired,
-	handleDelete: PropTypes.func.isRequired,
 };
 
 ProjectCard.displayName = 'ProjectCard';

@@ -1,4 +1,4 @@
-import React, { useState, memo } from 'react';
+import React, { useState } from 'react';
 import Popover from '@mui/material/Popover';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -9,7 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ReactCardFlip from 'react-card-flip';
 import CardActionArea from '@mui/material/CardActionArea';
 
-const NewArtCard = memo(({ artwork, onDelete }) => {
+const NewArtCard = ({ artwork, onDelete }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
 	const [flip, setFlip] = useState(false);
@@ -230,8 +230,6 @@ const NewArtCard = memo(({ artwork, onDelete }) => {
 			</ReactCardFlip>
 		</div>
 	);
-});
-
-NewArtCard.displayName = 'NewArtCard';
+};
 
 export default NewArtCard;
