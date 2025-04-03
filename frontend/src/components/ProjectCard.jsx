@@ -8,14 +8,11 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ReactCardFlip from 'react-card-flip';
 import CardActionArea from '@mui/material/CardActionArea';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 
 const ProjectCard = ({ project, handleDelete }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
 	const [flip, setFlip] = useState(false);
-	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 	const open = Boolean(anchorEl);
 
 	if (!project) {
@@ -24,7 +21,7 @@ const ProjectCard = ({ project, handleDelete }) => {
 
 	const imageUrl =
 		project.images && project.images.length > 0
-			? `http://localhost:3000/uploads/${project.images[currentImageIndex]}`
+			? `http://localhost:3000/uploads/${project.images[0]}`
 			: null;
 
 	const handlePopClick = (event) => {
@@ -35,22 +32,6 @@ const ProjectCard = ({ project, handleDelete }) => {
 	const handleClose = () => {
 		setAnchorEl(null);
 		setPopoverImageId(null);
-	};
-
-	const handleNextImage = () => {
-		if (project.images && project.images.length > 0) {
-			setCurrentImageIndex((prevIndex) =>
-				prevIndex === project.images.length - 1 ? 0 : prevIndex + 1
-			);
-		}
-	};
-
-	const handlePrevImage = () => {
-		if (project.images && project.images.length > 0) {
-			setCurrentImageIndex((prevIndex) =>
-				prevIndex === 0 ? project.images.length - 1 : prevIndex - 1
-			);
-		}
 	};
 
 	return (
@@ -72,55 +53,6 @@ const ProjectCard = ({ project, handleDelete }) => {
 								alt='Project Image'
 								onClick={handlePopClick}
 							/>
-							{project.images && project.images.length > 1 && (
-								<>
-									<IconButton
-										onClick={handlePrevImage}
-										sx={{
-											position: 'absolute',
-											left: 8,
-											top: '50%',
-											transform: 'translateY(-50%)',
-											backgroundColor: 'rgba(255, 255, 255, 0.7)',
-											'&:hover': {
-												backgroundColor: 'rgba(255, 255, 255, 0.9)',
-											},
-										}}
-									>
-										<NavigateBeforeIcon />
-									</IconButton>
-									<IconButton
-										onClick={handleNextImage}
-										sx={{
-											position: 'absolute',
-											right: 8,
-											top: '50%',
-											transform: 'translateY(-50%)',
-											backgroundColor: 'rgba(255, 255, 255, 0.7)',
-											'&:hover': {
-												backgroundColor: 'rgba(255, 255, 255, 0.9)',
-											},
-										}}
-									>
-										<NavigateNextIcon />
-									</IconButton>
-									<div
-										style={{
-											position: 'absolute',
-											bottom: 8,
-											left: '50%',
-											transform: 'translateX(-50%)',
-											backgroundColor: 'rgba(0, 0, 0, 0.5)',
-											color: 'white',
-											padding: '4px 8px',
-											borderRadius: '12px',
-											fontSize: '12px',
-										}}
-									>
-										{currentImageIndex + 1} / {project.images.length}
-									</div>
-								</>
-							)}
 						</div>
 
 						<Popover
@@ -248,7 +180,5 @@ const ProjectCard = ({ project, handleDelete }) => {
 		</div>
 	);
 };
-
-ProjectCard.displayName = 'ProjectCard';
 
 export default ProjectCard;
