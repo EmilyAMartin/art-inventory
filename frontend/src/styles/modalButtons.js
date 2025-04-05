@@ -8,13 +8,16 @@ export const buttonStyle = (isHover) => ({
 	color: '#ffffff',
 	outline: 'none',
 	border: 'none',
-	borderRadius: '0.5rem',
+	borderRadius: '1rem',
 	fontSize: '1rem',
 	fontWeight: 500,
 	cursor: 'pointer',
 	transition: '0.2s',
 	width: 150,
 	backgroundColor: isHover ? '#4640ad' : '#6c63ff',
+	justifyContent: 'center',
+	alignItems: 'center',
+	textAlign: 'center',
 });
 
 export const modalStyle = {

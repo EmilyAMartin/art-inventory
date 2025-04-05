@@ -77,7 +77,7 @@ const LoginBtn = () => {
 		color: '#ffffff',
 		outline: 'none',
 		border: 'none',
-		borderRadius: '0.5rem',
+		borderRadius: '1rem',
 		fontSize: '1rem',
 		fontWeight: 500,
 		cursor: 'pointer',
