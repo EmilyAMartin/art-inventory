@@ -2,11 +2,16 @@ import React, { useState, useEffect } from 'react';
 import Grid2 from '@mui/material/Grid2';
 import ArtCard from '../components/ArtCard';
 import axios from 'axios';
+import { Typography, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Favorites = () => {
 	const [artwork, setArtwork] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [userId, setUserId] = useState(null);
+	const navigate = useNavigate();
 
 	const checkImageUrl = async (imageUrl) => {
 		try {
@@ -31,11 +36,23 @@ const Favorites = () => {
 				credentials: 'include',
 			});
 
+			if (response.status === 401) {
+				// User is not logged in
+				setIsLoggedIn(false);
+				setUserId(null);
+				setArtwork([]);
+				setLoading(false);
+				return;
+			}
+
 			if (!response.ok) {
 				throw new Error('Failed to fetch favorite artworks');
 			}
 
+			setIsLoggedIn(true);
 			const data = await response.json();
+			setUserId(data.userId || null);
+
 			if (!Array.isArray(data.favorites)) {
 				setArtwork([]);
 				return;
@@ -89,6 +106,11 @@ const Favorites = () => {
 	}, []);
 
 	const handleFavUpdate = async (artworkId) => {
+		if (!isLoggedIn) {
+			alert('You must be logged in to update favorites');
+			return;
+		}
+
 		try {
 			const response = await fetch('http://localhost:3000/favorites', {
 				method: 'POST',
@@ -112,6 +134,10 @@ const Favorites = () => {
 		}
 	};
 
+	const handleLogin = () => {
+		navigate('/login');
+	};
+
 	if (loading) {
 		return <div>Loading artwork...</div>;
 	}
@@ -120,8 +146,76 @@ const Favorites = () => {
 		return <div>Error: {error}</div>;
 	}
 
+	if (!isLoggedIn) {
+		return (
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+					justifyContent: 'center',
+					marginTop: '100px',
+					textAlign: 'center',
+				}}
+			>
+				<Typography
+					variant='h5'
+					gutterBottom
+				>
+					You need to be logged in to view your favorites
+				</Typography>
+				<Typography
+					variant='body1'
+					gutterBottom
+					style={{ marginBottom: '20px' }}
+				>
+					Please log in to see your favorite artworks
+				</Typography>
+				<Button
+					variant='contained'
+					color='primary'
+					onClick={handleLogin}
+				>
+					Log In
+				</Button>
+			</div>
+		);
+	}
+
 	if (artwork.length === 0) {
-		return <div>No Favorites Added</div>;
+		return (
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+					justifyContent: 'center',
+					marginTop: '100px',
+					textAlign: 'center',
+				}}
+			>
+				<Typography
+					variant='h5'
+					gutterBottom
+				>
+					No Favorites Added
+				</Typography>
+				<Typography
+					variant='body1'
+					gutterBottom
+					style={{ marginBottom: '20px' }}
+				>
+					Browse the gallery and add some artworks to your favorites
+				</Typography>
+				<Button
+					variant='contained'
+					color='primary'
+					onClick={() => navigate('/gallery')}
+				>
+					Go to Gallery
+				</Button>
+			</div>
+		);
 	}
 
 	return (
@@ -142,7 +236,7 @@ const Favorites = () => {
 						<ArtCard
 							art={art}
 							handleFavUpdate={handleFavUpdate}
-							favoriteStatus={true}
+							isLoggedIn={isLoggedIn}
 						/>
 					</Grid2>
 				))}

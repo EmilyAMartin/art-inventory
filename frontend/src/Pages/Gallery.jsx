@@ -16,6 +16,7 @@ const Gallery = () => {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [userId, setUserId] = useState(null);
 	const [totalResults, setTotalResults] = useState(0);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const RESULTS_PER_PAGE = 12;
 
 	const fetchDataById = async (id) => {
@@ -37,6 +38,41 @@ const Gallery = () => {
 		}
 	};
 
+	const fetchFavorites = async () => {
+		try {
+			const response = await fetch('http://localhost:3000/favorites', {
+				method: 'GET',
+				credentials: 'include',
+			});
+
+			if (response.status === 401) {
+				// User is not logged in
+				setIsLoggedIn(false);
+				setUserId(null);
+				return [];
+			}
+
+			if (!response.ok) {
+				throw new Error('Failed to fetch favorite artworks');
+			}
+
+			setIsLoggedIn(true);
+			const data = await response.json();
+			setUserId(data.userId || null);
+
+			if (!Array.isArray(data.favorites)) {
+				return [];
+			}
+
+			return data.favorites.map((fav) => fav.id);
+		} catch (err) {
+			console.error('Error fetching favorites:', err);
+			setIsLoggedIn(false);
+			setUserId(null);
+			return [];
+		}
+	};
+
 	const fetchData = async () => {
 		setIsLoading(true);
 		try {
@@ -45,7 +81,9 @@ const Gallery = () => {
 			let validArtwork = [];
 			const MAX_ATTEMPTS = 3; // Maximum number of additional pages to fetch
 			let attempts = 0;
-			let favoritesList = [];
+
+			// Fetch favorites list (will be empty if user is not logged in)
+			const favoritesList = await fetchFavorites();
 
 			while (validArtwork.length < RESULTS_PER_PAGE && attempts < MAX_ATTEMPTS) {
 				if (searchQuery) {
@@ -67,21 +105,6 @@ const Gallery = () => {
 					setTotalResults(response.data.pagination.total);
 					data = response.data;
 				}
-
-				const favoritesResponse = await fetch('http://localhost:3000/favorites', {
-					method: 'GET',
-					credentials: 'include',
-				});
-
-				if (!favoritesResponse.ok) {
-					throw new Error('Failed to fetch favorite artworks');
-				}
-
-				const favoritesData = await favoritesResponse.json();
-				favoritesList = Array.isArray(favoritesData.favorites)
-					? favoritesData.favorites.map((fav) => fav.id)
-					: [];
-				setUserId(favoritesData.userId || null);
 
 				// Filter and process artwork data
 				const newValidArtwork = await Promise.all(
@@ -134,7 +157,7 @@ const Gallery = () => {
 	}, [page]);
 
 	const handleFavUpdate = async (artworkId, isFavorite) => {
-		if (!userId) {
+		if (!isLoggedIn) {
 			alert('You must be logged in to favorite artwork');
 			return;
 		}
@@ -237,6 +260,7 @@ const Gallery = () => {
 								art={art}
 								handleFavUpdate={handleFavUpdate}
 								userId={userId}
+								isLoggedIn={isLoggedIn}
 							/>
 						</Grid2>
 					))}

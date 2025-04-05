@@ -8,8 +8,9 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
+import Tooltip from '@mui/material/Tooltip';
 
-const ArtCard = ({ art, handleFavUpdate }) => {
+const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
 	const [flip, setFlip] = useState(false);
@@ -26,7 +27,34 @@ const ArtCard = ({ art, handleFavUpdate }) => {
 	};
 
 	const handleFavClick = () => {
+		if (!isLoggedIn) {
+			return;
+		}
 		handleFavUpdate(art.id, !art.favorite);
+	};
+
+	const FavoriteIcon = () => {
+		if (!isLoggedIn) {
+			return (
+				<Tooltip title='Log in to favorite artwork'>
+					<div style={{ cursor: 'not-allowed' }}>
+						<FavoriteBorder style={{ opacity: 0.5 }} />
+					</div>
+				</Tooltip>
+			);
+		}
+
+		return art.favorite ? (
+			<Favorite
+				onClick={handleFavClick}
+				style={{ cursor: 'pointer' }}
+			/>
+		) : (
+			<FavoriteBorder
+				onClick={handleFavClick}
+				style={{ cursor: 'pointer' }}
+			/>
+		);
 	};
 
 	return (
@@ -96,14 +124,10 @@ const ArtCard = ({ art, handleFavUpdate }) => {
 							margin: 25,
 						}}
 					>
-						{art.favorite ? (
-							<Favorite onClick={handleFavClick} />
-						) : (
-							<FavoriteBorder onClick={handleFavClick} />
-						)}
+						<FavoriteIcon />
 
 						<div
-							style={{ fontSize: 15, fontWeight: 600 }}
+							style={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
 							onClick={() => setFlip(!flip)}
 						>
 							Learn More
@@ -185,7 +209,7 @@ const ArtCard = ({ art, handleFavUpdate }) => {
 						}}
 					>
 						<div
-							style={{ fontSize: 15, fontWeight: 600 }}
+							style={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
 							onClick={() => setFlip(!flip)}
 						>
 							Back
