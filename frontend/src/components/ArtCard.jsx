@@ -42,11 +42,7 @@ const ArtCard = ({ art, handleFavUpdate }) => {
 					<CardMedia
 						style={{ width: 300, height: 300 }}
 						component='img'
-						image={
-							art.image_path
-								? art.image_path
-								: `https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`
-						}
+						image={art.image_url}
 						alt='Artwork'
 						onClick={handlePopClick}
 					/>

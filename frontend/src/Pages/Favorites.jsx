@@ -8,6 +8,20 @@ const Favorites = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 
+	const checkImageUrl = async (imageUrl) => {
+		try {
+			const response = await fetch(imageUrl, { method: 'HEAD' });
+			if (response.status === 403) {
+				console.log('Image access forbidden (403):', imageUrl);
+				return false;
+			}
+			return response.ok || response.status === 302;
+		} catch (error) {
+			console.log('Image access error:', error);
+			return false;
+		}
+	};
+
 	const fetchFavorites = async () => {
 		setLoading(true);
 		try {
@@ -33,7 +47,27 @@ const Favorites = () => {
 					const { data: artData } = await axios.get(
 						`https://api.artic.edu/api/v1/artworks/${fav.id}`
 					);
-					return { ...artData.data, favorite: true };
+
+					// Check if the artwork has an image URL
+					if (!artData.data.image_id) {
+						console.log('Skipping artwork due to no image_id:', fav.id);
+						return null;
+					}
+
+					// Use the IIIF API with the correct format
+					const imageUrl = `https://www.artic.edu/iiif/2/${artData.data.image_id}/full/400,/0/default.jpg`;
+					const hasValidImage = await checkImageUrl(imageUrl);
+
+					if (!hasValidImage) {
+						console.log('Skipping artwork due to invalid image:', fav.id);
+						return null;
+					}
+
+					return {
+						...artData.data,
+						favorite: true,
+						image_url: imageUrl,
+					};
 				} catch (err) {
 					console.error(`Error fetching artwork ${fav.id}:`, err);
 					return null;
@@ -54,7 +88,7 @@ const Favorites = () => {
 		fetchFavorites();
 	}, []);
 
-	const handleFavUpdate = async (artworkId, currentFavoriteStatus) => {
+	const handleFavUpdate = async (artworkId) => {
 		try {
 			const response = await fetch('http://localhost:3000/favorites', {
 				method: 'POST',

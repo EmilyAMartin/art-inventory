@@ -14,14 +14,25 @@ const Gallery = () => {
 	const [error, setError] = useState(null);
 	const [page, setPage] = useState(1);
 	const [searchQuery, setSearchQuery] = useState('');
-	const [favorites, setFavorites] = useState([]);
 	const [userId, setUserId] = useState(null);
+	const [totalResults, setTotalResults] = useState(0);
+	const RESULTS_PER_PAGE = 12;
+
+	const fetchDataById = async (id) => {
+		const response = await axios.get(`${BASE_URL}/${id}`);
+		return response.data.data;
+	};
 
 	const checkImageUrl = async (imageUrl) => {
 		try {
 			const response = await fetch(imageUrl, { method: 'HEAD' });
-			return response.ok;
+			if (response.status === 403) {
+				console.log('Image access forbidden (403):', imageUrl);
+				return false;
+			}
+			return response.ok || response.status === 302;
 		} catch (error) {
+			console.log('Image access error:', error);
 			return false;
 		}
 	};
@@ -29,47 +40,88 @@ const Gallery = () => {
 	const fetchData = async () => {
 		setIsLoading(true);
 		try {
-			const { data } = await axios.get(`${BASE_URL}?page=${page}`);
+			let data;
+			let currentPage = page;
+			let validArtwork = [];
+			const MAX_ATTEMPTS = 3; // Maximum number of additional pages to fetch
+			let attempts = 0;
+			let favoritesList = [];
 
-			const favoritesResponse = await fetch('http://localhost:3000/favorites', {
-				method: 'GET',
-				credentials: 'include',
-			});
+			while (validArtwork.length < RESULTS_PER_PAGE && attempts < MAX_ATTEMPTS) {
+				if (searchQuery) {
+					// First search for artworks matching the query
+					const searchResponse = await axios.get(
+						`${BASE_URL}/search?q=${searchQuery}&page=${currentPage}`
+					);
+					setTotalResults(searchResponse.data.pagination.total);
+					// Then fetch full details for each artwork
+					const searchResults = await Promise.all(
+						searchResponse.data.data.map(async (art) => {
+							return await fetchDataById(art.id);
+						})
+					);
+					data = { data: searchResults };
+				} else {
+					// Regular page loading
+					const response = await axios.get(`${BASE_URL}?page=${currentPage}`);
+					setTotalResults(response.data.pagination.total);
+					data = response.data;
+				}
 
-			if (!favoritesResponse.ok) {
-				throw new Error('Failed to fetch favorite artworks');
+				const favoritesResponse = await fetch('http://localhost:3000/favorites', {
+					method: 'GET',
+					credentials: 'include',
+				});
+
+				if (!favoritesResponse.ok) {
+					throw new Error('Failed to fetch favorite artworks');
+				}
+
+				const favoritesData = await favoritesResponse.json();
+				favoritesList = Array.isArray(favoritesData.favorites)
+					? favoritesData.favorites.map((fav) => fav.id)
+					: [];
+				setUserId(favoritesData.userId || null);
+
+				// Filter and process artwork data
+				const newValidArtwork = await Promise.all(
+					data.data.map(async (art) => {
+						// Check if the artwork has an image URL
+						if (!art.image_id) {
+							console.log('Skipping artwork due to no image_id:', art.id);
+							return null;
+						}
+
+						// Use the IIIF API with the correct format
+						const imageUrl = `https://www.artic.edu/iiif/2/${art.image_id}/full/400,/0/default.jpg`;
+						const hasValidImage = await checkImageUrl(imageUrl);
+
+						if (!hasValidImage) {
+							console.log('Skipping artwork due to invalid image:', art.id);
+							return null;
+						}
+
+						return {
+							...art,
+							image_url: imageUrl,
+							favorite: favoritesList.includes(art.id),
+						};
+					})
+				);
+
+				// Filter out null values and add to valid artwork
+				validArtwork = [
+					...validArtwork,
+					...newValidArtwork.filter((art) => art !== null),
+				];
+				currentPage++;
+				attempts++;
 			}
 
-			const favoritesData = await favoritesResponse.json();
-			const favoritesList = Array.isArray(favoritesData.favorites)
-				? favoritesData.favorites.map((fav) => fav.id)
-				: [];
-			const userId = favoritesData.userId || null;
+			// Take only the first RESULTS_PER_PAGE items
+			validArtwork = validArtwork.slice(0, RESULTS_PER_PAGE);
 
-			// Filter and process artwork data
-			const validArtwork = await Promise.all(
-				data.data.map(async (art) => {
-					// Check if the artwork has an image URL
-					if (!art.image_id) return null;
-
-					const imageUrl = `https://www.artic.edu/iiif/2/${art.image_id}/full/400,/0/default.jpg`;
-					const hasValidImage = await checkImageUrl(imageUrl);
-
-					if (!hasValidImage) return null;
-
-					return {
-						...art,
-						favorite: favoritesList.includes(art.id),
-					};
-				})
-			);
-
-			// Filter out null values (artworks with invalid images)
-			const filteredArtwork = validArtwork.filter((art) => art !== null);
-
-			setArtwork(filteredArtwork);
-			setFavorites(favoritesList);
-			setUserId(userId);
+			setArtwork(validArtwork);
 		} catch (err) {
 			setError(err.message);
 		} finally {
@@ -106,13 +158,6 @@ const Gallery = () => {
 				prevArtwork.map((art) =>
 					art.id === artworkId ? { ...art, favorite: isFavorite } : art
 				)
-			);
-
-			// Update favorites list
-			setFavorites((prevFavorites) =>
-				isFavorite
-					? [...prevFavorites, artworkId]
-					: prevFavorites.filter((id) => id !== artworkId)
 			);
 		} catch (error) {
 			console.error('Error updating favorites:', error);
@@ -217,6 +262,7 @@ const Gallery = () => {
 					</Button>
 					<Button
 						color='black'
+						disabled={page * RESULTS_PER_PAGE >= totalResults}
 						onClick={() => {
 							setPage(page + 1);
 							window.scrollTo(0, 0);
