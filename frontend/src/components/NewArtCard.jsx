@@ -9,16 +9,45 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ReactCardFlip from 'react-card-flip';
 import CardActionArea from '@mui/material/CardActionArea';
 
+import Switch from '@mui/material/Switch'; // Import the Switch component
+
 const NewArtCard = ({ artwork, onDelete }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
 	const [flip, setFlip] = useState(false);
+	const [isPublic, setIsPublic] = useState(artwork.isPublic || false); // Add state for public/private status
 	const open = Boolean(anchorEl);
 
 	// Return early if artwork is undefined
 	if (!artwork) {
 		return null;
 	}
+
+	const handleTogglePublic = async () => {
+		try {
+			const response = await fetch(
+				`http://localhost:3000/artworks/${artwork.id}/toggle-public`,
+				{
+					method: 'PATCH',
+					credentials: 'include',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ isPublic: !isPublic }),
+				}
+			);
+
+			if (!response.ok) {
+				throw new Error('Failed to update public/private status');
+			}
+
+			// Update the local state
+			setIsPublic((prev) => !prev);
+		} catch (error) {
+			console.error('Error updating public/private status:', error);
+			alert('Failed to update public/private status');
+		}
+	};
 
 	const handleDeleteClick = async (e) => {
 		e.stopPropagation();
@@ -140,6 +169,23 @@ const NewArtCard = ({ artwork, onDelete }) => {
 							>
 								{artwork.date}
 							</Typography>
+
+							{/* Add Public/Private Toggle */}
+							<div
+								style={{ marginTop: '1rem', display: 'flex', alignItems: 'center' }}
+							>
+								<Typography
+									variant='body2'
+									sx={{ marginRight: '0.5rem' }}
+								>
+									{isPublic ? 'Public' : 'Private'}
+								</Typography>
+								<Switch
+									checked={isPublic}
+									onChange={handleTogglePublic}
+									color='primary'
+								/>
+							</div>
 						</CardContent>
 
 						<div

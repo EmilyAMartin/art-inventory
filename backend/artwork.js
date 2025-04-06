@@ -19,6 +19,7 @@ export const createTable = async () => {
         medium_display VARCHAR(255),
         credit_line VARCHAR(255),
         description TEXT,
+        is_public BOOLEAN DEFAULT FALSE, -- Added is_public column
         FOREIGN KEY (artist_id) REFERENCES users(id)
       );
     `);
@@ -56,6 +57,23 @@ export const createTable = async () => {
 			console.log('Removed thumbnail column from artwork table');
 		}
 
+		// Check if is_public column exists
+		const [isPublicColumn] = await dbPool.query(`
+      SELECT COLUMN_NAME 
+      FROM INFORMATION_SCHEMA.COLUMNS 
+      WHERE TABLE_NAME = 'artwork' 
+      AND COLUMN_NAME = 'is_public';
+    `);
+
+		// Add is_public column if it doesn't exist
+		if (isPublicColumn.length === 0) {
+			await dbPool.query(`
+        ALTER TABLE artwork 
+        ADD COLUMN is_public BOOLEAN DEFAULT FALSE;
+      `);
+			console.log('Added is_public column to artwork table');
+		}
+
 		console.log('Artwork table schema updated successfully.');
 	} catch (err) {
 		console.error('Error updating artwork table schema:', err);
@@ -70,9 +88,9 @@ export const setupRoutes = (app) => {
 		try {
 			const [results] = await dbPool.query(
 				`SELECT artwork.id, artwork.title, artwork.date_end, artwork.image_path, 
-				artwork.place_of_origin, artwork.artwork_type_title, artwork.medium_display, 
-				artwork.credit_line, artwork.description
-				FROM artwork`
+                artwork.place_of_origin, artwork.artwork_type_title, artwork.medium_display, 
+                artwork.credit_line, artwork.description, artwork.is_public
+                FROM artwork`
 			);
 
 			// Format the artwork data
@@ -84,6 +102,7 @@ export const setupRoutes = (app) => {
 				artist: artwork.artist || 'Unknown Artist',
 				images: artwork.image_path ? [artwork.image_path] : [],
 				description: artwork.description || '',
+				isPublic: artwork.is_public, // Include is_public field
 			}));
 
 			res.json(formattedArtworks);
@@ -162,16 +181,16 @@ export const setupRoutes = (app) => {
 
 			// Insert the artwork into the database
 			const query = `INSERT INTO artwork (
-				artist_id,
-				title,
-				date_end,
-				place_of_origin,
-				artwork_type_title,
-				medium_display,
-				credit_line,
-				image_path,
-				description
-			) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+                artist_id,
+                title,
+                date_end,
+                place_of_origin,
+                artwork_type_title,
+                medium_display,
+                credit_line,
+                image_path,
+                description
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
 			const values = [
 				req.session.user.id,
@@ -207,10 +226,10 @@ export const setupRoutes = (app) => {
 			try {
 				[newArtwork] = await dbPool.query(
 					`SELECT artwork.id, artwork.title, artwork.date_end, artwork.image_path, 
-					artwork.place_of_origin, artwork.artwork_type_title, artwork.medium_display, 
-					artwork.credit_line, artwork.description
-					FROM artwork 
-					WHERE artwork.id = ?`,
+                    artwork.place_of_origin, artwork.artwork_type_title, artwork.medium_display, 
+                    artwork.credit_line, artwork.description, artwork.is_public
+                    FROM artwork 
+                    WHERE artwork.id = ?`,
 					[result.insertId]
 				);
 				console.log('Retrieved new artwork:', newArtwork[0]);
@@ -250,6 +269,62 @@ export const setupRoutes = (app) => {
 				error: 'Internal Server Error',
 				details: error.message,
 				stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
+			});
+		}
+	});
+
+	// Toggle public/private status of an artwork
+	app.patch('/artworks/:id/toggle-public', async (req, res) => {
+		if (!req.session.user) {
+			return res.status(401).json({
+				success: false,
+				error: 'Not logged in',
+				message: 'You must be logged in to update artwork visibility',
+			});
+		}
+
+		const artworkId = req.params.id;
+		const { isPublic } = req.body;
+
+		try {
+			// Check if the artwork exists and belongs to the user
+			const [artworkResult] = await dbPool.query(
+				'SELECT artist_id FROM artwork WHERE id = ?',
+				[artworkId]
+			);
+
+			if (artworkResult.length === 0) {
+				return res.status(404).json({
+					success: false,
+					error: 'Not found',
+					message: 'Artwork not found',
+				});
+			}
+
+			if (artworkResult[0].artist_id !== req.session.user.id) {
+				return res.status(403).json({
+					success: false,
+					error: 'Forbidden',
+					message: 'You can only update your own artwork',
+				});
+			}
+
+			// Update the is_public field
+			await dbPool.query('UPDATE artwork SET is_public = ? WHERE id = ?', [
+				isPublic,
+				artworkId,
+			]);
+
+			res.json({
+				success: true,
+				message: 'Artwork visibility updated successfully',
+			});
+		} catch (error) {
+			console.error('Error updating artwork visibility:', error);
+			res.status(500).json({
+				success: false,
+				error: 'Internal Server Error',
+				details: error.message,
 			});
 		}
 	});

@@ -162,7 +162,7 @@ const PortfolioPage = () => {
 	};
 
 	return (
-		<div>
+		<div style={{ marginBottom: '3rem' }}>
 			{/* Project Section */}
 			<div style={{ margin: '1rem' }}>
 				<h2>Portfolio</h2>
