@@ -103,7 +103,6 @@ const PortfolioPage = () => {
 	const handleDeleteNewArtwork = (artworkId) => {
 		setArtworks((prev) => prev.filter((art) => art.id !== artworkId));
 	};
-
 	const renderProjects = () => {
 		if (projects.length === 0) {
 			return <div>No projects added</div>;
@@ -112,10 +111,12 @@ const PortfolioPage = () => {
 		return (
 			<div
 				style={{
+					width: '100%',
+					padding: '0 20px',
 					display: 'grid',
 					gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-					gap: '2rem',
-					padding: '1rem',
+					gap: '20px',
+					justifyContent: 'center',
 				}}
 			>
 				{projects.map((project) => (

@@ -35,7 +35,7 @@ const ProjectCard = ({ project, handleDelete }) => {
 	};
 
 	return (
-		<div>
+		<div style={{ marginTop: '1rem' }}>
 			<ReactCardFlip
 				isFlipped={flip}
 				flipDirection='horizontal'
