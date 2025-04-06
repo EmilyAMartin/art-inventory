@@ -161,34 +161,24 @@ const PortfolioPage = () => {
 	};
 
 	return (
-		<div
-			style={{
-				padding: '2rem',
-				maxWidth: '1200px',
-			}}
-		>
-			<div
-				style={{
-					display: 'flex',
-					justifyContent: 'space-between',
-					alignItems: 'center',
-				}}
-			>
-				<h2 style={{ marginBottom: '1rem' }}>Portfolio</h2>
+		<div>
+			{/* Project Section */}
+			<div style={{ margin: '1rem' }}>
+				<h2>Portfolio</h2>
 			</div>
-			<div style={{ padding: '1rem' }}>
+			<div style={{ margin: '1rem' }}>
 				<AddProjectBtn onProjectAdded={handleProjectAdded} />
 			</div>
 			{isLoading ? <div>Loading projects...</div> : renderProjects()}
 
 			{/* Artwork Section */}
-			<div>
-				<h2 style={{ marginBottom: '1rem' }}>Artwork</h2>
-				<div style={{ padding: '1rem' }}>
-					<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
-				</div>
-				{isLoading ? <div>Loading artwork...</div> : renderArtwork()}
+			<div style={{ margin: '1rem' }}>
+				<h2>Artwork</h2>
 			</div>
+			<div style={{ margin: '1rem' }}>
+				<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
+			</div>
+			{isLoading ? <div>Loading artwork...</div> : renderArtwork()}
 		</div>
 	);
 };

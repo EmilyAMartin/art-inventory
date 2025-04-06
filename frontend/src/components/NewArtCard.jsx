@@ -64,7 +64,7 @@ const NewArtCard = ({ artwork, onDelete }) => {
 	};
 
 	return (
-		<div style={{ marginTop: 25 }}>
+		<div style={{ marginTop: '1rem' }}>
 			<ReactCardFlip
 				isFlipped={flip}
 				flipDirection='horizontal'
