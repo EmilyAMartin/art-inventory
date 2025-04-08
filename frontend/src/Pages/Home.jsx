@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from './Context';
 import SignUpBtn from '../components/SignUpBtn';
 import LoginBtn from '../components/LoginBtn';
@@ -10,17 +10,34 @@ import Slider from 'react-slick';
 const Home = () => {
 	const { currentUser } = useContext(AuthContext);
 	const [comments, setComments] = useState([]);
+	const [publicArtworks, setPublicArtworks] = useState([]); // State for public artworks
 
 	const handleCommentSubmit = (comment) => {
 		setComments([...comments, comment]);
 	};
 
-	const artwork = {
-		title: 'Untitled',
-		artist: 'Emily Martin',
-		imageUrl: 'Images/13.jpg',
-	};
-	const posts = new Array(10).fill(artwork);
+	// Fetch public artworks
+	useEffect(() => {
+		const fetchPublicArtworks = async () => {
+			try {
+				const response = await fetch(
+					'http://localhost:3000/artworks?visibility=public',
+					{
+						credentials: 'include',
+					}
+				);
+				if (!response.ok) {
+					throw new Error('Failed to fetch public artworks');
+				}
+				const data = await response.json();
+				setPublicArtworks(data);
+			} catch (error) {
+				console.error('Error fetching public artworks:', error);
+			}
+		};
+
+		fetchPublicArtworks();
+	}, []);
 
 	const settings = {
 		dots: true,
@@ -80,12 +97,11 @@ const Home = () => {
 			{/* New Section */}
 			<Typography>What's new on Portfolio</Typography>
 			<Slider {...settings}>
-				{posts.map((artwork, index) => (
+				{publicArtworks.map((artwork, index) => (
 					<div
 						key={index}
 						style={{ padding: '0 1rem' }}
 					>
-						{' '}
 						<ArtworkPost
 							artwork={artwork}
 							onSubmitComment={handleCommentSubmit}
@@ -98,12 +114,11 @@ const Home = () => {
 			<br />
 			<Typography>Trending on Portfolio</Typography>
 			<Slider {...settings}>
-				{posts.map((artwork, index) => (
+				{publicArtworks.map((artwork, index) => (
 					<div
 						key={index}
 						style={{ padding: '0 1rem' }}
 					>
-						{' '}
 						<ArtworkPost
 							artwork={artwork}
 							onSubmitComment={handleCommentSubmit}

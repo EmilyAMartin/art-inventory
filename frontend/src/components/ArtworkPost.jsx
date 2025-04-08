@@ -45,9 +45,14 @@ const ArtworkPost = ({ artwork }) => {
 				component='img'
 				height='250'
 				width='250'
-				image={artwork.imageUrl}
-				alt={artwork.title}
+				image={
+					artwork.image_path
+						? `http://localhost:3000${artwork.image_path}`
+						: '/images/fallback.jpg'
+				}
+				alt={artwork.title || 'Artwork'}
 			/>
+
 			<CardContent>
 				<Typography
 					variant='h5'
