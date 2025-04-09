@@ -2,10 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from './Context';
 import SignUpBtn from '../components/SignUpBtn';
 import LoginBtn from '../components/LoginBtn';
-
-import { Typography } from '@mui/material';
 import ArtworkPost from '../components/ArtworkPost';
-import Slider from 'react-slick';
 
 const Home = () => {
 	const { currentUser } = useContext(AuthContext);
@@ -39,6 +36,32 @@ const Home = () => {
 		fetchPublicArtworks();
 	}, []);
 
+	const settings = {
+		dots: true,
+		infinite: true,
+		speed: 500,
+		slidesToShow: 3,
+		slidesToScroll: 1,
+		centerMode: true,
+		centerPadding: '0',
+		responsive: [
+			{
+				breakpoint: 1024,
+				settings: {
+					slidesToShow: 2,
+					slidesToScroll: 1,
+				},
+			},
+			{
+				breakpoint: 600,
+				settings: {
+					slidesToShow: 1,
+					slidesToScroll: 1,
+				},
+			},
+		],
+	};
+
 	return (
 		<div className='App'>
 			<div className='home-container'>
@@ -68,16 +91,10 @@ const Home = () => {
 				</div>
 			</div>
 
-			{/* New Section */}
+			{/* New Art Section */}
+
 			<h2>What's new on Portfolio</h2>
-			<div
-				style={{
-					display: 'flex',
-					marginBottom: '2rem',
-					marginTop: '2rem',
-					gap: '2rem',
-				}}
-			>
+			<div style={{ display: 'flex', marginTop: '1rem', gap: '1rem' }}>
 				{publicArtworks.map((artwork, index) => (
 					<div key={index}>
 						<ArtworkPost

@@ -79,8 +79,8 @@ const NewArtCard = ({ artwork, onDelete }) => {
 	// Get the first image from the images array or use a default image
 	const imageUrl =
 		artwork.images && artwork.images.length > 0
-			? `http://localhost:3000/${artwork.images[0]}`
-			: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDMwMCAzMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbGw9IiNmMGYwZjAiLz4KICA8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE2IiBmaWxsPSIjNjY2Ij4KICAgIE5vIEltYWdlIEF2YWlsYWJsZQogIDwvdGV4dD4KPC9zdmc+';
+			? `http://localhost:3000/uploads/${artwork.images[0]}`
+			: null;
 
 	const handlePopClick = (event) => {
 		setAnchorEl(event.currentTarget);

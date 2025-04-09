@@ -133,7 +133,7 @@ export const setupRoutes = (app) => {
 
 		try {
 			const { title, artist, date, medium, location, description } = req.body;
-			const imagePath = req.file ? req.file.path : null;
+			const imagePath = req.file ? req.file.filename : null;
 
 			console.log('Received data:', {
 				title,

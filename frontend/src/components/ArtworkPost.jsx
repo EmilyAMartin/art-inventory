@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
 	Card,
 	CardContent,
@@ -13,32 +13,11 @@ import {
 	Avatar,
 } from '@mui/material';
 import CommentIcon from '@mui/icons-material/Comment';
-import axios from 'axios';
 
 const ArtworkPost = ({ artwork }) => {
 	const [comment, setComment] = useState('');
 	const [comments, setComments] = useState([]);
 	const [isCommentSectionVisible, setIsCommentSectionVisible] = useState(false);
-	const [artworkData, setArtworkData] = useState(null);
-
-	useEffect(() => {
-		if (!artwork) {
-			axios
-				.get('http://localhost:3000/artwork')
-				.then((response) => {
-					setArtworkData(response.data);
-				})
-				.catch((error) => {
-					console.error('Error fetching artwork:', error);
-				});
-		} else {
-			setArtworkData(artwork);
-		}
-	}, [artwork]);
-
-	if (!artworkData) {
-		return <div>Loading artwork...</div>;
-	}
 
 	const handleCommentChange = (event) => {
 		setComment(event.target.value);
@@ -61,8 +40,8 @@ const ArtworkPost = ({ artwork }) => {
 	};
 	const imageUrl =
 		artwork.images && artwork.images.length > 0
-			? `http://localhost:3000/${artwork.images[0]}`
-			: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDMwMCAzMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbGw9IiNmMGYwZjAiLz4KICA8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE2IiBmaWxsPSIjNjY2Ij4KICAgIE5vIEltYWdlIEF2YWlsYWJsZQogIDwvdGV4dD4KPC9zdmc+';
+			? `http://localhost:3000/uploads/${artwork.images[0]}`
+			: null;
 
 	return (
 		<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
@@ -71,23 +50,21 @@ const ArtworkPost = ({ artwork }) => {
 				component='img'
 				image={imageUrl}
 				alt='Artwork Image'
-				onError={(e) => {
-					e.target.onerror = null;
-				}}
 			/>
+
 			<CardContent>
 				<Typography
 					variant='h5'
 					component='div'
 					sx={{ fontWeight: 'bold' }}
 				>
-					{artworkData.title}
+					{artwork.title}
 				</Typography>
 				<Typography
 					variant='subtitle1'
 					color='text.secondary'
 				>
-					{artworkData.artist}
+					{artwork.artist}
 				</Typography>
 				<Divider sx={{ margin: '10px 0' }} />
 
