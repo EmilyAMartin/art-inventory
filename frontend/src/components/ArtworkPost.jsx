@@ -54,15 +54,16 @@ const ArtworkPost = ({ artwork }) => {
 
 			<CardContent>
 				<Typography
-					variant='h5'
+					gutterBottom
+					fontSize={16}
+					fontWeight={500}
 					component='div'
-					sx={{ fontWeight: 'bold' }}
 				>
 					{artwork.title}
 				</Typography>
 				<Typography
-					variant='subtitle1'
-					color='text.secondary'
+					variant='body2'
+					sx={{ color: 'text.secondary' }}
 				>
 					{artwork.artist}
 				</Typography>
@@ -73,7 +74,13 @@ const ArtworkPost = ({ artwork }) => {
 					justifyContent='space-between'
 					alignItems='center'
 				>
-					<Typography variant='h6'>Comments</Typography>
+					<Typography
+						variant='body1'
+						fontWeight={500}
+						sx={{ color: 'text.secondary' }}
+					>
+						Comments
+					</Typography>
 					<IconButton onClick={toggleCommentSection}>
 						<Badge
 							badgeContent={comments.length}
