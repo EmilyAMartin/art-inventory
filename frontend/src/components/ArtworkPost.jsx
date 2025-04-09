@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	Card,
 	CardContent,
@@ -13,11 +13,34 @@ import {
 	Avatar,
 } from '@mui/material';
 import CommentIcon from '@mui/icons-material/Comment';
+import axios from 'axios';
 
 const ArtworkPost = ({ artwork }) => {
 	const [comment, setComment] = useState('');
 	const [comments, setComments] = useState([]);
 	const [isCommentSectionVisible, setIsCommentSectionVisible] = useState(false);
+	const [artworkData, setArtworkData] = useState(null);
+
+	// Fetch artwork data (if it's not directly passed as a prop)
+	useEffect(() => {
+		if (!artwork) {
+			axios
+				.get('/api/artwork') // Replace with your actual endpoint to fetch artwork
+				.then((response) => {
+					setArtworkData(response.data); // Assuming the response has the artwork data
+				})
+				.catch((error) => {
+					console.error('Error fetching artwork:', error);
+				});
+		} else {
+			setArtworkData(artwork); // If artwork is already passed as a prop, use it directly
+		}
+	}, [artwork]);
+
+	// Show loading state until artwork is fetched
+	if (!artworkData) {
+		return <div>Loading artwork...</div>;
+	}
 
 	const handleCommentChange = (event) => {
 		setComment(event.target.value);
@@ -45,27 +68,25 @@ const ArtworkPost = ({ artwork }) => {
 				component='img'
 				height='250'
 				width='250'
-				image={
-					artwork.image_path
-						? `http://localhost:3000${artwork.image_path}`
-						: '/images/fallback.jpg'
-				}
-				alt={artwork.title || 'Artwork'}
+				image={`http://localhost:3000${artworkData.image_path}`}
+				alt={artworkData.title || 'Artwork'}
+				onError={(e) => {
+					e.target.onerror = null;
+				}}
 			/>
-
 			<CardContent>
 				<Typography
 					variant='h5'
 					component='div'
 					sx={{ fontWeight: 'bold' }}
 				>
-					{artwork.title}
+					{artworkData.title}
 				</Typography>
 				<Typography
 					variant='subtitle1'
 					color='text.secondary'
 				>
-					{artwork.artist}
+					{artworkData.artist}
 				</Typography>
 				<Divider sx={{ margin: '10px 0' }} />
 
