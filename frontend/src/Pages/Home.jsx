@@ -36,32 +36,6 @@ const Home = () => {
 		fetchPublicArtworks();
 	}, []);
 
-	const settings = {
-		dots: true,
-		infinite: true,
-		speed: 500,
-		slidesToShow: 3,
-		slidesToScroll: 1,
-		centerMode: true,
-		centerPadding: '0',
-		responsive: [
-			{
-				breakpoint: 1024,
-				settings: {
-					slidesToShow: 2,
-					slidesToScroll: 1,
-				},
-			},
-			{
-				breakpoint: 600,
-				settings: {
-					slidesToShow: 1,
-					slidesToScroll: 1,
-				},
-			},
-		],
-	};
-
 	return (
 		<div className='App'>
 			<div className='home-container'>
@@ -93,7 +67,7 @@ const Home = () => {
 
 			{/* New Art Section */}
 
-			<h2>What's new on Portfolio</h2>
+			<h2>New on Portfolio</h2>
 			<div style={{ display: 'flex', marginTop: '1rem', gap: '1rem' }}>
 				{publicArtworks.map((artwork, index) => (
 					<div key={index}>

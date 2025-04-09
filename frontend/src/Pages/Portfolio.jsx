@@ -173,7 +173,7 @@ const PortfolioPage = () => {
 			{isLoading ? <div>Loading projects...</div> : renderProjects()}
 
 			{/* Artwork Section */}
-			<div style={{ margin: '1rem' }}>
+			<div style={{ marginTop: '2rem', marginLeft: '1rem' }}>
 				<h2>Artwork</h2>
 			</div>
 			<div style={{ margin: '1rem' }}>
