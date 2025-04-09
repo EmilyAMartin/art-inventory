@@ -21,23 +21,21 @@ const ArtworkPost = ({ artwork }) => {
 	const [isCommentSectionVisible, setIsCommentSectionVisible] = useState(false);
 	const [artworkData, setArtworkData] = useState(null);
 
-	// Fetch artwork data (if it's not directly passed as a prop)
 	useEffect(() => {
 		if (!artwork) {
 			axios
-				.get('/api/artwork') // Replace with your actual endpoint to fetch artwork
+				.get('http://localhost:3000/artwork')
 				.then((response) => {
-					setArtworkData(response.data); // Assuming the response has the artwork data
+					setArtworkData(response.data);
 				})
 				.catch((error) => {
 					console.error('Error fetching artwork:', error);
 				});
 		} else {
-			setArtworkData(artwork); // If artwork is already passed as a prop, use it directly
+			setArtworkData(artwork);
 		}
 	}, [artwork]);
 
-	// Show loading state until artwork is fetched
 	if (!artworkData) {
 		return <div>Loading artwork...</div>;
 	}
@@ -61,15 +59,18 @@ const ArtworkPost = ({ artwork }) => {
 	const toggleCommentSection = () => {
 		setIsCommentSectionVisible((prev) => !prev);
 	};
+	const imageUrl =
+		artwork.images && artwork.images.length > 0
+			? `http://localhost:3000/${artwork.images[0]}`
+			: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDMwMCAzMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbGw9IiNmMGYwZjAiLz4KICA8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE2IiBmaWxsPSIjNjY2Ij4KICAgIE5vIEltYWdlIEF2YWlsYWJsZQogIDwvdGV4dD4KPC9zdmc+';
 
 	return (
-		<Card sx={{ maxWidth: 250 }}>
+		<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
 			<CardMedia
+				style={{ width: 300, height: 300 }}
 				component='img'
-				height='250'
-				width='250'
-				image={`http://localhost:3000${artworkData.image_path}`}
-				alt={artworkData.title || 'Artwork'}
+				image={imageUrl}
+				alt='Artwork Image'
 				onError={(e) => {
 					e.target.onerror = null;
 				}}
