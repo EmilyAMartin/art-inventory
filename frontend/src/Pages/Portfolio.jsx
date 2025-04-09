@@ -18,7 +18,7 @@ const PortfolioPage = () => {
 					fetch('http://localhost:3000/projects', {
 						credentials: 'include',
 					}),
-					fetch('http://localhost:3000/artworks', {
+					fetch('http://localhost:3000/my-artworks', {
 						credentials: 'include',
 					}),
 				]);
