@@ -3,6 +3,7 @@ import * as artwork from './artwork.js';
 import * as users from './users.js';
 import * as favorites from './favorites.js';
 import * as projects from './projects.js';
+import * as comments from './comments.js';
 
 import express from 'express';
 import session from 'express-session';
@@ -18,19 +19,17 @@ const corsOptions = {
 	origin: 'http://localhost:5173',
 	credentials: true,
 	methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-	allowedHeaders: ['Content-Type', 'Authorization'],
+	allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
 };
 app.use(cors(corsOptions));
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ limit: '5mb', extended: true }));
 
-// Create uploads directory if it doesn't exist
 const uploadDir = path.join(process.cwd(), 'uploads');
 if (!fs.existsSync(uploadDir)) {
 	fs.mkdirSync(uploadDir);
 }
 
-// Serve static files from uploads directory
 app.use('/uploads', express.static(uploadDir));
 
 app.use(
@@ -41,7 +40,8 @@ app.use(
 		saveUninitialized: false,
 		cookie: {
 			httpOnly: true,
-			secure: process.env.NODE_ENV === 'production',
+			secure: false,
+			sameSite: 'lax',
 			maxAge: 24 * 60 * 60 * 1000,
 		},
 	})
@@ -52,6 +52,7 @@ const initDb = async () => {
 		await users.createTable();
 		await artwork.createTable();
 		await favorites.createFavoritesTable();
+		await comments.createCommentsTable();
 		await projects.createTable();
 	} catch (err) {
 		console.error('Error initializing database:', err);
@@ -62,6 +63,7 @@ initDb();
 artwork.setupRoutes(app);
 users.setupRoutes(app);
 favorites.setupFavoritesRoutes(app);
+comments.setupCommentRoutes(app);
 projects.setupRoutes(app);
 
 app.use((err, req, res, next) => {
