@@ -13,6 +13,12 @@ import {
 	Avatar,
 } from '@mui/material';
 import CommentIcon from '@mui/icons-material/Comment';
+import {
+	Dialog,
+	DialogTitle,
+	DialogContent,
+	DialogActions,
+} from '@mui/material';
 
 const ArtworkPost = ({ artwork }) => {
 	const [comment, setComment] = useState('');
@@ -91,63 +97,72 @@ const ArtworkPost = ({ artwork }) => {
 					</IconButton>
 				</Box>
 
-				{isCommentSectionVisible && (
-					<Box sx={{ marginTop: '10px' }}>
-						{/* Comment Input Box */}
+				<Dialog
+					open={isCommentSectionVisible}
+					onClose={() => setIsCommentSectionVisible(false)}
+					fullWidth
+					maxWidth='sm'
+				>
+					<DialogTitle>Comments</DialogTitle>
+					<DialogContent dividers>
 						<TextField
 							label='Write a comment'
 							variant='outlined'
 							fullWidth
 							multiline
-							rows={1}
+							rows={2}
 							value={comment}
 							onChange={handleCommentChange}
 							sx={{ marginBottom: '10px' }}
 						/>
-						<Box
-							display='flex'
-							justifyContent='space-between'
-							alignItems='center'
-						>
-							<Button
-								variant='contained'
-								color='primary'
-								onClick={handleSubmitComment}
-								sx={{ marginTop: '10px' }}
-							>
-								Submit Comment
-							</Button>
-						</Box>
 
 						{comments.length > 0 && (
-							<Box sx={{ marginTop: '20px' }}>
-								<Typography variant='h6'>All Comments:</Typography>
-								<Box sx={{ marginTop: '10px' }}>
-									{comments.map((comment, index) => (
-										<Box
-											key={index}
-											display='flex'
-											alignItems='center'
-											sx={{ marginBottom: '10px' }}
+							<Box>
+								<Typography
+									variant='h6'
+									sx={{ marginBottom: '10px' }}
+								>
+									All Comments:
+								</Typography>
+								{comments.map((comment, index) => (
+									<Box
+										key={index}
+										display='flex'
+										alignItems='center'
+										sx={{ marginBottom: '10px' }}
+									>
+										<Avatar
+											alt='Profile Picture'
+											src={comment.profilePicture}
+											sx={{ width: 30, height: 30, marginRight: '10px' }}
+										/>
+										<Typography
+											variant='body2'
+											color='text.secondary'
 										>
-											<Avatar
-												alt='Profile Picture'
-												src={comment.profilePicture}
-												sx={{ width: 30, height: 30, marginRight: '10px' }}
-											/>
-											<Typography
-												variant='body2'
-												color='text.secondary'
-											>
-												{comment.text}
-											</Typography>
-										</Box>
-									))}
-								</Box>
+											{comment.text}
+										</Typography>
+									</Box>
+								))}
 							</Box>
 						)}
-					</Box>
-				)}
+					</DialogContent>
+					<DialogActions>
+						<Button
+							onClick={() => setIsCommentSectionVisible(false)}
+							color='secondary'
+						>
+							Close
+						</Button>
+						<Button
+							variant='contained'
+							color='primary'
+							onClick={handleSubmitComment}
+						>
+							Submit
+						</Button>
+					</DialogActions>
+				</Dialog>
 			</CardContent>
 		</Card>
 	);
