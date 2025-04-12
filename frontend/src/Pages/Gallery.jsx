@@ -6,6 +6,8 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
 import ArtCard from '../components/ArtCard';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
 
 const Gallery = () => {
 	const BASE_URL = 'https://api.artic.edu/api/v1/artworks';
@@ -17,6 +19,7 @@ const Gallery = () => {
 	const [userId, setUserId] = useState(null);
 	const [totalResults, setTotalResults] = useState(0);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [selectedCategories, setSelectedCategories] = useState([]);
 	const RESULTS_PER_PAGE = 12;
 
 	const fetchDataById = async (id) => {
@@ -27,13 +30,8 @@ const Gallery = () => {
 	const checkImageUrl = async (imageUrl) => {
 		try {
 			const response = await fetch(imageUrl, { method: 'HEAD' });
-			if (response.status === 403) {
-				console.log('Image access forbidden (403):', imageUrl);
-				return false;
-			}
 			return response.ok || response.status === 302;
-		} catch (error) {
-			console.log('Image access error:', error);
+		} catch {
 			return false;
 		}
 	};
@@ -44,27 +42,19 @@ const Gallery = () => {
 				method: 'GET',
 				credentials: 'include',
 			});
-
 			if (response.status === 401) {
-				// User is not logged in
 				setIsLoggedIn(false);
 				setUserId(null);
 				return [];
 			}
-
-			if (!response.ok) {
-				throw new Error('Failed to fetch favorite artworks');
-			}
+			if (!response.ok) throw new Error('Failed to fetch favorite artworks');
 
 			setIsLoggedIn(true);
 			const data = await response.json();
 			setUserId(data.userId || null);
-
-			if (!Array.isArray(data.favorites)) {
-				return [];
-			}
-
-			return data.favorites.map((fav) => fav.id);
+			return Array.isArray(data.favorites)
+				? data.favorites.map((fav) => fav.id)
+				: [];
 		} catch (err) {
 			console.error('Error fetching favorites:', err);
 			setIsLoggedIn(false);
@@ -79,20 +69,22 @@ const Gallery = () => {
 			let data;
 			let currentPage = page;
 			let validArtwork = [];
-			const MAX_ATTEMPTS = 3; // Maximum number of additional pages to fetch
+			const MAX_ATTEMPTS = 3;
 			let attempts = 0;
 
-			// Fetch favorites list (will be empty if user is not logged in)
 			const favoritesList = await fetchFavorites();
 
+			let combinedSearchQuery = searchQuery;
+			if (selectedCategories.length > 0) {
+				combinedSearchQuery = selectedCategories.join(' ');
+			}
+
 			while (validArtwork.length < RESULTS_PER_PAGE && attempts < MAX_ATTEMPTS) {
-				if (searchQuery) {
-					// First search for artworks matching the query
+				if (combinedSearchQuery) {
 					const searchResponse = await axios.get(
-						`${BASE_URL}/search?q=${searchQuery}&page=${currentPage}`
+						`${BASE_URL}/search?q=${combinedSearchQuery}&page=${currentPage}`
 					);
 					setTotalResults(searchResponse.data.pagination.total);
-					// Then fetch full details for each artwork
 					const searchResults = await Promise.all(
 						searchResponse.data.data.map(async (art) => {
 							return await fetchDataById(art.id);
@@ -100,30 +92,17 @@ const Gallery = () => {
 					);
 					data = { data: searchResults };
 				} else {
-					// Regular page loading
 					const response = await axios.get(`${BASE_URL}?page=${currentPage}`);
 					setTotalResults(response.data.pagination.total);
 					data = response.data;
 				}
 
-				// Filter and process artwork data
 				const newValidArtwork = await Promise.all(
 					data.data.map(async (art) => {
-						// Check if the artwork has an image URL
-						if (!art.image_id) {
-							console.log('Skipping artwork due to no image_id:', art.id);
-							return null;
-						}
-
-						// Use the IIIF API with the correct format
+						if (!art.image_id) return null;
 						const imageUrl = `https://www.artic.edu/iiif/2/${art.image_id}/full/400,/0/default.jpg`;
 						const hasValidImage = await checkImageUrl(imageUrl);
-
-						if (!hasValidImage) {
-							console.log('Skipping artwork due to invalid image:', art.id);
-							return null;
-						}
-
+						if (!hasValidImage) return null;
 						return {
 							...art,
 							image_url: imageUrl,
@@ -132,7 +111,6 @@ const Gallery = () => {
 					})
 				);
 
-				// Filter out null values and add to valid artwork
 				validArtwork = [
 					...validArtwork,
 					...newValidArtwork.filter((art) => art !== null),
@@ -141,10 +119,7 @@ const Gallery = () => {
 				attempts++;
 			}
 
-			// Take only the first RESULTS_PER_PAGE items
-			validArtwork = validArtwork.slice(0, RESULTS_PER_PAGE);
-
-			setArtwork(validArtwork);
+			setArtwork(validArtwork.slice(0, RESULTS_PER_PAGE));
 		} catch (err) {
 			setError(err.message);
 		} finally {
@@ -154,7 +129,7 @@ const Gallery = () => {
 
 	useEffect(() => {
 		fetchData();
-	}, [page]);
+	}, [page, selectedCategories]);
 
 	const handleFavUpdate = async (artworkId, isFavorite) => {
 		if (!isLoggedIn) {
@@ -165,18 +140,12 @@ const Gallery = () => {
 		try {
 			const response = await fetch('http://localhost:3000/favorites', {
 				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
+				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ artworkId, favorite: isFavorite }),
 				credentials: 'include',
 			});
+			if (!response.ok) throw new Error('Failed to update favorite status');
 
-			if (!response.ok) {
-				throw new Error('Failed to update favorite status');
-			}
-
-			// Update the artwork state to reflect the new favorite status
 			setArtwork((prevArtwork) =>
 				prevArtwork.map((art) =>
 					art.id === artworkId ? { ...art, favorite: isFavorite } : art
@@ -188,10 +157,24 @@ const Gallery = () => {
 		}
 	};
 
+	// Handle Reset Button to prevent routing to the search page
 	const handleReset = () => {
+		// Reset the local states
 		setSearchQuery('');
-		setPage(1);
+		setSelectedCategories([]);
+		setPage(1); // Reset to page 1
+
+		// Fetch data with the reset states
 		fetchData();
+
+		// Prevent navigation by manually clearing URL query string without reloading page
+		if (window.history.replaceState) {
+			window.history.replaceState(
+				{ ...window.history.state },
+				'',
+				window.location.pathname // Keep the current page and avoid search page
+			);
+		}
 	};
 
 	return (
@@ -199,6 +182,7 @@ const Gallery = () => {
 			id='gallery-container'
 			style={{ display: 'flex', flexDirection: 'column' }}
 		>
+			{/* Search Bar */}
 			<div
 				className='search-bar'
 				style={{ display: 'flex', justifyContent: 'center' }}
@@ -206,14 +190,13 @@ const Gallery = () => {
 				<TextField
 					id='search-bar'
 					value={searchQuery}
-					className='text'
-					onInput={(e) => {
-						setSearchQuery(e.target.value);
-					}}
+					onInput={(e) => setSearchQuery(e.target.value)}
 					onKeyDown={(e) => {
 						if (e.key === 'Enter') {
 							e.preventDefault();
-							fetchData();
+							setSelectedCategories([]);
+							setPage(1); // Reset page number to 1
+							fetchData(); // Fetch data without navigation
 						}
 					}}
 					label='Search Keyword'
@@ -222,13 +205,14 @@ const Gallery = () => {
 					size='small'
 				/>
 				<IconButton
-					type='submit'
-					onClick={fetchData}
+					type='button'
+					onClick={fetchData} // Trigger fetch data without navigation
 					aria-label='search'
 				>
 					<SearchIcon style={{ fill: 'black' }} />
 				</IconButton>
 				<Button
+					type='button'
 					color='black'
 					onClick={handleReset}
 				>
@@ -236,6 +220,58 @@ const Gallery = () => {
 				</Button>
 			</div>
 
+			{/* Category Chips */}
+			<Stack
+				direction='row'
+				spacing={1}
+				sx={{ justifyContent: 'center', flexWrap: 'wrap', mt: 2 }}
+			>
+				{[
+					'Photography',
+					'Painting',
+					'Printmaking',
+					'Sculpture',
+					'Textile',
+					'Digital',
+				].map((category) => (
+					<Chip
+						key={category}
+						label={category}
+						variant={selectedCategories.includes(category) ? 'filled' : 'outlined'}
+						color={selectedCategories.includes(category) ? 'primary' : 'default'}
+						clickable
+						component='button'
+						onClick={(e) => {
+							e.preventDefault();
+							const alreadySelected = selectedCategories.includes(category);
+							const newCategories = alreadySelected
+								? selectedCategories.filter((cat) => cat !== category)
+								: [...selectedCategories, category];
+							setSelectedCategories(newCategories);
+							setSearchQuery('');
+							setPage(1); // Reset page to 1 when a category is selected
+							fetchData(); // Fetch data without navigation
+						}}
+					/>
+				))}
+				{selectedCategories.length > 0 && (
+					<Chip
+						label='Clear'
+						color='error'
+						clickable
+						component='button'
+						onClick={(e) => {
+							e.preventDefault();
+							setSelectedCategories([]);
+							setSearchQuery('');
+							setPage(1); // Reset to page 1
+							fetchData(); // Fetch data with reset state
+						}}
+					/>
+				)}
+			</Stack>
+
+			{/* Artwork Grid */}
 			<div className='gallery-artwork'>
 				{isLoading && <div>Loading...</div>}
 				<Grid2
@@ -256,7 +292,6 @@ const Gallery = () => {
 							key={art.id}
 						>
 							<ArtCard
-								key={art.id}
 								art={art}
 								handleFavUpdate={handleFavUpdate}
 								userId={userId}
@@ -267,6 +302,7 @@ const Gallery = () => {
 				</Grid2>
 			</div>
 
+			{/* Pagination */}
 			{page > 0 && (
 				<div
 					id='page-navigation'
