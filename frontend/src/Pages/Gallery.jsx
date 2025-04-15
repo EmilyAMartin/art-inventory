@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import ArtCard from '../components/ArtCard';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
+import { debounce } from 'lodash';
 
 const Gallery = () => {
 	const BASE_URL = 'https://api.artic.edu/api/v1/artworks';
@@ -16,11 +17,10 @@ const Gallery = () => {
 	const [error, setError] = useState(null);
 	const [page, setPage] = useState(1);
 	const [searchQuery, setSearchQuery] = useState('');
-	const [userId, setUserId] = useState(null);
-	const [totalResults, setTotalResults] = useState(0);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [selectedCategories, setSelectedCategories] = useState([]);
 	const RESULTS_PER_PAGE = 12;
+	const [totalResults, setTotalResults] = useState(0);
 
 	const fetchDataById = async (id) => {
 		const response = await axios.get(`${BASE_URL}/${id}`);
@@ -30,7 +30,7 @@ const Gallery = () => {
 	const checkImageUrl = async (imageUrl) => {
 		try {
 			const response = await fetch(imageUrl, { method: 'HEAD' });
-			return response.ok || response.status === 302;
+			return response.ok;
 		} catch {
 			return false;
 		}
@@ -44,21 +44,18 @@ const Gallery = () => {
 			});
 			if (response.status === 401) {
 				setIsLoggedIn(false);
-				setUserId(null);
 				return [];
 			}
 			if (!response.ok) throw new Error('Failed to fetch favorite artworks');
 
 			setIsLoggedIn(true);
 			const data = await response.json();
-			setUserId(data.userId || null);
 			return Array.isArray(data.favorites)
 				? data.favorites.map((fav) => fav.id)
 				: [];
 		} catch (err) {
 			console.error('Error fetching favorites:', err);
 			setIsLoggedIn(false);
-			setUserId(null);
 			return [];
 		}
 	};
@@ -73,11 +70,7 @@ const Gallery = () => {
 			let attempts = 0;
 
 			const favoritesList = await fetchFavorites();
-
-			let combinedSearchQuery = searchQuery;
-			if (selectedCategories.length > 0) {
-				combinedSearchQuery = selectedCategories.join(' ');
-			}
+			let combinedSearchQuery = searchQuery || selectedCategories.join(' ');
 
 			while (validArtwork.length < RESULTS_PER_PAGE && attempts < MAX_ATTEMPTS) {
 				if (combinedSearchQuery) {
@@ -127,9 +120,7 @@ const Gallery = () => {
 		}
 	};
 
-	useEffect(() => {
-		fetchData();
-	}, [page, selectedCategories]);
+	const debouncedFetchData = debounce(fetchData, 300);
 
 	const handleFavUpdate = async (artworkId, isFavorite) => {
 		if (!isLoggedIn) {
@@ -157,25 +148,16 @@ const Gallery = () => {
 		}
 	};
 
-	// Handle Reset Button to prevent routing to the search page
 	const handleReset = () => {
-		// Reset the local states
 		setSearchQuery('');
 		setSelectedCategories([]);
-		setPage(1); // Reset to page 1
-
-		// Fetch data with the reset states
-		fetchData();
-
-		// Prevent navigation by manually clearing URL query string without reloading page
-		if (window.history.replaceState) {
-			window.history.replaceState(
-				{ ...window.history.state },
-				'',
-				window.location.pathname // Keep the current page and avoid search page
-			);
-		}
+		setPage(1);
+		fetchData(); // Immediate call to reset the page
 	};
+
+	useEffect(() => {
+		fetchData(); // Fetch data whenever page or selectedCategories change
+	}, [page, selectedCategories]);
 
 	return (
 		<div
@@ -195,8 +177,8 @@ const Gallery = () => {
 						if (e.key === 'Enter') {
 							e.preventDefault();
 							setSelectedCategories([]);
-							setPage(1); // Reset page number to 1
-							fetchData(); // Fetch data without navigation
+							setPage(1);
+							debouncedFetchData();
 						}
 					}}
 					label='Search Keyword'
@@ -206,7 +188,7 @@ const Gallery = () => {
 				/>
 				<IconButton
 					type='button'
-					onClick={fetchData} // Trigger fetch data without navigation
+					onClick={debouncedFetchData}
 					aria-label='search'
 				>
 					<SearchIcon style={{ fill: 'black' }} />
@@ -249,8 +231,8 @@ const Gallery = () => {
 								: [...selectedCategories, category];
 							setSelectedCategories(newCategories);
 							setSearchQuery('');
-							setPage(1); // Reset page to 1 when a category is selected
-							fetchData(); // Fetch data without navigation
+							setPage(1);
+							debouncedFetchData();
 						}}
 					/>
 				))}
@@ -264,8 +246,8 @@ const Gallery = () => {
 							e.preventDefault();
 							setSelectedCategories([]);
 							setSearchQuery('');
-							setPage(1); // Reset to page 1
-							fetchData(); // Fetch data with reset state
+							setPage(1);
+							debouncedFetchData();
 						}}
 					/>
 				)}
@@ -294,7 +276,6 @@ const Gallery = () => {
 							<ArtCard
 								art={art}
 								handleFavUpdate={handleFavUpdate}
-								userId={userId}
 								isLoggedIn={isLoggedIn}
 							/>
 						</Grid2>
@@ -303,36 +284,33 @@ const Gallery = () => {
 			</div>
 
 			{/* Pagination */}
-			{page > 0 && (
-				<div
-					id='page-navigation'
-					style={{
-						marginBottom: 25,
-						display: 'flex',
-						flexDirection: 'row',
-						justifyContent: 'center',
+			<div
+				id='page-navigation'
+				style={{
+					marginBottom: 25,
+					display: 'flex',
+					flexDirection: 'row',
+					justifyContent: 'center',
+				}}
+			>
+				<Button
+					disabled={page === 1}
+					color='black'
+					onClick={() => setPage(page - 1)}
+				>
+					Prev
+				</Button>
+				<Button
+					color='black'
+					disabled={page * RESULTS_PER_PAGE >= totalResults}
+					onClick={() => {
+						setPage(page + 1);
+						window.scrollTo(0, 0);
 					}}
 				>
-					<Button
-						disabled={page === 1}
-						color='black'
-						onClick={() => setPage(page - 1)}
-					>
-						Prev
-					</Button>
-					<Button
-						color='black'
-						disabled={page * RESULTS_PER_PAGE >= totalResults}
-						onClick={() => {
-							setPage(page + 1);
-							window.scrollTo(0, 0);
-						}}
-					>
-						Next
-					</Button>
-					{error && <div>{error}</div>}
-				</div>
-			)}
+					Next
+				</Button>
+			</div>
 		</div>
 	);
 };
