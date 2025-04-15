@@ -2,18 +2,17 @@ import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from './Context';
 import SignUpBtn from '../components/SignUpBtn';
 import LoginBtn from '../components/LoginBtn';
-import ArtworkPost from '../components/ArtworkPost';
+import ArtPostCarousel from '../components/ArtPostCarousel';
 
 const Home = () => {
 	const { currentUser } = useContext(AuthContext);
 	const [comments, setComments] = useState([]);
-	const [publicArtworks, setPublicArtworks] = useState([]); // State for public artworks
+	const [publicArtworks, setPublicArtworks] = useState([]);
 
 	const handleCommentSubmit = (comment) => {
 		setComments([...comments, comment]);
 	};
 
-	// Fetch public artworks
 	useEffect(() => {
 		const fetchPublicArtworks = async () => {
 			try {
@@ -66,17 +65,12 @@ const Home = () => {
 			</div>
 
 			{/* New Art Section */}
-
-			<h2>New on Portfolio</h2>
-			<div style={{ display: 'flex', marginTop: '1rem', gap: '1rem' }}>
-				{publicArtworks.map((artwork, index) => (
-					<div key={index}>
-						<ArtworkPost
-							artwork={artwork}
-							onSubmitComment={handleCommentSubmit}
-						/>
-					</div>
-				))}
+			<div className='art-post-section'>
+				<h2>New on Portfolio</h2>
+				<ArtPostCarousel
+					artworks={publicArtworks}
+					onSubmitComment={handleCommentSubmit}
+				/>
 			</div>
 		</div>
 	);

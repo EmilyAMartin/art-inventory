@@ -8,17 +8,15 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ReactCardFlip from 'react-card-flip';
 import CardActionArea from '@mui/material/CardActionArea';
-
-import Switch from '@mui/material/Switch'; // Import the Switch component
+import Switch from '@mui/material/Switch';
 
 const NewArtCard = ({ artwork, onDelete }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
 	const [flip, setFlip] = useState(false);
-	const [isPublic, setIsPublic] = useState(artwork.isPublic || false); // Add state for public/private status
+	const [isPublic, setIsPublic] = useState(artwork.isPublic || false);
 	const open = Boolean(anchorEl);
 
-	// Return early if artwork is undefined
 	if (!artwork) {
 		return null;
 	}
@@ -41,7 +39,6 @@ const NewArtCard = ({ artwork, onDelete }) => {
 				throw new Error('Failed to update public/private status');
 			}
 
-			// Update the local state
 			setIsPublic((prev) => !prev);
 		} catch (error) {
 			console.error('Error updating public/private status:', error);
@@ -68,7 +65,6 @@ const NewArtCard = ({ artwork, onDelete }) => {
 				throw new Error(errorData.message || 'Failed to delete artwork');
 			}
 
-			// If deletion was successful, call the parent's onDelete
 			onDelete(artwork.id);
 		} catch (error) {
 			console.error('Error deleting artwork:', error);
@@ -76,7 +72,6 @@ const NewArtCard = ({ artwork, onDelete }) => {
 		}
 	};
 
-	// Get the first image from the images array or use a default image
 	const imageUrl =
 		artwork.images && artwork.images.length > 0
 			? `http://localhost:3000/uploads/${artwork.images[0]}`
