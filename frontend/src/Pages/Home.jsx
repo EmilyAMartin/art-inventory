@@ -62,7 +62,7 @@ const Home = () => {
 					</div>
 					<div className='home-image-section'>
 						<img
-							src='/Images/home.png' // Absolute path from the public folder
+							src='/art-inventory/Images/home.png' // Include the base URL
 							alt='Illustration of girl painting'
 						/>
 					</div>
