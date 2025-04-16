@@ -9,6 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ReactCardFlip from 'react-card-flip';
 import CardActionArea from '@mui/material/CardActionArea';
 import Switch from '@mui/material/Switch';
+import Checkbox from '@mui/material/Checkbox';
 
 const NewArtCard = ({ artwork, onDelete }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -169,17 +170,17 @@ const NewArtCard = ({ artwork, onDelete }) => {
 							<div
 								style={{ marginTop: '1rem', display: 'flex', alignItems: 'center' }}
 							>
-								<Typography
-									variant='body2'
-									sx={{ marginRight: '0.5rem' }}
-								>
-									{isPublic ? 'Public' : 'Private'}
-								</Typography>
-								<Switch
+								<Checkbox
 									checked={isPublic}
 									onChange={handleTogglePublic}
 									color='primary'
 								/>
+								<Typography
+									variant='body2'
+									sx={{ marginLeft: '0.5rem' }}
+								>
+									Public
+								</Typography>
 							</div>
 						</CardContent>
 
