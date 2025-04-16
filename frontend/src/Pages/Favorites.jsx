@@ -30,14 +30,12 @@ const Favorites = () => {
 	const fetchFavorites = async () => {
 		setLoading(true);
 		try {
-			// First get the list of favorite IDs
 			const response = await fetch('http://localhost:3000/favorites', {
 				method: 'GET',
 				credentials: 'include',
 			});
 
 			if (response.status === 401) {
-				// User is not logged in
 				setIsLoggedIn(false);
 				setUserId(null);
 				setArtwork([]);
@@ -58,20 +56,17 @@ const Favorites = () => {
 				return;
 			}
 
-			// Then fetch the artwork details for each favorite
 			const artworkPromises = data.favorites.map(async (fav) => {
 				try {
 					const { data: artData } = await axios.get(
 						`https://api.artic.edu/api/v1/artworks/${fav.id}`
 					);
 
-					// Check if the artwork has an image URL
 					if (!artData.data.image_id) {
 						console.log('Skipping artwork due to no image_id:', fav.id);
 						return null;
 					}
 
-					// Use the IIIF API with the correct format
 					const imageUrl = `https://www.artic.edu/iiif/2/${artData.data.image_id}/full/400,/0/default.jpg`;
 					const hasValidImage = await checkImageUrl(imageUrl);
 
@@ -125,7 +120,6 @@ const Favorites = () => {
 				throw new Error('Failed to update favorite status');
 			}
 
-			// Remove the artwork from the local state immediately
 			setArtwork((prevArtwork) =>
 				prevArtwork.filter((art) => art.id !== artworkId)
 			);
