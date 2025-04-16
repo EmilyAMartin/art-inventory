@@ -70,17 +70,14 @@ const ImageUploadModal = ({
 	};
 
 	const handleImageChange = (e) => {
-		const files = Array.from(e.target.files);
-		const newImages = files.map((file) => {
+		const file = e.target.files[0]; // Get only the first file
+		if (file) {
 			const reader = new FileReader();
-			return new Promise((resolve) => {
-				reader.onloadend = () => resolve(reader.result);
-				reader.readAsDataURL(file);
-			});
-		});
-		Promise.all(newImages).then((imageData) => {
-			setImages((prevImages) => [...prevImages, ...imageData]);
-		});
+			reader.onloadend = () => {
+				setImages([reader.result]); // Replace the images array with a single image
+			};
+			reader.readAsDataURL(file);
+		}
 	};
 
 	const handleNext = () => {
@@ -182,12 +179,11 @@ const ImageUploadModal = ({
 							}}
 						>
 							<CloudUploadIcon />
-							Upload files
+							Upload file
 						</label>
 						<input
 							id='image-upload'
 							type='file'
-							multiple
 							accept='image/*'
 							style={{ display: 'none' }}
 							onChange={handleImageChange}
@@ -195,58 +191,17 @@ const ImageUploadModal = ({
 					</div>
 
 					{images.length > 0 && (
-						<>
-							<div
+						<div style={{ textAlign: 'center' }}>
+							<img
+								src={images[0]} // Always display the first image
+								alt='Uploaded'
 								style={{
-									display: 'flex',
-									flexDirection: 'row',
-									justifyContent: 'center',
-									gap: '10px',
+									maxWidth: '300px',
+									maxHeight: '300px',
+									objectFit: 'cover',
 								}}
-							>
-								<div
-									onClick={handlePrev}
-									style={{
-										padding: '8px 16px',
-										cursor: currentIndex === 0 ? 'not-allowed' : 'pointer',
-										opacity: currentIndex === 0 ? 0.5 : 1,
-										backgroundColor: '#f0f0f0',
-										borderRadius: '4px',
-									}}
-								>
-									Previous
-								</div>
-								<div
-									onClick={handleNext}
-									style={{
-										padding: '8px 16px',
-										cursor:
-											currentIndex === images.length - 1 ? 'not-allowed' : 'pointer',
-										opacity: currentIndex === images.length - 1 ? 0.5 : 1,
-										backgroundColor: '#f0f0f0',
-										borderRadius: '4px',
-									}}
-								>
-									Next
-								</div>
-							</div>
-							<div style={{ textAlign: 'center' }}>
-								<div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
-									<img
-										src={images[currentIndex]}
-										alt={`Image ${currentIndex + 1}`}
-										style={{
-											maxWidth: '300px',
-											maxHeight: '300px',
-											objectFit: 'cover',
-										}}
-									/>
-								</div>
-								<p>
-									{currentIndex + 1} / {images.length}
-								</p>
-							</div>
-						</>
+							/>
+						</div>
 					)}
 
 					<div

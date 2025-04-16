@@ -16,6 +16,12 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 	];
 
 	const handleSubmit = async (formData) => {
+		// Ensure only a single image is included in the formData
+		if (formData.getAll('images').length > 1) {
+			alert('Only one image can be uploaded.');
+			return;
+		}
+
 		const response = await fetch('http://localhost:3000/artworks', {
 			method: 'POST',
 			body: formData,
@@ -62,6 +68,7 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 				onSubmit={handleSubmit}
 				title='Add New Artwork'
 				fields={fields}
+				allowMultiple={false} // Pass a prop to disallow multiple uploads
 			/>
 		</div>
 	);

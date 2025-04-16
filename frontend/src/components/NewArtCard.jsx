@@ -8,14 +8,15 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ReactCardFlip from 'react-card-flip';
 import CardActionArea from '@mui/material/CardActionArea';
-import Switch from '@mui/material/Switch';
 import Checkbox from '@mui/material/Checkbox';
+import Button from '@mui/material/Button';
 
 const NewArtCard = ({ artwork, onDelete }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
 	const [flip, setFlip] = useState(false);
 	const [isPublic, setIsPublic] = useState(artwork.isPublic || false);
+	const [currentImageIndex, setCurrentImageIndex] = useState(0); // Track the current image index
 	const open = Boolean(anchorEl);
 
 	if (!artwork) {
@@ -73,10 +74,16 @@ const NewArtCard = ({ artwork, onDelete }) => {
 		}
 	};
 
-	const imageUrl =
-		artwork.images && artwork.images.length > 0
-			? `http://localhost:3000/uploads/${artwork.images[0]}`
-			: null;
+	const handleNextImage = () => {
+		setCurrentImageIndex((prevIndex) => (prevIndex + 1) % artwork.images.length);
+	};
+
+	const handlePreviousImage = () => {
+		setCurrentImageIndex(
+			(prevIndex) =>
+				(prevIndex - 1 + artwork.images.length) % artwork.images.length
+		);
+	};
 
 	const handlePopClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -87,6 +94,11 @@ const NewArtCard = ({ artwork, onDelete }) => {
 		setAnchorEl(null);
 		setPopoverImageId(null);
 	};
+
+	const imageUrl =
+		artwork.images && artwork.images.length > 0
+			? `http://localhost:3000/uploads/${artwork.images[currentImageIndex]}`
+			: null;
 
 	return (
 		<div style={{ marginTop: '1rem' }}>
@@ -125,6 +137,33 @@ const NewArtCard = ({ artwork, onDelete }) => {
 								alt=''
 							/>
 						</Popover>
+
+						{/* Image Navigation Buttons */}
+						<div
+							style={{
+								display: 'flex',
+								justifyContent: 'space-between',
+								alignItems: 'center',
+								marginTop: '0.5rem',
+							}}
+						>
+							<Button
+								variant='outlined'
+								size='small'
+								onClick={handlePreviousImage}
+								disabled={artwork.images.length <= 1}
+							>
+								Previous
+							</Button>
+							<Button
+								variant='outlined'
+								size='small'
+								onClick={handleNextImage}
+								disabled={artwork.images.length <= 1}
+							>
+								Next
+							</Button>
+						</div>
 
 						<CardContent style={{ width: 300, height: 200 }}>
 							<IconButton
