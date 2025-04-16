@@ -33,6 +33,11 @@ const Home = () => {
 		};
 
 		fetchPublicArtworks();
+
+		// Cleanup function
+		return () => {
+			setPublicArtworks([]);
+		};
 	}, []);
 
 	return (
@@ -57,8 +62,8 @@ const Home = () => {
 					</div>
 					<div className='home-image-section'>
 						<img
-							src='./Images/home.png'
-							alt='illustration of girl painting'
+							src='/Images/home.png' // Absolute path from the public folder
+							alt='Illustration of girl painting'
 						/>
 					</div>
 				</div>
