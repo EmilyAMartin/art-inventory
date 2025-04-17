@@ -6,9 +6,6 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
 import ArtCard from '../components/ArtCard';
-import Chip from '@mui/material/Chip';
-import Stack from '@mui/material/Stack';
-import { debounce } from 'lodash';
 
 const Gallery = () => {
 	const BASE_URL = 'https://api.artic.edu/api/v1/artworks';
@@ -18,7 +15,6 @@ const Gallery = () => {
 	const [page, setPage] = useState(1);
 	const [searchQuery, setSearchQuery] = useState('');
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	const [selectedCategories, setSelectedCategories] = useState([]);
 	const RESULTS_PER_PAGE = 12;
 	const [totalResults, setTotalResults] = useState(0);
 
@@ -70,12 +66,11 @@ const Gallery = () => {
 			let attempts = 0;
 
 			const favoritesList = await fetchFavorites();
-			let combinedSearchQuery = searchQuery || selectedCategories.join(' ');
 
 			while (validArtwork.length < RESULTS_PER_PAGE && attempts < MAX_ATTEMPTS) {
-				if (combinedSearchQuery) {
+				if (searchQuery) {
 					const searchResponse = await axios.get(
-						`${BASE_URL}/search?q=${combinedSearchQuery}&page=${currentPage}`
+						`${BASE_URL}/search?q=${searchQuery}&page=${currentPage}`
 					);
 					setTotalResults(searchResponse.data.pagination.total);
 					const searchResults = await Promise.all(
@@ -120,8 +115,6 @@ const Gallery = () => {
 		}
 	};
 
-	const debouncedFetchData = debounce(fetchData, 300);
-
 	const handleFavUpdate = async (artworkId, isFavorite) => {
 		if (!isLoggedIn) {
 			alert('You must be logged in to favorite artwork');
@@ -149,15 +142,13 @@ const Gallery = () => {
 	};
 
 	const handleReset = () => {
-		setSearchQuery('');
-		setSelectedCategories([]);
-		setPage(1);
-		fetchData(); // Immediate call to reset the page
+		setSearchQuery(''); // Clear the search query
+		setPage(1); // Reset to the first page
+		// No need to call fetchData directly here; it will be triggered by useEffect
 	};
-
 	useEffect(() => {
-		fetchData(); // Fetch data whenever page or selectedCategories change
-	}, [page, selectedCategories]);
+		fetchData(); // Fetch data whenever page or searchQuery changes
+	}, [page, searchQuery]);
 
 	return (
 		<div
@@ -176,9 +167,8 @@ const Gallery = () => {
 					onKeyDown={(e) => {
 						if (e.key === 'Enter') {
 							e.preventDefault();
-							setSelectedCategories([]);
 							setPage(1);
-							debouncedFetchData();
+							fetchData();
 						}
 					}}
 					label='Search Keyword'
@@ -188,7 +178,7 @@ const Gallery = () => {
 				/>
 				<IconButton
 					type='button'
-					onClick={debouncedFetchData}
+					onClick={fetchData}
 					aria-label='search'
 				>
 					<SearchIcon style={{ fill: 'black' }} />
@@ -201,57 +191,6 @@ const Gallery = () => {
 					Reset
 				</Button>
 			</div>
-
-			{/* Category Chips */}
-			<Stack
-				direction='row'
-				spacing={1}
-				sx={{ justifyContent: 'center', flexWrap: 'wrap', mt: 2 }}
-			>
-				{[
-					'Photography',
-					'Painting',
-					'Printmaking',
-					'Sculpture',
-					'Textile',
-					'Digital',
-				].map((category) => (
-					<Chip
-						key={category}
-						label={category}
-						variant={selectedCategories.includes(category) ? 'filled' : 'outlined'}
-						color={selectedCategories.includes(category) ? 'primary' : 'default'}
-						clickable
-						component='button'
-						onClick={(e) => {
-							e.preventDefault();
-							const alreadySelected = selectedCategories.includes(category);
-							const newCategories = alreadySelected
-								? selectedCategories.filter((cat) => cat !== category)
-								: [...selectedCategories, category];
-							setSelectedCategories(newCategories);
-							setSearchQuery('');
-							setPage(1);
-							debouncedFetchData();
-						}}
-					/>
-				))}
-				{selectedCategories.length > 0 && (
-					<Chip
-						label='Clear'
-						color='error'
-						clickable
-						component='button'
-						onClick={(e) => {
-							e.preventDefault();
-							setSelectedCategories([]);
-							setSearchQuery('');
-							setPage(1);
-							debouncedFetchData();
-						}}
-					/>
-				)}
-			</Stack>
 
 			{/* Artwork Grid */}
 			<div className='gallery-artwork'>
