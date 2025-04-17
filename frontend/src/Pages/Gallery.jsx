@@ -142,12 +142,12 @@ const Gallery = () => {
 	};
 
 	const handleReset = () => {
-		setSearchQuery(''); // Clear the search query
-		setPage(1); // Reset to the first page
-		// No need to call fetchData directly here; it will be triggered by useEffect
+		setSearchQuery('');
+		setPage(1);
 	};
+
 	useEffect(() => {
-		fetchData(); // Fetch data whenever page or searchQuery changes
+		fetchData();
 	}, [page, searchQuery]);
 
 	return (
@@ -190,6 +190,42 @@ const Gallery = () => {
 				>
 					Reset
 				</Button>
+			</div>
+
+			{/* Preset Search Buttons */}
+			<div
+				className='preset-search-buttons'
+				style={{
+					display: 'flex',
+					justifyContent: 'center',
+					marginTop: 10,
+					gap: 10,
+				}}
+			>
+				{['Painting', 'Printmaking', 'Sculpture', 'Photography'].map((preset) => (
+					<Button
+						key={preset}
+						variant='outlined'
+						sx={{
+							borderRadius: '20px',
+							padding: '8px 16px',
+							textTransform: 'capitalize',
+							color: searchQuery === preset ? 'white' : 'black',
+							backgroundColor: searchQuery === preset ? '#b9b5ff' : 'transparent',
+							borderColor: searchQuery === preset ? '#b9b5ff' : 'lightgrey',
+							'&:hover': {
+								backgroundColor: '#b9b5ff',
+								color: 'white',
+							},
+						}}
+						onClick={() => {
+							setSearchQuery(preset);
+							setPage(1);
+						}}
+					>
+						{preset}
+					</Button>
+				))}
 			</div>
 
 			{/* Artwork Grid */}
