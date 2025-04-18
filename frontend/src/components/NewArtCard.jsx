@@ -10,6 +10,7 @@ import ReactCardFlip from 'react-card-flip';
 import CardActionArea from '@mui/material/CardActionArea';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
+import toast, { Toaster } from 'react-hot-toast';
 
 const NewArtCard = ({ artwork, onDelete }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -44,7 +45,7 @@ const NewArtCard = ({ artwork, onDelete }) => {
 			setIsPublic((prev) => !prev);
 		} catch (error) {
 			console.error('Error updating public/private status:', error);
-			alert('Failed to update public/private status');
+			toast.error('Failed to update public/private status'); // Show error toast
 		}
 	};
 
@@ -70,7 +71,7 @@ const NewArtCard = ({ artwork, onDelete }) => {
 			onDelete(artwork.id);
 		} catch (error) {
 			console.error('Error deleting artwork:', error);
-			alert(`Failed to delete artwork: ${error.message}`);
+			toast.error(`Failed to delete artwork: ${error.message}`); // Show error toast
 		}
 	};
 
@@ -102,6 +103,12 @@ const NewArtCard = ({ artwork, onDelete }) => {
 
 	return (
 		<div style={{ marginTop: '1rem' }}>
+			{/* Toaster Component */}
+			<Toaster
+				position='top-center'
+				reverseOrder={false}
+			/>
+
 			<ReactCardFlip
 				isFlipped={flip}
 				flipDirection='horizontal'

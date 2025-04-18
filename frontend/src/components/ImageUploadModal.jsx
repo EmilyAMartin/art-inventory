@@ -8,6 +8,7 @@ import FormControl from '@mui/material/FormControl';
 import { TextField } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { modalStyle, SubmitButton, CancelButton } from '../styles/modalButtons';
+import toast, { Toaster } from 'react-hot-toast';
 
 const ImageUploadModal = ({
 	open,
@@ -38,7 +39,9 @@ const ImageUploadModal = ({
 				.map((field) => field.label);
 
 			if (missingFields.length > 0) {
-				alert(`Please fill in all required fields: ${missingFields.join(', ')}`);
+				toast.error(
+					`Please fill in all required fields: ${missingFields.join(', ')}`
+				); // Show error toast
 				return;
 			}
 
@@ -58,7 +61,7 @@ const ImageUploadModal = ({
 			onClose();
 		} catch (error) {
 			console.error('Error submitting form:', error);
-			alert(`Failed to submit: ${error.message}`);
+			toast.error(`Failed to submit: ${error.message}`); // Show error toast
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -112,6 +115,12 @@ const ImageUploadModal = ({
 			aria-describedby='modal-modal-description'
 		>
 			<Box sx={modalStyle}>
+				{/* Toaster Component */}
+				<Toaster
+					position='top-center'
+					reverseOrder={false}
+				/>
+
 				<div
 					style={{
 						display: 'flex',

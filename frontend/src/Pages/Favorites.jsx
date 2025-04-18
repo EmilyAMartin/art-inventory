@@ -4,6 +4,7 @@ import ArtCard from '../components/ArtCard';
 import axios from 'axios';
 import { Typography, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Favorites = () => {
 	const [artwork, setArtwork] = useState([]);
@@ -91,6 +92,7 @@ const Favorites = () => {
 			setArtwork(validArtwork);
 		} catch (err) {
 			setError(err.message);
+			toast.error('Failed to fetch favorite artworks'); // Show error toast
 		} finally {
 			setLoading(false);
 		}
@@ -102,7 +104,7 @@ const Favorites = () => {
 
 	const handleFavUpdate = async (artworkId) => {
 		if (!isLoggedIn) {
-			alert('You must be logged in to update favorites');
+			toast.error('You must be logged in to update favorites'); // Show error toast
 			return;
 		}
 
@@ -123,8 +125,11 @@ const Favorites = () => {
 			setArtwork((prevArtwork) =>
 				prevArtwork.filter((art) => art.id !== artworkId)
 			);
+
+			toast.success('Artwork removed from favorites'); // Show success toast
 		} catch (err) {
-			setError(err.message);
+			console.error('Error updating favorites:', err);
+			toast.error('Failed to update favorite status'); // Show error toast
 		}
 	};
 
@@ -216,6 +221,12 @@ const Favorites = () => {
 		<div
 			style={{ display: 'flex', flexDirection: 'column', gap: 15, marginTop: 25 }}
 		>
+			{/* Toaster Component */}
+			<Toaster
+				position='top-center'
+				reverseOrder={false}
+			/>
+
 			<Grid2
 				container
 				spacing={8}

@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
 import ArtCard from '../components/ArtCard';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Gallery = () => {
 	const BASE_URL = 'https://api.artic.edu/api/v1/artworks';
@@ -110,6 +111,7 @@ const Gallery = () => {
 			setArtwork(validArtwork.slice(0, RESULTS_PER_PAGE));
 		} catch (err) {
 			setError(err.message);
+			toast.error('Failed to fetch artwork data'); // Show error toast
 		} finally {
 			setIsLoading(false);
 		}
@@ -117,7 +119,7 @@ const Gallery = () => {
 
 	const handleFavUpdate = async (artworkId, isFavorite) => {
 		if (!isLoggedIn) {
-			alert('You must be logged in to favorite artwork');
+			toast.error('You must be logged in to favorite artwork'); // Show error toast
 			return;
 		}
 
@@ -135,9 +137,15 @@ const Gallery = () => {
 					art.id === artworkId ? { ...art, favorite: isFavorite } : art
 				)
 			);
+
+			toast.success(
+				isFavorite
+					? 'Artwork added to favorites!'
+					: 'Artwork removed from favorites!'
+			); // Show success toast
 		} catch (error) {
 			console.error('Error updating favorites:', error);
-			alert('Failed to update favorite status');
+			toast.error('Failed to update favorite status'); // Show error toast
 		}
 	};
 
@@ -155,6 +163,12 @@ const Gallery = () => {
 			id='gallery-container'
 			style={{ display: 'flex', flexDirection: 'column' }}
 		>
+			{/* Toaster Component */}
+			<Toaster
+				position='top-center'
+				reverseOrder={false}
+			/>
+
 			{/* Search Bar */}
 			<div
 				className='search-bar'

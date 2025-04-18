@@ -3,6 +3,7 @@ import AddProjectBtn from '../components/AddProjectBtn';
 import AddNewBtn from '../components/AddNewBtn';
 import ProjectCard from '../components/ProjectCard';
 import NewArtCard from '../components/NewArtCard';
+import toast, { Toaster } from 'react-hot-toast';
 
 const PortfolioPage = () => {
 	const [projects, setProjects] = useState([]);
@@ -52,6 +53,7 @@ const PortfolioPage = () => {
 				setArtworks(formattedArtworks);
 			} catch (error) {
 				console.error('Error fetching data:', error);
+				toast.error('Failed to fetch data'); // Show error toast
 			} finally {
 				setIsLoading(false);
 			}
@@ -66,6 +68,7 @@ const PortfolioPage = () => {
 			images: newProject.image_path ? [newProject.image_path] : [],
 		};
 		setProjects((prev) => [...prev, formattedProject]);
+		toast.success('Project added successfully'); // Show success toast
 	};
 
 	const handleDeleteProject = async (projectId) => {
@@ -80,9 +83,10 @@ const PortfolioPage = () => {
 			}
 
 			setProjects((prev) => prev.filter((project) => project.id !== projectId));
+			toast.success('Project deleted successfully'); // Show success toast
 		} catch (error) {
 			console.error('Error deleting project:', error);
-			alert('Failed to delete project');
+			toast.error('Failed to delete project'); // Show error toast
 		}
 	};
 
@@ -98,11 +102,14 @@ const PortfolioPage = () => {
 				return [...prevState, newArtwork];
 			});
 		}
+		toast.success('Artwork added successfully'); // Show success toast
 	};
 
 	const handleDeleteNewArtwork = (artworkId) => {
 		setArtworks((prev) => prev.filter((art) => art.id !== artworkId));
+		toast.success('Artwork deleted successfully'); // Show success toast
 	};
+
 	const renderProjects = () => {
 		if (projects.length === 0) {
 			return <div>No projects added</div>;
@@ -163,6 +170,12 @@ const PortfolioPage = () => {
 
 	return (
 		<div style={{ marginBottom: '3rem' }}>
+			{/* Toaster Component */}
+			<Toaster
+				position='top-center'
+				reverseOrder={false}
+			/>
+
 			{/* Project Section */}
 			<div style={{ margin: '1rem' }}>
 				<h2>Portfolio</h2>

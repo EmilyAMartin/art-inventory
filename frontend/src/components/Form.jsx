@@ -11,6 +11,7 @@ import {
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 
 function Form({ userData }) {
 	const [values, setValues] = useState({
@@ -53,22 +54,30 @@ function Form({ userData }) {
 		event.preventDefault();
 		console.log('Submitting form with values:', values);
 
+		// Check if new password and re-typed password match
+		if (newpassword && newpassword !== reppassword) {
+			toast.error('New password and re-typed password do not match!'); // Show error toast
+			return;
+		}
+
 		try {
 			const response = await axios.put('http://localhost:3000/profile', values, {
 				withCredentials: true,
 			});
 			console.log('Response:', response);
+
 			if (response.status === 200) {
-				alert('Profile updated successfully');
+				toast.success('Profile updated successfully!'); // Show success toast
 			} else {
-				alert('Failed to update profile');
+				toast.error('Failed to update profile'); // Show error toast
 			}
 		} catch (error) {
 			console.error('Error updating profile:', error);
-			alert(
-				'Error updating profile: ' +
-					(error.response?.data?.message || 'Something went wrong')
-			);
+			toast.error(
+				`Error updating profile: ${
+					error.response?.data?.message || 'Something went wrong'
+				}`
+			); // Show error toast
 		}
 	};
 
@@ -111,6 +120,12 @@ function Form({ userData }) {
 
 	return (
 		<main>
+			{/* Toaster Component */}
+			<Toaster
+				position='top-center'
+				reverseOrder={false}
+			/>
+
 			<Typography
 				variant='h6'
 				style={{
