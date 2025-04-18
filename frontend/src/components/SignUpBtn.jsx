@@ -14,6 +14,7 @@ import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 
 const SignUpBtn = () => {
 	const [open, setOpen] = useState(false);
@@ -25,7 +26,6 @@ const SignUpBtn = () => {
 
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
-
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 	const handleMouseDownPassword = (event) => {
 		event.preventDefault();
@@ -33,19 +33,21 @@ const SignUpBtn = () => {
 	const handleMouseUpPassword = (event) => {
 		event.preventDefault();
 	};
-	const handleMouseEnter = () => {
-		setIsHover(true);
-	};
-	const handleMouseLeave = () => {
-		setIsHover(false);
-	};
 
-	//API Request to Backend//
+	// API Request to Backend
 	const handleSubmit = async () => {
-		if (password !== repeatPassword) {
-			alert('Passwords do not match!');
+		// Check if the password field is empty
+		if (!password) {
+			toast.error('Password is required!'); // Show error toast
 			return;
 		}
+
+		// Check if passwords match
+		if (password !== repeatPassword) {
+			toast.error('Passwords do not match!'); // Show error toast
+			return;
+		}
+
 		try {
 			const response = await axios.post('http://localhost:3000/register', {
 				name: email,
@@ -53,13 +55,13 @@ const SignUpBtn = () => {
 				password: password,
 			});
 
-			alert(response.data.message);
+			toast.success(response.data.message); // Show success toast
 			handleClose();
 		} catch (error) {
 			console.error('Error registering user:', error);
-			alert(
+			toast.error(
 				error.response?.data?.message || 'An error occurred during registration.'
-			);
+			); // Show error toast
 		}
 	};
 
@@ -107,10 +109,15 @@ const SignUpBtn = () => {
 
 	return (
 		<div>
+			{/* Toaster Component */}
+			<Toaster
+				position='top-center'
+				reverseOrder={false}
+			/>
+
+			{/* Sign Up Button */}
 			<button
 				style={buttonStyle}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
 				onClick={handleOpen}
 			>
 				Sign Up

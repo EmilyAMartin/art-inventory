@@ -15,6 +15,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Checkbox from '@mui/material/Checkbox';
 import { AuthContext } from '../Pages/Context';
+import toast, { Toaster } from 'react-hot-toast';
 
 const LoginBtn = () => {
 	const [open, setOpen] = useState(false);
@@ -28,10 +29,16 @@ const LoginBtn = () => {
 	const handleClose = () => setOpen(false);
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 	const handleMouseDownPassword = (event) => event.preventDefault();
-	const handleMouseUpPassword = (event) => event.preventDefault();
+
 	const handleLogin = async (event) => {
 		event.preventDefault();
 		setError('');
+
+		// Check if the password field is empty
+		if (!password) {
+			toast.error('Password is required!'); // Show error toast
+			return;
+		}
 
 		try {
 			const response = await fetch('http://localhost:3000/login', {
@@ -56,19 +63,26 @@ const LoginBtn = () => {
 							userData.user.profile_image = `http://localhost:3000${userData.user.profile_image}`;
 						}
 						setCurrentUser(userData.user);
+
+						// Show success toast BEFORE closing the modal
+						toast.success('Logged in successfully!');
+
+						// Close the modal
 						handleClose();
-						alert('Logged in successfully!');
 					} else {
 						setError('Error fetching user profile');
+						toast.error('Error fetching user profile');
 					}
 				}, 500);
 			} else {
 				const data = await response.json();
 				setError(data.message || 'Login failed');
+				toast.error(data.message || 'Login failed');
 			}
 		} catch (error) {
 			console.error('Error:', error);
 			setError('An error occurred. Please try again later.');
+			toast.error('An error occurred. Please try again later.');
 		}
 	};
 
@@ -115,6 +129,13 @@ const LoginBtn = () => {
 
 	return (
 		<div>
+			{/* Toaster Component */}
+			<Toaster
+				position='top-center'
+				reverseOrder={false}
+			/>
+
+			{/* Login Button */}
 			<button
 				style={buttonStyle}
 				onClick={handleOpen}
@@ -122,6 +143,7 @@ const LoginBtn = () => {
 				Login
 			</button>
 
+			{/* Login Modal */}
 			<Modal
 				open={open}
 				onClose={handleClose}
@@ -170,7 +192,6 @@ const LoginBtn = () => {
 											aria-label='toggle password visibility'
 											onClick={handleClickShowPassword}
 											onMouseDown={handleMouseDownPassword}
-											onMouseUp={handleMouseUpPassword}
 											edge='end'
 										>
 											{showPassword ? <VisibilityOff /> : <Visibility />}

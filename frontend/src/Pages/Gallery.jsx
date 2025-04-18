@@ -198,34 +198,36 @@ const Gallery = () => {
 				style={{
 					display: 'flex',
 					justifyContent: 'center',
-					marginTop: 10,
+					marginTop: 20,
 					gap: 10,
 				}}
 			>
-				{['Painting', 'Printmaking', 'Sculpture', 'Photography'].map((preset) => (
-					<Button
-						key={preset}
-						variant='outlined'
-						sx={{
-							borderRadius: '20px',
-							padding: '8px 16px',
-							textTransform: 'capitalize',
-							color: searchQuery === preset ? 'white' : 'black',
-							backgroundColor: searchQuery === preset ? '#b9b5ff' : 'transparent',
-							borderColor: searchQuery === preset ? '#b9b5ff' : 'lightgrey',
-							'&:hover': {
-								backgroundColor: '#b9b5ff',
-								color: 'white',
-							},
-						}}
-						onClick={() => {
-							setSearchQuery(preset);
-							setPage(1);
-						}}
-					>
-						{preset}
-					</Button>
-				))}
+				{['Painting', 'Printmaking', 'Sculpture', 'Photography', 'Textile'].map(
+					(preset) => (
+						<Button
+							key={preset}
+							variant='outlined'
+							sx={{
+								borderRadius: '20px',
+								padding: '8px 16px',
+								textTransform: 'capitalize',
+								color: searchQuery === preset ? 'white' : 'black',
+								backgroundColor: searchQuery === preset ? '#b9b5ff' : 'transparent',
+								borderColor: searchQuery === preset ? '#b9b5ff' : 'lightgrey',
+								'&:hover': {
+									backgroundColor: '#b9b5ff',
+									color: 'white',
+								},
+							}}
+							onClick={() => {
+								setSearchQuery(preset);
+								setPage(1);
+							}}
+						>
+							{preset}
+						</Button>
+					)
+				)}
 			</div>
 
 			{/* Artwork Grid */}
