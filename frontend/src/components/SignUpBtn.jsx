@@ -14,7 +14,7 @@ import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import axios from 'axios';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 const SignUpBtn = () => {
 	const [open, setOpen] = useState(false);
@@ -34,17 +34,13 @@ const SignUpBtn = () => {
 		event.preventDefault();
 	};
 
-	// API Request to Backend
 	const handleSubmit = async () => {
-		// Check if the password field is empty
 		if (!password) {
-			toast.error('Password is required!'); // Show error toast
+			toast.error('Password is required!');
 			return;
 		}
-
-		// Check if passwords match
 		if (password !== repeatPassword) {
-			toast.error('Passwords do not match!'); // Show error toast
+			toast.error('Passwords do not match!');
 			return;
 		}
 
@@ -55,13 +51,13 @@ const SignUpBtn = () => {
 				password: password,
 			});
 
-			toast.success(response.data.message); // Show success toast
+			toast.success(response.data.message);
 			handleClose();
 		} catch (error) {
 			console.error('Error registering user:', error);
 			toast.error(
 				error.response?.data?.message || 'An error occurred during registration.'
-			); // Show error toast
+			);
 		}
 	};
 
@@ -109,12 +105,6 @@ const SignUpBtn = () => {
 
 	return (
 		<div>
-			{/* Toaster Component */}
-			<Toaster
-				position='top-center'
-				reverseOrder={false}
-			/>
-
 			{/* Sign Up Button */}
 			<button
 				style={buttonStyle}

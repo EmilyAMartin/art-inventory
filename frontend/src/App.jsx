@@ -10,6 +10,7 @@ import { AuthContext } from './Pages/Context';
 import { useEffect, useState } from 'react';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import Toast from './components/Toast';
 
 function App() {
 	const [currentUser, setCurrentUser] = useState(null);
@@ -47,6 +48,7 @@ function App() {
 
 	return (
 		<div className='App'>
+			<Toast />
 			<AuthContext.Provider value={{ currentUser, setCurrentUser }}>
 				<Navbar />
 				<Routes>

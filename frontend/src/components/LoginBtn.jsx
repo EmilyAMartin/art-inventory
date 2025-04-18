@@ -15,7 +15,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Checkbox from '@mui/material/Checkbox';
 import { AuthContext } from '../Pages/Context';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 const LoginBtn = () => {
 	const [open, setOpen] = useState(false);
@@ -34,9 +34,8 @@ const LoginBtn = () => {
 		event.preventDefault();
 		setError('');
 
-		// Check if the password field is empty
 		if (!password) {
-			toast.error('Password is required!'); // Show error toast
+			toast.error('Password is required!');
 			return;
 		}
 
@@ -64,10 +63,8 @@ const LoginBtn = () => {
 						}
 						setCurrentUser(userData.user);
 
-						// Show success toast BEFORE closing the modal
 						toast.success('Logged in successfully!');
 
-						// Close the modal
 						handleClose();
 					} else {
 						setError('Error fetching user profile');
@@ -129,12 +126,6 @@ const LoginBtn = () => {
 
 	return (
 		<div>
-			{/* Toaster Component */}
-			<Toaster
-				position='top-center'
-				reverseOrder={false}
-			/>
-
 			{/* Login Button */}
 			<button
 				style={buttonStyle}

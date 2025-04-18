@@ -8,7 +8,7 @@ import FormControl from '@mui/material/FormControl';
 import { TextField } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { modalStyle, SubmitButton, CancelButton } from '../styles/modalButtons';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 const ImageUploadModal = ({
 	open,
@@ -32,7 +32,6 @@ const ImageUploadModal = ({
 		try {
 			setIsSubmitting(true);
 
-			// Check required fields
 			const missingFields = fields
 				.filter((field) => field.required)
 				.filter((field) => !formData[field.name])
@@ -41,7 +40,7 @@ const ImageUploadModal = ({
 			if (missingFields.length > 0) {
 				toast.error(
 					`Please fill in all required fields: ${missingFields.join(', ')}`
-				); // Show error toast
+				);
 				return;
 			}
 
@@ -61,7 +60,7 @@ const ImageUploadModal = ({
 			onClose();
 		} catch (error) {
 			console.error('Error submitting form:', error);
-			toast.error(`Failed to submit: ${error.message}`); // Show error toast
+			toast.error(`Failed to submit: ${error.message}`);
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -73,11 +72,11 @@ const ImageUploadModal = ({
 	};
 
 	const handleImageChange = (e) => {
-		const file = e.target.files[0]; // Get only the first file
+		const file = e.target.files[0];
 		if (file) {
 			const reader = new FileReader();
 			reader.onloadend = () => {
-				setImages([reader.result]); // Replace the images array with a single image
+				setImages([reader.result]);
 			};
 			reader.readAsDataURL(file);
 		}
@@ -115,12 +114,6 @@ const ImageUploadModal = ({
 			aria-describedby='modal-modal-description'
 		>
 			<Box sx={modalStyle}>
-				{/* Toaster Component */}
-				<Toaster
-					position='top-center'
-					reverseOrder={false}
-				/>
-
 				<div
 					style={{
 						display: 'flex',
@@ -202,7 +195,7 @@ const ImageUploadModal = ({
 					{images.length > 0 && (
 						<div style={{ textAlign: 'center' }}>
 							<img
-								src={images[0]} // Always display the first image
+								src={images[0]}
 								alt='Uploaded'
 								style={{
 									maxWidth: '300px',

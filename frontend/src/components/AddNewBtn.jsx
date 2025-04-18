@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { buttonStyle } from '../styles/modalButtons';
 import ImageUploadModal from './ImageUploadModal';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 const AddNewBtn = ({ onArtworkAdded }) => {
 	const [open, setOpen] = useState(false);
@@ -17,9 +17,8 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 	];
 
 	const handleSubmit = async (formData) => {
-		// Ensure only a single image is included in the formData
 		if (formData.getAll('images').length > 1) {
-			toast.error('Only one image can be uploaded.'); // Show error toast
+			toast.error('Only one image can be uploaded.');
 			return;
 		}
 
@@ -55,12 +54,6 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 
 	return (
 		<div>
-			{/* Toaster Component */}
-			<Toaster
-				position='top-center'
-				reverseOrder={false}
-			/>
-
 			<div
 				style={buttonStyle(isHover)}
 				onMouseEnter={handleMouseEnter}
@@ -75,7 +68,7 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 				onSubmit={handleSubmit}
 				title='Add New Artwork'
 				fields={fields}
-				allowMultiple={false} // Pass a prop to disallow multiple uploads
+				allowMultiple={false}
 			/>
 		</div>
 	);
