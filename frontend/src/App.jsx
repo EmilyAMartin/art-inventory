@@ -6,6 +6,7 @@ import Account from './Pages/Account';
 import Gallery from './Pages/Gallery';
 import Portfolio from './Pages/Portfolio';
 import Favorites from './Pages/Favorites';
+import UserProfile from './components/UserProfile'; // Import UserProfile
 import { AuthContext } from './Pages/Context';
 import { useEffect, useState } from 'react';
 import 'slick-carousel/slick/slick.css';
@@ -71,6 +72,10 @@ function App() {
 					<Route
 						path='/Account'
 						element={<Account />}
+					/>
+					<Route
+						path='/users/:userId' // Add this route
+						element={<UserProfile />}
 					/>
 				</Routes>
 			</AuthContext.Provider>

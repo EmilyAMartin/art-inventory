@@ -33,8 +33,6 @@ const Home = () => {
 		};
 
 		fetchPublicArtworks();
-
-		// Cleanup function
 		return () => {
 			setPublicArtworks([]);
 		};
@@ -62,14 +60,13 @@ const Home = () => {
 					</div>
 					<div className='home-image-section'>
 						<img
-							src='/art-inventory/Images/home.png' // Include the base URL
+							src='/art-inventory/Images/home.png'
 							alt='Illustration of girl painting'
 						/>
 					</div>
 				</div>
 			</div>
 
-			{/* New Art Section */}
 			<div className='art-post-section'>
 				<h2>New on Portfolio</h2>
 				<ArtPostCarousel

@@ -49,13 +49,15 @@ app.use(
 
 const initDb = async () => {
 	try {
-		await users.createTable();
-		await artwork.createTable();
-		await favorites.createFavoritesTable();
-		await comments.createCommentsTable();
-		await projects.createTable();
+		await users.createTable(dbPool); // Pass dbPool to users.createTable
+		await artwork.createTable(dbPool); // Pass dbPool to artwork.createTable
+		await favorites.createFavoritesTable(dbPool); // Pass dbPool to favorites.createFavoritesTable
+		await comments.createCommentsTable(dbPool); // Pass dbPool to comments.createCommentsTable
+		await projects.createTable(dbPool); // Pass dbPool to projects.createTable
+		console.log('Database initialized successfully.');
 	} catch (err) {
 		console.error('Error initializing database:', err);
+		process.exit(1); // Exit the process if database initialization fails
 	}
 };
 

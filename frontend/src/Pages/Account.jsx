@@ -25,11 +25,8 @@ const Account = () => {
 
 	const handleFile = async (file) => {
 		try {
-			// Create a FormData object to send the file
 			const formData = new FormData();
 			formData.append('image', file);
-
-			// Upload the image to your backend
 			const response = await axios.post(
 				'http://localhost:3000/profile/image',
 				formData,
@@ -40,8 +37,6 @@ const Account = () => {
 					withCredentials: true,
 				}
 			);
-
-			// Update the user data with the new image URL
 			const updatedUser = response.data.user;
 			updatedUser.profile_image = `http://localhost:3000${updatedUser.profile_image}`;
 			setUserData(updatedUser);
@@ -120,10 +115,7 @@ const Account = () => {
 					accept='image/*'
 				/>
 
-				{/* Display username above the bio */}
 				{userData.username && <h2 style={{ margin: 0 }}>{userData.username}</h2>}
-
-				{/* Display bio under the username */}
 				{userData.bio && (
 					<p style={{ margin: 0, color: 'gray', fontStyle: 'italic' }}>
 						{userData.bio}

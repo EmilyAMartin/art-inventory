@@ -1,27 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Box, Typography, Grid } from '@mui/material';
+import { Box, Typography, Grid2 } from '@mui/material';
 
 const UserProfile = () => {
-	const { userId } = useParams(); // Get the user ID from the URL
+	const { userId } = useParams();
 	const [user, setUser] = useState(null);
 	const [artworks, setArtworks] = useState([]);
 
 	useEffect(() => {
-		// Fetch user data
 		const fetchUserData = async () => {
 			try {
+				// Fetch user data
 				const userResponse = await axios.get(
 					`http://localhost:3000/users/${userId}`
 				);
-				setUser(userResponse.data);
+				if (userResponse.status === 200) {
+					setUser(userResponse.data);
+				} else {
+					console.error('Failed to fetch user data:', userResponse);
+				}
 
-				// Fetch user's public artwork
+				// Fetch artworks
 				const artworkResponse = await axios.get(
 					`http://localhost:3000/users/${userId}/artworks`
 				);
-				setArtworks(artworkResponse.data);
+				if (artworkResponse.status === 200) {
+					setArtworks(artworkResponse.data);
+				} else {
+					console.error('Failed to fetch artworks:', artworkResponse);
+				}
 			} catch (error) {
 				console.error('Error fetching user data:', error);
 			}
@@ -76,12 +84,12 @@ const UserProfile = () => {
 			>
 				Public Artwork
 			</Typography>
-			<Grid
+			<Grid2
 				container
 				spacing={2}
 			>
 				{artworks.map((artwork) => (
-					<Grid
+					<Grid2
 						item
 						xs={12}
 						sm={6}
@@ -104,9 +112,9 @@ const UserProfile = () => {
 						>
 							{artwork.title}
 						</Typography>
-					</Grid>
+					</Grid2>
 				))}
-			</Grid>
+			</Grid2>
 		</Box>
 	);
 };
