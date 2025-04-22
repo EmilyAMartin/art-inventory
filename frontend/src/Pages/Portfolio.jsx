@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import AddProjectBtn from '../components/AddProjectBtn';
 import AddNewBtn from '../components/AddNewBtn';
-import ProjectCard from '../components/ProjectCard';
-import NewArtCard from '../components/NewArtCard';
+import ProjectCardCarousel from '../components/ProjectCardCarousel';
+import NewArtCardCarousel from '../components/NewArtCarousel';
 import toast from 'react-hot-toast';
 
 const PortfolioPage = () => {
@@ -111,8 +111,12 @@ const PortfolioPage = () => {
 	};
 
 	const renderProjects = () => {
-		if (projects.length === 0) {
-			return <div>No projects added</div>;
+		if (!projects || projects.length === 0) {
+			return (
+				<div style={{ marginTop: '1rem', color: '#666' }}>
+					No projects available
+				</div>
+			);
 		}
 
 		return (
@@ -121,19 +125,14 @@ const PortfolioPage = () => {
 					width: '100%',
 					padding: '0 20px',
 					display: 'grid',
-					gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
 					gap: '20px',
 					justifyContent: 'center',
 				}}
 			>
-				{projects.map((project) => (
-					<div key={project.id}>
-						<ProjectCard
-							project={project}
-							handleDelete={() => handleDeleteProject(project.id)}
-						/>
-					</div>
-				))}
+				<ProjectCardCarousel
+					projects={projects}
+					handleDeleteProject={handleDeleteProject}
+				/>
 			</div>
 		);
 	};
@@ -151,19 +150,14 @@ const PortfolioPage = () => {
 					width: '100%',
 					padding: '0 20px',
 					display: 'grid',
-					gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
 					gap: '20px',
 					justifyContent: 'center',
 				}}
 			>
-				{artworks.map((art) => (
-					<div key={art.id}>
-						<NewArtCard
-							artwork={art}
-							onDelete={handleDeleteNewArtwork}
-						/>
-					</div>
-				))}
+				<NewArtCardCarousel
+					artworks={artworks}
+					handleDeleteNewArtwork={handleDeleteNewArtwork}
+				/>
 			</div>
 		);
 	};
@@ -180,7 +174,7 @@ const PortfolioPage = () => {
 			{isLoading ? <div>Loading projects...</div> : renderProjects()}
 
 			{/* Artwork Section */}
-			<div style={{ marginTop: '2rem', marginLeft: '1rem' }}>
+			<div style={{ marginTop: '10rem', marginLeft: '1rem' }}>
 				<h2>Artwork</h2>
 			</div>
 			<div style={{ margin: '1rem' }}>

@@ -5,17 +5,17 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Slide from '@mui/material/Slide';
 import Stack from '@mui/material/Stack';
-import NewArtCard from './NewArtCard';
+import ProjectCard from './ProjectCard';
 
-function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
+function ProjectCardCarousel({ projects, handleDeleteProject }) {
 	const [currentPage, setCurrentPage] = useState(0);
 	const [slideDirection, setSlideDirection] = useState('left');
 
-	const cardsPerPage = 5; // Number of cards to display per page
+	const cardsPerPage = 3; // Number of cards to display per page
 	const containerWidth = cardsPerPage * 300; // Adjust based on card width
 
 	const handleNextPage = () => {
-		if (currentPage < Math.ceil(artworks.length / cardsPerPage) - 1) {
+		if (currentPage < Math.ceil(projects.length / cardsPerPage) - 1) {
 			setSlideDirection('left');
 			setCurrentPage((prevPage) => prevPage + 1);
 		}
@@ -28,7 +28,7 @@ function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
 		}
 	};
 
-	const currentArtworks = artworks.slice(
+	const currentProjects = projects.slice(
 		currentPage * cardsPerPage,
 		currentPage * cardsPerPage + cardsPerPage
 	);
@@ -67,14 +67,14 @@ function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
 						justifyContent='center'
 						sx={{ width: '100%', height: '100%' }}
 					>
-						{currentArtworks.map((art, i) => (
+						{currentProjects.map((project, i) => (
 							<Box
-								key={`art-${i}`}
+								key={`project-${i}`}
 								sx={{ width: '300px' }}
 							>
-								<NewArtCard
-									artwork={art}
-									onDelete={() => handleDeleteNewArtwork(art.id)}
+								<ProjectCard
+									project={project}
+									handleDelete={() => handleDeleteProject(project.id)}
 								/>
 							</Box>
 						))}
@@ -86,7 +86,7 @@ function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
 			<IconButton
 				onClick={handleNextPage}
 				sx={{ margin: 5 }}
-				disabled={currentPage >= Math.ceil(artworks.length / cardsPerPage) - 1}
+				disabled={currentPage >= Math.ceil(projects.length / cardsPerPage) - 1}
 			>
 				<NavigateNextIcon />
 			</IconButton>
@@ -94,4 +94,4 @@ function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
 	);
 }
 
-export default NewArtCardCarousel;
+export default ProjectCardCarousel;
