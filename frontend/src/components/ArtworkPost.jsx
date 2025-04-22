@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
 	Card,
 	CardContent,
@@ -175,11 +176,21 @@ const ArtworkPost = ({ artwork }) => {
 										alignItems='flex-start'
 										sx={{ marginBottom: '15px' }}
 									>
-										<Avatar
-											alt='Profile Picture'
-											src={comment.profile_picture}
-											sx={{ width: 30, height: 30, marginRight: '10px' }}
-										/>
+										<Link
+											to={`/users/${comment.user_id}`}
+											style={{ textDecoration: 'none' }}
+										>
+											<Avatar
+												alt='Profile Picture'
+												src={comment.profile_picture}
+												sx={{
+													width: 30,
+													height: 30,
+													marginRight: '10px',
+													cursor: 'pointer',
+												}}
+											/>
+										</Link>
 										<Box>
 											<Typography
 												variant='body2'

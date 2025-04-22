@@ -4,6 +4,7 @@ import Form from '../components/Form';
 import axios from 'axios';
 import { useContext } from 'react';
 import { AuthContext } from './Context';
+import { Link } from 'react-router-dom';
 
 const Account = () => {
 	const addNewPhoto = useRef(null);
@@ -91,18 +92,19 @@ const Account = () => {
 				}}
 			>
 				{selectedImage ? (
-					<img
-						src={selectedImage}
-						alt='Profile'
-						style={{
-							width: 150,
-							height: 150,
-							borderRadius: '50%',
-							objectFit: 'cover',
-							cursor: 'pointer',
-						}}
-						onClick={handleClick}
-					/>
+					<Link to={`/users/${currentUser.id}`}>
+						<img
+							src={selectedImage}
+							alt='Profile'
+							style={{
+								width: 150,
+								height: 150,
+								borderRadius: '50%',
+								objectFit: 'cover',
+								cursor: 'pointer',
+							}}
+						/>
+					</Link>
 				) : (
 					<BsPersonCircle
 						fontSize={150}
