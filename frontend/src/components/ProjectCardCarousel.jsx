@@ -11,7 +11,7 @@ function ProjectCardCarousel({ projects, handleDeleteProject }) {
 	const [currentPage, setCurrentPage] = useState(0);
 	const [slideDirection, setSlideDirection] = useState('left');
 
-	const cardsPerPage = 3; // Number of cards to display per page
+	const cardsPerPage = 5; // Number of cards to display per page
 	const containerWidth = cardsPerPage * 300; // Adjust based on card width
 
 	const handleNextPage = () => {

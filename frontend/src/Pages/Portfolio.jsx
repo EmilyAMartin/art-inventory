@@ -120,15 +120,7 @@ const PortfolioPage = () => {
 		}
 
 		return (
-			<div
-				style={{
-					width: '100%',
-					padding: '0 20px',
-					display: 'grid',
-					gap: '20px',
-					justifyContent: 'center',
-				}}
-			>
+			<div>
 				<ProjectCardCarousel
 					projects={projects}
 					handleDeleteProject={handleDeleteProject}
@@ -145,15 +137,7 @@ const PortfolioPage = () => {
 		}
 
 		return (
-			<div
-				style={{
-					width: '100%',
-					padding: '0 20px',
-					display: 'grid',
-					gap: '20px',
-					justifyContent: 'center',
-				}}
-			>
+			<div>
 				<NewArtCardCarousel
 					artworks={artworks}
 					handleDeleteNewArtwork={handleDeleteNewArtwork}
@@ -165,19 +149,19 @@ const PortfolioPage = () => {
 	return (
 		<div style={{ marginBottom: '3rem' }}>
 			{/* Project Section */}
-			<div style={{ margin: '1rem' }}>
+			<div style={{ margin: '2rem' }}>
 				<h2>Portfolio</h2>
 			</div>
-			<div style={{ margin: '1rem' }}>
+			<div style={{ margin: '2rem' }}>
 				<AddProjectBtn onProjectAdded={handleProjectAdded} />
 			</div>
 			{isLoading ? <div>Loading projects...</div> : renderProjects()}
 
 			{/* Artwork Section */}
-			<div style={{ marginTop: '10rem', marginLeft: '1rem' }}>
+			<div style={{ marginTop: '15rem', marginLeft: '2rem' }}>
 				<h2>Artwork</h2>
 			</div>
-			<div style={{ margin: '1rem' }}>
+			<div style={{ margin: '2rem' }}>
 				<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
 			</div>
 			{isLoading ? <div>Loading artwork...</div> : renderArtwork()}
