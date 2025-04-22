@@ -117,6 +117,16 @@ const Account = () => {
 					style={{ display: 'none' }}
 					accept='image/*'
 				/>
+
+				{/* Display username above the bio */}
+				{userData.username && <h2 style={{ margin: 0 }}>{userData.username}</h2>}
+
+				{/* Display bio under the username */}
+				{userData.bio && (
+					<p style={{ margin: 0, color: 'gray', fontStyle: 'italic' }}>
+						{userData.bio}
+					</p>
+				)}
 			</div>
 
 			{hasCompleteProfile ? (
