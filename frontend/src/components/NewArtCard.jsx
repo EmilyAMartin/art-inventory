@@ -17,7 +17,6 @@ const NewArtCard = ({ artwork, onDelete }) => {
 	const [popoverImageId, setPopoverImageId] = useState(null);
 	const [flip, setFlip] = useState(false);
 	const [isPublic, setIsPublic] = useState(artwork.isPublic || false);
-	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 	const open = Boolean(anchorEl);
 
 	if (!artwork) {
@@ -25,65 +24,11 @@ const NewArtCard = ({ artwork, onDelete }) => {
 	}
 
 	const handleTogglePublic = async () => {
-		try {
-			const response = await fetch(
-				`http://localhost:3000/artworks/${artwork.id}/toggle-public`,
-				{
-					method: 'PATCH',
-					credentials: 'include',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({ isPublic: !isPublic }),
-				}
-			);
-
-			if (!response.ok) {
-				throw new Error('Failed to update public/private status');
-			}
-
-			setIsPublic((prev) => !prev);
-		} catch (error) {
-			console.error('Error updating public/private status:', error);
-			toast.error('Failed to update public/private status');
-		}
+		// ...existing code...
 	};
 
 	const handleDeleteClick = async (e) => {
-		e.stopPropagation();
-		try {
-			const response = await fetch(
-				`http://localhost:3000/artworks/${artwork.id}`,
-				{
-					method: 'DELETE',
-					credentials: 'include',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				}
-			);
-
-			if (!response.ok) {
-				const errorData = await response.json();
-				throw new Error(errorData.message || 'Failed to delete artwork');
-			}
-
-			onDelete(artwork.id);
-		} catch (error) {
-			console.error('Error deleting artwork:', error);
-			toast.error(`Failed to delete artwork: ${error.message}`);
-		}
-	};
-
-	const handleNextImage = () => {
-		setCurrentImageIndex((prevIndex) => (prevIndex + 1) % artwork.images.length);
-	};
-
-	const handlePreviousImage = () => {
-		setCurrentImageIndex(
-			(prevIndex) =>
-				(prevIndex - 1 + artwork.images.length) % artwork.images.length
-		);
+		// ...existing code...
 	};
 
 	const handlePopClick = (event) => {
@@ -96,9 +41,10 @@ const NewArtCard = ({ artwork, onDelete }) => {
 		setPopoverImageId(null);
 	};
 
+	// Use only the first image
 	const imageUrl =
 		artwork.images && artwork.images.length > 0
-			? `http://localhost:3000/uploads/${artwork.images[currentImageIndex]}`
+			? `http://localhost:3000/uploads/${artwork.images[0]}`
 			: null;
 
 	return (
@@ -138,33 +84,6 @@ const NewArtCard = ({ artwork, onDelete }) => {
 								alt=''
 							/>
 						</Popover>
-
-						{/* Image Navigation Buttons */}
-						<div
-							style={{
-								display: 'flex',
-								justifyContent: 'space-between',
-								alignItems: 'center',
-								marginTop: '0.5rem',
-							}}
-						>
-							<Button
-								variant='outlined'
-								size='small'
-								onClick={handlePreviousImage}
-								disabled={artwork.images.length <= 1}
-							>
-								Previous
-							</Button>
-							<Button
-								variant='outlined'
-								size='small'
-								onClick={handleNextImage}
-								disabled={artwork.images.length <= 1}
-							>
-								Next
-							</Button>
-						</div>
 
 						<CardContent style={{ width: 300, height: 200 }}>
 							<IconButton
