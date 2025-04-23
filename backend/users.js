@@ -147,6 +147,26 @@ export const setupRoutes = (app) => {
 			res.status(401).json({ message: 'Not logged in' });
 		}
 	});
+	app.get('/users/:userId', async (req, res) => {
+		try {
+			const { userId } = req.params;
+
+			// Fetch user data from the database
+			const [userResult] = await dbPool.query(
+				'SELECT id, name, email, username, bio, profile_image FROM users WHERE id = ?',
+				[userId]
+			);
+
+			if (userResult.length === 0) {
+				return res.status(404).json({ message: 'User not found' });
+			}
+
+			res.json(userResult[0]);
+		} catch (err) {
+			console.error('Error fetching user by ID:', err);
+			res.status(500).json({ message: 'Internal Server Error' });
+		}
+	});
 
 	app.put('/profile', async (req, res) => {
 		if (req.session.user) {
