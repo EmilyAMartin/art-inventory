@@ -11,7 +11,7 @@ function ArtPostCarousel({ artworks, onSubmitComment }) {
 	const [currentPage, setCurrentPage] = useState(0);
 	const [slideDirection, setSlideDirection] = useState('left');
 
-	const cardsPerPage = 6;
+	const cardsPerPage = 5;
 	const containerWidth = cardsPerPage * 250;
 
 	const handleNextPage = () => {

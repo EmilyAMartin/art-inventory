@@ -16,13 +16,22 @@ import {
 	DialogTitle,
 	DialogContent,
 	DialogActions,
+	Popover,
+	CardActionArea,
 } from '@mui/material';
+import ReactCardFlip from 'react-card-flip';
 import CommentIcon from '@mui/icons-material/Comment';
 
 const ArtworkPost = ({ artwork }) => {
 	const [comment, setComment] = useState('');
 	const [comments, setComments] = useState([]);
 	const [isCommentSectionVisible, setIsCommentSectionVisible] = useState(false);
+	const [anchorEl, setAnchorEl] = useState(null);
+	const [popoverImageId, setPopoverImageId] = useState(null);
+	const [flip, setFlip] = useState(false);
+	const open = Boolean(anchorEl);
+
+	// Time formatting function
 	const timeAgo = (date) => {
 		const seconds = Math.floor((new Date() - new Date(date)) / 1000);
 		if (seconds < 60) return 'Just now';
@@ -34,6 +43,7 @@ const ArtworkPost = ({ artwork }) => {
 		return `${days} day${days !== 1 ? 's' : ''} ago`;
 	};
 
+	// Fetch comments when the component mounts or artwork ID changes
 	useEffect(() => {
 		const fetchComments = async () => {
 			try {
@@ -42,20 +52,23 @@ const ArtworkPost = ({ artwork }) => {
 					{ credentials: 'include' }
 				);
 				const data = await response.json();
-				console.log('Fetched comments:', data); // Debugging log
 				setComments(data);
 			} catch (err) {
 				console.error('Error fetching comments:', err);
 			}
 		};
 
-		fetchComments();
-	}, [artwork.id]);
+		if (artwork?.id) {
+			fetchComments();
+		}
+	}, [artwork?.id]);
 
+	// Handle comment input change
 	const handleCommentChange = (event) => {
 		setComment(event.target.value);
 	};
 
+	// Submit a new comment
 	const handleSubmitComment = async () => {
 		if (!comment.trim()) return;
 
@@ -78,6 +91,8 @@ const ArtworkPost = ({ artwork }) => {
 
 			setComment('');
 			setIsCommentSectionVisible(false);
+
+			// Fetch updated comments
 			const updatedComments = await fetch(
 				`http://localhost:3000/api/comments/${artwork.id}`,
 				{ credentials: 'include' }
@@ -87,154 +102,281 @@ const ArtworkPost = ({ artwork }) => {
 			console.error('Error submitting comment:', err);
 		}
 	};
+
+	// Toggle comment section visibility
 	const toggleCommentSection = () => {
 		setIsCommentSectionVisible((prev) => !prev);
 	};
 
+	// Handle popover for image
+	const handlePopClick = (event) => {
+		setAnchorEl(event.currentTarget);
+		setPopoverImageId(event.target.src);
+	};
+
+	const handleClose = () => {
+		setAnchorEl(null);
+		setPopoverImageId(null);
+	};
+
+	// Determine the image URL
 	const imageUrl =
 		artwork.images && artwork.images.length > 0
 			? `http://localhost:3000/uploads/${artwork.images[0]}`
 			: null;
 
+	if (!artwork) {
+		return null;
+	}
+
 	return (
-		<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
-			<CardMedia
-				style={{ width: 300, height: 300 }}
-				component='img'
-				image={imageUrl}
-				alt='Artwork Image'
-			/>
-
-			<CardContent>
-				<Typography
-					gutterBottom
-					fontSize={16}
-					fontWeight={500}
-				>
-					{artwork.title}
-				</Typography>
-				<Typography
-					variant='body2'
-					sx={{ color: 'text.secondary' }}
-				>
-					{artwork.artist}
-				</Typography>
-				<Divider sx={{ margin: '10px 0' }} />
-
-				<Box
-					display='flex'
-					justifyContent='space-between'
-					alignItems='center'
-				>
-					<Typography
-						variant='body1'
-						fontWeight={500}
-						sx={{ color: 'text.secondary' }}
-					>
-						Comments
-					</Typography>
-					<IconButton onClick={toggleCommentSection}>
-						<Badge
-							badgeContent={comments.length}
-							color='primary'
-						>
-							<CommentIcon />
-						</Badge>
-					</IconButton>
-				</Box>
-
-				<Dialog
-					open={isCommentSectionVisible}
-					onClose={() => setIsCommentSectionVisible(false)}
-					fullWidth
-					maxWidth='sm'
-				>
-					<DialogTitle>Comments</DialogTitle>
-					<DialogContent dividers>
-						<TextField
-							label='Write a comment'
-							variant='outlined'
-							fullWidth
-							multiline
-							rows={2}
-							value={comment}
-							onChange={handleCommentChange}
-							sx={{ marginBottom: '10px' }}
+		<div style={{ marginTop: '1rem' }}>
+			<ReactCardFlip
+				isFlipped={flip}
+				flipDirection='horizontal'
+			>
+				{/* Front Side */}
+				<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
+					<CardActionArea>
+						<CardMedia
+							style={{ width: 300, height: 300 }}
+							component='img'
+							image={imageUrl}
+							alt={artwork.title}
+							onClick={handlePopClick}
 						/>
-
-						{comments.length > 0 && (
-							<Box>
+						<Popover
+							open={open}
+							anchorEl={anchorEl}
+							onClose={handleClose}
+							anchorOrigin={{
+								vertical: 'bottom',
+								horizontal: 'center',
+							}}
+						>
+							<CardMedia
+								component='img'
+								image={popoverImageId}
+								alt='Enlarged Artwork'
+							/>
+						</Popover>
+						<CardContent>
+							<Typography
+								gutterBottom
+								fontSize={16}
+								fontWeight={500}
+								component='div'
+							>
+								{artwork.title}
+							</Typography>
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								{artwork.artist}
+							</Typography>
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								{artwork.date}
+							</Typography>
+							<Divider sx={{ margin: '10px 0' }} />
+							<Box
+								display='flex'
+								justifyContent='space-between'
+								alignItems='center'
+							>
 								<Typography
-									variant='h6'
-									sx={{ marginBottom: '10px' }}
+									variant='body1'
+									fontWeight={500}
 								>
-									All Comments:
+									Comments
 								</Typography>
-								{comments.map((comment, index) => (
-									<Box
-										key={index}
-										display='flex'
-										alignItems='flex-start'
-										sx={{ marginBottom: '15px' }}
+								<IconButton onClick={toggleCommentSection}>
+									<Badge
+										badgeContent={comments.length}
+										color='primary'
 									>
-										<Link
-											to={`/users/${comment.user_id}`}
-											style={{ textDecoration: 'none' }}
-										>
-											<Avatar
-												alt='Profile Picture'
-												src={comment.profile_picture}
-												sx={{
-													width: 30,
-													height: 30,
-													marginRight: '10px',
-													cursor: 'pointer',
-												}}
-											/>
-										</Link>
-										<Box>
-											<Typography
-												variant='body2'
-												sx={{ fontWeight: 'bold' }}
-											>
-												{comment.user_name}
-											</Typography>
-											<Typography
-												variant='body2'
-												color='text.secondary'
-											>
-												{comment.text}
-											</Typography>
-											<Typography
-												variant='caption'
-												color='text.disabled'
-											>
-												{timeAgo(comment.created_at)}
-											</Typography>
-										</Box>
-									</Box>
-								))}
+										<CommentIcon />
+									</Badge>
+								</IconButton>
 							</Box>
-						)}
-					</DialogContent>
-					<DialogActions>
-						<Button
-							onClick={() => setIsCommentSectionVisible(false)}
-							color='secondary'
+						</CardContent>
+						<div
+							style={{
+								display: 'flex',
+								flexDirection: 'row',
+								justifyContent: 'space-between',
+								margin: 25,
+							}}
 						>
-							Close
-						</Button>
-						<Button
-							variant='contained'
-							color='primary'
-							onClick={handleSubmitComment}
+							<div
+								style={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
+								onClick={() => setFlip(!flip)}
+							>
+								Learn More
+							</div>
+						</div>
+					</CardActionArea>
+				</Card>
+
+				{/* Back Side */}
+				<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
+					<CardContent style={{ width: 300, height: 500 }}>
+						<Typography
+							gutterBottom
+							fontSize={16}
+							fontWeight={500}
+							component='div'
 						>
-							Submit
-						</Button>
-					</DialogActions>
-				</Dialog>
-			</CardContent>
-		</Card>
+							{artwork.title}
+						</Typography>
+						<br />
+						<Typography
+							variant='body2'
+							sx={{ color: 'text.secondary' }}
+						>
+							Artist: {artwork.artist}
+						</Typography>
+						<br />
+						<Typography
+							variant='body2'
+							sx={{ color: 'text.secondary' }}
+						>
+							Date: {artwork.date}
+						</Typography>
+						<br />
+						<Typography
+							variant='body2'
+							sx={{ color: 'text.secondary' }}
+						>
+							Location: {artwork.location}
+						</Typography>
+						<br />
+						<Typography
+							variant='body2'
+							sx={{ color: 'text.secondary' }}
+						>
+							Medium: {artwork.medium}
+						</Typography>
+						<br />
+						<Typography
+							variant='body2'
+							sx={{ color: 'text.secondary' }}
+						>
+							Description: {artwork.description}
+						</Typography>
+					</CardContent>
+					<div
+						style={{
+							display: 'flex',
+							flexDirection: 'row',
+							justifyContent: 'space-between',
+							margin: 25,
+						}}
+					>
+						<div
+							style={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
+							onClick={() => setFlip(!flip)}
+						>
+							Back
+						</div>
+					</div>
+				</Card>
+			</ReactCardFlip>
+
+			{/* Comment Section Dialog */}
+			<Dialog
+				open={isCommentSectionVisible}
+				onClose={() => setIsCommentSectionVisible(false)}
+				fullWidth
+				maxWidth='sm'
+			>
+				<DialogTitle>Comments</DialogTitle>
+				<DialogContent dividers>
+					<TextField
+						label='Write a comment'
+						variant='outlined'
+						fullWidth
+						multiline
+						rows={2}
+						value={comment}
+						onChange={handleCommentChange}
+						sx={{ marginBottom: '10px' }}
+					/>
+					{comments.length > 0 && (
+						<Box>
+							<Typography
+								variant='h6'
+								sx={{ marginBottom: '10px' }}
+							>
+								All Comments:
+							</Typography>
+							{comments.map((comment, index) => (
+								<Box
+									key={index}
+									display='flex'
+									alignItems='flex-start'
+									sx={{ marginBottom: '15px' }}
+								>
+									<Link
+										to={`/users/${comment.user_id}`}
+										style={{ textDecoration: 'none' }}
+									>
+										<Avatar
+											alt='Profile Picture'
+											src={comment.profile_picture}
+											sx={{
+												width: 30,
+												height: 30,
+												marginRight: '10px',
+												cursor: 'pointer',
+											}}
+										/>
+									</Link>
+									<Box>
+										<Typography
+											variant='body2'
+											sx={{ fontWeight: 'bold' }}
+										>
+											{comment.user_name}
+										</Typography>
+										<Typography
+											variant='body2'
+											color='text.secondary'
+										>
+											{comment.text}
+										</Typography>
+										<Typography
+											variant='caption'
+											color='text.disabled'
+										>
+											{timeAgo(comment.created_at)}
+										</Typography>
+									</Box>
+								</Box>
+							))}
+						</Box>
+					)}
+				</DialogContent>
+				<DialogActions>
+					<Button
+						onClick={() => setIsCommentSectionVisible(false)}
+						color='secondary'
+					>
+						Close
+					</Button>
+					<Button
+						variant='contained'
+						color='primary'
+						onClick={handleSubmitComment}
+					>
+						Submit
+					</Button>
+				</DialogActions>
+			</Dialog>
+		</div>
 	);
 };
 
