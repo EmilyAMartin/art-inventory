@@ -114,6 +114,39 @@ export const setupRoutes = (app) => {
 			res.status(500).json({ success: false, error: 'Internal Server Error' });
 		}
 	});
+	
+	app.get('/users/:userId/public-artworks', async (req, res) => {
+		try {
+			const { userId } = req.params;
+
+			const [results] = await dbPool.query(
+				`
+      SELECT id, title, date_end, image_path, 
+             place_of_origin, artwork_type_title, medium_display, 
+             credit_line, description, is_public, artist_name
+      FROM artwork
+      WHERE is_public = true AND artist_id = ?
+    `,
+				[userId]
+			);
+
+			const formattedArtworks = results.map((artwork) => ({
+				...artwork,
+				location: artwork.place_of_origin,
+				medium: artwork.medium_display,
+				date: artwork.date_end,
+				artist: artwork.artist_name || 'Unknown Artist',
+				images: artwork.image_path ? [artwork.image_path] : [],
+				description: artwork.description || '',
+				isPublic: artwork.is_public,
+			}));
+
+			res.json(formattedArtworks);
+		} catch (error) {
+			console.error('Error fetching public artworks by user:', error);
+			res.status(500).json({ success: false, error: 'Internal Server Error' });
+		}
+	});
 
 	app.post('/artworks', upload.single('image'), async (req, res) => {
 		console.log('Received artwork creation request:', req.body);

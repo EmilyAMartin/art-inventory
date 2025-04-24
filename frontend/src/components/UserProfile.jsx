@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Box, Typography } from '@mui/material';
+import PublicArtCarousel from './PublicArtCarousel'; // Import the new carousel component
 
 const UserProfile = () => {
 	const { userId } = useParams();
 	const [user, setUser] = useState(null);
+	const [artworks, setArtworks] = useState([]); // State for artworks
 
 	useEffect(() => {
 		const fetchUserData = async () => {
@@ -14,10 +16,15 @@ const UserProfile = () => {
 				const userResponse = await axios.get(
 					`http://localhost:3000/users/${userId}`
 				);
-				console.log('User Response:', userResponse.data); // Debugging log
 				setUser(userResponse.data);
+
+				// Fetch user's public artworks
+				const artworksResponse = await axios.get(
+					`http://localhost:3000/users/${userId}/public-artworks`
+				);
+				setArtworks(artworksResponse.data);
 			} catch (error) {
-				console.error('Error fetching user data:', error);
+				console.error('Error fetching data:', error);
 			}
 		};
 
@@ -63,6 +70,12 @@ const UserProfile = () => {
 					{user.bio}
 				</Typography>
 			</Box>
+
+			{/* Public Artworks Carousel */}
+			<div style={{}}>
+				<h2>Artwork</h2>
+			</div>
+			<PublicArtCarousel artworks={artworks} />
 		</Box>
 	);
 };
