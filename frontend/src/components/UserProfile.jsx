@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Box, Typography, Grid2 } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 const UserProfile = () => {
 	const { userId } = useParams();
 	const [user, setUser] = useState(null);
-	const [artworks, setArtworks] = useState([]);
 
 	useEffect(() => {
 		const fetchUserData = async () => {
@@ -15,21 +14,8 @@ const UserProfile = () => {
 				const userResponse = await axios.get(
 					`http://localhost:3000/users/${userId}`
 				);
-				if (userResponse.status === 200) {
-					setUser(userResponse.data);
-				} else {
-					console.error('Failed to fetch user data:', userResponse);
-				}
-
-				// Fetch artworks
-				const artworkResponse = await axios.get(
-					`http://localhost:3000/users/${userId}/artworks`
-				);
-				if (artworkResponse.status === 200) {
-					setArtworks(artworkResponse.data);
-				} else {
-					console.error('Failed to fetch artworks:', artworkResponse);
-				}
+				console.log('User Response:', userResponse.data); // Debugging log
+				setUser(userResponse.data);
 			} catch (error) {
 				console.error('Error fetching user data:', error);
 			}
@@ -51,10 +37,11 @@ const UserProfile = () => {
 					flexDirection: 'column',
 					alignItems: 'center',
 					marginBottom: '20px',
+					marginTop: '50px',
 				}}
 			>
 				<img
-					src={user.profile_image}
+					src={`http://localhost:3000${user.profile_image}`}
 					alt='Profile'
 					style={{
 						width: '150px',
@@ -76,45 +63,6 @@ const UserProfile = () => {
 					{user.bio}
 				</Typography>
 			</Box>
-
-			{/* Public Artwork */}
-			<Typography
-				variant='h5'
-				sx={{ marginBottom: '20px' }}
-			>
-				Public Artwork
-			</Typography>
-			<Grid2
-				container
-				spacing={2}
-			>
-				{artworks.map((artwork) => (
-					<Grid2
-						item
-						xs={12}
-						sm={6}
-						md={4}
-						key={artwork.id}
-					>
-						<img
-							src={`http://localhost:3000/uploads/${artwork.image}`}
-							alt={artwork.title}
-							style={{
-								width: '100%',
-								height: '200px',
-								objectFit: 'cover',
-								borderRadius: '10px',
-							}}
-						/>
-						<Typography
-							variant='body1'
-							sx={{ marginTop: '10px' }}
-						>
-							{artwork.title}
-						</Typography>
-					</Grid2>
-				))}
-			</Grid2>
 		</Box>
 	);
 };

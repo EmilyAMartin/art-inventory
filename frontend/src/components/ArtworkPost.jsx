@@ -42,6 +42,7 @@ const ArtworkPost = ({ artwork }) => {
 					{ credentials: 'include' }
 				);
 				const data = await response.json();
+				console.log('Fetched comments:', data); // Debugging log
 				setComments(data);
 			} catch (err) {
 				console.error('Error fetching comments:', err);
