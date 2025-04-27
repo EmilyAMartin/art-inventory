@@ -67,7 +67,7 @@ function ArtPostCarousel({ artworks, onSubmitComment }) {
 						{currentArtworks.map((art, i) => (
 							<Box
 								key={`art-${i}`}
-								sx={{ width: '250px' }}
+								sx={{ width: '300px' }}
 							>
 								<ArtworkPost
 									artwork={art}

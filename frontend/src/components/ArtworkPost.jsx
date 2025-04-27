@@ -136,10 +136,10 @@ const ArtworkPost = ({ artwork }) => {
 				flipDirection='horizontal'
 			>
 				{/* Front Side */}
-				<Card sx={{ maxWidth: 600, maxHeight: 600 }}>
+				<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
 					<CardActionArea>
 						<CardMedia
-							style={{ width: 600, height: 300 }}
+							style={{ width: 300, height: 300 }}
 							component='img'
 							image={imageUrl}
 							alt={artwork.title}

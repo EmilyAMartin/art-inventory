@@ -73,7 +73,9 @@ const Home = () => {
 			</div>
 
 			<div className='art-post-section'>
-				<h2>New on Portfolio</h2>
+				<div style={{ marginLeft: '4rem' }}>
+					<h2>New on Portfolio</h2>
+				</div>
 				<ArtPostCarousel
 					artworks={publicArtworks}
 					onSubmitComment={handleCommentSubmit}
