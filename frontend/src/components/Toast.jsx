@@ -1,17 +1,13 @@
 import React from 'react';
-import { QueryClient, QueryCache } from '@tanstack/react-query';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Toaster } from 'react-hot-toast';
 
-export const queryClient = new QueryClient({
-	queryCache: new QueryCache({
-		onError: (error, query) => {
-			toast.error(query?.meta?.errorMessage ?? 'Something went wrong!');
-		},
-	}),
-});
 const Toast = () => {
-	return <ToastContainer />;
+	return (
+		<Toaster
+			position='top-center'
+			reverseOrder={false}
+		/>
+	);
 };
 
 export default Toast;

@@ -1,11 +1,10 @@
-import {} from 'react';
 import AddProjectBtn from '../components/AddProjectBtn';
 import AddNewBtn from '../components/AddNewBtn';
 import ProjectCardCarousel from '../components/ProjectCardCarousel';
 import NewArtCardCarousel from '../components/NewArtCarousel';
 import toast from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
-import { queryClient } from '../components/Toast';
+import { queryClient } from '../components/queryClient';
 
 const fetchPortfolioData = async () => {
 	const [projectsResponse, artworksResponse] = await Promise.all([
@@ -50,6 +49,7 @@ const fetchPortfolioData = async () => {
 
 const PortfolioPage = () => {
 	const { isLoading, data } = useQuery({
+		queryKey: ['portfolio', 'me@jackharrhy.com'], // for now hard coded, in the future, account for the users portfolio we are currently looking at
 		queryFn: fetchPortfolioData,
 		meta: {
 			errorMessage: 'Failed to fetch portfolio data!',
@@ -60,6 +60,7 @@ const PortfolioPage = () => {
 	const artworks = data?.formattedArtworks;
 
 	const handleProjectAdded = (newProject) => {
+		// refetch
 		toast.success('Project added successfully');
 	};
 
@@ -84,10 +85,12 @@ const PortfolioPage = () => {
 	};
 
 	const handleNewArtworkAdded = (newArtwork) => {
+		// refetch
 		toast.success('Artwork added successfully');
 	};
 
 	const handleDeleteNewArtwork = (artworkId) => {
+		// refetch
 		toast.success('Artwork deleted successfully');
 	};
 

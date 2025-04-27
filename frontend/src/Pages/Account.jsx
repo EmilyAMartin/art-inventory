@@ -1,16 +1,16 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { BsPersonCircle } from 'react-icons/bs';
 import Form from '../components/Form';
 import axios from 'axios';
 import { useContext } from 'react';
 import { AuthContext } from './Context';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 const Account = () => {
 	const addNewPhoto = useRef(null);
-	const [selectedImage, setSelectedImage] = useState(null);
 	const { currentUser, setCurrentUser } = useContext(AuthContext);
+	const queryClient = useQueryClient();
 
 	// Fetch user data using React Query
 	const {
@@ -30,13 +30,13 @@ const Account = () => {
 			return user;
 		},
 		onSuccess: (data) => {
-			setSelectedImage(data.profile_image);
+			queryClient.setQueryData(['userData'], data);
 		},
 	});
 
-	// Handle image upload manually
-	const handleImageUpload = async (file) => {
-		try {
+	// Mutation for image upload
+	const uploadImageMutation = useMutation({
+		mutationFn: async (file) => {
 			const formData = new FormData();
 			formData.append('image', file);
 
@@ -51,14 +51,17 @@ const Account = () => {
 				}
 			);
 
-			const updatedUser = response.data.user;
+			return response.data.user;
+		},
+		onSuccess: (updatedUser) => {
 			updatedUser.profile_image = `http://localhost:3000${updatedUser.profile_image}`;
-			setSelectedImage(updatedUser.profile_image);
+			queryClient.setQueryData(['userData'], updatedUser);
 			setCurrentUser(updatedUser);
-		} catch (error) {
+		},
+		onError: (error) => {
 			console.error('Error uploading image:', error);
-		}
-	};
+		},
+	});
 
 	const handleClick = (event) => {
 		addNewPhoto.current.click(event);
@@ -67,7 +70,7 @@ const Account = () => {
 	const handleChange = (event) => {
 		const fileUploaded = event.target.files[0];
 		if (fileUploaded) {
-			handleImageUpload(fileUploaded);
+			uploadImageMutation.mutate(fileUploaded);
 		}
 	};
 
@@ -94,10 +97,10 @@ const Account = () => {
 					alignItems: 'center',
 				}}
 			>
-				{selectedImage ? (
+				{userData.profile_image ? (
 					<Link to={`/users/${currentUser.id}`}>
 						<img
-							src={selectedImage}
+							src={userData.profile_image}
 							alt='Profile'
 							style={{
 								width: 150,

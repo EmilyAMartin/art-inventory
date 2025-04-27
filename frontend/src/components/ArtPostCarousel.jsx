@@ -11,17 +11,21 @@ function ArtPostCarousel({ artworks, onSubmitComment }) {
 	const [currentPage, setCurrentPage] = useState(0);
 	const [slideDirection, setSlideDirection] = useState('left');
 
-	const cardsPerPage = 5;
-	const containerWidth = cardsPerPage * 250;
+	const cardsPerPage = 5; // Number of cards to display per page
+	const containerWidth = cardsPerPage * 300; // Adjust based on card width
 
 	const handleNextPage = () => {
-		setSlideDirection('left');
-		setCurrentPage((prevPage) => prevPage + 1);
+		if (currentPage < Math.ceil(projects.length / cardsPerPage) - 1) {
+			setSlideDirection('left');
+			setCurrentPage((prevPage) => prevPage + 1);
+		}
 	};
 
 	const handlePrevPage = () => {
-		setSlideDirection('right');
-		setCurrentPage((prevPage) => prevPage - 1);
+		if (currentPage > 0) {
+			setSlideDirection('right');
+			setCurrentPage((prevPage) => prevPage - 1);
+		}
 	};
 
 	const currentArtworks = artworks.slice(

@@ -21,16 +21,14 @@ const fetchPublicArtworks = async () => {
 const Home = () => {
 	const { currentUser } = useContext(AuthContext);
 	const [comments, setComments] = useState([]);
-
-	// Fetch public artworks using React Query
 	const {
 		data: publicArtworks = [],
 		isLoading,
 		isError,
 		error,
 	} = useQuery({
-		queryKey: ['publicArtworks'], // Use object syntax
-		queryFn: fetchPublicArtworks, // Pass the fetch function as queryFn
+		queryKey: ['publicArtworks'],
+		queryFn: fetchPublicArtworks,
 	});
 
 	const handleCommentSubmit = (comment) => {
