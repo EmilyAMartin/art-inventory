@@ -1,32 +1,45 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import { BsPersonCircle } from 'react-icons/bs';
 import Form from '../components/Form';
 import axios from 'axios';
 import { useContext } from 'react';
 import { AuthContext } from './Context';
 import { Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 
 const Account = () => {
 	const addNewPhoto = useRef(null);
 	const [selectedImage, setSelectedImage] = useState(null);
-	const [userData, setUserData] = useState(null);
 	const { currentUser, setCurrentUser } = useContext(AuthContext);
 
-	const handleClick = (event) => {
-		addNewPhoto.current.click(event);
-	};
+	// Fetch user data using React Query
+	const {
+		data: userData,
+		isLoading,
+		isError,
+	} = useQuery({
+		queryKey: ['userData'],
+		queryFn: async () => {
+			const response = await axios.get('http://localhost:3000/profile', {
+				withCredentials: true,
+			});
+			const user = response.data.user;
+			if (user.profile_image) {
+				user.profile_image = `http://localhost:3000${user.profile_image}`;
+			}
+			return user;
+		},
+		onSuccess: (data) => {
+			setSelectedImage(data.profile_image);
+		},
+	});
 
-	const handleChange = async (event) => {
-		const fileUploaded = event.target.files[0];
-		if (fileUploaded) {
-			handleFile(fileUploaded);
-		}
-	};
-
-	const handleFile = async (file) => {
+	// Handle image upload manually
+	const handleImageUpload = async (file) => {
 		try {
 			const formData = new FormData();
 			formData.append('image', file);
+
 			const response = await axios.post(
 				'http://localhost:3000/profile/image',
 				formData,
@@ -37,9 +50,9 @@ const Account = () => {
 					withCredentials: true,
 				}
 			);
+
 			const updatedUser = response.data.user;
 			updatedUser.profile_image = `http://localhost:3000${updatedUser.profile_image}`;
-			setUserData(updatedUser);
 			setSelectedImage(updatedUser.profile_image);
 			setCurrentUser(updatedUser);
 		} catch (error) {
@@ -47,28 +60,23 @@ const Account = () => {
 		}
 	};
 
-	useEffect(() => {
-		const fetchUserData = async () => {
-			try {
-				const response = await axios.get('http://localhost:3000/profile', {
-					withCredentials: true,
-				});
-				const user = response.data.user;
-				if (user.profile_image) {
-					user.profile_image = `http://localhost:3000${user.profile_image}`;
-				}
-				setUserData(user);
-				setSelectedImage(user.profile_image);
-			} catch (error) {
-				console.error('Error fetching user data:', error);
-			}
-		};
+	const handleClick = (event) => {
+		addNewPhoto.current.click(event);
+	};
 
-		fetchUserData();
-	}, []);
+	const handleChange = (event) => {
+		const fileUploaded = event.target.files[0];
+		if (fileUploaded) {
+			handleImageUpload(fileUploaded);
+		}
+	};
 
-	if (userData === null) {
+	if (isLoading) {
 		return <div>Loading...</div>;
+	}
+
+	if (isError) {
+		return <div>Error fetching user data</div>;
 	}
 
 	const hasCompleteProfile = userData.username && userData.bio;

@@ -1,42 +1,49 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { AuthContext } from './Context';
 import SignUpBtn from '../components/SignUpBtn';
 import LoginBtn from '../components/LoginBtn';
 import ArtPostCarousel from '../components/ArtPostCarousel';
 
+const fetchPublicArtworks = async () => {
+	const response = await fetch(
+		'http://localhost:3000/artworks?visibility=public',
+		{
+			credentials: 'include',
+		}
+	);
+	if (!response.ok) {
+		throw new Error('Failed to fetch public artworks');
+	}
+	return response.json();
+};
+
 const Home = () => {
 	const { currentUser } = useContext(AuthContext);
 	const [comments, setComments] = useState([]);
-	const [publicArtworks, setPublicArtworks] = useState([]);
+
+	// Fetch public artworks using React Query
+	const {
+		data: publicArtworks = [],
+		isLoading,
+		isError,
+		error,
+	} = useQuery({
+		queryKey: ['publicArtworks'], // Use object syntax
+		queryFn: fetchPublicArtworks, // Pass the fetch function as queryFn
+	});
 
 	const handleCommentSubmit = (comment) => {
 		setComments([...comments, comment]);
 	};
 
-	useEffect(() => {
-		const fetchPublicArtworks = async () => {
-			try {
-				const response = await fetch(
-					'http://localhost:3000/artworks?visibility=public',
-					{
-						credentials: 'include',
-					}
-				);
-				if (!response.ok) {
-					throw new Error('Failed to fetch public artworks');
-				}
-				const data = await response.json();
-				setPublicArtworks(data);
-			} catch (error) {
-				console.error('Error fetching public artworks:', error);
-			}
-		};
+	if (isLoading) {
+		return <p>Loading public artworks...</p>;
+	}
 
-		fetchPublicArtworks();
-		return () => {
-			setPublicArtworks([]);
-		};
-	}, []);
+	if (isError) {
+		return <p>Error: {error.message}</p>;
+	}
 
 	return (
 		<div className='App'>

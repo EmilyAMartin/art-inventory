@@ -1,73 +1,65 @@
-import { useState, useEffect } from 'react';
+import {} from 'react';
 import AddProjectBtn from '../components/AddProjectBtn';
 import AddNewBtn from '../components/AddNewBtn';
 import ProjectCardCarousel from '../components/ProjectCardCarousel';
 import NewArtCardCarousel from '../components/NewArtCarousel';
 import toast from 'react-hot-toast';
+import { useQuery } from '@tanstack/react-query';
+import { queryClient } from '../components/Toast';
+
+const fetchPortfolioData = async () => {
+	const [projectsResponse, artworksResponse] = await Promise.all([
+		fetch('http://localhost:3000/projects', {
+			credentials: 'include',
+		}),
+		fetch('http://localhost:3000/my-artworks', {
+			credentials: 'include',
+		}),
+	]);
+
+	if (!projectsResponse.ok) {
+		throw new Error('Failed to fetch projects');
+	}
+	if (!artworksResponse.ok) {
+		throw new Error('Failed to fetch artworks');
+	}
+
+	const [projectsData, artworksData] = await Promise.all([
+		projectsResponse.json(),
+		artworksResponse.json(),
+	]);
+
+	const formattedProjects = projectsData.map((project) => ({
+		...project,
+		images: project.image_path ? [project.image_path] : [],
+	}));
+
+	const formattedArtworks = artworksData.map((artwork) => ({
+		...artwork,
+		images: artwork.image_path ? [artwork.image_path] : [],
+		location: artwork.place_of_origin,
+		medium: artwork.medium_display,
+		date: artwork.date_end,
+	}));
+
+	return {
+		formattedProjects,
+		formattedArtworks,
+	};
+};
 
 const PortfolioPage = () => {
-	const [projects, setProjects] = useState([]);
-	const [artworks, setArtworks] = useState([]);
-	const [isLoading, setIsLoading] = useState(true);
+	const { isLoading, data } = useQuery({
+		queryFn: fetchPortfolioData,
+		meta: {
+			errorMessage: 'Failed to fetch portfolio data!',
+		},
+	});
 
-	// Initial data fetch
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				setIsLoading(true);
-				const [projectsResponse, artworksResponse] = await Promise.all([
-					fetch('http://localhost:3000/projects', {
-						credentials: 'include',
-					}),
-					fetch('http://localhost:3000/my-artworks', {
-						credentials: 'include',
-					}),
-				]);
-
-				if (!projectsResponse.ok) {
-					throw new Error('Failed to fetch projects');
-				}
-				if (!artworksResponse.ok) {
-					throw new Error('Failed to fetch artworks');
-				}
-
-				const [projectsData, artworksData] = await Promise.all([
-					projectsResponse.json(),
-					artworksResponse.json(),
-				]);
-
-				const formattedProjects = projectsData.map((project) => ({
-					...project,
-					images: project.image_path ? [project.image_path] : [],
-				}));
-
-				const formattedArtworks = artworksData.map((artwork) => ({
-					...artwork,
-					images: artwork.image_path ? [artwork.image_path] : [],
-					location: artwork.place_of_origin,
-					medium: artwork.medium_display,
-					date: artwork.date_end,
-				}));
-
-				setProjects(formattedProjects);
-				setArtworks(formattedArtworks);
-			} catch (error) {
-				console.error('Error fetching data:', error);
-				toast.error('Failed to fetch data');
-			} finally {
-				setIsLoading(false);
-			}
-		};
-
-		fetchData();
-	}, []);
+	const projects = data?.formattedProjects;
+	const artworks = data?.formattedArtworks;
 
 	const handleProjectAdded = (newProject) => {
-		const formattedProject = {
-			...newProject,
-			images: newProject.image_path ? [newProject.image_path] : [],
-		};
-		setProjects((prev) => [...prev, formattedProject]);
 		toast.success('Project added successfully');
 	};
 
@@ -82,7 +74,8 @@ const PortfolioPage = () => {
 				throw new Error('Failed to delete project');
 			}
 
-			setProjects((prev) => prev.filter((project) => project.id !== projectId));
+			queryClient.invalidateQueries(['portfolio']);
+
 			toast.success('Project deleted successfully');
 		} catch (error) {
 			console.error('Error deleting project:', error);
@@ -91,22 +84,10 @@ const PortfolioPage = () => {
 	};
 
 	const handleNewArtworkAdded = (newArtwork) => {
-		if (Array.isArray(newArtwork)) {
-			setArtworks(newArtwork);
-		} else if (newArtwork && typeof newArtwork === 'object') {
-			setArtworks((prevState) => {
-				const exists = prevState.some((art) => art.id === newArtwork.id);
-				if (exists) {
-					return prevState;
-				}
-				return [...prevState, newArtwork];
-			});
-		}
 		toast.success('Artwork added successfully');
 	};
 
 	const handleDeleteNewArtwork = (artworkId) => {
-		setArtworks((prev) => prev.filter((art) => art.id !== artworkId));
 		toast.success('Artwork deleted successfully');
 	};
 
