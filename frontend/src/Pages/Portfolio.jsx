@@ -49,7 +49,6 @@ const fetchPortfolioData = async () => {
 
 const PortfolioPage = () => {
 	const { isLoading, data } = useQuery({
-		queryKey: ['portfolio', 'me@jackharrhy.com'], // for now hard coded, in the future, account for the users portfolio we are currently looking at
 		queryFn: fetchPortfolioData,
 		meta: {
 			errorMessage: 'Failed to fetch portfolio data!',

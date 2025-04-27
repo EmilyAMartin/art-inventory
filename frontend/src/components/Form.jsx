@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
 	TextField,
 	Typography,
@@ -10,8 +10,23 @@ import {
 } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+
+const checkLoginStatus = async () => {
+	const response = await axios.get('http://localhost:3000/profile', {
+		withCredentials: true,
+	});
+	return response.status === 200;
+};
+
+const updateProfile = async (values) => {
+	const response = await axios.put('http://localhost:3000/profile', values, {
+		withCredentials: true,
+	});
+	return response.data;
+};
 
 function Form({ userData }) {
 	const [values, setValues] = useState({
@@ -22,62 +37,40 @@ function Form({ userData }) {
 	const [newpassword, setNewPassword] = useState('');
 	const [reppassword, setRepPassword] = useState('');
 	const [showPassword, setShowPassword] = useState(false);
-	const [isLoggedIn, setIsLoggedIn] = useState(true);
 
-	useEffect(() => {
-		if (userData) {
-			setValues({
-				username: userData.username || '',
-				bio: userData.bio || '',
-				email: userData.email || '',
-			});
-		}
+	const {
+		data: isLoggedIn,
+		isLoading: isLoginLoading,
+		error: loginError,
+	} = useQuery({
+		queryKey: ['checkLogin'],
+		queryFn: checkLoginStatus,
+		retry: false,
+	});
 
-		const checkLoginStatus = async () => {
-			try {
-				const response = await axios.get('http://localhost:3000/profile', {
-					withCredentials: true,
-				});
-				if (response.status === 200) {
-					setIsLoggedIn(true);
-				}
-			} catch (error) {
-				console.log('User is not logged in:', error);
-				setIsLoggedIn(false);
-			}
-		};
-
-		checkLoginStatus();
-	}, [userData]);
+	const mutation = useMutation({
+		mutationFn: updateProfile,
+		onSuccess: () => {
+			toast.success('Profile updated successfully!');
+		},
+		onError: (error) => {
+			toast.error(
+				`Error updating profile: ${
+					error.response?.data?.message || 'Something went wrong'
+				}`
+			);
+		},
+	});
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		console.log('Submitting form with values:', values);
 
 		if (newpassword && newpassword !== reppassword) {
 			toast.error('New password and re-typed password do not match!');
 			return;
 		}
 
-		try {
-			const response = await axios.put('http://localhost:3000/profile', values, {
-				withCredentials: true,
-			});
-			console.log('Response:', response);
-
-			if (response.status === 200) {
-				toast.success('Profile updated successfully!');
-			} else {
-				toast.error('Failed to update profile');
-			}
-		} catch (error) {
-			console.error('Error updating profile:', error);
-			toast.error(
-				`Error updating profile: ${
-					error.response?.data?.message || 'Something went wrong'
-				}`
-			);
-		}
+		mutation.mutate(values);
 	};
 
 	const handleChange = (event) => {
@@ -105,6 +98,10 @@ function Form({ userData }) {
 		width: 150,
 		backgroundColor: '#6c63ff',
 	};
+
+	if (isLoginLoading) {
+		return <Typography>Loading...</Typography>;
+	}
 
 	if (!isLoggedIn) {
 		return (
@@ -259,8 +256,9 @@ function Form({ userData }) {
 					<button
 						style={buttonStyle}
 						type='submit'
+						disabled={mutation.isLoading}
 					>
-						Submit
+						{mutation.isLoading ? 'Updating...' : 'Submit'}
 					</button>
 				</div>
 			</form>

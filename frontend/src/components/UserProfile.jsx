@@ -1,38 +1,48 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Box, Typography } from '@mui/material';
-import PublicArtCarousel from './PublicArtCarousel'; // Import the new carousel component
+import PublicArtCarousel from './PublicArtCarousel';
+
+const fetchUserData = async (userId) => {
+	const userResponse = await axios.get(`http://localhost:3000/users/${userId}`);
+	return userResponse.data;
+};
+
+const fetchUserArtworks = async (userId) => {
+	const artworksResponse = await axios.get(
+		`http://localhost:3000/users/${userId}/public-artworks`
+	);
+	return artworksResponse.data;
+};
 
 const UserProfile = () => {
 	const { userId } = useParams();
-	const [user, setUser] = useState(null);
-	const [artworks, setArtworks] = useState([]); // State for artworks
+	const {
+		data: user,
+		isLoading: isUserLoading,
+		error: userError,
+	} = useQuery({
+		queryKey: ['user', userId],
+		queryFn: () => fetchUserData(userId),
+	});
+	const {
+		data: artworks,
+		isLoading: isArtworksLoading,
+		error: artworksError,
+	} = useQuery({
+		queryKey: ['artworks', userId],
+		queryFn: () => fetchUserArtworks(userId),
+		enabled: !!user,
+	});
 
-	useEffect(() => {
-		const fetchUserData = async () => {
-			try {
-				// Fetch user data
-				const userResponse = await axios.get(
-					`http://localhost:3000/users/${userId}`
-				);
-				setUser(userResponse.data);
-
-				// Fetch user's public artworks
-				const artworksResponse = await axios.get(
-					`http://localhost:3000/users/${userId}/public-artworks`
-				);
-				setArtworks(artworksResponse.data);
-			} catch (error) {
-				console.error('Error fetching data:', error);
-			}
-		};
-
-		fetchUserData();
-	}, [userId]);
-
-	if (!user) {
+	if (isUserLoading || isArtworksLoading) {
 		return <Typography>Loading...</Typography>;
+	}
+
+	if (userError || artworksError) {
+		return <Typography>Error fetching data</Typography>;
 	}
 
 	return (
@@ -72,7 +82,7 @@ const UserProfile = () => {
 			</Box>
 
 			{/* Public Artworks Carousel */}
-			<div style={{}}>
+			<div style={{ marginLeft: '1rem' }}>
 				<h2>Artwork</h2>
 			</div>
 			<PublicArtCarousel artworks={artworks} />

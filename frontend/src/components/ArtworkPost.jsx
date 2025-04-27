@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
 	Card,
@@ -21,94 +21,82 @@ import {
 } from '@mui/material';
 import ReactCardFlip from 'react-card-flip';
 import CommentIcon from '@mui/icons-material/Comment';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
+const fetchComments = async (artworkId) => {
+	const response = await fetch(
+		`http://localhost:3000/api/comments/${artworkId}`,
+		{
+			credentials: 'include',
+		}
+	);
+	if (!response.ok) {
+		throw new Error('Error fetching comments');
+	}
+	return response.json();
+};
+
+const submitComment = async ({ artworkId, commentText }) => {
+	const response = await fetch(
+		`http://localhost:3000/api/comments/${artworkId}`,
+		{
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			credentials: 'include',
+			body: JSON.stringify({ text: commentText }),
+		}
+	);
+	if (!response.ok) {
+		throw new Error('Failed to submit comment');
+	}
+	return response.json();
+};
 
 const ArtworkPost = ({ artwork }) => {
 	const [comment, setComment] = useState('');
-	const [comments, setComments] = useState([]);
 	const [isCommentSectionVisible, setIsCommentSectionVisible] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
 	const [flip, setFlip] = useState(false);
 	const open = Boolean(anchorEl);
+	const queryClient = useQueryClient();
 
-	// Time formatting function
-	const timeAgo = (date) => {
-		const seconds = Math.floor((new Date() - new Date(date)) / 1000);
-		if (seconds < 60) return 'Just now';
-		const minutes = Math.floor(seconds / 60);
-		if (minutes < 60) return `${minutes} min${minutes !== 1 ? 's' : ''} ago`;
-		const hours = Math.floor(minutes / 60);
-		if (hours < 24) return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
-		const days = Math.floor(hours / 24);
-		return `${days} day${days !== 1 ? 's' : ''} ago`;
-	};
+	const {
+		data: comments = [],
+		isLoading,
+		isError,
+		error,
+	} = useQuery({
+		queryKey: ['comments', artwork.id],
+		queryFn: () => fetchComments(artwork.id),
+		enabled: !!artwork.id,
+	});
 
-	// Fetch comments when the component mounts or artwork ID changes
-	useEffect(() => {
-		const fetchComments = async () => {
-			try {
-				const response = await fetch(
-					`http://localhost:3000/api/comments/${artwork.id}`,
-					{ credentials: 'include' }
-				);
-				const data = await response.json();
-				setComments(data);
-			} catch (err) {
-				console.error('Error fetching comments:', err);
-			}
-		};
+	const mutation = useMutation({
+		mutationFn: submitComment,
+		onSuccess: () => {
+			queryClient.invalidateQueries(['comments', artwork.id]);
+			setComment('');
+			setIsCommentSectionVisible(false);
+		},
+		onError: (error) => {
+			console.error('Error submitting comment:', error);
+		},
+	});
 
-		if (artwork?.id) {
-			fetchComments();
-		}
-	}, [artwork?.id]);
-
-	// Handle comment input change
 	const handleCommentChange = (event) => {
 		setComment(event.target.value);
 	};
 
-	// Submit a new comment
-	const handleSubmitComment = async () => {
+	const handleSubmitComment = () => {
 		if (!comment.trim()) return;
-
-		try {
-			const response = await fetch(
-				`http://localhost:3000/api/comments/${artwork.id}`,
-				{
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					credentials: 'include',
-					body: JSON.stringify({ text: comment }),
-				}
-			);
-
-			if (!response.ok) {
-				const errorData = await response.json();
-				console.error('Failed to submit comment:', errorData.message);
-				return;
-			}
-
-			setComment('');
-			setIsCommentSectionVisible(false);
-
-			// Fetch updated comments
-			const updatedComments = await fetch(
-				`http://localhost:3000/api/comments/${artwork.id}`,
-				{ credentials: 'include' }
-			).then((res) => res.json());
-			setComments(updatedComments);
-		} catch (err) {
-			console.error('Error submitting comment:', err);
-		}
+		mutation.mutate({ artworkId: artwork.id, commentText: comment });
 	};
 
-	// Toggle comment section visibility
 	const toggleCommentSection = () => {
 		setIsCommentSectionVisible((prev) => !prev);
 	};
 
-	// Handle popover for image
 	const handlePopClick = (event) => {
 		setAnchorEl(event.currentTarget);
 		setPopoverImageId(event.target.src);
@@ -119,7 +107,6 @@ const ArtworkPost = ({ artwork }) => {
 		setPopoverImageId(null);
 	};
 
-	// Determine the image URL
 	const imageUrl =
 		artwork.images && artwork.images.length > 0
 			? `http://localhost:3000/uploads/${artwork.images[0]}`
@@ -305,7 +292,11 @@ const ArtworkPost = ({ artwork }) => {
 						onChange={handleCommentChange}
 						sx={{ marginBottom: '10px' }}
 					/>
-					{comments.length > 0 && (
+					{isLoading ? (
+						<Typography>Loading comments...</Typography>
+					) : isError ? (
+						<Typography color='error'>Error: {error.message}</Typography>
+					) : comments.length > 0 ? (
 						<Box>
 							<Typography
 								variant='h6'
@@ -352,12 +343,14 @@ const ArtworkPost = ({ artwork }) => {
 											variant='caption'
 											color='text.disabled'
 										>
-											{timeAgo(comment.created_at)}
+											{new Date(comment.created_at).toLocaleTimeString()}
 										</Typography>
 									</Box>
 								</Box>
 							))}
 						</Box>
+					) : (
+						<Typography>No comments yet.</Typography>
 					)}
 				</DialogContent>
 				<DialogActions>
