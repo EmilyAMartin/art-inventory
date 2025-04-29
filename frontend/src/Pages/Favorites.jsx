@@ -1,113 +1,81 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Grid2 from '@mui/material/Grid2';
 import ArtCard from '../components/ArtCard';
 import axios from 'axios';
 import { Typography, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { useQuery } from '@tanstack/react-query';
+
+const checkImageUrl = async (imageUrl) => {
+	try {
+		const response = await fetch(imageUrl, { method: 'HEAD' });
+		if (response.status === 403) return false;
+		return response.ok || response.status === 302;
+	} catch {
+		return false;
+	}
+};
+
+const fetchFavorites = async () => {
+	const response = await fetch('http://localhost:3000/favorites', {
+		method: 'GET',
+		credentials: 'include',
+	});
+	if (response.status === 401) {
+		return { isLoggedIn: false, artwork: [], userId: null };
+	}
+	if (!response.ok) {
+		throw new Error('Failed to fetch favorite artworks');
+	}
+	const data = await response.json();
+	const userId = data.userId || null;
+
+	const artworkPromises = data.favorites.map(async (fav) => {
+		try {
+			const { data: artData } = await axios.get(
+				`https://api.artic.edu/api/v1/artworks/${fav.id}`
+			);
+			if (!artData.data.image_id) return null;
+
+			const imageUrl = `https://www.artic.edu/iiif/2/${artData.data.image_id}/full/400,/0/default.jpg`;
+			const hasValidImage = await checkImageUrl(imageUrl);
+			if (!hasValidImage) return null;
+
+			return {
+				...artData.data,
+				favorite: true,
+				image_url: imageUrl,
+			};
+		} catch {
+			return null;
+		}
+	});
+
+	const artworkResults = await Promise.all(artworkPromises);
+	const validArtwork = artworkResults.filter((art) => art !== null);
+
+	return {
+		isLoggedIn: true,
+		userId,
+		artwork: validArtwork,
+	};
+};
 
 const Favorites = () => {
-	const [artwork, setArtwork] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	const [userId, setUserId] = useState(null);
 	const navigate = useNavigate();
 
-	const checkImageUrl = async (imageUrl) => {
-		try {
-			const response = await fetch(imageUrl, { method: 'HEAD' });
-			if (response.status === 403) {
-				console.log('Image access forbidden (403):', imageUrl);
-				return false;
-			}
-			return response.ok || response.status === 302;
-		} catch (error) {
-			console.log('Image access error:', error);
-			return false;
-		}
-	};
-
-	const fetchFavorites = async () => {
-		setLoading(true);
-		try {
-			const response = await fetch('http://localhost:3000/favorites', {
-				method: 'GET',
-				credentials: 'include',
-			});
-
-			if (response.status === 401) {
-				setIsLoggedIn(false);
-				setUserId(null);
-				setArtwork([]);
-				setLoading(false);
-				return;
-			}
-
-			if (!response.ok) {
-				throw new Error('Failed to fetch favorite artworks');
-			}
-
-			setIsLoggedIn(true);
-			const data = await response.json();
-			setUserId(data.userId || null);
-
-			if (!Array.isArray(data.favorites)) {
-				setArtwork([]);
-				return;
-			}
-
-			const artworkPromises = data.favorites.map(async (fav) => {
-				try {
-					const { data: artData } = await axios.get(
-						`https://api.artic.edu/api/v1/artworks/${fav.id}`
-					);
-
-					if (!artData.data.image_id) {
-						console.log('Skipping artwork due to no image_id:', fav.id);
-						return null;
-					}
-
-					const imageUrl = `https://www.artic.edu/iiif/2/${artData.data.image_id}/full/400,/0/default.jpg`;
-					const hasValidImage = await checkImageUrl(imageUrl);
-
-					if (!hasValidImage) {
-						console.log('Skipping artwork due to invalid image:', fav.id);
-						return null;
-					}
-
-					return {
-						...artData.data,
-						favorite: true,
-						image_url: imageUrl,
-					};
-				} catch (err) {
-					console.error(`Error fetching artwork ${fav.id}:`, err);
-					return null;
-				}
-			});
-
-			const artworkResults = await Promise.all(artworkPromises);
-			const validArtwork = artworkResults.filter((art) => art !== null);
-			setArtwork(validArtwork);
-		} catch (err) {
-			setError(err.message);
-			toast.error('Failed to fetch favorite artworks');
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	useEffect(() => {
-		fetchFavorites();
-	}, []);
+	const { data, isLoading, error, refetch } = useQuery({
+		queryKey: ['favorites'],
+		queryFn: fetchFavorites,
+		refetchOnWindowFocus: false,
+	});
 
 	const handleFavUpdate = async (artworkId) => {
-		if (!isLoggedIn) {
+		if (!data?.isLoggedIn) {
 			toast.error('You must be logged in to update favorites');
 			return;
 		}
-
 		try {
 			const response = await fetch('http://localhost:3000/favorites', {
 				method: 'POST',
@@ -117,46 +85,22 @@ const Favorites = () => {
 				body: JSON.stringify({ artworkId, favorite: false }),
 				credentials: 'include',
 			});
-
-			if (!response.ok) {
-				throw new Error('Failed to update favorite status');
-			}
-
-			setArtwork((prevArtwork) =>
-				prevArtwork.filter((art) => art.id !== artworkId)
-			);
-
+			if (!response.ok) throw new Error('Failed to update favorite status');
 			toast.success('Artwork removed from favorites');
-		} catch (err) {
-			console.error('Error updating favorites:', err);
+			refetch(); // Refresh favorites
+		} catch {
 			toast.error('Failed to update favorite status');
 		}
 	};
 
-	const handleLogin = () => {
-		navigate('/login');
-	};
+	if (isLoading) return <div>Loading artwork...</div>;
+	if (error) return <div>Error: {error.message}</div>;
 
-	if (loading) {
-		return <div>Loading artwork...</div>;
-	}
-
-	if (error) {
-		return <div>Error: {error}</div>;
-	}
+	const { isLoggedIn, artwork } = data;
 
 	if (!isLoggedIn) {
 		return (
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					alignItems: 'center',
-					justifyContent: 'center',
-					marginTop: '100px',
-					textAlign: 'center',
-				}}
-			>
+			<div style={centeredBoxStyle}>
 				<Typography
 					variant='h5'
 					gutterBottom
@@ -173,7 +117,7 @@ const Favorites = () => {
 				<Button
 					variant='contained'
 					color='primary'
-					onClick={handleLogin}
+					onClick={() => navigate('/login')}
 				>
 					Log In
 				</Button>
@@ -183,16 +127,7 @@ const Favorites = () => {
 
 	if (artwork.length === 0) {
 		return (
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					alignItems: 'center',
-					justifyContent: 'center',
-					marginTop: '100px',
-					textAlign: 'center',
-				}}
-			>
+			<div style={centeredBoxStyle}>
 				<Typography
 					variant='h5'
 					gutterBottom
@@ -242,6 +177,15 @@ const Favorites = () => {
 			</Grid2>
 		</div>
 	);
+};
+
+const centeredBoxStyle = {
+	display: 'flex',
+	flexDirection: 'column',
+	alignItems: 'center',
+	justifyContent: 'center',
+	marginTop: '100px',
+	textAlign: 'center',
 };
 
 export default Favorites;

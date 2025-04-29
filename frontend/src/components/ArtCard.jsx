@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Favorite } from '@mui/icons-material';
-import { FavoriteBorder } from '@mui/icons-material';
+import { useState } from 'react';
+import { Favorite, FavoriteBorder } from '@mui/icons-material';
 import ReactCardFlip from 'react-card-flip';
 import Popover from '@mui/material/Popover';
 import Card from '@mui/material/Card';
@@ -14,6 +13,7 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
 	const [flip, setFlip] = useState(false);
+
 	const open = Boolean(anchorEl);
 
 	const handlePopClick = (event) => {
@@ -27,13 +27,11 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 	};
 
 	const handleFavClick = () => {
-		if (!isLoggedIn) {
-			return;
-		}
+		if (!isLoggedIn) return;
 		handleFavUpdate(art.id, !art.favorite);
 	};
 
-	const FavoriteIcon = () => {
+	const renderFavoriteIcon = () => {
 		if (!isLoggedIn) {
 			return (
 				<Tooltip title='Log in to favorite artwork'>
@@ -44,13 +42,10 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 			);
 		}
 
-		return art.favorite ? (
-			<Favorite
-				onClick={handleFavClick}
-				style={{ cursor: 'pointer' }}
-			/>
-		) : (
-			<FavoriteBorder
+		const Icon = art.favorite ? Favorite : FavoriteBorder;
+
+		return (
+			<Icon
 				onClick={handleFavClick}
 				style={{ cursor: 'pointer' }}
 			/>
@@ -62,6 +57,7 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 			isFlipped={flip}
 			flipDirection='horizontal'
 		>
+			{/* Front */}
 			<Card
 				className='card-font'
 				sx={{ maxWidth: 300, maxHeight: 600, display: 'flex' }}
@@ -75,16 +71,12 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 						onClick={handlePopClick}
 					/>
 					<Popover
-						sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
 						id={art.id}
 						open={open}
 						anchorEl={anchorEl}
 						anchorReference='none'
 						onClose={handleClose}
-						anchorOrigin={{
-							vertical: 'bottom',
-							horizontal: 'left',
-						}}
+						sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
 					>
 						<CardMedia
 							component='img'
@@ -99,7 +91,6 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 							gutterBottom
 							fontSize={16}
 							fontWeight={500}
-							component='div'
 						>
 							{art.title}
 						</Typography>
@@ -116,19 +107,18 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 							{art.date_end}
 						</Typography>
 					</CardContent>
+
 					<div
 						style={{
 							display: 'flex',
-							flexDirection: 'row',
 							justifyContent: 'space-between',
 							margin: 25,
 						}}
 					>
-						<FavoriteIcon />
-
+						{renderFavoriteIcon()}
 						<div
 							style={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
-							onClick={() => setFlip(!flip)}
+							onClick={() => setFlip(true)}
 						>
 							Learn More
 						</div>
@@ -136,6 +126,7 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 				</CardActionArea>
 			</Card>
 
+			{/* Back */}
 			<Card
 				className='card-back'
 				sx={{ maxWidth: 300, maxHeight: 600, display: 'flex' }}
@@ -146,7 +137,6 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 							gutterBottom
 							fontSize={16}
 							fontWeight={500}
-							component='div'
 						>
 							{art.title}
 						</Typography>
@@ -200,17 +190,17 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 							Credit: {art.credit_line}
 						</Typography>
 					</CardContent>
+
 					<div
 						style={{
 							display: 'flex',
-							flexDirection: 'row',
 							justifyContent: 'space-between',
 							margin: 25,
 						}}
 					>
 						<div
 							style={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
-							onClick={() => setFlip(!flip)}
+							onClick={() => setFlip(false)}
 						>
 							Back
 						</div>
