@@ -9,10 +9,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 const Account = () => {
 	const addNewPhoto = useRef(null);
-	const { currentUser, setCurrentUser } = useContext(AuthContext);
+	const { currentUser, refetchCurrentUser } = useContext(AuthContext);
 	const queryClient = useQueryClient();
-
-	// Fetch user data using React Query
 	const {
 		data: userData,
 		isLoading,
@@ -33,13 +31,11 @@ const Account = () => {
 			queryClient.setQueryData(['userData'], data);
 		},
 	});
-
 	// Mutation for image upload
 	const uploadImageMutation = useMutation({
 		mutationFn: async (file) => {
 			const formData = new FormData();
 			formData.append('image', file);
-
 			const response = await axios.post(
 				'http://localhost:3000/profile/image',
 				formData,
@@ -50,40 +46,32 @@ const Account = () => {
 					withCredentials: true,
 				}
 			);
-
 			return response.data.user;
 		},
 		onSuccess: (updatedUser) => {
 			updatedUser.profile_image = `http://localhost:3000${updatedUser.profile_image}`;
-			queryClient.setQueryData(['userData'], updatedUser);
-			setCurrentUser(updatedUser);
+			refetchCurrentUser();
 		},
 		onError: (error) => {
 			console.error('Error uploading image:', error);
 		},
 	});
-
 	const handleClick = (event) => {
 		addNewPhoto.current.click(event);
 	};
-
 	const handleChange = (event) => {
 		const fileUploaded = event.target.files[0];
 		if (fileUploaded) {
 			uploadImageMutation.mutate(fileUploaded);
 		}
 	};
-
 	if (isLoading) {
 		return <div>Loading...</div>;
 	}
-
 	if (isError) {
 		return <div>Error fetching user data</div>;
 	}
-
 	const hasCompleteProfile = userData.username && userData.bio;
-
 	return (
 		<>
 			<div
@@ -125,7 +113,6 @@ const Account = () => {
 					style={{ display: 'none' }}
 					accept='image/*'
 				/>
-
 				{userData.username && <h2 style={{ margin: 0 }}>{userData.username}</h2>}
 				{userData.bio && (
 					<p style={{ margin: 0, color: 'gray', fontStyle: 'italic' }}>
@@ -133,7 +120,6 @@ const Account = () => {
 					</p>
 				)}
 			</div>
-
 			{hasCompleteProfile ? (
 				<Form userData={userData} />
 			) : (
