@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
-import { green } from '@mui/material/colors';
-import { red } from '@mui/material/colors';
+import { green, red } from '@mui/material/colors';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -27,12 +26,8 @@ const SignUpBtn = () => {
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
-	const handleMouseDownPassword = (event) => {
-		event.preventDefault();
-	};
-	const handleMouseUpPassword = (event) => {
-		event.preventDefault();
-	};
+	const handleMouseDownPassword = (event) => event.preventDefault();
+	const handleMouseUpPassword = (event) => event.preventDefault();
 
 	const handleSubmit = async () => {
 		if (!password) {
@@ -61,32 +56,6 @@ const SignUpBtn = () => {
 		}
 	};
 
-	const buttonStyle = {
-		padding: '0.5rem',
-		hover: '#6c63ff50',
-		color: '#ffffff',
-		outline: 'none',
-		border: 'none',
-		borderRadius: '1rem',
-		fontSize: '1rem',
-		fontWeight: 500,
-		cursor: 'pointer',
-		transition: '0.2s',
-		width: 150,
-		backgroundColor: isHover ? '#4640ad' : '#6c63ff',
-	};
-
-	const modalStyle = {
-		display: 'flex',
-		flexDirection: 'column',
-		position: 'absolute',
-		top: '50%',
-		left: '50%',
-		transform: 'translate(-50%, -50%)',
-		bgcolor: 'background.paper',
-		maxWidth: 600,
-	};
-
 	const SubmitButton = styled(Button)(({ theme }) => ({
 		color: theme.palette.getContrastText(green[500]),
 		backgroundColor: green[400],
@@ -104,14 +73,29 @@ const SignUpBtn = () => {
 	}));
 
 	return (
-		<div>
-			{/* Sign Up Button */}
-			<button
-				style={buttonStyle}
+		<Box>
+			<Button
 				onClick={handleOpen}
+				sx={{
+					p: '0.5rem',
+					color: '#fff',
+					borderRadius: '1rem',
+					fontSize: '1rem',
+					fontWeight: 500,
+					cursor: 'pointer',
+					transition: '0.2s',
+					textTransform: 'none',
+					width: 150,
+					backgroundColor: isHover ? '#4640ad' : '#6c63ff',
+					'&:hover': {
+						backgroundColor: '#6c63ff50',
+					},
+				}}
+				onMouseEnter={() => setIsHover(true)}
+				onMouseLeave={() => setIsHover(false)}
 			>
 				Sign Up
-			</button>
+			</Button>
 
 			<Modal
 				open={open}
@@ -119,20 +103,34 @@ const SignUpBtn = () => {
 				aria-labelledby='modal-modal-title'
 				aria-describedby='modal-modal-description'
 			>
-				<Box sx={modalStyle}>
-					<div
-						style={{
+				<Box
+					sx={{
+						display: 'flex',
+						flexDirection: 'column',
+						position: 'absolute',
+						top: '50%',
+						left: '50%',
+						transform: 'translate(-50%, -50%)',
+						bgcolor: 'background.paper',
+						maxWidth: 600,
+					}}
+				>
+					<Box
+						sx={{
 							display: 'flex',
 							flexDirection: 'column',
 							alignItems: 'center',
 							justifyContent: 'center',
-							gap: 25,
+							gap: 3,
 							maxWidth: 600,
-							padding: 50,
+							p: 6,
 						}}
 					>
 						<Typography variant='h5'>Sign Up</Typography>
-						<Typography variant='h7'>Welcome, please sign up to continue</Typography>
+						<Typography variant='subtitle2'>
+							Welcome, please sign up to continue
+						</Typography>
+
 						<FormControl
 							sx={{ width: '100%' }}
 							variant='outlined'
@@ -142,10 +140,10 @@ const SignUpBtn = () => {
 								id='outlined-adornment-email'
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
-								endAdornment={<InputAdornment position='end'></InputAdornment>}
 								label='Email'
 							/>
 						</FormControl>
+
 						<FormControl
 							sx={{ width: '100%' }}
 							variant='outlined'
@@ -153,9 +151,9 @@ const SignUpBtn = () => {
 							<InputLabel htmlFor='outlined-adornment-password'>Password</InputLabel>
 							<OutlinedInput
 								id='outlined-adornment-password'
+								type={showPassword ? 'text' : 'password'}
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
-								type={showPassword ? 'text' : 'password'}
 								endAdornment={
 									<InputAdornment position='end'>
 										<IconButton
@@ -172,6 +170,7 @@ const SignUpBtn = () => {
 								label='Password'
 							/>
 						</FormControl>
+
 						<FormControl
 							sx={{ width: '100%' }}
 							variant='outlined'
@@ -181,9 +180,9 @@ const SignUpBtn = () => {
 							</InputLabel>
 							<OutlinedInput
 								id='outlined-adornment-repeat-password'
+								type={showPassword ? 'text' : 'password'}
 								value={repeatPassword}
 								onChange={(e) => setRepeatPassword(e.target.value)}
-								type={showPassword ? 'text' : 'password'}
 								endAdornment={
 									<InputAdornment position='end'>
 										<IconButton
@@ -200,33 +199,32 @@ const SignUpBtn = () => {
 								label='Repeat Password'
 							/>
 						</FormControl>
-						<div
-							style={{
+
+						<Box
+							sx={{
 								display: 'flex',
 								justifyContent: 'center',
-								gap: 50,
-								marginTop: 25,
+								gap: 6,
+								mt: 3,
 							}}
 						>
 							<SubmitButton
-								sx={{ color: 'white' }}
 								variant='contained'
 								onClick={handleSubmit}
 							>
 								Submit
 							</SubmitButton>
 							<CancelButton
-								sx={{ color: 'white' }}
 								variant='contained'
 								onClick={handleClose}
 							>
 								Cancel
 							</CancelButton>
-						</div>
-					</div>
+						</Box>
+					</Box>
 				</Box>
 			</Modal>
-		</div>
+		</Box>
 	);
 };
 

@@ -1,7 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { styled } from '@mui/material/styles';
-import { green } from '@mui/material/colors';
-import { red } from '@mui/material/colors';
+import { green, red } from '@mui/material/colors';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -62,9 +60,7 @@ const LoginBtn = () => {
 							userData.user.profile_image = `http://localhost:3000${userData.user.profile_image}`;
 						}
 						setCurrentUser(userData.user);
-
 						toast.success('Logged in successfully!');
-
 						handleClose();
 					} else {
 						setError('Error fetching user profile');
@@ -83,78 +79,63 @@ const LoginBtn = () => {
 		}
 	};
 
-	const buttonStyle = {
-		padding: '0.5rem',
-		color: '#ffffff',
-		outline: 'none',
-		border: 'none',
-		borderRadius: '1rem',
-		fontSize: '1rem',
-		fontWeight: 500,
-		cursor: 'pointer',
-		transition: '0.2s',
-		width: 150,
-		backgroundColor: '#6c63ff',
-	};
-
-	const modalStyle = {
-		display: 'flex',
-		flexDirection: 'column',
-		position: 'absolute',
-		top: '50%',
-		left: '50%',
-		transform: 'translate(-50%, -50%)',
-		bgcolor: 'background.paper',
-		maxWidth: 600,
-	};
-
-	const SubmitButton = styled(Button)(({ theme }) => ({
-		color: theme.palette.getContrastText(green[500]),
-		backgroundColor: green[400],
-		'&:hover': {
-			backgroundColor: green[700],
-		},
-	}));
-
-	const CancelButton = styled(Button)(({ theme }) => ({
-		color: theme.palette.getContrastText(red[500]),
-		backgroundColor: red[500],
-		'&:hover': {
-			backgroundColor: red[700],
-		},
-	}));
-
 	return (
-		<div>
-			{/* Login Button */}
-			<button
-				style={buttonStyle}
+		<Box>
+			<Button
 				onClick={handleOpen}
+				sx={{
+					p: '0.5rem',
+					color: '#ffffff',
+					borderRadius: '1rem',
+					fontSize: '1rem',
+					fontWeight: 500,
+					cursor: 'pointer',
+					transition: '0.2s',
+					width: 150,
+					textTransform: 'none',
+					bgcolor: '#6c63ff',
+					'&:hover': {
+						bgcolor: '#6c63ff90',
+					},
+				}}
 			>
 				Login
-			</button>
+			</Button>
 
-			{/* Login Modal */}
 			<Modal
 				open={open}
 				onClose={handleClose}
 				aria-labelledby='modal-modal-title'
 				aria-describedby='modal-modal-description'
 			>
-				<Box sx={modalStyle}>
-					<div
-						style={{
+				<Box
+					sx={{
+						display: 'flex',
+						flexDirection: 'column',
+						position: 'absolute',
+						top: '50%',
+						left: '50%',
+						transform: 'translate(-50%, -50%)',
+						bgcolor: 'background.paper',
+						maxWidth: 600,
+					}}
+				>
+					<Box
+						sx={{
 							display: 'flex',
 							flexDirection: 'column',
 							alignItems: 'center',
 							justifyContent: 'center',
-							gap: 25,
+							gap: 3,
 							maxWidth: 600,
-							padding: 50,
+							p: 6,
 						}}
 					>
 						<Typography variant='h5'>Login</Typography>
-						<Typography variant='h7'>Welcome, please login to continue</Typography>
+						<Typography variant='subtitle2'>
+							Welcome, please login to continue
+						</Typography>
+
 						<FormControl
 							sx={{ width: '100%' }}
 							variant='outlined'
@@ -167,6 +148,7 @@ const LoginBtn = () => {
 								label='Email'
 							/>
 						</FormControl>
+
 						<FormControl
 							sx={{ width: '100%' }}
 							variant='outlined'
@@ -192,43 +174,58 @@ const LoginBtn = () => {
 								label='Password'
 							/>
 						</FormControl>
+
 						{error && <Typography color='error'>{error}</Typography>}
-						<div
-							style={{
+
+						<Box
+							sx={{
 								display: 'flex',
 								flexDirection: 'row',
 								alignItems: 'center',
 							}}
 						>
 							<Checkbox /> Remember Password
-						</div>
-						<div
-							style={{
+						</Box>
+
+						<Box
+							sx={{
 								display: 'flex',
 								justifyContent: 'center',
-								gap: 50,
-								marginTop: 25,
+								gap: 6,
+								mt: 3,
 							}}
 						>
-							<SubmitButton
-								sx={{ color: 'white' }}
+							<Button
 								variant='contained'
 								onClick={handleLogin}
+								sx={{
+									color: 'white',
+									bgcolor: green[400],
+									'&:hover': {
+										bgcolor: green[700],
+									},
+								}}
 							>
 								Submit
-							</SubmitButton>
-							<CancelButton
-								sx={{ color: 'white' }}
+							</Button>
+							<Button
 								variant='contained'
 								onClick={handleClose}
+								sx={{
+									color: 'white',
+									bgcolor: red[500],
+									'&:hover': {
+										bgcolor: red[700],
+									},
+								}}
 							>
 								Cancel
-							</CancelButton>
-						</div>
-					</div>
+							</Button>
+						</Box>
+					</Box>
 				</Box>
 			</Modal>
-		</div>
+		</Box>
 	);
 };
 
