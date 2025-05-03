@@ -2,7 +2,7 @@ import React from 'react';
 import Grid2 from '@mui/material/Grid2';
 import ArtCard from '../components/ArtCard';
 import axios from 'axios';
-import { Typography, Button } from '@mui/material';
+import { Typography, Button, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
@@ -93,14 +93,23 @@ const Favorites = () => {
 		}
 	};
 
-	if (isLoading) return <div>Loading artwork...</div>;
-	if (error) return <div>Error: {error.message}</div>;
+	if (isLoading) return <Box>Loading artwork...</Box>;
+	if (error) return <Box>Error: {error.message}</Box>;
 
 	const { isLoggedIn, artwork } = data;
 
 	if (!isLoggedIn) {
 		return (
-			<div style={centeredBoxStyle}>
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+					justifyContent: 'center',
+					mt: '100px',
+					textAlign: 'center',
+				}}
+			>
 				<Typography
 					variant='h5'
 					gutterBottom
@@ -110,7 +119,7 @@ const Favorites = () => {
 				<Typography
 					variant='body1'
 					gutterBottom
-					style={{ marginBottom: '20px' }}
+					sx={{ mb: 2 }}
 				>
 					Please log in to see your favorite artworks
 				</Typography>
@@ -121,13 +130,22 @@ const Favorites = () => {
 				>
 					Log In
 				</Button>
-			</div>
+			</Box>
 		);
 	}
 
 	if (artwork.length === 0) {
 		return (
-			<div style={centeredBoxStyle}>
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+					justifyContent: 'center',
+					mt: '100px',
+					textAlign: 'center',
+				}}
+			>
 				<Typography
 					variant='h5'
 					gutterBottom
@@ -137,7 +155,7 @@ const Favorites = () => {
 				<Typography
 					variant='body1'
 					gutterBottom
-					style={{ marginBottom: '20px' }}
+					sx={{ mb: 2 }}
 				>
 					Browse the gallery and add some artworks to your favorites
 				</Typography>
@@ -148,18 +166,25 @@ const Favorites = () => {
 				>
 					Go to Gallery
 				</Button>
-			</div>
+			</Box>
 		);
 	}
 
 	return (
-		<div
-			style={{ display: 'flex', flexDirection: 'column', gap: 15, marginTop: 25 }}
+		<Box
+			sx={{
+				display: 'flex',
+				flexDirection: 'column',
+				justifyContent: 'space-between',
+				gap: 2,
+				ml: 10,
+				mr: 10,
+			}}
 		>
 			<Grid2
 				container
 				spacing={8}
-				style={{ marginTop: 25, justifyContent: 'space-between' }}
+				sx={{ mt: 3, justifyContent: 'space-between' }}
 			>
 				{artwork.map((art) => (
 					<Grid2
@@ -175,17 +200,8 @@ const Favorites = () => {
 					</Grid2>
 				))}
 			</Grid2>
-		</div>
+		</Box>
 	);
-};
-
-const centeredBoxStyle = {
-	display: 'flex',
-	flexDirection: 'column',
-	alignItems: 'center',
-	justifyContent: 'center',
-	marginTop: '100px',
-	textAlign: 'center',
 };
 
 export default Favorites;

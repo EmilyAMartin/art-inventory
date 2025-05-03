@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { buttonStyle } from '../styles/modalButtons';
+import { Box, Button } from '@mui/material'; // Import MUI components
 import ImageUploadModal from './ImageUploadModal';
 import toast from 'react-hot-toast';
 
@@ -53,15 +53,30 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 	const handleMouseLeave = () => setIsHover(false);
 
 	return (
-		<div>
-			<div
-				style={buttonStyle(isHover)}
+		<Box>
+			<Button
+				sx={{
+					p: '0.5rem',
+					color: '#fff',
+					borderRadius: '1rem',
+					fontSize: '1rem',
+					fontWeight: 500,
+					cursor: 'pointer',
+					transition: '0.2s',
+					textTransform: 'none',
+					width: 150,
+					backgroundColor: isHover ? '#4640ad' : '#6c63ff',
+					'&:hover': {
+						backgroundColor: '#6c63ff50',
+					},
+				}}
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
 				onClick={handleOpen}
 			>
-				Add New Artwork
-			</div>
+				New Artwork
+			</Button>
+
 			<ImageUploadModal
 				open={open}
 				onClose={handleClose}
@@ -70,7 +85,7 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 				fields={fields}
 				allowMultiple={false}
 			/>
-		</div>
+		</Box>
 	);
 };
 

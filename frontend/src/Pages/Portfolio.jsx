@@ -5,6 +5,7 @@ import NewArtCardCarousel from '../components/NewArtCarousel';
 import toast from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
 import { queryClient } from '../components/queryClient';
+import { Box, Typography } from '@mui/material'; // Import MUI components
 
 const fetchPortfolioData = async () => {
 	const [projectsResponse, artworksResponse] = await Promise.all([
@@ -95,60 +96,71 @@ const PortfolioPage = () => {
 
 	const renderProjects = () => {
 		if (!projects || projects.length === 0) {
-			return (
-				<div style={{ marginTop: '1rem', color: '#666' }}>
-					No projects available
-				</div>
-			);
+			return <Box sx={{ mt: 2, color: '#666' }}>No projects available</Box>;
 		}
 
 		return (
-			<div>
+			<Box>
 				<ProjectCardCarousel
 					projects={projects}
 					handleDeleteProject={handleDeleteProject}
 				/>
-			</div>
+			</Box>
 		);
 	};
 
 	const renderArtwork = () => {
 		if (!artworks || artworks.length === 0) {
-			return (
-				<div style={{ marginTop: '1rem', color: '#666' }}>No artwork available</div>
-			);
+			return <Box sx={{ mt: 2, color: '#666' }}>No artwork available</Box>;
 		}
 
 		return (
-			<div>
+			<Box>
 				<NewArtCardCarousel
 					artworks={artworks}
 					handleDeleteNewArtwork={handleDeleteNewArtwork}
 				/>
-			</div>
+			</Box>
 		);
 	};
 
 	return (
-		<div style={{ marginBottom: '3rem' }}>
+		<Box
+			sx={{
+				display: 'flex',
+				flexDirection: 'column',
+				justifyContent: 'space-between',
+				gap: 2,
+				ml: 10,
+				mr: 10,
+			}}
+		>
 			{/* Project Section */}
-			<div style={{ margin: '2rem' }}>
-				<h2>Portfolio</h2>
-			</div>
-			<div style={{ margin: '2rem' }}>
-				<AddProjectBtn onProjectAdded={handleProjectAdded} />
-			</div>
+			<Typography
+				variant='h5'
+				sx={{
+					marginTop: 5,
+					fontWeight: 500,
+				}}
+			>
+				Portfolio
+			</Typography>
+			<AddProjectBtn onProjectAdded={handleProjectAdded} />
 			{isLoading ? <div>Loading projects...</div> : renderProjects()}
 
 			{/* Artwork Section */}
-			<div style={{ marginTop: '15rem', marginLeft: '2rem' }}>
-				<h2>Artwork</h2>
-			</div>
-			<div style={{ margin: '2rem' }}>
-				<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
-			</div>
+			<Typography
+				variant='h5'
+				sx={{
+					marginTop: 35,
+					fontWeight: 500,
+				}}
+			>
+				Artwork
+			</Typography>
+			<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
 			{isLoading ? <div>Loading artwork...</div> : renderArtwork()}
-		</div>
+		</Box>
 	);
 };
 

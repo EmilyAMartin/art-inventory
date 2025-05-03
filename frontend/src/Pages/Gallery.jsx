@@ -9,9 +9,10 @@ import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
 import ArtCard from '../components/ArtCard';
 import toast from 'react-hot-toast';
+import { Typography } from '@mui/material';
 
 const BASE_URL = 'https://api.artic.edu/api/v1/artworks';
-const RESULTS_PER_PAGE = 15;
+const RESULTS_PER_PAGE = 12;
 
 const checkImageUrl = async (imageUrl) => {
 	try {
@@ -141,7 +142,7 @@ const Gallery = () => {
 	};
 
 	return (
-		<Box sx={{ display: 'flex', flexDirection: 'column', margin: 5 }}>
+		<Box sx={{ display: 'flex', flexDirection: 'column', ml: 10, mr: 10 }}>
 			{/* Search Bar */}
 			<Box
 				className='search-bar'
@@ -218,7 +219,7 @@ const Gallery = () => {
 
 			{/* Artwork Grid */}
 			<Box>
-				{isLoading && <div>Loading...</div>}
+				{isLoading && <Typography>Loading...</Typography>}
 				{error && <div>Error: {error.message}</div>}
 				<Grid2
 					container

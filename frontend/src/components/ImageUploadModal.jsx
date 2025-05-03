@@ -1,13 +1,16 @@
 import { useState } from 'react';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
-import { TextField } from '@mui/material';
+import {
+	Modal,
+	Box,
+	Typography,
+	OutlinedInput,
+	InputLabel,
+	FormControl,
+	TextField,
+	Button,
+} from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { modalStyle, SubmitButton, CancelButton } from '../styles/modalButtons';
+import { modalStyle } from '../styles/modalButtons'; // Kept only modalStyle
 import toast from 'react-hot-toast';
 
 const ImageUploadModal = ({
@@ -33,8 +36,7 @@ const ImageUploadModal = ({
 			setIsSubmitting(true);
 
 			const missingFields = fields
-				.filter((field) => field.required)
-				.filter((field) => !formData[field.name])
+				.filter((field) => field.required && !formData[field.name])
 				.map((field) => field.label);
 
 			if (missingFields.length > 0) {
@@ -82,18 +84,6 @@ const ImageUploadModal = ({
 		}
 	};
 
-	const handleNext = () => {
-		if (currentIndex < images.length - 1) {
-			setCurrentIndex(currentIndex + 1);
-		}
-	};
-
-	const handlePrev = () => {
-		if (currentIndex > 0) {
-			setCurrentIndex(currentIndex - 1);
-		}
-	};
-
 	const resetForm = () => {
 		setFormData(
 			fields.reduce((acc, field) => ({ ...acc, [field.name]: '' }), {})
@@ -114,13 +104,13 @@ const ImageUploadModal = ({
 			aria-describedby='modal-modal-description'
 		>
 			<Box sx={modalStyle}>
-				<div
-					style={{
+				<Box
+					sx={{
 						display: 'flex',
 						flexDirection: 'column',
 						alignItems: 'center',
 						justifyContent: 'center',
-						gap: 20,
+						gap: 2.5,
 						width: '100%',
 					}}
 				>
@@ -157,17 +147,17 @@ const ImageUploadModal = ({
 						)
 					)}
 
-					<div
-						style={{
+					<Box
+						sx={{
 							display: 'flex',
 							justifyContent: 'center',
 							alignItems: 'center',
 							backgroundColor: '#6c63ff',
-							padding: '8px',
+							p: 1,
 							fontSize: '0.9rem',
 							width: '100%',
 							cursor: 'pointer',
-							borderRadius: '4px',
+							borderRadius: 1,
 						}}
 					>
 						<label
@@ -181,7 +171,7 @@ const ImageUploadModal = ({
 							}}
 						>
 							<CloudUploadIcon />
-							Upload file
+							<Typography>Upload file</Typography>
 						</label>
 						<input
 							id='image-upload'
@@ -190,10 +180,10 @@ const ImageUploadModal = ({
 							style={{ display: 'none' }}
 							onChange={handleImageChange}
 						/>
-					</div>
+					</Box>
 
 					{images.length > 0 && (
-						<div style={{ textAlign: 'center' }}>
+						<Box sx={{ textAlign: 'center' }}>
 							<img
 								src={images[0]}
 								alt='Uploaded'
@@ -203,36 +193,54 @@ const ImageUploadModal = ({
 									objectFit: 'cover',
 								}}
 							/>
-						</div>
+						</Box>
 					)}
 
-					<div
-						style={{
+					<Box
+						sx={{
 							display: 'flex',
 							justifyContent: 'center',
-							gap: 30,
-							marginTop: 25,
+							gap: 4,
+							mt: 3,
 							flexDirection: 'row',
 						}}
 					>
-						<SubmitButton
-							sx={{ color: 'white' }}
+						<Button
 							variant='contained'
 							onClick={handleSubmit}
+							sx={{
+								fontSize: '1rem',
+								textTransform: 'none',
+								color: '#fff',
+								borderRadius: '1rem',
+								bgcolor: '#66bb6a',
+								'&:hover': {
+									bgcolor: '#388e3c',
+								},
+							}}
 							disabled={isSubmitting}
 						>
 							{isSubmitting ? 'Submitting...' : submitText}
-						</SubmitButton>
-						<CancelButton
-							sx={{ color: 'white' }}
+						</Button>
+						<Button
 							variant='contained'
 							onClick={handleClose}
+							sx={{
+								fontSize: '1rem',
+								textTransform: 'none',
+								color: '#fff',
+								borderRadius: '1rem',
+								bgcolor: '#f44336',
+								'&:hover': {
+									bgcolor: '#d32f2f',
+								},
+							}}
 							disabled={isSubmitting}
 						>
 							{cancelText}
-						</CancelButton>
-					</div>
-				</div>
+						</Button>
+					</Box>
+				</Box>
 			</Box>
 		</Modal>
 	);
