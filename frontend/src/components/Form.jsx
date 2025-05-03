@@ -7,6 +7,8 @@ import {
 	InputLabel,
 	InputAdornment,
 	IconButton,
+	Box,
+	Button,
 } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -64,12 +66,10 @@ function Form({ userData }) {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-
 		if (newpassword && newpassword !== reppassword) {
 			toast.error('New password and re-typed password do not match!');
 			return;
 		}
-
 		mutation.mutate(values);
 	};
 
@@ -83,22 +83,6 @@ function Form({ userData }) {
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 	const handleMouseDownPassword = (event) => event.preventDefault();
 
-	const buttonStyle = {
-		marginTop: '1.5rem',
-		padding: '0.6rem',
-		hover: '#6c63ff50',
-		color: '#ffffff',
-		outline: 'none',
-		border: 'none',
-		borderRadius: '0.5rem',
-		fontSize: '1rem',
-		fontWeight: 500,
-		cursor: 'pointer',
-		transition: '0.2s',
-		width: 150,
-		backgroundColor: '#6c63ff',
-	};
-
 	if (isLoginLoading) {
 		return <Typography>Loading...</Typography>;
 	}
@@ -107,7 +91,7 @@ function Form({ userData }) {
 		return (
 			<Typography
 				variant='h6'
-				style={{ textAlign: 'center' }}
+				sx={{ textAlign: 'center' }}
 			>
 				You must be logged in to update your profile.
 			</Typography>
@@ -115,14 +99,18 @@ function Form({ userData }) {
 	}
 
 	return (
-		<main>
-			<form
-				style={{ display: 'flex', flexDirection: 'column', gap: 25 }}
+		<Box sx={{ ml: 10, mr: 10 }}>
+			<Box
+				component='form'
 				onSubmit={handleSubmit}
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					gap: 3,
+				}}
 			>
 				<Typography variant='h6'>Profile</Typography>
 
-				{/* Username */}
 				<TextField
 					label='Username'
 					type='text'
@@ -135,7 +123,6 @@ function Form({ userData }) {
 					margin='normal'
 				/>
 
-				{/* Email */}
 				<TextField
 					label='Email'
 					type='email'
@@ -148,7 +135,6 @@ function Form({ userData }) {
 					margin='normal'
 				/>
 
-				{/* Bio */}
 				<TextField
 					label='Bio'
 					type='text'
@@ -164,13 +150,12 @@ function Form({ userData }) {
 				/>
 
 				<Typography
-					marginTop='1rem'
 					variant='h6'
+					sx={{ mt: 2 }}
 				>
 					Password and Security
 				</Typography>
 
-				{/* Current Password */}
 				<TextField
 					fullWidth
 					margin='normal'
@@ -180,7 +165,6 @@ function Form({ userData }) {
 					value={'**********'}
 				/>
 
-				{/* New Password */}
 				<FormControl
 					fullWidth
 					margin='normal'
@@ -197,9 +181,7 @@ function Form({ userData }) {
 						endAdornment={
 							<InputAdornment position='end'>
 								<IconButton
-									aria-label={
-										showPassword ? 'hide the password' : 'display the password'
-									}
+									aria-label='toggle password visibility'
 									onClick={handleClickShowPassword}
 									onMouseDown={handleMouseDownPassword}
 									edge='end'
@@ -211,7 +193,6 @@ function Form({ userData }) {
 					/>
 				</FormControl>
 
-				{/* Re-Type Password */}
 				<FormControl
 					fullWidth
 					margin='normal'
@@ -230,9 +211,7 @@ function Form({ userData }) {
 						endAdornment={
 							<InputAdornment position='end'>
 								<IconButton
-									aria-label={
-										showPassword ? 'hide the password' : 'display the password'
-									}
+									aria-label='toggle password visibility'
 									onClick={handleClickShowPassword}
 									onMouseDown={handleMouseDownPassword}
 									edge='end'
@@ -244,25 +223,31 @@ function Form({ userData }) {
 					/>
 				</FormControl>
 
-				{/* Submit Button */}
-				<div
-					style={{
-						display: 'flex',
-						justifyContent: 'center',
-						alignContent: 'center',
-						paddingBottom: 30,
-					}}
-				>
-					<button
-						style={buttonStyle}
+				<Box sx={{ display: 'flex', justifyContent: 'center', pb: 4 }}>
+					<Button
 						type='submit'
 						disabled={mutation.isLoading}
+						sx={{
+							p: '0.5rem',
+							color: '#ffffff',
+							borderRadius: '1rem',
+							fontSize: '1rem',
+							fontWeight: 500,
+							cursor: 'pointer',
+							transition: '0.2s',
+							width: 150,
+							textTransform: 'none',
+							bgcolor: '#6c63ff',
+							'&:hover': {
+								bgcolor: '#6c63ff90',
+							},
+						}}
 					>
 						{mutation.isLoading ? 'Updating...' : 'Submit'}
-					</button>
-				</div>
-			</form>
-		</main>
+					</Button>
+				</Box>
+			</Box>
+		</Box>
 	);
 }
 

@@ -179,6 +179,7 @@ const Favorites = () => {
 				gap: 2,
 				ml: 10,
 				mr: 10,
+				mt: 5,
 			}}
 		>
 			<Grid2

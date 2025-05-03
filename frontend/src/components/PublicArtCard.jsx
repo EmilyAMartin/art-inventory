@@ -6,6 +6,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import ReactCardFlip from 'react-card-flip';
 import CardActionArea from '@mui/material/CardActionArea';
+import Box from '@mui/material/Box';
 
 const PublicArtCard = ({ artwork }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -13,9 +14,7 @@ const PublicArtCard = ({ artwork }) => {
 	const [flip, setFlip] = useState(false);
 	const open = Boolean(anchorEl);
 
-	if (!artwork) {
-		return null;
-	}
+	if (!artwork) return null;
 
 	const handlePopClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -27,60 +26,59 @@ const PublicArtCard = ({ artwork }) => {
 		setPopoverImageId(null);
 	};
 
-	// Use only the first image
 	const imageUrl =
 		artwork.images && artwork.images.length > 0
 			? `http://localhost:3000/uploads/${artwork.images[0]}`
 			: null;
 
 	return (
-		<div style={{ marginTop: '1rem' }}>
+		<Box sx={{ mt: '1rem' }}>
 			<ReactCardFlip
 				isFlipped={flip}
 				flipDirection='horizontal'
 			>
-				<Card
-					className='card-font'
-					sx={{ maxWidth: 300, maxHeight: 600 }}
-				>
+				{/* Front Side */}
+				<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
 					<CardActionArea>
 						<CardMedia
-							style={{ width: 300, height: 300 }}
 							component='img'
 							image={imageUrl}
 							alt='Artwork Image'
 							onClick={handlePopClick}
+							sx={{ width: 300, height: 300 }}
 						/>
 
 						<Popover
-							sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
 							open={open}
 							anchorEl={anchorEl}
-							anchorReference='none'
 							onClose={handleClose}
+							anchorReference='none'
 							anchorOrigin={{
 								vertical: 'bottom',
 								horizontal: 'left',
+							}}
+							sx={{
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
 							}}
 						>
 							<CardMedia
 								component='img'
 								height='140'
 								image={popoverImageId}
-								alt=''
+								alt='Enlarged Artwork'
 							/>
 						</Popover>
 
-						<CardContent style={{ width: 300, height: 200 }}>
+						<CardContent sx={{ width: 300, height: 200 }}>
 							<Typography
 								gutterBottom
 								fontSize={16}
 								fontWeight={500}
-								component='div'
 							>
 								{artwork.title}
 							</Typography>
-
 							<Typography
 								variant='body2'
 								sx={{ color: 'text.secondary' }}
@@ -95,35 +93,40 @@ const PublicArtCard = ({ artwork }) => {
 							</Typography>
 						</CardContent>
 
-						<div
+						<Box
 							className='favorites-more'
-							style={{
+							sx={{
 								display: 'flex',
 								flexDirection: 'row',
 								justifyContent: 'space-between',
-								margin: 25,
+								m: 3,
 							}}
 						>
-							<div
-								style={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
-								onClick={() => setFlip(!flip)}
+							<Box
+								sx={{
+									display: 'flex',
+									flexDirection: 'row',
+									justifyContent: 'space-between',
+								}}
 							>
-								Learn More
-							</div>
-						</div>
+								<Typography
+									sx={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
+									onClick={() => setFlip(!flip)}
+								>
+									Learn More
+								</Typography>
+							</Box>
+						</Box>
 					</CardActionArea>
 				</Card>
 
-				<Card
-					className='card-back'
-					sx={{ maxWidth: 300, maxHeight: 600 }}
-				>
-					<CardContent style={{ width: 300, height: 500 }}>
+				{/* Back Side */}
+				<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
+					<CardContent sx={{ width: 300, height: 500 }}>
 						<Typography
 							gutterBottom
 							fontSize={16}
 							fontWeight={500}
-							component='div'
 						>
 							{artwork.title}
 						</Typography>
@@ -164,24 +167,31 @@ const PublicArtCard = ({ artwork }) => {
 						</Typography>
 					</CardContent>
 
-					<div
-						style={{
+					<Box
+						sx={{
 							display: 'flex',
 							flexDirection: 'row',
 							justifyContent: 'space-between',
-							margin: 25,
+							m: 3,
 						}}
 					>
-						<div
-							style={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
-							onClick={() => setFlip(!flip)}
+						<Box
+							sx={{
+								display: 'flex',
+								flexDirection: 'row',
+							}}
 						>
-							Back
-						</div>
-					</div>
+							<Typography
+								sx={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
+								onClick={() => setFlip(!flip)}
+							>
+								Back
+							</Typography>
+						</Box>
+					</Box>
 				</Card>
 			</ReactCardFlip>
-		</div>
+		</Box>
 	);
 };
 

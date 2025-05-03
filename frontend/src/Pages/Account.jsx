@@ -6,11 +6,13 @@ import { useContext } from 'react';
 import { AuthContext } from './Context';
 import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { Box, Typography } from '@mui/material';
 
 const Account = () => {
 	const addNewPhoto = useRef(null);
 	const { currentUser, refetchCurrentUser } = useContext(AuthContext);
 	const queryClient = useQueryClient();
+
 	const {
 		data: userData,
 		isLoading,
@@ -31,7 +33,7 @@ const Account = () => {
 			queryClient.setQueryData(['userData'], data);
 		},
 	});
-	// Mutation for image upload
+
 	const uploadImageMutation = useMutation({
 		mutationFn: async (file) => {
 			const formData = new FormData();
@@ -56,29 +58,30 @@ const Account = () => {
 			console.error('Error uploading image:', error);
 		},
 	});
+
 	const handleClick = (event) => {
 		addNewPhoto.current.click(event);
 	};
+
 	const handleChange = (event) => {
 		const fileUploaded = event.target.files[0];
 		if (fileUploaded) {
 			uploadImageMutation.mutate(fileUploaded);
 		}
 	};
-	if (isLoading) {
-		return <div>Loading...</div>;
-	}
-	if (isError) {
-		return <div>Error fetching user data</div>;
-	}
+
+	if (isLoading) return <Box>Loading...</Box>;
+	if (isError) return <Box>Error fetching user data</Box>;
+
 	const hasCompleteProfile = userData.username && userData.bio;
+
 	return (
 		<>
-			<div
+			<Box
 				className='profile-header'
-				style={{
-					marginTop: 50,
-					gap: 25,
+				sx={{
+					mt: 6,
+					gap: 3,
 					display: 'flex',
 					flexDirection: 'column',
 					justifyContent: 'center',
@@ -87,10 +90,11 @@ const Account = () => {
 			>
 				{userData.profile_image ? (
 					<Link to={`/users/${currentUser.id}`}>
-						<img
+						<Box
+							component='img'
 							src={userData.profile_image}
 							alt='Profile'
-							style={{
+							sx={{
 								width: 150,
 								height: 150,
 								borderRadius: '50%',
@@ -113,21 +117,37 @@ const Account = () => {
 					style={{ display: 'none' }}
 					accept='image/*'
 				/>
-				{userData.username && <h2 style={{ margin: 0 }}>{userData.username}</h2>}
-				{userData.bio && (
-					<p style={{ margin: 0, color: 'gray', fontStyle: 'italic' }}>
-						{userData.bio}
-					</p>
+				{userData.username && (
+					<Typography
+						variant='h5'
+						sx={{ m: 0 }}
+					>
+						{userData.username}
+					</Typography>
 				)}
-			</div>
+				{userData.bio && (
+					<Typography
+						variant='body1'
+						sx={{ m: 0, color: 'gray', fontStyle: 'italic' }}
+					>
+						{userData.bio}
+					</Typography>
+				)}
+			</Box>
+
 			{hasCompleteProfile ? (
 				<Form userData={userData} />
 			) : (
-				<div>
-					<h2>Your profile is incomplete</h2>
-					<p>Please complete your profile by providing a username and bio.</p>
+				<Box sx={{ mt: 4 }}>
+					<Typography variant='h6'>Your profile is incomplete</Typography>
+					<Typography
+						variant='body2'
+						sx={{ mb: 2 }}
+					>
+						Please complete your profile by providing a username and bio.
+					</Typography>
 					<Form userData={userData} />
-				</div>
+				</Box>
 			)}
 		</>
 	);

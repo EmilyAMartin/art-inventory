@@ -19,7 +19,6 @@ export const Navbar = () => {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const navigate = useNavigate();
-	const theme = useTheme();
 
 	const handleLinkClick = () => {
 		setMenuOpen(false);
@@ -52,7 +51,8 @@ export const Navbar = () => {
 		textDecoration: 'none',
 		color: 'black',
 		display: 'block',
-		padding: '1rem',
+		px: '1rem',
+		py: '0.75rem',
 		borderRadius: '0.5rem',
 		backgroundColor: isActive ? 'lightgray' : 'transparent',
 		'&:hover': {
@@ -67,14 +67,15 @@ export const Navbar = () => {
 				display: 'flex',
 				justifyContent: 'space-between',
 				alignItems: 'center',
-				mt: '3rem',
-				backgroundColor: '#fff',
+				mt: 6,
+				ml: 1,
+				mr: 2,
+				bgcolor: '#fff',
 				position: 'sticky',
 				top: 0,
 				zIndex: 1,
 				flexDirection: { xs: 'column', sm: 'row' },
-				paddingLeft: { xs: '0.5rem', sm: '3rem' },
-				paddingRight: { xs: '0.5rem', sm: '3rem' },
+				px: { xs: '0.5rem', sm: '3rem' },
 			}}
 		>
 			{/* Logo */}
@@ -89,10 +90,11 @@ export const Navbar = () => {
 					ml: 2,
 				}}
 			>
-				<img
+				<Box
+					component='img'
 					src='./Images/Logo.png'
 					alt='logo portfolio'
-					width='85%'
+					sx={{ width: '85%' }}
 				/>
 			</Box>
 
@@ -118,73 +120,50 @@ export const Navbar = () => {
 					flexDirection: { xs: 'column', sm: 'row' },
 					width: { xs: '100%', sm: 'auto' },
 					listStyle: 'none',
-					padding: 0,
-					margin: 0,
+					p: 0,
+					m: 0,
 					mb: { xs: '0.25rem', sm: 0 },
 				}}
 			>
-				{/* Home */}
-				<Box
-					component='li'
-					sx={{ width: { xs: '100%', sm: 'auto' }, textAlign: 'center' }}
-				>
-					<Typography
-						component={NavLink}
-						to='/'
-						onClick={handleLinkClick}
-						sx={linkSx}
+				{/* Common Navigation Items */}
+				{['/', '/Gallery'].map((path, index) => (
+					<Box
+						component='li'
+						key={path}
+						sx={{ width: { xs: '100%', sm: 'auto' }, textAlign: 'center' }}
 					>
-						Home
-					</Typography>
-				</Box>
+						<Typography
+							component={NavLink}
+							to={path}
+							onClick={handleLinkClick}
+							sx={linkSx}
+						>
+							{index === 0 ? 'Home' : 'Gallery'}
+						</Typography>
+					</Box>
+				))}
 
-				{/* Gallery */}
-				<Box
-					component='li'
-					sx={{ width: { xs: '100%', sm: 'auto' }, textAlign: 'center' }}
-				>
-					<Typography
-						component={NavLink}
-						to='/Gallery'
-						onClick={handleLinkClick}
-						sx={linkSx}
-					>
-						Gallery
-					</Typography>
-				</Box>
-
-				{/* Authenticated Routes */}
+				{/* Authenticated Navigation */}
 				{currentUser?.name && (
 					<>
-						<Box
-							component='li'
-							sx={{ width: { xs: '100%', sm: 'auto' }, textAlign: 'center' }}
-						>
-							<Typography
-								component={NavLink}
-								to='/Portfolio'
-								onClick={handleLinkClick}
-								sx={linkSx}
+						{['/Portfolio', '/Favorites'].map((path) => (
+							<Box
+								component='li'
+								key={path}
+								sx={{ width: { xs: '100%', sm: 'auto' }, textAlign: 'center' }}
 							>
-								Portfolio
-							</Typography>
-						</Box>
+								<Typography
+									component={NavLink}
+									to={path}
+									onClick={handleLinkClick}
+									sx={linkSx}
+								>
+									{path.replace('/', '')}
+								</Typography>
+							</Box>
+						))}
 
-						<Box
-							component='li'
-							sx={{ width: { xs: '100%', sm: 'auto' }, textAlign: 'center' }}
-						>
-							<Typography
-								component={NavLink}
-								to='/Favorites'
-								onClick={handleLinkClick}
-								sx={linkSx}
-							>
-								Favorites
-							</Typography>
-						</Box>
-
-						{/* Avatar and Menu */}
+						{/* Avatar & Account Menu */}
 						<Box component='li'>
 							<IconButton onClick={handleAccountClick}>
 								{currentUser.profile_image ? (
@@ -197,7 +176,6 @@ export const Navbar = () => {
 									<AccountCircleIcon sx={{ color: 'black', fontSize: '125%' }} />
 								)}
 							</IconButton>
-
 							<Menu
 								anchorEl={anchorEl}
 								open={Boolean(anchorEl)}
@@ -217,11 +195,10 @@ export const Navbar = () => {
 								<MenuItem
 									onClick={handleLogout}
 									sx={{
-										textAlign: 'center',
 										justifyContent: 'center',
 										fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
 										'&:hover': {
-											backgroundColor: 'transparent',
+											bgcolor: 'transparent',
 										},
 									}}
 								>

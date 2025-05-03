@@ -19,9 +19,9 @@ import {
 	Popover,
 	CardActionArea,
 } from '@mui/material';
-import ReactCardFlip from 'react-card-flip';
 import CommentIcon from '@mui/icons-material/Comment';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { green, red } from '@mui/material/colors';
 
 const fetchComments = async (artworkId) => {
 	const response = await fetch(
@@ -57,7 +57,6 @@ const ArtworkPost = ({ artwork }) => {
 	const [isCommentSectionVisible, setIsCommentSectionVisible] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
-	const [flip, setFlip] = useState(false);
 	const open = Boolean(anchorEl);
 	const queryClient = useQueryClient();
 
@@ -84,9 +83,7 @@ const ArtworkPost = ({ artwork }) => {
 		},
 	});
 
-	const handleCommentChange = (event) => {
-		setComment(event.target.value);
-	};
+	const handleCommentChange = (event) => setComment(event.target.value);
 
 	const handleSubmitComment = () => {
 		if (!comment.trim()) return;
@@ -112,168 +109,82 @@ const ArtworkPost = ({ artwork }) => {
 			? `http://localhost:3000/uploads/${artwork.images[0]}`
 			: null;
 
-	if (!artwork) {
-		return null;
-	}
+	if (!artwork) return null;
 
 	return (
-		<div style={{ marginTop: '1rem' }}>
-			<ReactCardFlip
-				isFlipped={flip}
-				flipDirection='horizontal'
-			>
-				{/* Front Side */}
-				<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
-					<CardActionArea>
-						<CardMedia
-							style={{ width: 300, height: 300 }}
-							component='img'
-							image={imageUrl}
-							alt={artwork.title}
-							onClick={handlePopClick}
-						/>
-						<Popover
-							open={open}
-							anchorEl={anchorEl}
-							onClose={handleClose}
-							anchorOrigin={{
-								vertical: 'bottom',
-								horizontal: 'center',
-							}}
-						>
-							<CardMedia
-								component='img'
-								image={popoverImageId}
-								alt='Enlarged Artwork'
-							/>
-						</Popover>
-						<CardContent>
-							<Typography
-								gutterBottom
-								fontSize={16}
-								fontWeight={500}
-								component='div'
-							>
-								{artwork.title}
-							</Typography>
-							<Typography
-								variant='body2'
-								sx={{ color: 'text.secondary' }}
-							>
-								{artwork.artist}
-							</Typography>
-							<Typography
-								variant='body2'
-								sx={{ color: 'text.secondary' }}
-							>
-								{artwork.date}
-							</Typography>
-							<Divider sx={{ margin: '10px 0' }} />
-							<Box
-								display='flex'
-								justifyContent='space-between'
-								alignItems='center'
-							>
-								<Typography
-									variant='body1'
-									fontWeight={500}
-								>
-									Comments
-								</Typography>
-								<IconButton onClick={toggleCommentSection}>
-									<Badge
-										badgeContent={comments.length}
-										color='primary'
-									>
-										<CommentIcon />
-									</Badge>
-								</IconButton>
-							</Box>
-						</CardContent>
-						<div
-							style={{
-								display: 'flex',
-								flexDirection: 'row',
-								justifyContent: 'space-between',
-								margin: 25,
-							}}
-						>
-							<div
-								style={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
-								onClick={() => setFlip(!flip)}
-							>
-								Learn More
-							</div>
-						</div>
-					</CardActionArea>
-				</Card>
+		<Box sx={{ mt: '1rem' }}>
+			<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
+				<CardActionArea>
+					<CardMedia
+						sx={{ width: 300, height: 300 }}
+						component='img'
+						image={imageUrl}
+						alt={artwork.title}
+						onClick={handlePopClick}
+					/>
 
-				{/* Back Side */}
-				<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
-					<CardContent style={{ width: 300, height: 500 }}>
+					<Popover
+						open={open}
+						anchorEl={anchorEl}
+						onClose={handleClose}
+						anchorOrigin={{
+							vertical: 'bottom',
+							horizontal: 'center',
+						}}
+					>
+						<CardMedia
+							component='img'
+							image={popoverImageId}
+							alt='Enlarged Artwork'
+						/>
+					</Popover>
+
+					<CardContent>
 						<Typography
 							gutterBottom
 							fontSize={16}
 							fontWeight={500}
-							component='div'
 						>
 							{artwork.title}
 						</Typography>
-						<br />
 						<Typography
 							variant='body2'
 							sx={{ color: 'text.secondary' }}
 						>
-							Artist: {artwork.artist}
+							{artwork.artist}
 						</Typography>
-						<br />
 						<Typography
 							variant='body2'
 							sx={{ color: 'text.secondary' }}
 						>
-							Date: {artwork.date}
+							{artwork.date}
 						</Typography>
-						<br />
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							Location: {artwork.location}
-						</Typography>
-						<br />
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							Medium: {artwork.medium}
-						</Typography>
-						<br />
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							Description: {artwork.description}
-						</Typography>
-					</CardContent>
-					<div
-						style={{
-							display: 'flex',
-							flexDirection: 'row',
-							justifyContent: 'space-between',
-							margin: 25,
-						}}
-					>
-						<div
-							style={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
-							onClick={() => setFlip(!flip)}
-						>
-							Back
-						</div>
-					</div>
-				</Card>
-			</ReactCardFlip>
+						<Divider sx={{ my: 1.5 }} />
 
-			{/* Comment Section Dialog */}
+						<Box
+							display='flex'
+							justifyContent='space-between'
+							alignItems='center'
+						>
+							<Typography
+								variant='body1'
+								fontWeight={500}
+							>
+								Comments
+							</Typography>
+							<IconButton onClick={toggleCommentSection}>
+								<Badge
+									badgeContent={comments.length}
+									color='primary'
+								>
+									<CommentIcon />
+								</Badge>
+							</IconButton>
+						</Box>
+					</CardContent>
+				</CardActionArea>
+			</Card>
+
 			<Dialog
 				open={isCommentSectionVisible}
 				onClose={() => setIsCommentSectionVisible(false)}
@@ -290,8 +201,9 @@ const ArtworkPost = ({ artwork }) => {
 						rows={2}
 						value={comment}
 						onChange={handleCommentChange}
-						sx={{ marginBottom: '10px' }}
+						sx={{ mb: 2 }}
 					/>
+
 					{isLoading ? (
 						<Typography>Loading comments...</Typography>
 					) : isError ? (
@@ -300,7 +212,7 @@ const ArtworkPost = ({ artwork }) => {
 						<Box>
 							<Typography
 								variant='h6'
-								sx={{ marginBottom: '10px' }}
+								sx={{ mb: 2 }}
 							>
 								All Comments:
 							</Typography>
@@ -309,7 +221,7 @@ const ArtworkPost = ({ artwork }) => {
 									key={index}
 									display='flex'
 									alignItems='flex-start'
-									sx={{ marginBottom: '15px' }}
+									sx={{ mb: 2 }}
 								>
 									<Link
 										to={`/users/${comment.user_id}`}
@@ -318,12 +230,7 @@ const ArtworkPost = ({ artwork }) => {
 										<Avatar
 											alt='Profile Picture'
 											src={comment.profile_picture}
-											sx={{
-												width: 30,
-												height: 30,
-												marginRight: '10px',
-												cursor: 'pointer',
-											}}
+											sx={{ width: 30, height: 30, mr: 1, cursor: 'pointer' }}
 										/>
 									</Link>
 									<Box>
@@ -353,23 +260,41 @@ const ArtworkPost = ({ artwork }) => {
 						<Typography>No comments yet.</Typography>
 					)}
 				</DialogContent>
-				<DialogActions>
+
+				<DialogActions
+					sx={{ display: 'flex', justifyContent: 'center', gap: 3, my: 2 }}
+				>
 					<Button
 						onClick={() => setIsCommentSectionVisible(false)}
-						color='secondary'
+						sx={{
+							fontSize: '1rem',
+							textTransform: 'none',
+							color: '#fff',
+							borderRadius: '1rem',
+							bgcolor: red[500],
+							'&:hover': { bgcolor: red[700] },
+						}}
 					>
-						Close
+						Cancel
 					</Button>
 					<Button
 						variant='contained'
-						color='primary'
 						onClick={handleSubmitComment}
+						disabled={mutation.isLoading}
+						sx={{
+							fontSize: '1rem',
+							textTransform: 'none',
+							color: '#fff',
+							borderRadius: '1rem',
+							bgcolor: green[400],
+							'&:hover': { bgcolor: green[700] },
+						}}
 					>
 						Submit
 					</Button>
 				</DialogActions>
 			</Dialog>
-		</div>
+		</Box>
 	);
 };
 

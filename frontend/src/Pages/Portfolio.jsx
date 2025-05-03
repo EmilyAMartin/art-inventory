@@ -140,7 +140,6 @@ const PortfolioPage = () => {
 				variant='h5'
 				sx={{
 					marginTop: 5,
-					fontWeight: 500,
 				}}
 			>
 				Portfolio
@@ -153,7 +152,6 @@ const PortfolioPage = () => {
 				variant='h5'
 				sx={{
 					marginTop: 35,
-					fontWeight: 500,
 				}}
 			>
 				Artwork

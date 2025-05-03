@@ -7,7 +7,11 @@ import PublicArtCarousel from './PublicArtCarousel';
 
 const fetchUserData = async (userId) => {
 	const userResponse = await axios.get(`http://localhost:3000/users/${userId}`);
-	return userResponse.data;
+	const user = userResponse.data;
+	if (user.profile_image) {
+		user.profile_image = `http://localhost:3000${user.profile_image}`;
+	}
+	return user;
 };
 
 const fetchUserArtworks = async (userId) => {
@@ -19,6 +23,7 @@ const fetchUserArtworks = async (userId) => {
 
 const UserProfile = () => {
 	const { userId } = useParams();
+
 	const {
 		data: user,
 		isLoading: isUserLoading,
@@ -27,6 +32,7 @@ const UserProfile = () => {
 		queryKey: ['user', userId],
 		queryFn: () => fetchUserData(userId),
 	});
+
 	const {
 		data: artworks,
 		isLoading: isArtworksLoading,
@@ -46,46 +52,50 @@ const UserProfile = () => {
 	}
 
 	return (
-		<Box sx={{ padding: '20px' }}>
-			{/* Profile Picture and Bio */}
+		<Box sx={{ mx: 10, display: 'flex', flexDirection: 'column', gap: 4 }}>
+			{/*Profile Header */}
 			<Box
 				sx={{
+					mt: 6,
+					gap: 3,
 					display: 'flex',
 					flexDirection: 'column',
+					justifyContent: 'center',
 					alignItems: 'center',
-					marginBottom: '20px',
-					marginTop: '50px',
 				}}
 			>
-				<img
-					src={`http://localhost:3000${user.profile_image}`}
+				<Box
+					component='img'
+					src={user.profile_image}
 					alt='Profile'
-					style={{
-						width: '150px',
-						height: '150px',
+					sx={{
+						width: 150,
+						height: 150,
 						borderRadius: '50%',
 						objectFit: 'cover',
 					}}
 				/>
+
 				<Typography
-					variant='h4'
-					sx={{ marginTop: '10px' }}
+					variant='h5'
+					sx={{ m: 0 }}
 				>
 					{user.username}
 				</Typography>
+
 				<Typography
 					variant='body1'
-					sx={{ marginTop: '10px', fontStyle: 'italic', color: 'gray' }}
+					sx={{ m: 0, color: 'gray', fontStyle: 'italic' }}
 				>
 					{user.bio}
 				</Typography>
 			</Box>
 
 			{/* Public Artworks Carousel */}
-			<div style={{ marginLeft: '1rem' }}>
-				<h2>Artwork</h2>
-			</div>
-			<PublicArtCarousel artworks={artworks} />
+			<Box sx={{ ml: 2 }}>
+				<Typography variant='h5'>Artwork</Typography>
+				<PublicArtCarousel artworks={artworks} />
+			</Box>
 		</Box>
 	);
 };

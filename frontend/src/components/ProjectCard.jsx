@@ -5,6 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ReactCardFlip from 'react-card-flip';
 import CardActionArea from '@mui/material/CardActionArea';
@@ -35,7 +36,7 @@ const ProjectCard = ({ project, handleDelete }) => {
 	};
 
 	return (
-		<div style={{ marginTop: '1rem' }}>
+		<Box sx={{ marginTop: '1rem' }}>
 			<ReactCardFlip
 				isFlipped={flip}
 				flipDirection='horizontal'
@@ -45,18 +46,22 @@ const ProjectCard = ({ project, handleDelete }) => {
 					sx={{ maxWidth: 300, maxHeight: 600 }}
 				>
 					<CardActionArea>
-						<div style={{ position: 'relative', width: 300, height: 300 }}>
+						<Box sx={{ position: 'relative', width: 300, height: 300 }}>
 							<CardMedia
-								style={{ width: 300, height: 300 }}
+								sx={{ width: 300, height: 300 }}
 								component='img'
 								image={imageUrl}
 								alt='Project Image'
 								onClick={handlePopClick}
 							/>
-						</div>
+						</Box>
 
 						<Popover
-							sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+							sx={{
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}
 							open={open}
 							anchorEl={anchorEl}
 							anchorReference='none'
@@ -74,14 +79,14 @@ const ProjectCard = ({ project, handleDelete }) => {
 							/>
 						</Popover>
 
-						<CardContent style={{ width: 300, height: 200 }}>
+						<CardContent sx={{ width: 300, height: 200 }}>
 							<IconButton
 								aria-label='delete'
 								color='black'
 								sx={{
 									position: 'absolute',
-									bottom: 10,
-									right: 10,
+									bottom: 15,
+									right: 15,
 									zIndex: 2,
 									'&:hover': {
 										backgroundColor: 'rgba(0, 0, 0, 0.04)',
@@ -112,30 +117,26 @@ const ProjectCard = ({ project, handleDelete }) => {
 							</Typography>
 						</CardContent>
 
-						<div
-							className='favorites-more'
-							style={{
+						<Box
+							sx={{
 								display: 'flex',
 								flexDirection: 'row',
 								justifyContent: 'space-between',
-								margin: 25,
+								m: 3,
 							}}
 						>
-							<div
-								style={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
+							<Typography
+								sx={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
 								onClick={() => setFlip(!flip)}
 							>
 								Learn More
-							</div>
-						</div>
+							</Typography>
+						</Box>
 					</CardActionArea>
 				</Card>
 
-				<Card
-					className='card-back'
-					sx={{ maxWidth: 300, maxHeight: 600 }}
-				>
-					<CardContent style={{ width: 300, height: 500 }}>
+				<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
+					<CardContent sx={{ width: 300, height: 500 }}>
 						<Typography
 							gutterBottom
 							fontSize={16}
@@ -160,24 +161,24 @@ const ProjectCard = ({ project, handleDelete }) => {
 						</Typography>
 					</CardContent>
 
-					<div
-						style={{
+					<Box
+						sx={{
 							display: 'flex',
 							flexDirection: 'row',
 							justifyContent: 'space-between',
-							margin: 25,
+							m: 3,
 						}}
 					>
-						<div
-							style={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
+						<Typography
+							sx={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
 							onClick={() => setFlip(!flip)}
 						>
 							Back
-						</div>
-					</div>
+						</Typography>
+					</Box>
 				</Card>
 			</ReactCardFlip>
-		</div>
+		</Box>
 	);
 };
 

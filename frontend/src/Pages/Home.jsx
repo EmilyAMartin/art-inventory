@@ -164,14 +164,7 @@ const Home = () => {
 
 			{/* Art Carousel Section */}
 			<Box>
-				<Typography
-					variant='h5'
-					sx={{
-						fontWeight: 500,
-					}}
-				>
-					New on Portfolio
-				</Typography>
+				<Typography variant='h5'>New on Portfolio</Typography>
 
 				<ArtPostCarousel
 					artworks={publicArtworks}

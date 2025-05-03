@@ -8,6 +8,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import Tooltip from '@mui/material/Tooltip';
+import Box from '@mui/material/Box';
 
 const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -35,9 +36,9 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 		if (!isLoggedIn) {
 			return (
 				<Tooltip title='Log in to favorite artwork'>
-					<div style={{ cursor: 'not-allowed' }}>
-						<FavoriteBorder style={{ opacity: 0.5 }} />
-					</div>
+					<Box sx={{ cursor: 'not-allowed', display: 'inline-flex' }}>
+						<FavoriteBorder sx={{ opacity: 0.5 }} />
+					</Box>
 				</Tooltip>
 			);
 		}
@@ -47,7 +48,7 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 		return (
 			<Icon
 				onClick={handleFavClick}
-				style={{ cursor: 'pointer' }}
+				sx={{ cursor: 'pointer' }}
 			/>
 		);
 	};
@@ -58,13 +59,10 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 			flipDirection='horizontal'
 		>
 			{/* Front */}
-			<Card
-				className='card-font'
-				sx={{ maxWidth: 300, maxHeight: 600, display: 'flex' }}
-			>
+			<Card sx={{ maxWidth: 300, maxHeight: 600, display: 'flex' }}>
 				<CardActionArea>
 					<CardMedia
-						style={{ width: 300, height: 300 }}
+						sx={{ width: 300, height: 300 }}
 						component='img'
 						image={art.image_url}
 						alt='Artwork'
@@ -76,7 +74,11 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 						anchorEl={anchorEl}
 						anchorReference='none'
 						onClose={handleClose}
-						sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+						sx={{
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
+						}}
 					>
 						<CardMedia
 							component='img'
@@ -86,7 +88,7 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 						/>
 					</Popover>
 
-					<CardContent style={{ width: 300, height: 200 }}>
+					<CardContent sx={{ width: 300, height: 200 }}>
 						<Typography
 							gutterBottom
 							fontSize={16}
@@ -108,31 +110,29 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 						</Typography>
 					</CardContent>
 
-					<div
-						style={{
+					<Box
+						sx={{
 							display: 'flex',
 							justifyContent: 'space-between',
-							margin: 25,
+							m: 3,
+							mt: 2,
 						}}
 					>
 						{renderFavoriteIcon()}
-						<div
-							style={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
+						<Typography
+							sx={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
 							onClick={() => setFlip(true)}
 						>
 							Learn More
-						</div>
-					</div>
+						</Typography>
+					</Box>
 				</CardActionArea>
 			</Card>
 
 			{/* Back */}
-			<Card
-				className='card-back'
-				sx={{ maxWidth: 300, maxHeight: 600, display: 'flex' }}
-			>
+			<Card sx={{ maxWidth: 300, maxHeight: 600, display: 'flex' }}>
 				<CardActionArea>
-					<CardContent style={{ width: 300, height: 500 }}>
+					<CardContent sx={{ width: 300, height: 500 }}>
 						<Typography
 							gutterBottom
 							fontSize={16}
@@ -191,20 +191,21 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 						</Typography>
 					</CardContent>
 
-					<div
-						style={{
+					<Box
+						sx={{
 							display: 'flex',
 							justifyContent: 'space-between',
-							margin: 25,
+							m: 3,
+							mt: 2,
 						}}
 					>
-						<div
-							style={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
+						<Typography
+							sx={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
 							onClick={() => setFlip(false)}
 						>
 							Back
-						</div>
-					</div>
+						</Typography>
+					</Box>
 				</CardActionArea>
 			</Card>
 		</ReactCardFlip>
