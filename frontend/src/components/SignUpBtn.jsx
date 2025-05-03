@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { styled } from '@mui/material/styles';
 import { green, red } from '@mui/material/colors';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
@@ -56,22 +55,6 @@ const SignUpBtn = () => {
 		}
 	};
 
-	const SubmitButton = styled(Button)(({ theme }) => ({
-		color: theme.palette.getContrastText(green[500]),
-		backgroundColor: green[400],
-		'&:hover': {
-			backgroundColor: green[700],
-		},
-	}));
-
-	const CancelButton = styled(Button)(({ theme }) => ({
-		color: theme.palette.getContrastText(red[500]),
-		backgroundColor: red[500],
-		'&:hover': {
-			backgroundColor: red[700],
-		},
-	}));
-
 	return (
 		<Box>
 			<Button
@@ -127,7 +110,7 @@ const SignUpBtn = () => {
 						}}
 					>
 						<Typography variant='h5'>Sign Up</Typography>
-						<Typography variant='subtitle2'>
+						<Typography variant='subtitle1'>
 							Welcome, please sign up to continue
 						</Typography>
 
@@ -208,18 +191,38 @@ const SignUpBtn = () => {
 								mt: 3,
 							}}
 						>
-							<SubmitButton
+							<Button
 								variant='contained'
 								onClick={handleSubmit}
+								sx={{
+									fontSize: '1rem',
+									textTransform: 'none',
+									color: '#fff',
+									borderRadius: '1rem',
+									bgcolor: green[400],
+									'&:hover': {
+										bgcolor: green[700],
+									},
+								}}
 							>
 								Submit
-							</SubmitButton>
-							<CancelButton
+							</Button>
+							<Button
 								variant='contained'
 								onClick={handleClose}
+								sx={{
+									fontSize: '1rem',
+									textTransform: 'none',
+									color: '#fff',
+									borderRadius: '1rem',
+									bgcolor: red[500],
+									'&:hover': {
+										bgcolor: red[700],
+									},
+								}}
 							>
 								Cancel
-							</CancelButton>
+							</Button>
 						</Box>
 					</Box>
 				</Box>

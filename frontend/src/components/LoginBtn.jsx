@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query'; // make sure you import from the correct path
 import { green, red } from '@mui/material/colors';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
@@ -23,10 +24,40 @@ const LoginBtn = () => {
 	const [error, setError] = useState('');
 	const { setCurrentUser } = useContext(AuthContext);
 
-	const handleOpen = () => setOpen(true);
-	const handleClose = () => setOpen(false);
-	const handleClickShowPassword = () => setShowPassword((show) => !show);
-	const handleMouseDownPassword = (event) => event.preventDefault();
+	// React Query to fetch the user profile after login
+	const {
+		data: userData,
+		error: profileError,
+		isLoading: profileLoading,
+		refetch,
+	} = useQuery({
+		queryKey: ['profile'], // This is the query key
+		queryFn: () =>
+			fetch('http://localhost:3000/profile', {
+				method: 'GET',
+				credentials: 'include',
+			}).then((res) => res.json()), // This is the function to fetch the data
+		enabled: false, // Don't fetch automatically, only refetch after login
+	});
+
+	// React Query to handle login
+	const mutation = useMutation({
+		mutationFn: ({ email, password }) =>
+			fetch('http://localhost:3000/login', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ email, password }),
+				credentials: 'include',
+			}),
+		onSuccess: () => {
+			toast.success('Logged in successfully!');
+			// Refetch profile after successful login
+			refetch();
+		},
+		onError: (error) => {
+			toast.error('Login failed: ' + error.message);
+		},
+	});
 
 	const handleLogin = async (event) => {
 		event.preventDefault();
@@ -37,47 +68,26 @@ const LoginBtn = () => {
 			return;
 		}
 
-		try {
-			const response = await fetch('http://localhost:3000/login', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ email, password }),
-				credentials: 'include',
-			});
-
-			if (response.ok) {
-				setTimeout(async () => {
-					const userResponse = await fetch('http://localhost:3000/profile', {
-						method: 'GET',
-						credentials: 'include',
-					});
-
-					if (userResponse.ok) {
-						const userData = await userResponse.json();
-						if (userData.user.profile_image) {
-							userData.user.profile_image = `http://localhost:3000${userData.user.profile_image}`;
-						}
-						setCurrentUser(userData.user);
-						toast.success('Logged in successfully!');
-						handleClose();
-					} else {
-						setError('Error fetching user profile');
-						toast.error('Error fetching user profile');
-					}
-				}, 500);
-			} else {
-				const data = await response.json();
-				setError(data.message || 'Login failed');
-				toast.error(data.message || 'Login failed');
-			}
-		} catch (error) {
-			console.error('Error:', error);
-			setError('An error occurred. Please try again later.');
-			toast.error('An error occurred. Please try again later.');
-		}
+		// Trigger the login mutation
+		mutation.mutate({ email, password });
 	};
+
+	const handleOpen = () => setOpen(true);
+	const handleClose = () => setOpen(false);
+	const handleClickShowPassword = () => setShowPassword((show) => !show);
+	const handleMouseDownPassword = (event) => event.preventDefault();
+
+	// Update the user context with the profile data when fetched
+	if (userData) {
+		const user = userData.user;
+		if (user && !profileLoading && !profileError) {
+			if (user.profile_image) {
+				user.profile_image = `http://localhost:3000${user.profile_image}`;
+			}
+			setCurrentUser(user);
+			handleClose();
+		}
+	}
 
 	return (
 		<Box>
@@ -175,7 +185,12 @@ const LoginBtn = () => {
 							/>
 						</FormControl>
 
-						{error && <Typography color='error'>{error}</Typography>}
+						{mutation.isError && (
+							<Typography color='error'>{mutation.error.message}</Typography>
+						)}
+						{profileError && (
+							<Typography color='error'>{profileError.message}</Typography>
+						)}
 
 						<Box
 							sx={{
@@ -199,12 +214,16 @@ const LoginBtn = () => {
 								variant='contained'
 								onClick={handleLogin}
 								sx={{
-									color: 'white',
+									fontSize: '1rem',
+									textTransform: 'none',
+									color: '#fff',
+									borderRadius: '1rem',
 									bgcolor: green[400],
 									'&:hover': {
 										bgcolor: green[700],
 									},
 								}}
+								disabled={mutation.isLoading}
 							>
 								Submit
 							</Button>
@@ -212,7 +231,10 @@ const LoginBtn = () => {
 								variant='contained'
 								onClick={handleClose}
 								sx={{
-									color: 'white',
+									fontSize: '1rem',
+									textTransform: 'none',
+									color: '#fff',
+									borderRadius: '1rem',
 									bgcolor: red[500],
 									'&:hover': {
 										bgcolor: red[700],

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import Grid2 from '@mui/material/Grid2';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
@@ -10,7 +11,7 @@ import ArtCard from '../components/ArtCard';
 import toast from 'react-hot-toast';
 
 const BASE_URL = 'https://api.artic.edu/api/v1/artworks';
-const RESULTS_PER_PAGE = 12;
+const RESULTS_PER_PAGE = 15;
 
 const checkImageUrl = async (imageUrl) => {
 	try {
@@ -128,7 +129,7 @@ const Gallery = () => {
 					? 'Artwork added to favorites!'
 					: 'Artwork removed from favorites!'
 			);
-			refetch(); // Refresh query data
+			refetch();
 		} catch (err) {
 			toast.error('Failed to update favorite status');
 		}
@@ -140,14 +141,11 @@ const Gallery = () => {
 	};
 
 	return (
-		<div
-			id='gallery-container'
-			style={{ display: 'flex', flexDirection: 'column' }}
-		>
+		<Box sx={{ display: 'flex', flexDirection: 'column', margin: 5 }}>
 			{/* Search Bar */}
-			<div
+			<Box
 				className='search-bar'
-				style={{ display: 'flex', justifyContent: 'center' }}
+				sx={{ display: 'flex', justifyContent: 'center' }}
 			>
 				<TextField
 					id='search-bar'
@@ -168,8 +166,9 @@ const Gallery = () => {
 					type='button'
 					onClick={() => setPage(1)}
 					aria-label='search'
+					sx={{ fill: 'black' }}
 				>
-					<SearchIcon style={{ fill: 'black' }} />
+					<SearchIcon />
 				</IconButton>
 				<Button
 					type='button'
@@ -178,16 +177,15 @@ const Gallery = () => {
 				>
 					Reset
 				</Button>
-			</div>
+			</Box>
 
-			{/* Preset Buttons */}
-			<div
-				className='preset-search-buttons'
-				style={{
+			{/* Search Buttons */}
+			<Box
+				sx={{
 					display: 'flex',
 					justifyContent: 'center',
-					marginTop: 20,
-					gap: 10,
+					marginTop: 5,
+					gap: 2,
 				}}
 			>
 				{['Painting', 'Printmaking', 'Sculpture', 'Photography', 'Textile'].map(
@@ -196,7 +194,7 @@ const Gallery = () => {
 							key={preset}
 							variant='outlined'
 							sx={{
-								borderRadius: '20px',
+								borderRadius: '1rem',
 								padding: '8px 16px',
 								textTransform: 'capitalize',
 								color: searchQuery === preset ? 'white' : 'black',
@@ -216,21 +214,21 @@ const Gallery = () => {
 						</Button>
 					)
 				)}
-			</div>
+			</Box>
 
 			{/* Artwork Grid */}
-			<div className='gallery-artwork'>
+			<Box>
 				{isLoading && <div>Loading...</div>}
 				{error && <div>Error: {error.message}</div>}
 				<Grid2
-					style={{
-						marginTop: 25,
-						marginBottom: 25,
+					container
+					spacing={8}
+					sx={{
+						marginTop: 5,
+						marginBottom: 3,
 						display: 'flex',
 						justifyContent: 'space-between',
 					}}
-					container
-					spacing={8}
 				>
 					{data?.artwork.map((art) => (
 						<Grid2
@@ -246,13 +244,12 @@ const Gallery = () => {
 						</Grid2>
 					))}
 				</Grid2>
-			</div>
+			</Box>
 
 			{/* Pagination */}
-			<div
-				id='page-navigation'
-				style={{
-					marginBottom: 25,
+			<Box
+				sx={{
+					marginTop: 5,
 					display: 'flex',
 					justifyContent: 'center',
 				}}
@@ -274,8 +271,8 @@ const Gallery = () => {
 				>
 					Next
 				</Button>
-			</div>
-		</div>
+			</Box>
+		</Box>
 	);
 };
 
