@@ -42,7 +42,8 @@ const Home = () => {
 					md: '85vw',
 				},
 				maxWidth: '1900px',
-				mx: 'auto',
+				ml: 10,
+				mr: 10,
 				fontFamily: 'Roboto, sans-serif',
 				boxSizing: 'border-box',
 			}}
@@ -57,7 +58,6 @@ const Home = () => {
 					justifyContent: { xs: 'center', md: 'initial' },
 				}}
 			>
-				{/* Background decoration (optional) */}
 				<Box
 					sx={{
 						position: 'absolute',
@@ -136,7 +136,7 @@ const Home = () => {
 						flex: 1,
 						width: '100%',
 						display: 'flex',
-						justifyContent: 'center',
+						justifyContent: 'right',
 					}}
 				>
 					<Box
@@ -164,7 +164,7 @@ const Home = () => {
 
 			{/* Art Carousel Section */}
 			<Box>
-				<Typography variant='h5'>New on Portfolio</Typography>
+				<Typography variant='h6'>New on Portfolio</Typography>
 
 				<ArtPostCarousel
 					artworks={publicArtworks}

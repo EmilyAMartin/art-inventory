@@ -93,8 +93,9 @@ const Favorites = () => {
 		}
 	};
 
-	if (isLoading) return <Box>Loading artwork...</Box>;
-	if (error) return <Box>Error: {error.message}</Box>;
+	if (isLoading)
+		return <Typography sx={{ ml: 10 }}>Loading artwork...</Typography>;
+	if (error) return <Typography>Error: {error.message}</Typography>;
 
 	const { isLoggedIn, artwork } = data;
 

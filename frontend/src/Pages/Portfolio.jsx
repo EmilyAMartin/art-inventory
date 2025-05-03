@@ -96,7 +96,12 @@ const PortfolioPage = () => {
 
 	const renderProjects = () => {
 		if (!projects || projects.length === 0) {
-			return <Box sx={{ mt: 2, color: '#666' }}>No projects available</Box>;
+			return (
+				<Box sx={{ mt: 2, color: '#666' }}>
+					{' '}
+					<Typography>No projects available</Typography>
+				</Box>
+			);
 		}
 
 		return (
@@ -111,7 +116,11 @@ const PortfolioPage = () => {
 
 	const renderArtwork = () => {
 		if (!artworks || artworks.length === 0) {
-			return <Box sx={{ mt: 2, color: '#666' }}>No artwork available</Box>;
+			return (
+				<Box sx={{ mt: 2, color: '#666' }}>
+					<Typography>No artworks available</Typography>
+				</Box>
+			);
 		}
 
 		return (
@@ -137,7 +146,7 @@ const PortfolioPage = () => {
 		>
 			{/* Project Section */}
 			<Typography
-				variant='h5'
+				variant='h6'
 				sx={{
 					marginTop: 5,
 				}}
@@ -145,11 +154,11 @@ const PortfolioPage = () => {
 				Portfolio
 			</Typography>
 			<AddProjectBtn onProjectAdded={handleProjectAdded} />
-			{isLoading ? <div>Loading projects...</div> : renderProjects()}
+			{isLoading ? <Typography>Loading projects...</Typography> : renderProjects()}
 
 			{/* Artwork Section */}
 			<Typography
-				variant='h5'
+				variant='h6'
 				sx={{
 					marginTop: 35,
 				}}
@@ -157,7 +166,7 @@ const PortfolioPage = () => {
 				Artwork
 			</Typography>
 			<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
-			{isLoading ? <div>Loading artwork...</div> : renderArtwork()}
+			{isLoading ? <Typography>Loading artwork...</Typography> : renderArtwork()}
 		</Box>
 	);
 };

@@ -225,7 +225,7 @@ const ArtworkPost = ({ artwork }) => {
 								>
 									<Link
 										to={`/users/${comment.user_id}`}
-										style={{ textDecoration: 'none' }}
+										sx={{ textDecoration: 'none' }}
 									>
 										<Avatar
 											alt='Profile Picture'

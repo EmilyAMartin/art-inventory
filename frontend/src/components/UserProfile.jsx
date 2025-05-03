@@ -85,7 +85,7 @@ const UserProfile = () => {
 
 				<Typography
 					variant='body1'
-					sx={{ m: 0, color: 'gray', fontStyle: 'italic' }}
+					sx={{ m: 0, color: 'gray', font: 'italic' }}
 				>
 					{user.bio}
 				</Typography>

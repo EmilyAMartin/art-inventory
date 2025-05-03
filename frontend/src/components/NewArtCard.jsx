@@ -1,60 +1,34 @@
 import React, { useState } from 'react';
-import {
-	Popover,
-	Card,
-	CardContent,
-	CardMedia,
-	Typography,
-	IconButton,
-	CardActionArea,
-	Checkbox,
-	Box,
-} from '@mui/material';
+import Popover from '@mui/material/Popover';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ReactCardFlip from 'react-card-flip';
+import CardActionArea from '@mui/material/CardActionArea';
+import Checkbox from '@mui/material/Checkbox';
+import Button from '@mui/material/Button';
 import toast from 'react-hot-toast';
-import { useMutation } from '@tanstack/react-query';
 
-const NewArtCard = ({ artwork, onDelete, yourAuthToken }) => {
+const NewArtCard = ({ artwork, onDelete }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
 	const [flip, setFlip] = useState(false);
 	const [isPublic, setIsPublic] = useState(artwork.isPublic || false);
 	const open = Boolean(anchorEl);
 
-	if (!artwork) return null;
+	if (!artwork) {
+		return null;
+	}
 
-	const deleteArtwork = async (artworkId) => {
-		const response = await fetch(`http://localhost:3000/artworks/${artworkId}`, {
-			method: 'DELETE',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${yourAuthToken}`,
-			},
-		});
-
-		if (!response.ok) {
-			throw new Error('Failed to delete artwork');
-		}
-
-		return response.json();
+	const handleTogglePublic = async () => {
+		// ...existing code...
 	};
 
-	const { mutate, isLoading, isError, error } = useMutation({
-		mutationFn: deleteArtwork,
-		onSuccess: () => {
-			toast.success('Artwork deleted successfully');
-			onDelete(artwork.id);
-		},
-		onError: (err) => {
-			toast.error(err.message || 'Failed to delete artwork');
-		},
-	});
-
-	const handleDeleteClick = (e) => {
-		e.stopPropagation();
-		if (isLoading) return;
-		mutate(artwork.id);
+	const handleDeleteClick = async (e) => {
+		// ...existing code...
 	};
 
 	const handlePopClick = (event) => {
@@ -67,22 +41,25 @@ const NewArtCard = ({ artwork, onDelete, yourAuthToken }) => {
 		setPopoverImageId(null);
 	};
 
+	// Use only the first image
 	const imageUrl =
 		artwork.images && artwork.images.length > 0
 			? `http://localhost:3000/uploads/${artwork.images[0]}`
 			: null;
 
 	return (
-		<Box sx={{ mt: '1rem' }}>
+		<div style={{ marginTop: '1rem' }}>
 			<ReactCardFlip
 				isFlipped={flip}
 				flipDirection='horizontal'
 			>
-				{/* Front Side */}
-				<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
+				<Card
+					className='card-font'
+					sx={{ maxWidth: 300, maxHeight: 600 }}
+				>
 					<CardActionArea>
 						<CardMedia
-							sx={{ width: 300, height: 300 }}
+							style={{ width: 300, height: 300 }}
 							component='img'
 							image={imageUrl}
 							alt='Artwork Image'
@@ -90,11 +67,7 @@ const NewArtCard = ({ artwork, onDelete, yourAuthToken }) => {
 						/>
 
 						<Popover
-							sx={{
-								display: 'flex',
-								justifyContent: 'center',
-								alignItems: 'center',
-							}}
+							sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
 							open={open}
 							anchorEl={anchorEl}
 							anchorReference='none'
@@ -112,21 +85,20 @@ const NewArtCard = ({ artwork, onDelete, yourAuthToken }) => {
 							/>
 						</Popover>
 
-						<CardContent sx={{ width: 300, height: 200, position: 'relative' }}>
+						<CardContent style={{ width: 300, height: 200 }}>
 							<IconButton
 								aria-label='delete'
+								color='black'
 								sx={{
 									position: 'absolute',
 									bottom: 10,
-									right: 50,
+									right: 10,
 									zIndex: 2,
-									color: '',
 									'&:hover': {
 										backgroundColor: 'rgba(0, 0, 0, 0.04)',
 									},
 								}}
 								onClick={handleDeleteClick}
-								disabled={isLoading}
 							>
 								<DeleteIcon />
 							</IconButton>
@@ -135,6 +107,7 @@ const NewArtCard = ({ artwork, onDelete, yourAuthToken }) => {
 								gutterBottom
 								fontSize={16}
 								fontWeight={500}
+								component='div'
 							>
 								{artwork.title}
 							</Typography>
@@ -152,46 +125,53 @@ const NewArtCard = ({ artwork, onDelete, yourAuthToken }) => {
 								{artwork.date}
 							</Typography>
 
-							<Box sx={{ mt: '1rem', display: 'flex', alignItems: 'center' }}>
+							{/* Add Public/Private Toggle */}
+							<div
+								style={{ marginTop: '1rem', display: 'flex', alignItems: 'center' }}
+							>
 								<Checkbox
 									checked={isPublic}
-									onChange={() => setIsPublic(!isPublic)}
+									onChange={handleTogglePublic}
 									color='primary'
 								/>
 								<Typography
 									variant='body2'
-									sx={{ ml: '0.5rem' }}
+									sx={{ marginLeft: '0.5rem' }}
 								>
 									Public
 								</Typography>
-							</Box>
+							</div>
 						</CardContent>
 
-						<Box
-							sx={{
+						<div
+							className='favorites-more'
+							style={{
 								display: 'flex',
 								flexDirection: 'row',
 								justifyContent: 'space-between',
-								m: 3,
+								margin: 25,
 							}}
 						>
-							<Typography
-								sx={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
+							<div
+								style={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
 								onClick={() => setFlip(!flip)}
 							>
 								Learn More
-							</Typography>
-						</Box>
+							</div>
+						</div>
 					</CardActionArea>
 				</Card>
 
-				{/* Back Side */}
-				<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
-					<CardContent sx={{ width: 300, height: 500 }}>
+				<Card
+					className='card-back'
+					sx={{ maxWidth: 300, maxHeight: 600 }}
+				>
+					<CardContent style={{ width: 300, height: 500 }}>
 						<Typography
 							gutterBottom
 							fontSize={16}
 							fontWeight={500}
+							component='div'
 						>
 							{artwork.title}
 						</Typography>
@@ -232,24 +212,24 @@ const NewArtCard = ({ artwork, onDelete, yourAuthToken }) => {
 						</Typography>
 					</CardContent>
 
-					<Box
-						sx={{
+					<div
+						style={{
 							display: 'flex',
 							flexDirection: 'row',
 							justifyContent: 'space-between',
-							m: 3,
+							margin: 25,
 						}}
 					>
-						<Typography
-							sx={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
+						<div
+							style={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
 							onClick={() => setFlip(!flip)}
 						>
 							Back
-						</Typography>
-					</Box>
+						</div>
+					</div>
 				</Card>
 			</ReactCardFlip>
-		</Box>
+		</div>
 	);
 };
 
