@@ -73,8 +73,9 @@ function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
 								sx={{ width: '300px' }}
 							>
 								<NewArtCard
+									key={art.id}
 									artwork={art}
-									onDelete={() => handleDeleteNewArtwork(art.id)}
+									handleDelete={handleDeleteNewArtwork}
 								/>
 							</Box>
 						))}

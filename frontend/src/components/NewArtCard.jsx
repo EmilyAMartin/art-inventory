@@ -1,34 +1,59 @@
 import React, { useState } from 'react';
-import Popover from '@mui/material/Popover';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
+import {
+	Popover,
+	Card,
+	CardContent,
+	CardMedia,
+	Typography,
+	IconButton,
+	CardActionArea,
+	Checkbox,
+	Box,
+} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ReactCardFlip from 'react-card-flip';
-import CardActionArea from '@mui/material/CardActionArea';
-import Checkbox from '@mui/material/Checkbox';
-import Button from '@mui/material/Button';
 import toast from 'react-hot-toast';
 
-const NewArtCard = ({ artwork, onDelete }) => {
+const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
 	const [flip, setFlip] = useState(false);
 	const [isPublic, setIsPublic] = useState(artwork.isPublic || false);
 	const open = Boolean(anchorEl);
 
-	if (!artwork) {
-		return null;
-	}
+	if (!artwork) return null;
 
-	const handleTogglePublic = async () => {
-		// ...existing code...
+	const handleDeleteClick = (e) => {
+		e.stopPropagation();
+		handleDelete(artwork.id);
 	};
 
-	const handleDeleteClick = async (e) => {
-		// ...existing code...
+	const handleTogglePublic = async () => {
+		const updatedStatus = !isPublic;
+
+		try {
+			const response = await fetch(
+				`http://localhost:3000/artworks/${artwork.id}/toggle-public`,
+				{
+					method: 'PATCH',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ isPublic: updatedStatus }),
+					credentials: 'include', // Ensures cookies are sent along with the request
+				}
+			);
+
+			if (!response.ok) {
+				throw new Error('Failed to update public status');
+			}
+
+			setIsPublic(updatedStatus);
+			toast.success(`Artwork is now ${updatedStatus ? 'public' : 'private'}`);
+		} catch (error) {
+			console.error('Toggle error:', error);
+			toast.error('Failed to update public status');
+		}
 	};
 
 	const handlePopClick = (event) => {
@@ -41,25 +66,22 @@ const NewArtCard = ({ artwork, onDelete }) => {
 		setPopoverImageId(null);
 	};
 
-	// Use only the first image
 	const imageUrl =
 		artwork.images && artwork.images.length > 0
 			? `http://localhost:3000/uploads/${artwork.images[0]}`
 			: null;
 
 	return (
-		<div style={{ marginTop: '1rem' }}>
+		<Box sx={{ mt: '1rem' }}>
 			<ReactCardFlip
 				isFlipped={flip}
 				flipDirection='horizontal'
 			>
-				<Card
-					className='card-font'
-					sx={{ maxWidth: 300, maxHeight: 600 }}
-				>
+				{/* Front Side */}
+				<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
 					<CardActionArea>
 						<CardMedia
-							style={{ width: 300, height: 300 }}
+							sx={{ width: 300, height: 300 }}
 							component='img'
 							image={imageUrl}
 							alt='Artwork Image'
@@ -67,7 +89,11 @@ const NewArtCard = ({ artwork, onDelete }) => {
 						/>
 
 						<Popover
-							sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+							sx={{
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}
 							open={open}
 							anchorEl={anchorEl}
 							anchorReference='none'
@@ -85,15 +111,15 @@ const NewArtCard = ({ artwork, onDelete }) => {
 							/>
 						</Popover>
 
-						<CardContent style={{ width: 300, height: 200 }}>
+						<CardContent sx={{ width: 300, height: 200, position: 'relative' }}>
 							<IconButton
 								aria-label='delete'
-								color='black'
 								sx={{
 									position: 'absolute',
 									bottom: 10,
-									right: 10,
+									right: 50,
 									zIndex: 2,
+									color: '',
 									'&:hover': {
 										backgroundColor: 'rgba(0, 0, 0, 0.04)',
 									},
@@ -107,7 +133,6 @@ const NewArtCard = ({ artwork, onDelete }) => {
 								gutterBottom
 								fontSize={16}
 								fontWeight={500}
-								component='div'
 							>
 								{artwork.title}
 							</Typography>
@@ -125,10 +150,7 @@ const NewArtCard = ({ artwork, onDelete }) => {
 								{artwork.date}
 							</Typography>
 
-							{/* Add Public/Private Toggle */}
-							<div
-								style={{ marginTop: '1rem', display: 'flex', alignItems: 'center' }}
-							>
+							<Box sx={{ mt: '1rem', display: 'flex', alignItems: 'center' }}>
 								<Checkbox
 									checked={isPublic}
 									onChange={handleTogglePublic}
@@ -136,42 +158,38 @@ const NewArtCard = ({ artwork, onDelete }) => {
 								/>
 								<Typography
 									variant='body2'
-									sx={{ marginLeft: '0.5rem' }}
+									sx={{ ml: '0.5rem' }}
 								>
 									Public
 								</Typography>
-							</div>
+							</Box>
 						</CardContent>
 
-						<div
-							className='favorites-more'
-							style={{
+						<Box
+							sx={{
 								display: 'flex',
 								flexDirection: 'row',
 								justifyContent: 'space-between',
-								margin: 25,
+								m: 3,
 							}}
 						>
-							<div
-								style={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
+							<Typography
+								sx={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
 								onClick={() => setFlip(!flip)}
 							>
 								Learn More
-							</div>
-						</div>
+							</Typography>
+						</Box>
 					</CardActionArea>
 				</Card>
 
-				<Card
-					className='card-back'
-					sx={{ maxWidth: 300, maxHeight: 600 }}
-				>
-					<CardContent style={{ width: 300, height: 500 }}>
+				{/* Back Side */}
+				<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
+					<CardContent sx={{ width: 300, height: 500 }}>
 						<Typography
 							gutterBottom
 							fontSize={16}
 							fontWeight={500}
-							component='div'
 						>
 							{artwork.title}
 						</Typography>
@@ -212,24 +230,24 @@ const NewArtCard = ({ artwork, onDelete }) => {
 						</Typography>
 					</CardContent>
 
-					<div
-						style={{
+					<Box
+						sx={{
 							display: 'flex',
 							flexDirection: 'row',
 							justifyContent: 'space-between',
-							margin: 25,
+							m: 3,
 						}}
 					>
-						<div
-							style={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
+						<Typography
+							sx={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
 							onClick={() => setFlip(!flip)}
 						>
 							Back
-						</div>
-					</div>
+						</Typography>
+					</Box>
 				</Card>
 			</ReactCardFlip>
-		</div>
+		</Box>
 	);
 };
 

@@ -5,7 +5,7 @@ import NewArtCardCarousel from '../components/NewArtCarousel';
 import toast from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
 import { queryClient } from '../components/queryClient';
-import { Box, Typography } from '@mui/material'; // Import MUI components
+import { Box, Typography } from '@mui/material';
 
 const fetchPortfolioData = async () => {
 	const [projectsResponse, artworksResponse] = await Promise.all([
@@ -89,9 +89,24 @@ const PortfolioPage = () => {
 		toast.success('Artwork added successfully');
 	};
 
-	const handleDeleteNewArtwork = (artworkId) => {
-		// refetch
-		toast.success('Artwork deleted successfully');
+	const handleDeleteNewArtwork = async (artworkId) => {
+		try {
+			const response = await fetch(`http://localhost:3000/artworks/${artworkId}`, {
+				method: 'DELETE',
+				credentials: 'include',
+			});
+
+			if (!response.ok) {
+				throw new Error('Failed to delete artwork');
+			}
+
+			queryClient.invalidateQueries(['portfolio']); // Re-fetch data from backend
+
+			toast.success('Artwork deleted successfully');
+		} catch (error) {
+			console.error('Error deleting artwork:', error);
+			toast.error('Failed to delete artwork');
+		}
 	};
 
 	const renderProjects = () => {

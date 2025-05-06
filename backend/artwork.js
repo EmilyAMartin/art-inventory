@@ -114,7 +114,7 @@ export const setupRoutes = (app) => {
 			res.status(500).json({ success: false, error: 'Internal Server Error' });
 		}
 	});
-	
+
 	app.get('/users/:userId/public-artworks', async (req, res) => {
 		try {
 			const { userId } = req.params;
@@ -250,7 +250,6 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	// Toggle public/private status of an artwork
 	app.patch('/artworks/:id/toggle-public', async (req, res) => {
 		if (!req.session.user) {
 			return res.status(401).json({
