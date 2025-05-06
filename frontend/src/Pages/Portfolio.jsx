@@ -100,7 +100,7 @@ const PortfolioPage = () => {
 				throw new Error('Failed to delete artwork');
 			}
 
-			queryClient.invalidateQueries(['portfolio']); // Re-fetch data from backend
+			queryClient.invalidateQueries(['portfolio']);
 
 			toast.success('Artwork deleted successfully');
 		} catch (error) {

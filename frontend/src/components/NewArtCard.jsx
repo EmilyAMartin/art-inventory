@@ -40,7 +40,7 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify({ isPublic: updatedStatus }),
-					credentials: 'include', // Ensures cookies are sent along with the request
+					credentials: 'include',
 				}
 			);
 

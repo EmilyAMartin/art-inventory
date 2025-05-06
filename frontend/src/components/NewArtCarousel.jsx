@@ -11,8 +11,8 @@ function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
 	const [currentPage, setCurrentPage] = useState(0);
 	const [slideDirection, setSlideDirection] = useState('left');
 
-	const cardsPerPage = 5; // Number of cards to display per page
-	const containerWidth = cardsPerPage * 300; // Adjust based on card width
+	const cardsPerPage = 5;
+	const containerWidth = cardsPerPage * 300;
 
 	const handleNextPage = () => {
 		if (currentPage < Math.ceil(artworks.length / cardsPerPage) - 1) {
