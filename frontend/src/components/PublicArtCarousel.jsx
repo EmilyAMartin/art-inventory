@@ -10,33 +10,21 @@ import PublicArtCard from './PublicArtCard';
 function PublicArtCarousel({ artworks }) {
 	const [currentPage, setCurrentPage] = useState(0);
 	const [slideDirection, setSlideDirection] = useState('left');
-	const [isSliding, setIsSliding] = useState(false); // Prevent rapid clicks during animation
 
-	const cardsPerPage = 5; // Number of cards to display per page
-	const containerWidth = cardsPerPage * 300; // Adjust based on card width
+	const cardsPerPage = 5;
+	const containerWidth = cardsPerPage * 300;
 
 	const handleNextPage = () => {
-		if (
-			currentPage < Math.ceil(artworks.length / cardsPerPage) - 1 &&
-			!isSliding
-		) {
+		if (currentPage < Math.ceil(artworks.length / cardsPerPage) - 1) {
 			setSlideDirection('left');
-			setIsSliding(true); // Disable further clicks during animation
-			setTimeout(() => {
-				setCurrentPage((prevPage) => prevPage + 1);
-				setIsSliding(false); // Re-enable clicks after animation
-			}, 300); // Match the Slide animation duration
+			setCurrentPage((prevPage) => prevPage + 1);
 		}
 	};
 
 	const handlePrevPage = () => {
-		if (currentPage > 0 && !isSliding) {
+		if (currentPage > 0) {
 			setSlideDirection('right');
-			setIsSliding(true); // Disable further clicks during animation
-			setTimeout(() => {
-				setCurrentPage((prevPage) => prevPage - 1);
-				setIsSliding(false); // Re-enable clicks after animation
-			}, 300); // Match the Slide animation duration
+			setCurrentPage((prevPage) => prevPage - 1);
 		}
 	};
 
@@ -61,7 +49,7 @@ function PublicArtCarousel({ artworks }) {
 			<IconButton
 				onClick={handlePrevPage}
 				sx={{ margin: 5 }}
-				disabled={currentPage === 0 || isSliding}
+				disabled={currentPage === 0}
 			>
 				<NavigateBeforeIcon />
 			</IconButton>
@@ -70,9 +58,7 @@ function PublicArtCarousel({ artworks }) {
 			<Box sx={{ width: `${containerWidth}px`, height: '100%' }}>
 				<Slide
 					direction={slideDirection}
-					in={!isSliding}
-					mountOnEnter
-					unmountOnExit
+					in={true}
 				>
 					<Stack
 						spacing={2}
@@ -86,7 +72,10 @@ function PublicArtCarousel({ artworks }) {
 								key={`art-${i}`}
 								sx={{ width: '300px' }}
 							>
-								<PublicArtCard artwork={art} />
+								<PublicArtCard
+									key={art.id}
+									artwork={art}
+								/>
 							</Box>
 						))}
 					</Stack>
@@ -97,9 +86,7 @@ function PublicArtCarousel({ artworks }) {
 			<IconButton
 				onClick={handleNextPage}
 				sx={{ margin: 5 }}
-				disabled={
-					currentPage >= Math.ceil(artworks.length / cardsPerPage) - 1 || isSliding
-				}
+				disabled={currentPage >= Math.ceil(artworks.length / cardsPerPage) - 1}
 			>
 				<NavigateNextIcon />
 			</IconButton>

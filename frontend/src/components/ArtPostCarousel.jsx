@@ -11,11 +11,11 @@ function ArtPostCarousel({ artworks, onSubmitComment }) {
 	const [currentPage, setCurrentPage] = useState(0);
 	const [slideDirection, setSlideDirection] = useState('left');
 
-	const cardsPerPage = 5; // Number of cards to display per page
-	const containerWidth = cardsPerPage * 300; // Adjust based on card width
+	const cardsPerPage = 5;
+	const containerWidth = cardsPerPage * 300;
 
 	const handleNextPage = () => {
-		if (currentPage < Math.ceil(projects.length / cardsPerPage) - 1) {
+		if (currentPage < Math.ceil(artworks.length / cardsPerPage) - 1) {
 			setSlideDirection('left');
 			setCurrentPage((prevPage) => prevPage + 1);
 		}
@@ -45,6 +45,7 @@ function ArtPostCarousel({ artworks, onSubmitComment }) {
 				marginTop: '40px',
 			}}
 		>
+			{/* Previous Button */}
 			<IconButton
 				onClick={handlePrevPage}
 				sx={{ margin: 5 }}
@@ -52,6 +53,8 @@ function ArtPostCarousel({ artworks, onSubmitComment }) {
 			>
 				<NavigateBeforeIcon />
 			</IconButton>
+
+			{/* Carousel Content */}
 			<Box sx={{ width: `${containerWidth}px`, height: '100%' }}>
 				<Slide
 					direction={slideDirection}
@@ -70,14 +73,17 @@ function ArtPostCarousel({ artworks, onSubmitComment }) {
 								sx={{ width: '300px' }}
 							>
 								<ArtworkPost
-									artwork={art}
 									onSubmitComment={onSubmitComment}
+									key={art.id}
+									artwork={art}
 								/>
 							</Box>
 						))}
 					</Stack>
 				</Slide>
 			</Box>
+
+			{/* Next Button */}
 			<IconButton
 				onClick={handleNextPage}
 				sx={{ margin: 5 }}
