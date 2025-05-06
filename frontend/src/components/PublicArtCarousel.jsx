@@ -10,21 +10,33 @@ import PublicArtCard from './PublicArtCard';
 function PublicArtCarousel({ artworks }) {
 	const [currentPage, setCurrentPage] = useState(0);
 	const [slideDirection, setSlideDirection] = useState('left');
+	const [isSliding, setIsSliding] = useState(false); // Prevent rapid clicks during animation
 
 	const cardsPerPage = 5; // Number of cards to display per page
 	const containerWidth = cardsPerPage * 300; // Adjust based on card width
 
 	const handleNextPage = () => {
-		if (currentPage < Math.ceil(artworks.length / cardsPerPage) - 1) {
+		if (
+			currentPage < Math.ceil(artworks.length / cardsPerPage) - 1 &&
+			!isSliding
+		) {
 			setSlideDirection('left');
-			setCurrentPage((prevPage) => prevPage + 1);
+			setIsSliding(true); // Disable further clicks during animation
+			setTimeout(() => {
+				setCurrentPage((prevPage) => prevPage + 1);
+				setIsSliding(false); // Re-enable clicks after animation
+			}, 300); // Match the Slide animation duration
 		}
 	};
 
 	const handlePrevPage = () => {
-		if (currentPage > 0) {
+		if (currentPage > 0 && !isSliding) {
 			setSlideDirection('right');
-			setCurrentPage((prevPage) => prevPage - 1);
+			setIsSliding(true); // Disable further clicks during animation
+			setTimeout(() => {
+				setCurrentPage((prevPage) => prevPage - 1);
+				setIsSliding(false); // Re-enable clicks after animation
+			}, 300); // Match the Slide animation duration
 		}
 	};
 
@@ -49,7 +61,7 @@ function PublicArtCarousel({ artworks }) {
 			<IconButton
 				onClick={handlePrevPage}
 				sx={{ margin: 5 }}
-				disabled={currentPage === 0}
+				disabled={currentPage === 0 || isSliding}
 			>
 				<NavigateBeforeIcon />
 			</IconButton>
@@ -58,7 +70,9 @@ function PublicArtCarousel({ artworks }) {
 			<Box sx={{ width: `${containerWidth}px`, height: '100%' }}>
 				<Slide
 					direction={slideDirection}
-					in={true}
+					in={!isSliding}
+					mountOnEnter
+					unmountOnExit
 				>
 					<Stack
 						spacing={2}
@@ -83,7 +97,9 @@ function PublicArtCarousel({ artworks }) {
 			<IconButton
 				onClick={handleNextPage}
 				sx={{ margin: 5 }}
-				disabled={currentPage >= Math.ceil(artworks.length / cardsPerPage) - 1}
+				disabled={
+					currentPage >= Math.ceil(artworks.length / cardsPerPage) - 1 || isSliding
+				}
 			>
 				<NavigateNextIcon />
 			</IconButton>

@@ -13,6 +13,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import ReactCardFlip from 'react-card-flip';
 import toast from 'react-hot-toast';
+import { queryClient } from './queryClient';
 
 const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -50,6 +51,9 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 
 			setIsPublic(updatedStatus);
 			toast.success(`Artwork is now ${updatedStatus ? 'public' : 'private'}`);
+
+			// Invalidate the portfolio query to refetch data
+			queryClient.invalidateQueries(['portfolio']);
 		} catch (error) {
 			console.error('Toggle error:', error);
 			toast.error('Failed to update public status');

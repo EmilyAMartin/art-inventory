@@ -60,7 +60,8 @@ const PortfolioPage = () => {
 	const artworks = data?.formattedArtworks;
 
 	const handleProjectAdded = (newProject) => {
-		// refetch
+		// Invalidate the portfolio query to refetch data
+		queryClient.invalidateQueries(['portfolio']);
 		toast.success('Project added successfully');
 	};
 
@@ -86,6 +87,7 @@ const PortfolioPage = () => {
 
 	const handleNewArtworkAdded = (newArtwork) => {
 		// refetch
+		queryClient.invalidateQueries(['portfolio']);
 		toast.success('Artwork added successfully');
 	};
 
