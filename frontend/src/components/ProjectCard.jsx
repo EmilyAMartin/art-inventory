@@ -82,9 +82,9 @@ const ProjectCard = ({ project, handleDelete }) => {
 						<CardContent sx={{ width: 300, height: 200 }}>
 							<IconButton
 								aria-label='delete'
-								color='black'
 								sx={{
 									position: 'absolute',
+									color: 'black',
 									bottom: 15,
 									right: 15,
 									zIndex: 2,

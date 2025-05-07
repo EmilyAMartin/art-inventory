@@ -120,10 +120,10 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 								aria-label='delete'
 								sx={{
 									position: 'absolute',
-									bottom: 10,
+									bottom: -50,
 									right: 50,
 									zIndex: 2,
-									color: '',
+									color: 'black',
 									'&:hover': {
 										backgroundColor: 'rgba(0, 0, 0, 0.04)',
 									},
