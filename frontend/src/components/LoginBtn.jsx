@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { green, red } from '@mui/material/colors';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
@@ -22,22 +22,8 @@ const LoginBtn = () => {
 	const [showPassword, setShowPassword] = useState(false);
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const [error, setError] = useState('');
 	const { setCurrentUser } = useContext(AuthContext);
-	const {
-		data: userData,
-		error: profileError,
-		isLoading: profileLoading,
-		refetch,
-	} = useQuery({
-		queryKey: ['profile'],
-		queryFn: () =>
-			fetch(`${BASE_URL}/profile`, {
-				method: 'GET',
-				credentials: 'include',
-			}).then((res) => res.json()),
-		enabled: false,
-	});
+	const queryClient = useQueryClient();
 
 	const mutation = useMutation({
 		mutationFn: ({ email, password }) =>
@@ -46,20 +32,25 @@ const LoginBtn = () => {
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ email, password }),
 				credentials: 'include',
+			}).then((res) => {
+				if (!res.ok) {
+					throw new Error('Invalid email or password');
+				}
+				return res.json();
 			}),
-		onSuccess: () => {
+		onSuccess: async () => {
 			toast.success('Logged in successfully!');
-			refetch();
+			// Refetch the profile data after successful login
+			await queryClient.invalidateQueries(['profile']);
+			handleClose();
 		},
 		onError: (error) => {
 			toast.error('Login failed: ' + error.message);
 		},
 	});
 
-	const handleLogin = async (event) => {
+	const handleLogin = (event) => {
 		event.preventDefault();
-		setError('');
-
 		if (!password) {
 			toast.error('Password is required!');
 			return;
@@ -71,17 +62,6 @@ const LoginBtn = () => {
 	const handleClose = () => setOpen(false);
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 	const handleMouseDownPassword = (event) => event.preventDefault();
-
-	if (userData) {
-		const user = userData.user;
-		if (user && !profileLoading && !profileError) {
-			if (user.profile_image) {
-				user.profile_image = `${BASE_URL}${user.profile_image}`;
-			}
-			setCurrentUser(user);
-			handleClose();
-		}
-	}
 
 	return (
 		<Box>
@@ -178,13 +158,6 @@ const LoginBtn = () => {
 								label='Password'
 							/>
 						</FormControl>
-
-						{mutation.isError && (
-							<Typography color='error'>{mutation.error.message}</Typography>
-						)}
-						{profileError && (
-							<Typography color='error'>{profileError.message}</Typography>
-						)}
 
 						<Box
 							sx={{

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { AuthContext } from './Context';
 import SignUpBtn from '../components/SignUpBtn';
@@ -23,21 +23,13 @@ const Home = () => {
 		isLoading,
 		isError,
 		error,
-		refetch,
 	} = useQuery({
 		queryKey: ['publicArtworks'],
 		queryFn: fetchPublicArtworks,
 	});
 
-	// Automatically refetch public artworks when the user logs in
-	useEffect(() => {
-		if (currentUser) {
-			refetch();
-		}
-	}, [currentUser, refetch]);
-
-	if (isLoading) return <p>Loading public artworks...</p>;
-	if (isError) return <p>Error: {error.message}</p>;
+	if (isLoading) return <Typography>Loading public artworks...</Typography>;
+	if (isError) return <Typography>Error: {error.message}</Typography>;
 
 	return (
 		<Box
@@ -80,7 +72,7 @@ const Home = () => {
 					}}
 				/>
 
-				{/* Left content */}
+				{/* Left Content */}
 				<Box
 					sx={{
 						flex: 1,
@@ -136,7 +128,7 @@ const Home = () => {
 					)}
 				</Box>
 
-				{/* Right image */}
+				{/* Right Content */}
 				<Box
 					sx={{
 						flex: 1,
@@ -168,10 +160,9 @@ const Home = () => {
 				</Box>
 			</Box>
 
-			{/* Art Carousel Section */}
+			{/* Public Artwork Section */}
 			<Box>
 				<Typography variant='h6'>New on Portfolio</Typography>
-
 				<ArtPostCarousel
 					artworks={publicArtworks}
 					onSubmitComment={setComments}
