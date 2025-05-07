@@ -107,8 +107,8 @@ const ArtworkPost = ({ artwork }) => {
 	if (!artwork) return null;
 
 	return (
-		<Box sx={{ mt: '1rem' }}>
-			<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
+		<Box sx={{ display: 'flex', justifyContent: 'center', paddingBottom: 4 }}>
+			<Card sx={{ maxWidth: 300, maxHeight: 450 }}>
 				<CardActionArea>
 					<CardMedia
 						sx={{ width: 300, height: 300 }}

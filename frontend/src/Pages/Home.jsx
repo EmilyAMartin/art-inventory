@@ -34,16 +34,10 @@ const Home = () => {
 	return (
 		<Box
 			sx={{
-				minHeight: '100vh',
-				width: {
-					xs: '95vw',
-					md: '85vw',
-				},
-				maxWidth: '1900px',
-				ml: 10,
-				mr: 10,
-				fontFamily: 'Roboto, sans-serif',
-				boxSizing: 'border-box',
+				display: 'flex',
+				flexDirection: 'column',
+				margin: 10,
+				gap: 4, // Maintain spacing between sections
 			}}
 		>
 			{/* Hero Section */}
@@ -161,7 +155,11 @@ const Home = () => {
 			</Box>
 
 			{/* Public Artwork Section */}
-			<Box>
+			<Box
+				sx={{
+					pb: 10,
+				}}
+			>
 				<Typography variant='h6'>New on Portfolio</Typography>
 				<ArtPostCarousel
 					artworks={publicArtworks}

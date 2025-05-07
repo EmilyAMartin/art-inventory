@@ -143,7 +143,7 @@ const Gallery = () => {
 	};
 
 	return (
-		<Box sx={{ display: 'flex', flexDirection: 'column', ml: 10, mr: 10 }}>
+		<Box sx={{ display: 'flex', flexDirection: 'column', margin: 10, gap: 4 }}>
 			{/* Search Bar */}
 			<Box
 				className='search-bar'
@@ -186,7 +186,6 @@ const Gallery = () => {
 				sx={{
 					display: 'flex',
 					justifyContent: 'center',
-					marginTop: 5,
 					gap: 2,
 				}}
 			>
@@ -226,8 +225,6 @@ const Gallery = () => {
 					container
 					spacing={8}
 					sx={{
-						marginTop: 5,
-						marginBottom: 3,
 						display: 'flex',
 						justifyContent: 'space-between',
 					}}
@@ -251,7 +248,6 @@ const Gallery = () => {
 			{/* Pagination */}
 			<Box
 				sx={{
-					marginTop: 5,
 					display: 'flex',
 					justifyContent: 'center',
 				}}

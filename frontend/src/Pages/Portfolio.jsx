@@ -61,7 +61,6 @@ const PortfolioPage = () => {
 	const artworks = data?.formattedArtworks;
 
 	const handleProjectAdded = (newProject) => {
-		// Invalidate the portfolio query to refetch data
 		queryClient.invalidateQueries(['portfolio']);
 		toast.success('Project added successfully');
 	};
@@ -78,7 +77,6 @@ const PortfolioPage = () => {
 			}
 
 			queryClient.invalidateQueries(['portfolio']);
-
 			toast.success('Project deleted successfully');
 		} catch (error) {
 			console.error('Error deleting project:', error);
@@ -87,7 +85,6 @@ const PortfolioPage = () => {
 	};
 
 	const handleNewArtworkAdded = (newArtwork) => {
-		// refetch
 		queryClient.invalidateQueries(['portfolio']);
 		toast.success('Artwork added successfully');
 	};
@@ -104,7 +101,6 @@ const PortfolioPage = () => {
 			}
 
 			queryClient.invalidateQueries(['portfolio']);
-
 			toast.success('Artwork deleted successfully');
 		} catch (error) {
 			console.error('Error deleting artwork:', error);
@@ -116,7 +112,6 @@ const PortfolioPage = () => {
 		if (!projects || projects.length === 0) {
 			return (
 				<Box sx={{ mt: 2, color: '#666' }}>
-					{' '}
 					<Typography>No projects available</Typography>
 				</Box>
 			);
@@ -156,10 +151,11 @@ const PortfolioPage = () => {
 			sx={{
 				display: 'flex',
 				flexDirection: 'column',
-				justifyContent: 'space-between',
 				gap: 2,
-				ml: 10,
-				mr: 10,
+				margin: 10,
+				paddingBottom: 20,
+				minHeight: '100vh',
+				boxSizing: 'border-box',
 			}}
 		>
 			{/* Project Section */}
@@ -185,6 +181,9 @@ const PortfolioPage = () => {
 			</Typography>
 			<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
 			{isLoading ? <Typography>Loading artwork...</Typography> : renderArtwork()}
+
+			{/* Spacer to ensure bottom padding */}
+			<Box sx={{ height: 50 }} />
 		</Box>
 	);
 };
