@@ -10,8 +10,9 @@ import TextField from '@mui/material/TextField';
 import ArtCard from '../components/ArtCard';
 import toast from 'react-hot-toast';
 import { Typography } from '@mui/material';
+import { BASE_URL } from '../config';
 
-const BASE_URL = 'https://api.artic.edu/api/v1/artworks';
+const API_URL = 'https://api.artic.edu/api/v1/artworks';
 const RESULTS_PER_PAGE = 12;
 
 const checkImageUrl = async (imageUrl) => {
@@ -25,7 +26,7 @@ const checkImageUrl = async (imageUrl) => {
 
 const fetchFavorites = async () => {
 	try {
-		const response = await fetch('http://localhost:3000/favorites', {
+		const response = await fetch(`${BASE_URL}/favorites`, {
 			method: 'GET',
 			credentials: 'include',
 		});
@@ -58,17 +59,17 @@ const fetchArtwork = async ({ queryKey }) => {
 
 		if (searchQuery) {
 			const searchResponse = await axios.get(
-				`${BASE_URL}/search?q=${searchQuery}&page=${currentPage}`
+				`${API_URL}/search?q=${searchQuery}&page=${currentPage}`
 			);
 			totalResults = searchResponse.data.pagination.total;
 			const results = await Promise.all(
 				searchResponse.data.data.map((art) =>
-					axios.get(`${BASE_URL}/${art.id}`).then((res) => res.data.data)
+					axios.get(`${API_URL}/${art.id}`).then((res) => res.data.data)
 				)
 			);
 			data = results;
 		} else {
-			const response = await axios.get(`${BASE_URL}?page=${currentPage}`);
+			const response = await axios.get(`${API_URL}?page=${currentPage}`);
 			totalResults = response.data.pagination.total;
 			data = response.data.data;
 		}
@@ -117,7 +118,7 @@ const Gallery = () => {
 		}
 
 		try {
-			const response = await fetch('http://localhost:3000/favorites', {
+			const response = await fetch(`${BASE_URL}/favorites`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ artworkId, favorite: isFavorite }),

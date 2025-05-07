@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Box, Button } from '@mui/material'; // Import MUI components
 import ImageUploadModal from './ImageUploadModal';
 import toast from 'react-hot-toast';
+import { BASE_URL } from '../config';
 
 const AddNewBtn = ({ onArtworkAdded }) => {
 	const [open, setOpen] = useState(false);
@@ -22,7 +23,7 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 			return;
 		}
 
-		const response = await fetch('http://localhost:3000/artworks', {
+		const response = await fetch(`${BASE_URL}/artworks`, {
 			method: 'POST',
 			body: formData,
 			credentials: 'include',

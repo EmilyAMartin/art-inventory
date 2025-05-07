@@ -1,18 +1,16 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { AuthContext } from './Context';
 import SignUpBtn from '../components/SignUpBtn';
 import LoginBtn from '../components/LoginBtn';
 import ArtPostCarousel from '../components/ArtPostCarousel';
 import { Box, Typography } from '@mui/material';
+import { BASE_URL } from '../config';
 
 const fetchPublicArtworks = async () => {
-	const response = await fetch(
-		'http://localhost:3000/artworks?visibility=public',
-		{
-			credentials: 'include',
-		}
-	);
+	const response = await fetch(`${BASE_URL}/artworks?visibility=public`, {
+		credentials: 'include',
+	});
 	if (!response.ok) throw new Error('Failed to fetch public artworks');
 	return response.json();
 };
@@ -25,10 +23,18 @@ const Home = () => {
 		isLoading,
 		isError,
 		error,
+		refetch,
 	} = useQuery({
 		queryKey: ['publicArtworks'],
 		queryFn: fetchPublicArtworks,
 	});
+
+	// Automatically refetch public artworks when the user logs in
+	useEffect(() => {
+		if (currentUser) {
+			refetch();
+		}
+	}, [currentUser, refetch]);
 
 	if (isLoading) return <p>Loading public artworks...</p>;
 	if (isError) return <p>Error: {error.message}</p>;

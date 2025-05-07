@@ -13,6 +13,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { AuthContext } from '../Pages/Context';
 import LoginBtn from './LoginBtn';
+import { BASE_URL } from '../config';
 
 export const Navbar = () => {
 	const { currentUser } = useContext(AuthContext);
@@ -34,7 +35,7 @@ export const Navbar = () => {
 
 	const handleLogout = async () => {
 		try {
-			const response = await fetch('http://localhost:3000/logout', {
+			const response = await fetch(`${BASE_URL}/logout`, {
 				method: 'POST',
 				credentials: 'include',
 			});

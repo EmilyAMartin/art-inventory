@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import ReactCardFlip from 'react-card-flip';
 import CardActionArea from '@mui/material/CardActionArea';
 import Box from '@mui/material/Box';
+import { BASE_URL } from '../config';
 
 const PublicArtCard = ({ artwork }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -28,7 +29,7 @@ const PublicArtCard = ({ artwork }) => {
 
 	const imageUrl =
 		artwork.images && artwork.images.length > 0
-			? `http://localhost:3000/uploads/${artwork.images[0]}`
+			? `${BASE_URL}/uploads/${artwork.images[0]}`
 			: null;
 
 	return (

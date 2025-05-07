@@ -7,6 +7,7 @@ import { AuthContext } from './Context';
 import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Box, Typography } from '@mui/material';
+import { BASE_URL } from '../config';
 
 const Account = () => {
 	const addNewPhoto = useRef(null);
@@ -20,12 +21,12 @@ const Account = () => {
 	} = useQuery({
 		queryKey: ['userData'],
 		queryFn: async () => {
-			const response = await axios.get('http://localhost:3000/profile', {
+			const response = await axios.get(`${BASE_URL}/profile`, {
 				withCredentials: true,
 			});
 			const user = response.data.user;
 			if (user.profile_image) {
-				user.profile_image = `http://localhost:3000${user.profile_image}`;
+				user.profile_image = `${BASE_URL}${user.profile_image}`;
 			}
 			return user;
 		},
@@ -38,20 +39,16 @@ const Account = () => {
 		mutationFn: async (file) => {
 			const formData = new FormData();
 			formData.append('image', file);
-			const response = await axios.post(
-				'http://localhost:3000/profile/image',
-				formData,
-				{
-					headers: {
-						'Content-Type': 'multipart/form-data',
-					},
-					withCredentials: true,
-				}
-			);
+			const response = await axios.post('${BASE_URL}/profile/image', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+				withCredentials: true,
+			});
 			return response.data.user;
 		},
 		onSuccess: (updatedUser) => {
-			updatedUser.profile_image = `http://localhost:3000${updatedUser.profile_image}`;
+			updatedUser.profile_image = `${BASE_URL}${updatedUser.profile_image}`;
 			refetchCurrentUser();
 		},
 		onError: (error) => {

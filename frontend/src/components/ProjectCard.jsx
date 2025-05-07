@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ReactCardFlip from 'react-card-flip';
 import CardActionArea from '@mui/material/CardActionArea';
+import { BASE_URL } from '../config';
 
 const ProjectCard = ({ project, handleDelete }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -22,7 +23,7 @@ const ProjectCard = ({ project, handleDelete }) => {
 
 	const imageUrl =
 		project.images && project.images.length > 0
-			? `http://localhost:3000/uploads/${project.images[0]}`
+			? `${BASE_URL}/uploads/${project.images[0]}`
 			: null;
 
 	const handlePopClick = (event) => {

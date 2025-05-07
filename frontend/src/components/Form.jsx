@@ -15,16 +15,17 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { BASE_URL } from '../config';
 
 const checkLoginStatus = async () => {
-	const response = await axios.get('http://localhost:3000/profile', {
+	const response = await axios.get(`${BASE_URL}/profile`, {
 		withCredentials: true,
 	});
 	return response.status === 200;
 };
 
 const updateProfile = async (values) => {
-	const response = await axios.put('http://localhost:3000/profile', values, {
+	const response = await axios.put(`${BASE_URL}/profile`, values, {
 		withCredentials: true,
 	});
 	return response.data;

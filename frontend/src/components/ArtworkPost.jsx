@@ -22,14 +22,12 @@ import {
 import CommentIcon from '@mui/icons-material/Comment';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { green, red } from '@mui/material/colors';
+import { BASE_URL } from '../config';
 
 const fetchComments = async (artworkId) => {
-	const response = await fetch(
-		`http://localhost:3000/api/comments/${artworkId}`,
-		{
-			credentials: 'include',
-		}
-	);
+	const response = await fetch(`${BASE_URL}/api/comments/${artworkId}`, {
+		credentials: 'include',
+	});
 	if (!response.ok) {
 		throw new Error('Error fetching comments');
 	}
@@ -37,15 +35,12 @@ const fetchComments = async (artworkId) => {
 };
 
 const submitComment = async ({ artworkId, commentText }) => {
-	const response = await fetch(
-		`http://localhost:3000/api/comments/${artworkId}`,
-		{
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			credentials: 'include',
-			body: JSON.stringify({ text: commentText }),
-		}
-	);
+	const response = await fetch(`${BASE_URL}/api/comments/${artworkId}`, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		credentials: 'include',
+		body: JSON.stringify({ text: commentText }),
+	});
 	if (!response.ok) {
 		throw new Error('Failed to submit comment');
 	}
@@ -106,7 +101,7 @@ const ArtworkPost = ({ artwork }) => {
 
 	const imageUrl =
 		artwork.images && artwork.images.length > 0
-			? `http://localhost:3000/uploads/${artwork.images[0]}`
+			? `${BASE_URL}/uploads/${artwork.images[0]}`
 			: null;
 
 	if (!artwork) return null;

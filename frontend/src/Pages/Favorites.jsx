@@ -6,6 +6,7 @@ import { Typography, Button, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
+import { BASE_URL } from '../config';
 
 const checkImageUrl = async (imageUrl) => {
 	try {
@@ -18,7 +19,7 @@ const checkImageUrl = async (imageUrl) => {
 };
 
 const fetchFavorites = async () => {
-	const response = await fetch('http://localhost:3000/favorites', {
+	const response = await fetch(`${BASE_URL}/favorites`, {
 		method: 'GET',
 		credentials: 'include',
 	});
@@ -77,7 +78,7 @@ const Favorites = () => {
 			return;
 		}
 		try {
-			const response = await fetch('http://localhost:3000/favorites', {
+			const response = await fetch(`${BASE_URL}/favorites`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',

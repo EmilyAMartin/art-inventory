@@ -4,19 +4,20 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Box, Typography } from '@mui/material';
 import PublicArtCarousel from './PublicArtCarousel';
+import { BASE_URL } from '../config';
 
 const fetchUserData = async (userId) => {
-	const userResponse = await axios.get(`http://localhost:3000/users/${userId}`);
+	const userResponse = await axios.get(`${BASE_URL}/users/${userId}`);
 	const user = userResponse.data;
 	if (user.profile_image) {
-		user.profile_image = `http://localhost:3000${user.profile_image}`;
+		user.profile_image = `${BASE_URL}${user.profile_image}`;
 	}
 	return user;
 };
 
 const fetchUserArtworks = async (userId) => {
 	const artworksResponse = await axios.get(
-		`http://localhost:3000/users/${userId}/public-artworks`
+		`${BASE_URL}/users/${userId}/public-artworks`
 	);
 	return artworksResponse.data;
 };

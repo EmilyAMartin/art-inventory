@@ -11,6 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Toast from './components/Toast';
+import { BASE_URL } from './config';
 
 function App() {
 	const {
@@ -20,7 +21,7 @@ function App() {
 	} = useQuery({
 		queryKey: ['userProfile'],
 		queryFn: async () => {
-			const userResponse = await fetch('http://localhost:3000/profile', {
+			const userResponse = await fetch(`${BASE_URL}/profile`, {
 				method: 'GET',
 				credentials: 'include',
 			});
@@ -32,7 +33,7 @@ function App() {
 			}
 			const data = await userResponse.json();
 			if (data.user.profile_image) {
-				data.user.profile_image = `http://localhost:3000${data.user.profile_image}`;
+				data.user.profile_image = `${BASE_URL}${data.user.profile_image}`;
 			}
 			return data.user;
 		},

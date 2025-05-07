@@ -13,6 +13,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { BASE_URL } from '../config';
 
 const SignUpBtn = () => {
 	const [open, setOpen] = useState(false);
@@ -39,7 +40,7 @@ const SignUpBtn = () => {
 		}
 
 		try {
-			const response = await axios.post('http://localhost:3000/register', {
+			const response = await axios.post(`${BASE_URL}/register`, {
 				name: email,
 				email: email,
 				password: password,

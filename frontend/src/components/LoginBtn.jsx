@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useMutation, useQuery } from '@tanstack/react-query'; // make sure you import from the correct path
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { green, red } from '@mui/material/colors';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
@@ -15,6 +15,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Checkbox from '@mui/material/Checkbox';
 import { AuthContext } from '../Pages/Context';
 import toast from 'react-hot-toast';
+import { BASE_URL } from '../config';
 
 const LoginBtn = () => {
 	const [open, setOpen] = useState(false);
@@ -23,27 +24,24 @@ const LoginBtn = () => {
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
 	const { setCurrentUser } = useContext(AuthContext);
-
-	// React Query to fetch the user profile after login
 	const {
 		data: userData,
 		error: profileError,
 		isLoading: profileLoading,
 		refetch,
 	} = useQuery({
-		queryKey: ['profile'], // This is the query key
+		queryKey: ['profile'],
 		queryFn: () =>
-			fetch('http://localhost:3000/profile', {
+			fetch(`${BASE_URL}/profile`, {
 				method: 'GET',
 				credentials: 'include',
-			}).then((res) => res.json()), // This is the function to fetch the data
-		enabled: false, // Don't fetch automatically, only refetch after login
+			}).then((res) => res.json()),
+		enabled: false,
 	});
 
-	// React Query to handle login
 	const mutation = useMutation({
 		mutationFn: ({ email, password }) =>
-			fetch('http://localhost:3000/login', {
+			fetch(`${BASE_URL}/login`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ email, password }),
@@ -51,7 +49,6 @@ const LoginBtn = () => {
 			}),
 		onSuccess: () => {
 			toast.success('Logged in successfully!');
-			// Refetch profile after successful login
 			refetch();
 		},
 		onError: (error) => {
@@ -67,8 +64,6 @@ const LoginBtn = () => {
 			toast.error('Password is required!');
 			return;
 		}
-
-		// Trigger the login mutation
 		mutation.mutate({ email, password });
 	};
 
@@ -77,12 +72,11 @@ const LoginBtn = () => {
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 	const handleMouseDownPassword = (event) => event.preventDefault();
 
-	// Update the user context with the profile data when fetched
 	if (userData) {
 		const user = userData.user;
 		if (user && !profileLoading && !profileError) {
 			if (user.profile_image) {
-				user.profile_image = `http://localhost:3000${user.profile_image}`;
+				user.profile_image = `${BASE_URL}${user.profile_image}`;
 			}
 			setCurrentUser(user);
 			handleClose();

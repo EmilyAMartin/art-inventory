@@ -14,6 +14,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ReactCardFlip from 'react-card-flip';
 import toast from 'react-hot-toast';
 import { queryClient } from './queryClient';
+import { BASE_URL } from '../config';
 
 const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -34,7 +35,7 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 
 		try {
 			const response = await fetch(
-				`http://localhost:3000/artworks/${artwork.id}/toggle-public`,
+				`${BASE_URL}/artworks/${artwork.id}/toggle-public`,
 				{
 					method: 'PATCH',
 					headers: {
@@ -72,7 +73,7 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 
 	const imageUrl =
 		artwork.images && artwork.images.length > 0
-			? `http://localhost:3000/uploads/${artwork.images[0]}`
+			? `${BASE_URL}/uploads/${artwork.images[0]}`
 			: null;
 
 	return (

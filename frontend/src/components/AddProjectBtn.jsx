@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Box, Button } from '@mui/material'; // Import MUI components
 import ImageUploadModal from './ImageUploadModal';
+import { BASE_URL } from '../config';
 
 const AddProjectBtn = ({ onProjectAdded }) => {
 	const [open, setOpen] = useState(false);
@@ -13,7 +14,7 @@ const AddProjectBtn = ({ onProjectAdded }) => {
 	];
 
 	const handleSubmit = async (formData) => {
-		const response = await fetch('http://localhost:3000/projects', {
+		const response = await fetch(`${BASE_URL}/projects`, {
 			method: 'POST',
 			body: formData,
 			credentials: 'include',

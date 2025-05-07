@@ -6,13 +6,14 @@ import toast from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
 import { queryClient } from '../components/queryClient';
 import { Box, Typography } from '@mui/material';
+import { BASE_URL } from '../config';
 
 const fetchPortfolioData = async () => {
 	const [projectsResponse, artworksResponse] = await Promise.all([
-		fetch('http://localhost:3000/projects', {
+		fetch(`${BASE_URL}/projects`, {
 			credentials: 'include',
 		}),
-		fetch('http://localhost:3000/my-artworks', {
+		fetch(`${BASE_URL}/my-artworks`, {
 			credentials: 'include',
 		}),
 	]);
@@ -67,7 +68,7 @@ const PortfolioPage = () => {
 
 	const handleDeleteProject = async (projectId) => {
 		try {
-			const response = await fetch(`http://localhost:3000/projects/${projectId}`, {
+			const response = await fetch(`${BASE_URL}/projects/${projectId}`, {
 				method: 'DELETE',
 				credentials: 'include',
 			});
@@ -93,7 +94,7 @@ const PortfolioPage = () => {
 
 	const handleDeleteNewArtwork = async (artworkId) => {
 		try {
-			const response = await fetch(`http://localhost:3000/artworks/${artworkId}`, {
+			const response = await fetch(`${BASE_URL}/artworks/${artworkId}`, {
 				method: 'DELETE',
 				credentials: 'include',
 			});
