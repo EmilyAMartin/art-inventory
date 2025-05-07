@@ -59,7 +59,7 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 			flipDirection='horizontal'
 		>
 			{/* Front */}
-			<Card sx={{ maxWidth: 300, maxHeight: 600, display: 'flex' }}>
+			<Card sx={{ maxWidth: 300, maxHeight: 450, display: 'flex' }}>
 				<CardActionArea>
 					<CardMedia
 						sx={{ width: 300, height: 300 }}
@@ -91,8 +91,14 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 					<CardContent sx={{ width: 300, height: 200 }}>
 						<Typography
 							gutterBottom
-							fontSize={16}
-							fontWeight={500}
+							sx={{
+								mr: 5,
+								fontSize: 'clamp(0.8rem, 4vw, 1rem)',
+								fontWeight: 500,
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								textOverflow: 'ellipsis',
+							}}
 						>
 							{art.title}
 						</Typography>
@@ -108,104 +114,120 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 						>
 							{art.date_end}
 						</Typography>
-					</CardContent>
 
-					<Box
-						sx={{
-							display: 'flex',
-							justifyContent: 'space-between',
-							m: 3,
-							mt: 2,
-						}}
-					>
-						{renderFavoriteIcon()}
-						<Typography
-							sx={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
-							onClick={() => setFlip(true)}
+						<Box
+							sx={{
+								display: 'flex',
+								flexDirection: 'row',
+								justifyContent: 'space-between',
+								mt: 2,
+								gap: 21,
+								position: 'absolute',
+							}}
 						>
-							Learn More
-						</Typography>
-					</Box>
+							<Typography
+								sx={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
+								onClick={() => setFlip(true)}
+							>
+								Learn More
+							</Typography>
+							{renderFavoriteIcon()}
+						</Box>
+					</CardContent>
 				</CardActionArea>
 			</Card>
 
 			{/* Back */}
-			<Card sx={{ maxWidth: 300, maxHeight: 600, display: 'flex' }}>
+			<Card sx={{ maxWidth: 300, maxHeight: 450, display: 'flex' }}>
 				<CardActionArea>
-					<CardContent sx={{ width: 300, height: 500 }}>
-						<Typography
-							gutterBottom
-							fontSize={16}
-							fontWeight={500}
-						>
-							{art.title}
-						</Typography>
-						<br />
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							Artist: {art.artist_title}
-						</Typography>
-						<br />
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							Date: {art.date_end}
-						</Typography>
-						<br />
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							Place of Origin: {art.place_of_origin}
-						</Typography>
-						<br />
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							Type: {art.artwork_type_title}
-						</Typography>
-						<br />
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							Medium: {art.medium_display}
-						</Typography>
-						<br />
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							Description: {art?.thumbnail?.alt_text}
-						</Typography>
-						<br />
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							Credit: {art.credit_line}
-						</Typography>
-					</CardContent>
-
-					<Box
+					<CardContent
 						sx={{
+							width: 300,
+							height: 500,
 							display: 'flex',
-							justifyContent: 'space-between',
-							m: 3,
-							mt: 2,
+							flexDirection: 'column',
 						}}
 					>
-						<Typography
-							sx={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
-							onClick={() => setFlip(false)}
+						<Box>
+							<Typography
+								gutterBottom
+								sx={{
+									mr: 5,
+									fontSize: 'clamp(0.8rem, 4vw, 1rem)',
+									fontWeight: 500,
+									whiteSpace: 'nowrap',
+									overflow: 'hidden',
+									textOverflow: 'ellipsis',
+								}}
+							>
+								{art.title}
+							</Typography>
+							<br />
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								Artist: {art.artist_title}
+							</Typography>
+							<br />
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								Date: {art.date_end}
+							</Typography>
+							<br />
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								Place of Origin: {art.place_of_origin}
+							</Typography>
+							<br />
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								Type: {art.artwork_type_title}
+							</Typography>
+							<br />
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								Medium: {art.medium_display}
+							</Typography>
+							<br />
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								Description: {art?.thumbnail?.alt_text}
+							</Typography>
+							<br />
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								Credit: {art.credit_line}
+							</Typography>
+						</Box>
+						<Box
+							sx={{
+								display: 'flex',
+								justifyContent: 'space-between',
+								mt: 50,
+								position: 'absolute',
+							}}
 						>
-							Back
-						</Typography>
-					</Box>
+							<Typography
+								sx={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
+								onClick={() => setFlip(false)}
+							>
+								Back
+							</Typography>
+						</Box>
+					</CardContent>
 				</CardActionArea>
 			</Card>
 		</ReactCardFlip>
