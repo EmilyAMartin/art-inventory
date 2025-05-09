@@ -166,7 +166,7 @@ const LoginBtn = () => {
 								alignItems: 'center',
 							}}
 						>
-							<Checkbox /> Remember Password
+							<Checkbox /> <Typography>Remember Password</Typography>
 						</Box>
 
 						<Box

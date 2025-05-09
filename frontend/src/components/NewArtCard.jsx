@@ -83,7 +83,14 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 				flipDirection='horizontal'
 			>
 				{/* Front Side */}
-				<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
+				<Card
+					sx={{
+						maxWidth: 300,
+						height: 450,
+						display: 'flex',
+						flexDirection: 'column',
+					}}
+				>
 					<CardActionArea>
 						<CardMedia
 							sx={{ width: 300, height: 300 }}
@@ -110,19 +117,18 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 						>
 							<CardMedia
 								component='img'
-								height='140'
 								image={popoverImageId}
-								alt=''
+								alt='Enlarged Artwork'
 							/>
 						</Popover>
 
-						<CardContent sx={{ width: 300, height: 200, position: 'relative' }}>
+						<CardContent sx={{ width: 300, position: 'relative' }}>
 							<IconButton
 								aria-label='delete'
 								sx={{
 									position: 'absolute',
-									bottom: -50,
-									right: 50,
+									bottom: -25,
+									right: 30,
 									zIndex: 2,
 									color: 'black',
 									'&:hover': {
@@ -134,13 +140,35 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 								<DeleteIcon />
 							</IconButton>
 
-							<Typography
-								gutterBottom
-								fontSize={16}
-								fontWeight={500}
+							<Box
+								sx={{
+									display: 'flex',
+									alignItems: 'center',
+									justifyContent: 'space-between',
+								}}
 							>
-								{artwork.title}
-							</Typography>
+								<Typography
+									gutterBottom
+									fontSize={16}
+									fontWeight={500}
+								>
+									{artwork.title}
+								</Typography>
+
+								<Box sx={{ display: 'flex', alignItems: 'center', ml: '2rem' }}>
+									<Checkbox
+										checked={isPublic}
+										onChange={handleTogglePublic}
+										color='primary'
+									/>
+									<Typography
+										variant='body2'
+										sx={{ mr: '2rem' }}
+									>
+										Public
+									</Typography>
+								</Box>
+							</Box>
 
 							<Typography
 								variant='body2'
@@ -154,20 +182,6 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 							>
 								{artwork.date}
 							</Typography>
-
-							<Box sx={{ mt: '1rem', display: 'flex', alignItems: 'center' }}>
-								<Checkbox
-									checked={isPublic}
-									onChange={handleTogglePublic}
-									color='primary'
-								/>
-								<Typography
-									variant='body2'
-									sx={{ ml: '0.5rem' }}
-								>
-									Public
-								</Typography>
-							</Box>
 						</CardContent>
 
 						<Box
@@ -175,12 +189,18 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 								display: 'flex',
 								flexDirection: 'row',
 								justifyContent: 'space-between',
-								m: 3,
 							}}
 						>
 							<Typography
-								sx={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
-								onClick={() => setFlip(!flip)}
+								sx={{
+									position: 'absolute',
+									bottom: -20,
+									left: 15,
+									fontSize: 15,
+									fontWeight: 600,
+									cursor: 'pointer',
+								}}
+								onClick={() => setFlip(true)}
 							>
 								Learn More
 							</Typography>
@@ -189,7 +209,7 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 				</Card>
 
 				{/* Back Side */}
-				<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
+				<Card sx={{ maxWidth: 300, maxHeight: 450 }}>
 					<CardContent sx={{ width: 300, height: 500 }}>
 						<Typography
 							gutterBottom
@@ -244,7 +264,15 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 						}}
 					>
 						<Typography
-							sx={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
+							sx={{
+								position: 'absolute',
+								bottom: 15,
+								left: 15,
+								zIndex: 2,
+								fontSize: 15,
+								fontWeight: 600,
+								cursor: 'pointer',
+							}}
 							onClick={() => setFlip(!flip)}
 						>
 							Back

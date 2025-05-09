@@ -58,8 +58,15 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 			isFlipped={flip}
 			flipDirection='horizontal'
 		>
-			{/* Front */}
-			<Card sx={{ maxWidth: 300, maxHeight: 450, display: 'flex' }}>
+			{/* Front Side */}
+			<Card
+				sx={{
+					maxWidth: 300,
+					height: 450,
+					display: 'flex',
+					flexDirection: 'column',
+				}}
+			>
 				<CardActionArea>
 					<CardMedia
 						sx={{ width: 300, height: 300 }}
@@ -82,13 +89,12 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 					>
 						<CardMedia
 							component='img'
-							height='140'
 							image={popoverImageId}
-							alt=''
+							alt='Enlarged Artwork'
 						/>
 					</Popover>
 
-					<CardContent sx={{ width: 300, height: 200 }}>
+					<CardContent sx={{ width: 300 }}>
 						<Typography
 							gutterBottom
 							sx={{
@@ -117,16 +123,20 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 
 						<Box
 							sx={{
+								position: 'absolute',
+								mt: 2,
 								display: 'flex',
 								flexDirection: 'row',
 								justifyContent: 'space-between',
-								mt: 2,
-								gap: 21,
-								position: 'absolute',
 							}}
 						>
 							<Typography
-								sx={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
+								sx={{
+									mr: 21,
+									fontSize: 15,
+									fontWeight: 600,
+									cursor: 'pointer',
+								}}
 								onClick={() => setFlip(true)}
 							>
 								Learn More

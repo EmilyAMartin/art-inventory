@@ -37,25 +37,28 @@ const ProjectCard = ({ project, handleDelete }) => {
 	};
 
 	return (
-		<Box sx={{ marginTop: '1rem' }}>
+		<Box sx={{ mt: '1rem' }}>
 			<ReactCardFlip
 				isFlipped={flip}
 				flipDirection='horizontal'
 			>
+				{/* Front Side */}
 				<Card
-					className='card-font'
-					sx={{ maxWidth: 300, maxHeight: 600 }}
+					sx={{
+						maxWidth: 300,
+						height: 450,
+						display: 'flex',
+						flexDirection: 'column',
+					}}
 				>
 					<CardActionArea>
-						<Box sx={{ position: 'relative', width: 300, height: 300 }}>
-							<CardMedia
-								sx={{ width: 300, height: 300 }}
-								component='img'
-								image={imageUrl}
-								alt='Project Image'
-								onClick={handlePopClick}
-							/>
-						</Box>
+						<CardMedia
+							sx={{ width: 300, height: 300 }}
+							component='img'
+							image={imageUrl}
+							alt='Project Image'
+							onClick={handlePopClick}
+						/>
 
 						<Popover
 							sx={{
@@ -74,21 +77,20 @@ const ProjectCard = ({ project, handleDelete }) => {
 						>
 							<CardMedia
 								component='img'
-								height='140'
 								image={popoverImageId}
-								alt=''
+								alt='Enlarged Artwork'
 							/>
 						</Popover>
 
-						<CardContent sx={{ width: 300, height: 200 }}>
+						<CardContent sx={{ width: 300, position: 'relative' }}>
 							<IconButton
 								aria-label='delete'
 								sx={{
 									position: 'absolute',
-									color: 'black',
-									bottom: 15,
-									right: 15,
+									bottom: -60,
+									right: 30,
 									zIndex: 2,
+									color: 'black',
 									'&:hover': {
 										backgroundColor: 'rgba(0, 0, 0, 0.04)',
 									},
@@ -105,7 +107,6 @@ const ProjectCard = ({ project, handleDelete }) => {
 								gutterBottom
 								fontSize={16}
 								fontWeight={500}
-								component='div'
 							>
 								{project.title}
 							</Typography>
@@ -127,8 +128,15 @@ const ProjectCard = ({ project, handleDelete }) => {
 							}}
 						>
 							<Typography
-								sx={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
-								onClick={() => setFlip(!flip)}
+								sx={{
+									position: 'absolute',
+									bottom: -5,
+									left: 15,
+									fontSize: 15,
+									fontWeight: 600,
+									cursor: 'pointer',
+								}}
+								onClick={() => setFlip(true)}
 							>
 								Learn More
 							</Typography>
@@ -136,13 +144,13 @@ const ProjectCard = ({ project, handleDelete }) => {
 					</CardActionArea>
 				</Card>
 
-				<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
+				{/* Back Side */}
+				<Card sx={{ maxWidth: 300, maxHeight: 450 }}>
 					<CardContent sx={{ width: 300, height: 500 }}>
 						<Typography
 							gutterBottom
 							fontSize={16}
 							fontWeight={500}
-							component='div'
 						>
 							{project.title}
 						</Typography>
@@ -171,7 +179,15 @@ const ProjectCard = ({ project, handleDelete }) => {
 						}}
 					>
 						<Typography
-							sx={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
+							sx={{
+								position: 'absolute',
+								bottom: 15,
+								left: 15,
+								zIndex: 2,
+								fontSize: 15,
+								fontWeight: 600,
+								cursor: 'pointer',
+							}}
 							onClick={() => setFlip(!flip)}
 						>
 							Back

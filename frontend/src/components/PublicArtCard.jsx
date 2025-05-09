@@ -39,17 +39,29 @@ const PublicArtCard = ({ artwork }) => {
 				flipDirection='horizontal'
 			>
 				{/* Front Side */}
-				<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
+				<Card
+					sx={{
+						maxWidth: 300,
+						height: 450,
+						display: 'flex',
+						flexDirection: 'column',
+					}}
+				>
 					<CardActionArea>
 						<CardMedia
+							sx={{ width: 300, height: 300 }}
 							component='img'
 							image={imageUrl}
 							alt='Artwork Image'
 							onClick={handlePopClick}
-							sx={{ width: 300, height: 300 }}
 						/>
 
 						<Popover
+							sx={{
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}
 							open={open}
 							anchorEl={anchorEl}
 							onClose={handleClose}
@@ -58,21 +70,15 @@ const PublicArtCard = ({ artwork }) => {
 								vertical: 'bottom',
 								horizontal: 'left',
 							}}
-							sx={{
-								display: 'flex',
-								justifyContent: 'center',
-								alignItems: 'center',
-							}}
 						>
 							<CardMedia
 								component='img'
-								height='140'
 								image={popoverImageId}
 								alt='Enlarged Artwork'
 							/>
 						</Popover>
 
-						<CardContent sx={{ width: 300, height: 200 }}>
+						<CardContent sx={{ width: 300, position: 'relative' }}>
 							<Typography
 								gutterBottom
 								fontSize={16}
@@ -111,8 +117,15 @@ const PublicArtCard = ({ artwork }) => {
 								}}
 							>
 								<Typography
-									sx={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
-									onClick={() => setFlip(!flip)}
+									sx={{
+										position: 'absolute',
+										bottom: 15,
+										left: 15,
+										fontSize: 15,
+										fontWeight: 600,
+										cursor: 'pointer',
+									}}
+									onClick={() => setFlip(true)}
 								>
 									Learn More
 								</Typography>
@@ -122,7 +135,7 @@ const PublicArtCard = ({ artwork }) => {
 				</Card>
 
 				{/* Back Side */}
-				<Card sx={{ maxWidth: 300, maxHeight: 600 }}>
+				<Card sx={{ maxWidth: 300, maxHeight: 450 }}>
 					<CardContent sx={{ width: 300, height: 500 }}>
 						<Typography
 							gutterBottom
@@ -176,19 +189,20 @@ const PublicArtCard = ({ artwork }) => {
 							m: 3,
 						}}
 					>
-						<Box
+						<Typography
 							sx={{
-								display: 'flex',
-								flexDirection: 'row',
+								position: 'absolute',
+								bottom: 15,
+								left: 15,
+								zIndex: 2,
+								fontSize: 15,
+								fontWeight: 600,
+								cursor: 'pointer',
 							}}
+							onClick={() => setFlip(!flip)}
 						>
-							<Typography
-								sx={{ fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
-								onClick={() => setFlip(!flip)}
-							>
-								Back
-							</Typography>
-						</Box>
+							Back
+						</Typography>
 					</Box>
 				</Card>
 			</ReactCardFlip>

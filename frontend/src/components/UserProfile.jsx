@@ -53,7 +53,9 @@ const UserProfile = () => {
 	}
 
 	return (
-		<Box sx={{ mx: 10, display: 'flex', flexDirection: 'column', gap: 4 }}>
+		<Box
+			sx={{ ml: 10, mr: 10, mb: 20, display: 'flex', flexDirection: 'column' }}
+		>
 			{/*Profile Header */}
 			<Box
 				sx={{
