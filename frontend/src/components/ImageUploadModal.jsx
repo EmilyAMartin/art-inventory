@@ -155,9 +155,9 @@ const ImageUploadModal = ({
 							backgroundColor: '#6c63ff',
 							p: 1,
 							fontSize: '0.9rem',
-							width: '100%',
+							width: '98%',
 							cursor: 'pointer',
-							borderRadius: 1,
+							borderRadius: 2,
 						}}
 					>
 						<label
@@ -171,7 +171,7 @@ const ImageUploadModal = ({
 							}}
 						>
 							<CloudUploadIcon />
-							<Typography>Upload file</Typography>
+							<Typography>Upload</Typography>
 						</label>
 						<input
 							id='image-upload'
@@ -209,6 +209,7 @@ const ImageUploadModal = ({
 							variant='contained'
 							onClick={handleSubmit}
 							sx={{
+								boxShadow: 'none',
 								fontSize: '1rem',
 								textTransform: 'none',
 								color: '#fff',
@@ -226,6 +227,7 @@ const ImageUploadModal = ({
 							variant='contained'
 							onClick={handleClose}
 							sx={{
+								boxShadow: 'none',
 								fontSize: '1rem',
 								textTransform: 'none',
 								color: '#fff',

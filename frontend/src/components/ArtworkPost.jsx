@@ -154,7 +154,7 @@ const ArtworkPost = ({ artwork }) => {
 						>
 							{artwork.date}
 						</Typography>
-						<Divider sx={{ my: 1.5 }} />
+						<Divider sx={{ my: 1 }} />
 
 						<Box
 							display='flex'

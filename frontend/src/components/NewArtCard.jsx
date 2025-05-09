@@ -128,7 +128,7 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 								sx={{
 									position: 'absolute',
 									bottom: -25,
-									right: 30,
+									right: 35,
 									zIndex: 2,
 									color: 'black',
 									'&:hover': {

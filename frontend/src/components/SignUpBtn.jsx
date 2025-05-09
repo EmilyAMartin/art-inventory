@@ -196,6 +196,7 @@ const SignUpBtn = () => {
 								variant='contained'
 								onClick={handleSubmit}
 								sx={{
+									boxShadow: 'none',
 									fontSize: '1rem',
 									textTransform: 'none',
 									color: '#fff',
@@ -212,6 +213,7 @@ const SignUpBtn = () => {
 								variant='contained'
 								onClick={handleClose}
 								sx={{
+									boxShadow: 'none',
 									fontSize: '1rem',
 									textTransform: 'none',
 									color: '#fff',

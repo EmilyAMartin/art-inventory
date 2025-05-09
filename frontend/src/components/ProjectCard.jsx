@@ -88,7 +88,7 @@ const ProjectCard = ({ project, handleDelete }) => {
 								sx={{
 									position: 'absolute',
 									bottom: -60,
-									right: 30,
+									right: 35,
 									zIndex: 2,
 									color: 'black',
 									'&:hover': {
