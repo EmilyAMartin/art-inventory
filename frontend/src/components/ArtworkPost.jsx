@@ -260,19 +260,6 @@ const ArtworkPost = ({ artwork }) => {
 					sx={{ display: 'flex', justifyContent: 'center', gap: 3, my: 2 }}
 				>
 					<Button
-						onClick={() => setIsCommentSectionVisible(false)}
-						sx={{
-							fontSize: '1rem',
-							textTransform: 'none',
-							color: '#fff',
-							borderRadius: '1rem',
-							bgcolor: red[500],
-							'&:hover': { bgcolor: red[700] },
-						}}
-					>
-						Cancel
-					</Button>
-					<Button
 						variant='contained'
 						onClick={handleSubmitComment}
 						disabled={mutation.isLoading}
@@ -286,6 +273,19 @@ const ArtworkPost = ({ artwork }) => {
 						}}
 					>
 						Submit
+					</Button>
+					<Button
+						onClick={() => setIsCommentSectionVisible(false)}
+						sx={{
+							fontSize: '1rem',
+							textTransform: 'none',
+							color: '#fff',
+							borderRadius: '1rem',
+							bgcolor: red[500],
+							'&:hover': { bgcolor: red[700] },
+						}}
+					>
+						Cancel
 					</Button>
 				</DialogActions>
 			</Dialog>
