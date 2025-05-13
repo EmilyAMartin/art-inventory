@@ -77,110 +77,171 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 			: null;
 
 	return (
-		<Box sx={{ mt: '1rem' }}>
-			<ReactCardFlip
-				isFlipped={flip}
-				flipDirection='horizontal'
+		<Box
+			sx={{
+				position: 'relative', // Ensure proper layering
+			}}
+		>
+			{/* Background content wrapper */}
+			<Box
+				sx={{
+					filter: open ? 'blur(5px)' : 'none', // Apply blur to the entire page
+					pointerEvents: open ? 'none' : 'auto', // Disable interaction with blurred content
+					transition: 'filter 0.3s ease', // Smooth transition for the blur effect
+				}}
 			>
-				{/* Front Side */}
-				<Card
-					sx={{
-						maxWidth: 300,
-						height: 450,
-						display: 'flex',
-						flexDirection: 'column',
-					}}
+				<ReactCardFlip
+					isFlipped={flip}
+					flipDirection='horizontal'
 				>
-					<CardActionArea>
-						<CardMedia
-							sx={{ width: 300, height: 300 }}
-							component='img'
-							image={imageUrl}
-							alt='Artwork Image'
-							onClick={handlePopClick}
-						/>
-
-						<Popover
-							sx={{
-								display: 'flex',
-								justifyContent: 'center',
-								alignItems: 'center',
-							}}
-							open={open}
-							anchorEl={anchorEl}
-							anchorReference='none'
-							onClose={handleClose}
-							anchorOrigin={{
-								vertical: 'bottom',
-								horizontal: 'left',
-							}}
-						>
+					{/* Front Side */}
+					<Card
+						sx={{
+							maxWidth: 300,
+							height: 450,
+							display: 'flex',
+							flexDirection: 'column',
+						}}
+					>
+						<CardActionArea>
 							<CardMedia
+								sx={{ width: 300, height: 300 }}
 								component='img'
-								image={popoverImageId}
-								alt='Enlarged Artwork'
+								image={imageUrl}
+								alt='Artwork Image'
+								onClick={handlePopClick}
 							/>
-						</Popover>
 
-						<CardContent sx={{ width: 300, position: 'relative' }}>
-							<IconButton
-								aria-label='delete'
-								sx={{
-									position: 'absolute',
-									bottom: -25,
-									right: 35,
-									zIndex: 2,
-									color: 'black',
-									'&:hover': {
-										backgroundColor: 'rgba(0, 0, 0, 0.04)',
-									},
-								}}
-								onClick={handleDeleteClick}
-							>
-								<DeleteIcon />
-							</IconButton>
+							<CardContent sx={{ width: 300, position: 'relative' }}>
+								<IconButton
+									aria-label='delete'
+									sx={{
+										position: 'absolute',
+										bottom: -25,
+										right: 35,
+										zIndex: 2,
+										color: 'black',
+										'&:hover': {
+											backgroundColor: 'rgba(0, 0, 0, 0.04)',
+										},
+									}}
+									onClick={handleDeleteClick}
+								>
+									<DeleteIcon />
+								</IconButton>
+
+								<Box
+									sx={{
+										display: 'flex',
+										alignItems: 'center',
+										justifyContent: 'space-between',
+									}}
+								>
+									<Typography
+										gutterBottom
+										fontSize={16}
+										fontWeight={500}
+									>
+										{artwork.title}
+									</Typography>
+
+									<Box sx={{ display: 'flex', alignItems: 'center', ml: '2rem' }}>
+										<Checkbox
+											checked={isPublic}
+											onChange={handleTogglePublic}
+											color='primary'
+										/>
+										<Typography
+											variant='body2'
+											sx={{ mr: '2rem' }}
+										>
+											Public
+										</Typography>
+									</Box>
+								</Box>
+
+								<Typography
+									variant='body2'
+									sx={{ color: 'text.secondary' }}
+								>
+									{artwork.artist}
+								</Typography>
+								<Typography
+									variant='body2'
+									sx={{ color: 'text.secondary' }}
+								>
+									{artwork.date}
+								</Typography>
+							</CardContent>
 
 							<Box
 								sx={{
 									display: 'flex',
-									alignItems: 'center',
+									flexDirection: 'row',
 									justifyContent: 'space-between',
 								}}
 							>
 								<Typography
-									gutterBottom
-									fontSize={16}
-									fontWeight={500}
+									sx={{
+										position: 'absolute',
+										bottom: -20,
+										left: 15,
+										fontSize: 15,
+										fontWeight: 600,
+										cursor: 'pointer',
+									}}
+									onClick={() => setFlip(true)}
 								>
-									{artwork.title}
+									Learn More
 								</Typography>
-
-								<Box sx={{ display: 'flex', alignItems: 'center', ml: '2rem' }}>
-									<Checkbox
-										checked={isPublic}
-										onChange={handleTogglePublic}
-										color='primary'
-									/>
-									<Typography
-										variant='body2'
-										sx={{ mr: '2rem' }}
-									>
-										Public
-									</Typography>
-								</Box>
 							</Box>
+						</CardActionArea>
+					</Card>
 
+					{/* Back Side */}
+					<Card sx={{ maxWidth: 300, maxHeight: 450 }}>
+						<CardContent sx={{ width: 300, height: 500 }}>
 							<Typography
-								variant='body2'
-								sx={{ color: 'text.secondary' }}
+								gutterBottom
+								fontSize={16}
+								fontWeight={500}
 							>
-								{artwork.artist}
+								{artwork.title}
 							</Typography>
+							<br />
 							<Typography
 								variant='body2'
 								sx={{ color: 'text.secondary' }}
 							>
-								{artwork.date}
+								Artist: {artwork.artist}
+							</Typography>
+							<br />
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								Date: {artwork.date}
+							</Typography>
+							<br />
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								Location: {artwork.location}
+							</Typography>
+							<br />
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								Medium: {artwork.medium}
+							</Typography>
+							<br />
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								Description: {artwork.description}
 							</Typography>
 						</CardContent>
 
@@ -189,97 +250,57 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 								display: 'flex',
 								flexDirection: 'row',
 								justifyContent: 'space-between',
+								m: 3,
 							}}
 						>
 							<Typography
 								sx={{
 									position: 'absolute',
-									bottom: -20,
+									bottom: 15,
 									left: 15,
+									zIndex: 2,
 									fontSize: 15,
 									fontWeight: 600,
 									cursor: 'pointer',
 								}}
-								onClick={() => setFlip(true)}
+								onClick={() => setFlip(!flip)}
 							>
-								Learn More
+								Back
 							</Typography>
 						</Box>
-					</CardActionArea>
-				</Card>
+					</Card>
+				</ReactCardFlip>
+			</Box>
 
-				{/* Back Side */}
-				<Card sx={{ maxWidth: 300, maxHeight: 450 }}>
-					<CardContent sx={{ width: 300, height: 500 }}>
-						<Typography
-							gutterBottom
-							fontSize={16}
-							fontWeight={500}
-						>
-							{artwork.title}
-						</Typography>
-						<br />
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							Artist: {artwork.artist}
-						</Typography>
-						<br />
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							Date: {artwork.date}
-						</Typography>
-						<br />
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							Location: {artwork.location}
-						</Typography>
-						<br />
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							Medium: {artwork.medium}
-						</Typography>
-						<br />
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							Description: {artwork.description}
-						</Typography>
-					</CardContent>
-
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'row',
-							justifyContent: 'space-between',
-							m: 3,
-						}}
-					>
-						<Typography
-							sx={{
-								position: 'absolute',
-								bottom: 15,
-								left: 15,
-								zIndex: 2,
-								fontSize: 15,
-								fontWeight: 600,
-								cursor: 'pointer',
-							}}
-							onClick={() => setFlip(!flip)}
-						>
-							Back
-						</Typography>
-					</Box>
-				</Card>
-			</ReactCardFlip>
+			{/* Popover */}
+			<Popover
+				sx={{
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center',
+					position: 'fixed',
+					top: 0,
+					left: 0,
+					width: '100%',
+					height: '100%',
+					backgroundColor: 'rgba(0, 0, 0, 0.5)', // Optional: Dim background
+					zIndex: 1300, // Ensure it appears above other content
+				}}
+				open={open}
+				anchorEl={anchorEl}
+				anchorReference='none'
+				onClose={handleClose}
+				anchorOrigin={{
+					vertical: 'bottom',
+					horizontal: 'left',
+				}}
+			>
+				<CardMedia
+					component='img'
+					image={popoverImageId}
+					alt='Enlarged Artwork'
+				/>
+			</Popover>
 		</Box>
 	);
 };

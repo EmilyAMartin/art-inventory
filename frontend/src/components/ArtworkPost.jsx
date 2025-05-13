@@ -107,188 +107,110 @@ const ArtworkPost = ({ artwork }) => {
 	if (!artwork) return null;
 
 	return (
-		<Box sx={{ display: 'flex', justifyContent: 'center', paddingBottom: 4 }}>
-			<Card sx={{ maxWidth: 300, maxHeight: 450 }}>
-				<CardActionArea>
-					<CardMedia
-						sx={{ width: 300, height: 300 }}
-						component='img'
-						image={imageUrl}
-						alt={artwork.title}
-						onClick={handlePopClick}
-					/>
-
-					<Popover
-						open={open}
-						anchorEl={anchorEl}
-						onClose={handleClose}
-						anchorOrigin={{
-							vertical: 'bottom',
-							horizontal: 'center',
-						}}
-					>
-						<CardMedia
-							component='img'
-							image={popoverImageId}
-							alt='Enlarged Artwork'
-						/>
-					</Popover>
-
-					<CardContent>
-						<Typography
-							gutterBottom
-							fontSize={16}
-							fontWeight={500}
-						>
-							{artwork.title}
-						</Typography>
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							{artwork.artist}
-						</Typography>
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							{artwork.date}
-						</Typography>
-						<Divider sx={{ my: 1 }} />
-
-						<Box
-							display='flex'
-							justifyContent='space-between'
-							alignItems='center'
-						>
-							<Typography
-								variant='body1'
-								fontWeight={500}
-							>
-								Comments
-							</Typography>
-							<IconButton onClick={toggleCommentSection}>
-								<Badge
-									badgeContent={comments.length}
-									color='primary'
-								>
-									<CommentIcon />
-								</Badge>
-							</IconButton>
-						</Box>
-					</CardContent>
-				</CardActionArea>
-			</Card>
-
-			<Dialog
-				open={isCommentSectionVisible}
-				onClose={() => setIsCommentSectionVisible(false)}
-				fullWidth
-				maxWidth='sm'
+		<Box
+			sx={{
+				position: 'relative', // Ensure proper layering
+			}}
+		>
+			{/* Background content wrapper */}
+			<Box
+				sx={{
+					filter: open ? 'blur(5px)' : 'none', // Apply blur to the entire page
+					pointerEvents: open ? 'none' : 'auto', // Disable interaction with blurred content
+					transition: 'filter 0.3s ease', // Smooth transition for the blur effect
+				}}
 			>
-				<DialogTitle>Comments</DialogTitle>
-				<DialogContent dividers>
-					<TextField
-						label='Write a comment'
-						variant='outlined'
-						fullWidth
-						multiline
-						rows={2}
-						value={comment}
-						onChange={handleCommentChange}
-						sx={{ mb: 2 }}
-					/>
-
-					{isLoading ? (
-						<Typography>Loading comments...</Typography>
-					) : isError ? (
-						<Typography color='error'>Error: {error.message}</Typography>
-					) : comments.length > 0 ? (
-						<Box>
-							<Typography
-								variant='h6'
-								sx={{ mb: 2 }}
-							>
-								All Comments:
-							</Typography>
-							{comments.map((comment, index) => (
-								<Box
-									key={index}
-									display='flex'
-									alignItems='flex-start'
-									sx={{ mb: 2 }}
-								>
-									<Link
-										to={`/users/${comment.user_id}`}
-										sx={{ textDecoration: 'none' }}
-									>
-										<Avatar
-											alt='Profile Picture'
-											src={comment.profile_picture}
-											sx={{ width: 30, height: 30, mr: 1, cursor: 'pointer' }}
-										/>
-									</Link>
-									<Box>
-										<Typography
-											variant='body2'
-											sx={{ fontWeight: 'bold' }}
-										>
-											{comment.user_name}
-										</Typography>
-										<Typography
-											variant='body2'
-											color='text.secondary'
-										>
-											{comment.text}
-										</Typography>
-										<Typography
-											variant='caption'
-											color='text.disabled'
-										>
-											{new Date(comment.created_at).toLocaleTimeString()}
-										</Typography>
-									</Box>
-								</Box>
-							))}
-						</Box>
-					) : (
-						<Typography>No comments yet.</Typography>
-					)}
-				</DialogContent>
-
-				<DialogActions
-					sx={{ display: 'flex', justifyContent: 'center', gap: 3, my: 2 }}
+				{/* Main content */}
+				<Box
+					sx={{
+						display: 'flex',
+						justifyContent: 'center',
+						paddingBottom: 4,
+					}}
 				>
-					<Button
-						variant='contained'
-						onClick={handleSubmitComment}
-						disabled={mutation.isLoading}
-						sx={{
-							fontSize: '1rem',
-							textTransform: 'none',
-							color: '#fff',
-							borderRadius: '1rem',
-							bgcolor: green[400],
-							'&:hover': { bgcolor: green[700] },
-						}}
-					>
-						Submit
-					</Button>
-					<Button
-						onClick={() => setIsCommentSectionVisible(false)}
-						sx={{
-							fontSize: '1rem',
-							textTransform: 'none',
-							color: '#fff',
-							borderRadius: '1rem',
-							bgcolor: red[500],
-							'&:hover': { bgcolor: red[700] },
-						}}
-					>
-						Cancel
-					</Button>
-				</DialogActions>
-			</Dialog>
+					<Card sx={{ maxWidth: 300, maxHeight: 450 }}>
+						<CardActionArea>
+							<CardMedia
+								sx={{ width: 300, height: 300 }}
+								component='img'
+								image={imageUrl}
+								alt={artwork.title}
+								onClick={handlePopClick}
+							/>
+
+							<CardContent>
+								<Typography
+									gutterBottom
+									fontSize={16}
+									fontWeight={500}
+								>
+									{artwork.title}
+								</Typography>
+								<Typography
+									variant='body2'
+									sx={{ color: 'text.secondary' }}
+								>
+									{artwork.artist}
+								</Typography>
+								<Typography
+									variant='body2'
+									sx={{ color: 'text.secondary' }}
+								>
+									{artwork.date}
+								</Typography>
+								<Divider sx={{ my: 1 }} />
+
+								<Box
+									display='flex'
+									justifyContent='space-between'
+									alignItems='center'
+								>
+									<Typography
+										variant='body1'
+										fontWeight={500}
+									>
+										Comments
+									</Typography>
+									<IconButton onClick={toggleCommentSection}>
+										<Badge
+											badgeContent={comments.length}
+											color='primary'
+										>
+											<CommentIcon />
+										</Badge>
+									</IconButton>
+								</Box>
+							</CardContent>
+						</CardActionArea>
+					</Card>
+				</Box>
+			</Box>
+
+			{/* Popover */}
+			<Popover
+				open={open}
+				anchorEl={anchorEl}
+				anchorReference='none'
+				onClose={handleClose}
+				sx={{
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center',
+					position: 'fixed',
+					top: 0,
+					left: 0,
+					width: '100%',
+					height: '100%',
+					backgroundColor: 'rgba(0, 0, 0, 0.5)', // Optional: Dim background
+					zIndex: 1300, // Ensure it appears above other content
+				}}
+			>
+				<CardMedia
+					component='img'
+					image={popoverImageId}
+					alt='Enlarged Artwork'
+				/>
+			</Popover>
 		</Box>
 	);
 };

@@ -33,52 +33,100 @@ const PublicArtCard = ({ artwork }) => {
 			: null;
 
 	return (
-		<Box sx={{ mt: '1rem' }}>
-			<ReactCardFlip
-				isFlipped={flip}
-				flipDirection='horizontal'
+		<Box
+			sx={{
+				position: 'relative', // Ensure proper layering
+			}}
+		>
+			{/* Background content wrapper */}
+			<Box
+				sx={{
+					filter: open ? 'blur(5px)' : 'none', // Apply blur to the entire page
+					pointerEvents: open ? 'none' : 'auto', // Disable interaction with blurred content
+					transition: 'filter 0.3s ease', // Smooth transition for the blur effect
+				}}
 			>
-				{/* Front Side */}
-				<Card
-					sx={{
-						maxWidth: 300,
-						height: 450,
-						display: 'flex',
-						flexDirection: 'column',
-					}}
+				<ReactCardFlip
+					isFlipped={flip}
+					flipDirection='horizontal'
 				>
-					<CardActionArea>
-						<CardMedia
-							sx={{ width: 300, height: 300 }}
-							component='img'
-							image={imageUrl}
-							alt='Artwork Image'
-							onClick={handlePopClick}
-						/>
-
-						<Popover
-							sx={{
-								display: 'flex',
-								justifyContent: 'center',
-								alignItems: 'center',
-							}}
-							open={open}
-							anchorEl={anchorEl}
-							onClose={handleClose}
-							anchorReference='none'
-							anchorOrigin={{
-								vertical: 'bottom',
-								horizontal: 'left',
-							}}
-						>
+					{/* Front Side */}
+					<Card
+						sx={{
+							maxWidth: 300,
+							height: 450,
+							display: 'flex',
+							flexDirection: 'column',
+						}}
+					>
+						<CardActionArea>
 							<CardMedia
+								sx={{ width: 300, height: 300 }}
 								component='img'
-								image={popoverImageId}
-								alt='Enlarged Artwork'
+								image={imageUrl}
+								alt='Artwork Image'
+								onClick={handlePopClick}
 							/>
-						</Popover>
 
-						<CardContent sx={{ width: 300, position: 'relative' }}>
+							<CardContent sx={{ width: 300, position: 'relative' }}>
+								<Typography
+									gutterBottom
+									fontSize={16}
+									fontWeight={500}
+								>
+									{artwork.title}
+								</Typography>
+								<Typography
+									variant='body2'
+									sx={{ color: 'text.secondary' }}
+								>
+									{artwork.artist}
+								</Typography>
+								<Typography
+									variant='body2'
+									sx={{ color: 'text.secondary' }}
+								>
+									{artwork.date}
+								</Typography>
+							</CardContent>
+
+							<Box
+								className='favorites-more'
+								sx={{
+									display: 'flex',
+									flexDirection: 'row',
+									justifyContent: 'space-between',
+									m: 3,
+								}}
+							>
+								<Box
+									sx={{
+										display: 'flex',
+										flexDirection: 'row',
+										justifyContent: 'space-between',
+									}}
+								>
+									<Typography
+										sx={{
+											position: 'absolute',
+											bottom: 15,
+											left: 15,
+											fontSize: 15,
+											fontWeight: 600,
+											cursor: 'pointer',
+										}}
+										onClick={() => setFlip(true)}
+									>
+										Learn More
+									</Typography>
+								</Box>
+							</Box>
+						</CardActionArea>
+					</Card>
+
+					{/* Back Side */}
+					<Card sx={{ maxWidth: 300, maxHeight: 450 }}>
+						<CardContent sx={{ width: 300, height: 500 }}>
 							<Typography
 								gutterBottom
 								fontSize={16}
@@ -86,22 +134,44 @@ const PublicArtCard = ({ artwork }) => {
 							>
 								{artwork.title}
 							</Typography>
+							<br />
 							<Typography
 								variant='body2'
 								sx={{ color: 'text.secondary' }}
 							>
-								{artwork.artist}
+								Artist: {artwork.artist}
 							</Typography>
+							<br />
 							<Typography
 								variant='body2'
 								sx={{ color: 'text.secondary' }}
 							>
-								{artwork.date}
+								Date: {artwork.date}
+							</Typography>
+							<br />
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								Location: {artwork.location}
+							</Typography>
+							<br />
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								Medium: {artwork.medium}
+							</Typography>
+							<br />
+							<Typography
+								variant='body2'
+								sx={{ color: 'text.secondary' }}
+							>
+								Description: {artwork.description}
 							</Typography>
 						</CardContent>
 
 						<Box
-							className='favorites-more'
 							sx={{
 								display: 'flex',
 								flexDirection: 'row',
@@ -109,103 +179,54 @@ const PublicArtCard = ({ artwork }) => {
 								m: 3,
 							}}
 						>
-							<Box
+							<Typography
 								sx={{
-									display: 'flex',
-									flexDirection: 'row',
-									justifyContent: 'space-between',
+									position: 'absolute',
+									bottom: 15,
+									left: 15,
+									zIndex: 2,
+									fontSize: 15,
+									fontWeight: 600,
+									cursor: 'pointer',
 								}}
+								onClick={() => setFlip(!flip)}
 							>
-								<Typography
-									sx={{
-										position: 'absolute',
-										bottom: 15,
-										left: 15,
-										fontSize: 15,
-										fontWeight: 600,
-										cursor: 'pointer',
-									}}
-									onClick={() => setFlip(true)}
-								>
-									Learn More
-								</Typography>
-							</Box>
+								Back
+							</Typography>
 						</Box>
-					</CardActionArea>
-				</Card>
+					</Card>
+				</ReactCardFlip>
+			</Box>
 
-				{/* Back Side */}
-				<Card sx={{ maxWidth: 300, maxHeight: 450 }}>
-					<CardContent sx={{ width: 300, height: 500 }}>
-						<Typography
-							gutterBottom
-							fontSize={16}
-							fontWeight={500}
-						>
-							{artwork.title}
-						</Typography>
-						<br />
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							Artist: {artwork.artist}
-						</Typography>
-						<br />
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							Date: {artwork.date}
-						</Typography>
-						<br />
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							Location: {artwork.location}
-						</Typography>
-						<br />
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							Medium: {artwork.medium}
-						</Typography>
-						<br />
-						<Typography
-							variant='body2'
-							sx={{ color: 'text.secondary' }}
-						>
-							Description: {artwork.description}
-						</Typography>
-					</CardContent>
-
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'row',
-							justifyContent: 'space-between',
-							m: 3,
-						}}
-					>
-						<Typography
-							sx={{
-								position: 'absolute',
-								bottom: 15,
-								left: 15,
-								zIndex: 2,
-								fontSize: 15,
-								fontWeight: 600,
-								cursor: 'pointer',
-							}}
-							onClick={() => setFlip(!flip)}
-						>
-							Back
-						</Typography>
-					</Box>
-				</Card>
-			</ReactCardFlip>
+			{/* Popover */}
+			<Popover
+				sx={{
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center',
+					position: 'fixed',
+					top: 0,
+					left: 0,
+					width: '100%',
+					height: '100%',
+					backgroundColor: 'rgba(0, 0, 0, 0.5)', // Optional: Dim background
+					zIndex: 1300, // Ensure it appears above other content
+				}}
+				open={open}
+				anchorEl={anchorEl}
+				anchorReference='none'
+				onClose={handleClose}
+				anchorOrigin={{
+					vertical: 'bottom',
+					horizontal: 'left',
+				}}
+			>
+				<CardMedia
+					component='img'
+					image={popoverImageId}
+					alt='Enlarged Artwork'
+				/>
+			</Popover>
 		</Box>
 	);
 };
