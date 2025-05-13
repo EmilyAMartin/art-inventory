@@ -88,7 +88,7 @@ const Favorites = () => {
 			});
 			if (!response.ok) throw new Error('Failed to update favorite status');
 			toast.success('Artwork removed from favorites');
-			refetch(); // Refresh favorites
+			refetch();
 		} catch {
 			toast.error('Failed to update favorite status');
 		}
@@ -177,6 +177,7 @@ const Favorites = () => {
 			sx={{
 				display: 'flex',
 				flexDirection: 'column',
+				alignItems: 'center',
 				justifyContent: 'space-between',
 				gap: 2,
 				margin: 10,
