@@ -177,69 +177,64 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 							<CardContent
 								sx={{
 									padding: { xs: 1, sm: 2 },
+									display: 'flex',
+									flexDirection: 'column', // Stack content vertically
+									height: '100%', // Ensure the CardContent takes the full height of the card
+									justifyContent: 'space-between', // Distribute space between elements
 								}}
 							>
-								<Box>
+								<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
 									<Typography
-										gutterBottom
+										variant='body2'
 										sx={{
-											fontSize: { xs: '0.9rem', sm: '1rem' },
-											fontWeight: 500,
-											whiteSpace: 'nowrap',
-											overflow: 'hidden',
-											textOverflow: 'ellipsis',
+											color: 'text.secondary',
+											fontSize: 'clamp(0.7rem, 1vw, 0.9rem)',
+											whiteSpace: 'normal',
+											wordBreak: 'break-word',
 										}}
-									>
-										{art.title}
-									</Typography>
-									<Typography
-										variant='body2'
-										sx={{ color: 'text.secondary' }}
-									>
-										Artist: {art.artist_title}
-									</Typography>
-									<Typography
-										variant='body2'
-										sx={{ color: 'text.secondary' }}
-									>
-										Date: {art.date_end}
-									</Typography>
-									<Typography
-										variant='body2'
-										sx={{ color: 'text.secondary' }}
 									>
 										Place of Origin: {art.place_of_origin}
 									</Typography>
 									<Typography
 										variant='body2'
-										sx={{ color: 'text.secondary' }}
+										sx={{
+											color: 'text.secondary',
+											fontSize: 'clamp(0.7rem, 1vw, 0.9rem)',
+											whiteSpace: 'normal',
+											wordBreak: 'break-word',
+										}}
 									>
 										Type: {art.artwork_type_title}
 									</Typography>
 									<Typography
 										variant='body2'
-										sx={{ color: 'text.secondary' }}
+										sx={{
+											color: 'text.secondary',
+											fontSize: 'clamp(0.7rem, 1vw, 0.9rem)',
+											whiteSpace: 'normal',
+											wordBreak: 'break-word',
+										}}
 									>
 										Medium: {art.medium_display}
 									</Typography>
 									<Typography
 										variant='body2'
-										sx={{ color: 'text.secondary' }}
+										sx={{
+											color: 'text.secondary',
+											fontSize: 'clamp(0.7rem, 1vw, 0.9rem)',
+											whiteSpace: 'normal',
+											wordBreak: 'break-word',
+										}}
 									>
 										Description: {art?.thumbnail?.alt_text}
-									</Typography>
-									<Typography
-										variant='body2'
-										sx={{ color: 'text.secondary' }}
-									>
-										Credit: {art.credit_line}
 									</Typography>
 								</Box>
 								<Box
 									sx={{
 										display: 'flex',
 										justifyContent: 'flex-end',
-										mt: 2,
+										position: 'absolute',
+										mt: 50,
 									}}
 								>
 									<Typography
@@ -247,6 +242,7 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 											fontSize: { xs: '0.8rem', sm: '1rem' },
 											fontWeight: 600,
 											cursor: 'pointer',
+											marginTop: 'auto', // Ensure this pushes the button to the bottom
 										}}
 										onClick={() => setFlip(false)}
 									>

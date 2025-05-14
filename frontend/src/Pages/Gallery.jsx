@@ -195,8 +195,8 @@ const Gallery = () => {
 					display: 'flex',
 					justifyContent: 'center',
 					gap: 2,
-					flexWrap: 'wrap', // Allow buttons to wrap on smaller screens
-					padding: 2, // Add padding for better spacing
+					flexWrap: 'wrap',
+					padding: 2,
 				}}
 			>
 				{['Painting', 'Printmaking', 'Sculpture', 'Photography', 'Textile'].map(
@@ -215,10 +215,10 @@ const Gallery = () => {
 									backgroundColor: '#b9b5ff',
 									color: 'white',
 								},
-								// Responsive width for buttons
+
 								width: {
-									xs: '100%', // Full width on extra small screens
-									sm: 'auto', // Auto width on small screens and above
+									xs: '100%',
+									sm: 'auto',
 								},
 							}}
 							onClick={() => {
