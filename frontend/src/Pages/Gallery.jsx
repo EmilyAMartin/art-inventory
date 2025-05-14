@@ -143,7 +143,15 @@ const Gallery = () => {
 	};
 
 	return (
-		<Box sx={{ display: 'flex', flexDirection: 'column', margin: 10, gap: 4 }}>
+		<Box
+			sx={{
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				margin: 10,
+				gap: 4,
+			}}
+		>
 			{/* Search Bar */}
 			<Box
 				className='search-bar'
@@ -187,6 +195,8 @@ const Gallery = () => {
 					display: 'flex',
 					justifyContent: 'center',
 					gap: 2,
+					flexWrap: 'wrap', // Allow buttons to wrap on smaller screens
+					padding: 2, // Add padding for better spacing
 				}}
 			>
 				{['Painting', 'Printmaking', 'Sculpture', 'Photography', 'Textile'].map(
@@ -204,6 +214,11 @@ const Gallery = () => {
 								'&:hover': {
 									backgroundColor: '#b9b5ff',
 									color: 'white',
+								},
+								// Responsive width for buttons
+								width: {
+									xs: '100%', // Full width on extra small screens
+									sm: 'auto', // Auto width on small screens and above
 								},
 							}}
 							onClick={() => {
