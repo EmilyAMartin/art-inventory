@@ -36,7 +36,6 @@ const Home = () => {
 			sx={{
 				display: 'flex',
 				flexDirection: 'column',
-				margin: 10,
 				gap: 4,
 			}}
 		>

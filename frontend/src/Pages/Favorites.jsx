@@ -179,8 +179,8 @@ const Favorites = () => {
 				flexDirection: 'column',
 				alignItems: 'center',
 				justifyContent: 'space-between',
+				mt: 10,
 				gap: 2,
-				margin: 10,
 			}}
 		>
 			<Grid2

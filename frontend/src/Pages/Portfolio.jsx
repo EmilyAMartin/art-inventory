@@ -152,7 +152,6 @@ const PortfolioPage = () => {
 				display: 'flex',
 				flexDirection: 'column',
 				gap: 2,
-				margin: 10,
 				paddingBottom: 20,
 				minHeight: '100vh',
 				boxSizing: 'border-box',

@@ -148,7 +148,6 @@ const Gallery = () => {
 				display: 'flex',
 				flexDirection: 'column',
 				alignItems: 'center',
-				margin: 10,
 				gap: 4,
 			}}
 		>

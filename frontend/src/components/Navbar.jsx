@@ -68,10 +68,6 @@ export const Navbar = () => {
 				display: 'flex',
 				justifyContent: 'space-between',
 				alignItems: 'center',
-				mt: 6,
-				mr: 2,
-				ml: 2,
-
 				bgcolor: '#fff',
 				position: 'sticky',
 				top: 0,
@@ -88,7 +84,6 @@ export const Navbar = () => {
 					fontWeight: 'bold',
 					textDecoration: 'none',
 					color: 'black',
-					ml: 2,
 				}}
 			>
 				<Box
