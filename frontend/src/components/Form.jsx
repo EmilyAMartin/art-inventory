@@ -100,7 +100,7 @@ function Form({ userData }) {
 	}
 
 	return (
-		<Box sx={{ ml: 10, mr: 10 }}>
+		<Box sx={{ mt: 10, ml: 10, mr: 10 }}>
 			<Box
 				component='form'
 				onSubmit={handleSubmit}

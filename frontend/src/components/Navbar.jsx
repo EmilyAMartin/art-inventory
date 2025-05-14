@@ -165,18 +165,27 @@ export const Navbar = () => {
 						))}
 
 						{/* Avatar & Account Menu */}
-						<Box component='li'>
-							<IconButton onClick={handleAccountClick}>
-								{currentUser.profile_image ? (
-									<Avatar
-										src={currentUser.profile_image}
-										alt={currentUser.name}
-										sx={{ width: 35, height: 35 }}
-									/>
-								) : (
-									<AccountCircleIcon sx={{ color: 'black', fontSize: '125%' }} />
-								)}
-							</IconButton>
+						<Box>
+							<Box
+								sx={{
+									display: 'flex',
+									justifyContent: { xs: 'center', sm: 'flex-start' }, // Center on mobile, align left on larger screens
+									alignItems: 'center',
+									mt: { xs: 2, sm: 0 }, // Add margin-top for spacing in mobile view
+								}}
+							>
+								<IconButton onClick={handleAccountClick}>
+									{currentUser.profile_image ? (
+										<Avatar
+											src={currentUser.profile_image}
+											alt={currentUser.name}
+											sx={{ width: 35, height: 35 }}
+										/>
+									) : (
+										<AccountCircleIcon sx={{ color: 'black', fontSize: '125%' }} />
+									)}
+								</IconButton>
+							</Box>
 							<Menu
 								anchorEl={anchorEl}
 								open={Boolean(anchorEl)}
