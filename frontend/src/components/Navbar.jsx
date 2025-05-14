@@ -69,14 +69,14 @@ export const Navbar = () => {
 				justifyContent: 'space-between',
 				alignItems: 'center',
 				mt: 6,
-				ml: 1,
 				mr: 2,
+				ml: 2,
+
 				bgcolor: '#fff',
 				position: 'sticky',
 				top: 0,
 				zIndex: 1,
 				flexDirection: { xs: 'column', sm: 'row' },
-				px: { xs: '0.5rem', sm: '3rem' },
 			}}
 		>
 			{/* Logo */}

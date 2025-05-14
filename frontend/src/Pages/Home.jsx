@@ -37,7 +37,7 @@ const Home = () => {
 				display: 'flex',
 				flexDirection: 'column',
 				margin: 10,
-				gap: 4, // Maintain spacing between sections
+				gap: 4,
 			}}
 		>
 			{/* Hero Section */}

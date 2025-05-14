@@ -59,8 +59,6 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 				position: 'relative',
 				width: '100%',
 				maxWidth: 400,
-				margin: '0 auto',
-				padding: { xs: 1, sm: 2 },
 			}}
 		>
 			{/* Background content wrapper */}
