@@ -17,7 +17,6 @@ export async function createCommentsTable() {
 }
 
 export function setupCommentRoutes(app) {
-	// Fetch comments for a specific artwork
 	app.get('/api/comments/:artworkId', async (req, res) => {
 		try {
 			const [rows] = await dbPool.query(
@@ -27,8 +26,6 @@ export function setupCommentRoutes(app) {
                 ORDER BY created_at DESC`,
 				[req.params.artworkId]
 			);
-
-			// Add full URL for profile_picture if it exists
 			const fullComments = rows.map((comment) => ({
 				...comment,
 				profile_picture: comment.profile_picture
@@ -42,12 +39,10 @@ export function setupCommentRoutes(app) {
 			res.status(500).json({ message: 'Failed to fetch comments' });
 		}
 	});
-
-	// Add a new comment to a specific artwork
 	app.post('/api/comments/:artworkId', async (req, res) => {
 		const { artworkId } = req.params;
 		const { text } = req.body;
-		const user = req.session.user; // Assuming user session is available
+		const user = req.session.user;
 
 		if (!user) {
 			return res.status(401).json({ message: 'Not authenticated' });
@@ -63,10 +58,10 @@ export function setupCommentRoutes(app) {
                 VALUES (?, ?, ?, ?, ?)`,
 				[
 					artworkId,
-					user.id, // Use the logged-in user's ID
-					user.username || user.name, // Use username or name
+					user.id,
+					user.username || user.name,
 					text,
-					user.profile_image || 'https://example.com/default-pic.jpg', // Default profile picture if none exists
+					user.profile_image || 'https://example.com/default-pic.jpg',
 				]
 			);
 

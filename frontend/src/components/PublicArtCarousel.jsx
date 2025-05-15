@@ -102,7 +102,6 @@ function PublicArtCarousel({ artworks }) {
 				<br />
 				<br />
 				<br />
-				{/* Dot Carousel for Small Screens */}
 				{isSmallScreen && (
 					<Stack
 						direction='row'

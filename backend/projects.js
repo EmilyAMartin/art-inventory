@@ -6,7 +6,6 @@ import express from 'express';
 
 export const createTable = async () => {
 	try {
-		// Create the projects table if it doesn't exist
 		await dbPool.query(`
             CREATE TABLE IF NOT EXISTS projects (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -27,7 +26,6 @@ export const createTable = async () => {
 };
 
 export const setupRoutes = (app) => {
-	// Get all projects for the current user
 	app.get('/projects', async (req, res) => {
 		if (!req.session.user) {
 			return res.status(401).json({
@@ -44,8 +42,6 @@ export const setupRoutes = (app) => {
 				WHERE projects.user_id = ?`,
 				[req.session.user.id]
 			);
-
-			// Format the project data
 			const formattedProjects = results.map((project) => ({
 				...project,
 				images: project.image_path ? [project.image_path] : [],
@@ -63,7 +59,6 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	// Add new project route with file upload
 	app.post('/projects', upload.single('image'), async (req, res) => {
 		console.log('Received project creation request:', req.body);
 		console.log('Uploaded file:', req.file);
@@ -105,7 +100,6 @@ export const setupRoutes = (app) => {
 				});
 			}
 
-			// Insert the project into the database
 			const query = `INSERT INTO projects (user_id, title, medium, description, image_path) VALUES (?, ?, ?, ?, ?)`;
 			const values = [req.session.user.id, title, medium, description, imagePath];
 
@@ -126,7 +120,6 @@ export const setupRoutes = (app) => {
 				});
 			}
 
-			// Get the newly created project
 			let newProject;
 			try {
 				[newProject] = await dbPool.query(
@@ -136,8 +129,6 @@ export const setupRoutes = (app) => {
 					[result.insertId]
 				);
 				console.log('Retrieved new project:', newProject[0]);
-
-				// Format the project for frontend
 				const project = newProject[0];
 				console.log('Project before formatting:', project);
 				project.images = project.image_path ? [project.image_path] : [];
@@ -169,7 +160,6 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	// Delete project route
 	app.delete('/projects/:id', async (req, res) => {
 		if (!req.session.user) {
 			return res.status(401).json({
@@ -181,8 +171,6 @@ export const setupRoutes = (app) => {
 
 		try {
 			const projectId = req.params.id;
-
-			// First check if the project exists and belongs to the user
 			const [projectResult] = await dbPool.query(
 				'SELECT user_id, image_path FROM projects WHERE id = ?',
 				[projectId]
@@ -204,17 +192,13 @@ export const setupRoutes = (app) => {
 				});
 			}
 
-			// Delete the image file if it exists
 			if (projectResult[0].image_path) {
 				try {
 					fs.unlinkSync(projectResult[0].image_path);
 				} catch (unlinkError) {
 					console.error('Error deleting image file:', unlinkError);
-					// Continue with database deletion even if file deletion fails
 				}
 			}
-
-			// Delete the project from database
 			await dbPool.query('DELETE FROM projects WHERE id = ?', [projectId]);
 
 			res.json({

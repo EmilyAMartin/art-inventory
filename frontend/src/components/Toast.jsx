@@ -6,6 +6,12 @@ const Toast = () => {
 		<Toaster
 			position='top-center'
 			reverseOrder={false}
+			toastOptions={{
+				style: {
+					fontFamily: 'Roboto, sans-serif',
+					fontSize: '1rem',
+				},
+			}}
 		/>
 	);
 };

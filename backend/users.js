@@ -4,7 +4,6 @@ import upload from './fileUpload.js';
 import path from 'path';
 import fs from 'fs';
 
-// User Table
 export const createTable = async () => {
 	try {
 		await dbPool.query(`
@@ -25,9 +24,7 @@ export const createTable = async () => {
 	}
 };
 
-// Users Routes
 export const setupRoutes = (app) => {
-	// Login Route
 	app.post('/login', async (req, res) => {
 		const { email, password } = req.body;
 
@@ -68,7 +65,6 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	// Logout Route
 	app.post('/logout', (req, res) => {
 		if (req.session.user) {
 			req.session.destroy((err) => {
@@ -83,7 +79,6 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	// Register Route
 	app.post('/register', async (req, res) => {
 		const { name, email, password, username, bio } = req.body;
 
@@ -151,18 +146,15 @@ export const setupRoutes = (app) => {
 		try {
 			const { userId } = req.params;
 
-			// Query to fetch user details
 			const [userResult] = await dbPool.query(
 				'SELECT id, name, email, username, bio, profile_image FROM users WHERE id = ?',
 				[userId]
 			);
 
-			// If no user is found, return 404
 			if (userResult.length === 0) {
 				return res.status(404).json({ message: 'User not found' });
 			}
 
-			// Return the user data
 			res.json(userResult[0]);
 		} catch (err) {
 			console.error('Error fetching user:', err);
@@ -211,7 +203,6 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	// Update Profile Image Route
 	app.post('/profile/image', upload.single('image'), async (req, res) => {
 		if (!req.session.user) {
 			return res.status(401).json({ message: 'Not logged in' });
@@ -222,10 +213,7 @@ export const setupRoutes = (app) => {
 				return res.status(400).json({ message: 'No image file provided' });
 			}
 
-			// Create the image URL
 			const imageUrl = `/uploads/${req.file.filename}`;
-
-			// Delete old profile image if it exists
 			const [userResult] = await dbPool.query(
 				'SELECT profile_image FROM users WHERE id = ?',
 				[req.session.user.id]
@@ -246,7 +234,6 @@ export const setupRoutes = (app) => {
 				req.session.user.id,
 			]);
 
-			// Update session user data
 			const [updatedUserResult] = await dbPool.query(
 				'SELECT id, name, email, username, bio, profile_image FROM users WHERE id = ?',
 				[req.session.user.id]

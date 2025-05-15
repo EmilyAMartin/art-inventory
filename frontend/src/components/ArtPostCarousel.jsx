@@ -56,7 +56,6 @@ function ArtPostCarousel({ artworks, onSubmitComment }) {
 				marginTop: '40px',
 			}}
 		>
-			{/* Previous Button */}
 			<IconButton
 				onClick={handlePrevPage}
 				sx={{ margin: 5 }}
@@ -65,7 +64,6 @@ function ArtPostCarousel({ artworks, onSubmitComment }) {
 				<NavigateBeforeIcon />
 			</IconButton>
 
-			{/* Carousel Content */}
 			<Box
 				sx={{
 					width: `${containerWidth}px`,
@@ -103,7 +101,6 @@ function ArtPostCarousel({ artworks, onSubmitComment }) {
 				<br />
 				<br />
 				<br />
-				{/* Dot Carousel for Small Screens */}
 				{isSmallScreen && (
 					<Stack
 						direction='row'
@@ -142,8 +139,6 @@ function ArtPostCarousel({ artworks, onSubmitComment }) {
 					</Stack>
 				)}
 			</Box>
-
-			{/* Next Button */}
 			<IconButton
 				onClick={handleNextPage}
 				sx={{ margin: 5 }}

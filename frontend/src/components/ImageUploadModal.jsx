@@ -10,7 +10,7 @@ import {
 	Button,
 } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { modalStyle } from '../styles/modalButtons'; // Ensure this path is correct
+import { modalStyle } from '../styles/modalButtons';
 import toast from 'react-hot-toast';
 
 const ImageUploadModal = ({

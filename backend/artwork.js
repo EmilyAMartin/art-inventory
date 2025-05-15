@@ -10,7 +10,7 @@ export const createTable = async () => {
       CREATE TABLE IF NOT EXISTS artwork (
         id INT AUTO_INCREMENT PRIMARY KEY,
         artist_id INT,
-        artist_name VARCHAR(255), -- ✅ Added artist_name
+        artist_name VARCHAR(255), 
         title VARCHAR(255),
         date_end VARCHAR(50),
         image_path VARCHAR(255),
@@ -24,7 +24,6 @@ export const createTable = async () => {
       );
     `);
 
-		// Ensure artist_name column exists
 		const [artistNameCol] = await dbPool.query(`
       SELECT COLUMN_NAME 
       FROM INFORMATION_SCHEMA.COLUMNS 
@@ -38,16 +37,12 @@ export const createTable = async () => {
       `);
 			console.log('Added artist_name column to artwork table');
 		}
-
-		// (The rest of your column-check logic remains unchanged)
-		// ...
 	} catch (err) {
 		console.error('Error updating artwork table schema:', err);
 	}
 };
 
 export const setupRoutes = (app) => {
-	// Serve uploaded files
 	app.use('/uploads', express.static('uploads'));
 
 	app.get('/artworks', async (req, res) => {
@@ -172,8 +167,6 @@ export const setupRoutes = (app) => {
 					message: 'Title, date, medium, and location are required',
 				});
 			}
-
-			// Check user exists
 			const [userResult] = await dbPool.query(
 				'SELECT id FROM users WHERE id = ?',
 				[req.session.user.id]
@@ -184,8 +177,6 @@ export const setupRoutes = (app) => {
 					error: 'User not found',
 				});
 			}
-
-			// ✅ INSERT with artist_name
 			const query = `INSERT INTO artwork (
 			artist_id,
 			artist_name,
@@ -213,8 +204,6 @@ export const setupRoutes = (app) => {
 			];
 
 			const [result] = await dbPool.query(query, values);
-
-			// ✅ SELECT newly inserted artwork including artist_name
 			const [newArtwork] = await dbPool.query(
 				`SELECT artwork.id, artwork.title, artwork.date_end, artwork.image_path, 
         artwork.place_of_origin, artwork.artwork_type_title, artwork.medium_display, 
@@ -229,7 +218,7 @@ export const setupRoutes = (app) => {
 			artwork.location = artwork.place_of_origin;
 			artwork.medium = artwork.medium_display;
 			artwork.date = artwork.date_end;
-			artwork.artist = artwork.artist_name; // ✅ Persisted artist name
+			artwork.artist = artwork.artist_name;
 
 			delete artwork.place_of_origin;
 			delete artwork.medium_display;
@@ -263,7 +252,6 @@ export const setupRoutes = (app) => {
 		const { isPublic } = req.body;
 
 		try {
-			// Check if the artwork exists and belongs to the user
 			const [artworkResult] = await dbPool.query(
 				'SELECT artist_id FROM artwork WHERE id = ?',
 				[artworkId]
@@ -284,8 +272,6 @@ export const setupRoutes = (app) => {
 					message: 'You can only update your own artwork',
 				});
 			}
-
-			// Update the is_public field
 			await dbPool.query('UPDATE artwork SET is_public = ? WHERE id = ?', [
 				isPublic,
 				artworkId,
@@ -304,8 +290,6 @@ export const setupRoutes = (app) => {
 			});
 		}
 	});
-
-	// Delete artwork route
 	app.delete('/artworks/:id', async (req, res) => {
 		if (!req.session.user) {
 			console.log('No user session found');
@@ -318,8 +302,6 @@ export const setupRoutes = (app) => {
 
 		try {
 			const artworkId = req.params.id;
-
-			// First check if the artwork exists and belongs to the user
 			const [artworkResult] = await dbPool.query(
 				'SELECT artist_id, image_path FROM artwork WHERE id = ?',
 				[artworkId]
@@ -340,18 +322,13 @@ export const setupRoutes = (app) => {
 					message: 'You can only delete your own artwork',
 				});
 			}
-
-			// Delete the image file if it exists
 			if (artworkResult[0].image_path) {
 				try {
 					fs.unlinkSync(artworkResult[0].image_path);
 				} catch (unlinkError) {
 					console.error('Error deleting image file:', unlinkError);
-					// Continue with database deletion even if file deletion fails
 				}
 			}
-
-			// Delete the artwork from database
 			await dbPool.query('DELETE FROM artwork WHERE id = ?', [artworkId]);
 
 			res.json({

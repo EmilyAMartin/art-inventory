@@ -61,7 +61,6 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 				maxWidth: 400,
 			}}
 		>
-			{/* Background content wrapper */}
 			<Box
 				sx={{
 					filter: open ? 'blur(5px)' : 'none',
@@ -176,9 +175,9 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 								sx={{
 									padding: { xs: 1, sm: 2 },
 									display: 'flex',
-									flexDirection: 'column', // Stack content vertically
-									height: '100%', // Ensure the CardContent takes the full height of the card
-									justifyContent: 'space-between', // Distribute space between elements
+									flexDirection: 'column',
+									height: '100%',
+									justifyContent: 'space-between',
 								}}
 							>
 								<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
@@ -240,7 +239,7 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 											fontSize: { xs: '0.8rem', sm: '1rem' },
 											fontWeight: 600,
 											cursor: 'pointer',
-											marginTop: 'auto', // Ensure this pushes the button to the bottom
+											marginTop: 'auto',
 										}}
 										onClick={() => setFlip(false)}
 									>

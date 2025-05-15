@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'; // Import Box from Material-UI
+import { Box } from '@mui/material';
 import { Route, Routes } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import Home from './Pages/Home';

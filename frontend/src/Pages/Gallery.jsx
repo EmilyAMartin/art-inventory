@@ -13,7 +13,7 @@ import { Typography } from '@mui/material';
 import { BASE_URL } from '../config';
 
 const API_URL = 'https://api.artic.edu/api/v1/artworks';
-const RESULTS_PER_PAGE = 12;
+const RESULTS_PER_PAGE = 15;
 
 const checkImageUrl = async (imageUrl) => {
 	try {

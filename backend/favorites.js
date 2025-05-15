@@ -46,14 +46,12 @@ export const setupFavoritesRoutes = (app) => {
 
 		try {
 			if (favorite) {
-				// Add favorite
 				await dbPool.query(
 					'INSERT INTO favorites (artwork_external_id, user_id) VALUES (?, ?)',
 					[artworkId, userId]
 				);
 				res.status(200).json({ message: 'Favorite added successfully' });
 			} else {
-				// Remove favorite
 				await dbPool.query(
 					'DELETE FROM favorites WHERE artwork_external_id = ? AND user_id = ?',
 					[artworkId, userId]

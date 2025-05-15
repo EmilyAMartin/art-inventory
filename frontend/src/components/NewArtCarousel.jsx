@@ -104,7 +104,6 @@ function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
 				<br />
 				<br />
 				<br />
-				{/* Dot Carousel for Small Screens - UNDER the card(s) */}
 				{isSmallScreen && (
 					<Stack
 						direction='row'

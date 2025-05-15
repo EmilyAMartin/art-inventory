@@ -33,6 +33,7 @@ export const modalStyle = {
 	padding: '2rem',
 	maxHeight: '90vh',
 	overflow: 'auto',
+	borderRadius: '0.5rem',
 };
 
 export const SubmitButton = styled(Button)(({ theme }) => ({

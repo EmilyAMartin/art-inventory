@@ -39,15 +39,14 @@ const ProjectCard = ({ project, handleDelete }) => {
 	return (
 		<Box
 			sx={{
-				position: 'relative', // Ensure proper layering
+				position: 'relative',
 			}}
 		>
-			{/* Background content wrapper */}
 			<Box
 				sx={{
-					filter: open ? 'blur(5px)' : 'none', // Apply blur to the entire page
-					pointerEvents: open ? 'none' : 'auto', // Disable interaction with blurred content
-					transition: 'filter 0.3s ease', // Smooth transition for the blur effect
+					filter: open ? 'blur(5px)' : 'none',
+					pointerEvents: open ? 'none' : 'auto',
+					transition: 'filter 0.3s ease',
 				}}
 			>
 				<ReactCardFlip
@@ -198,8 +197,8 @@ const ProjectCard = ({ project, handleDelete }) => {
 					left: 0,
 					width: '100%',
 					height: '100%',
-					backgroundColor: 'rgba(0, 0, 0, 0.5)', // Optional: Dim background
-					zIndex: 1300, // Ensure it appears above other content
+					backgroundColor: 'rgba(0, 0, 0, 0.5)',
+					zIndex: 1300,
 				}}
 				open={open}
 				anchorEl={anchorEl}

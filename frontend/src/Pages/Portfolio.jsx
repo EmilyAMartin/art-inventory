@@ -180,8 +180,6 @@ const PortfolioPage = () => {
 			</Typography>
 			<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
 			{isLoading ? <Typography>Loading artwork...</Typography> : renderArtwork()}
-
-			{/* Spacer to ensure bottom padding */}
 			<Box sx={{ height: 50 }} />
 		</Box>
 	);

@@ -40,7 +40,6 @@ const LoginBtn = () => {
 			}),
 		onSuccess: async () => {
 			toast.success('Logged in successfully!');
-			// Refetch the profile data after successful login
 			await queryClient.invalidateQueries(['profile']);
 			handleClose();
 		},

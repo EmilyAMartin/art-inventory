@@ -16,8 +16,6 @@ function ProjectCardCarousel({ projects, handleDeleteProject }) {
 	const [slideDirection, setSlideDirection] = useState('left');
 
 	const maxPage = Math.max(0, Math.ceil(projects.length / cardsPerPage) - 1);
-
-	// Always clamp currentPage to maxPage
 	const safeCurrentPage = Math.min(currentPage, maxPage);
 
 	const handleNextPage = () => {

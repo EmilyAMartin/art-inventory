@@ -74,8 +74,8 @@ const Account = () => {
 
 	return (
 		<>
+			{/*Profile Header */}
 			<Box
-				className='profile-header'
 				sx={{
 					mt: 6,
 					gap: 3,
@@ -96,7 +96,6 @@ const Account = () => {
 								height: 150,
 								borderRadius: '50%',
 								objectFit: 'cover',
-								cursor: 'pointer',
 							}}
 						/>
 					</Link>
