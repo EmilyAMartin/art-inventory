@@ -7,7 +7,6 @@ import {
 	MenuItem,
 	Avatar,
 	Typography,
-	useTheme,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -19,7 +18,6 @@ export const Navbar = () => {
 	const { currentUser } = useContext(AuthContext);
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);
-	const navigate = useNavigate();
 
 	const handleLinkClick = () => {
 		setMenuOpen(false);
@@ -85,6 +83,7 @@ export const Navbar = () => {
 					textDecoration: 'none',
 					color: 'black',
 				}}
+				onClick={handleLinkClick}
 			>
 				<Box
 					component='img'
@@ -139,7 +138,6 @@ export const Navbar = () => {
 					</Box>
 				))}
 
-				{/* Authenticated Navigation */}
 				{currentUser?.name && (
 					<>
 						{['/Portfolio', '/Favorites'].map((path) => (
@@ -158,15 +156,14 @@ export const Navbar = () => {
 								</Typography>
 							</Box>
 						))}
-
 						{/* Avatar & Account Menu */}
 						<Box>
 							<Box
 								sx={{
 									display: 'flex',
-									justifyContent: { xs: 'center', sm: 'flex-start' }, // Center on mobile, align left on larger screens
+									justifyContent: { xs: 'center', sm: 'flex-start' },
 									alignItems: 'center',
-									mt: { xs: 2, sm: 0 }, // Add margin-top for spacing in mobile view
+									mt: { xs: 2, sm: 0 },
 								}}
 							>
 								<IconButton onClick={handleAccountClick}>
@@ -188,7 +185,12 @@ export const Navbar = () => {
 								anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 								transformOrigin={{ vertical: 'top', horizontal: 'right' }}
 							>
-								<MenuItem onClick={handleMenuClose}>
+								<MenuItem
+									onClick={() => {
+										handleMenuClose();
+										handleLinkClick();
+									}}
+								>
 									<Typography
 										component={NavLink}
 										to='/Account'

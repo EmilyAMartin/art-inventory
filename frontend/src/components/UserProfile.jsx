@@ -79,23 +79,26 @@ const UserProfile = () => {
 					}}
 				/>
 
-				<Typography
-					variant='h5'
-					sx={{ m: 0 }}
-				>
-					{user.username}
-				</Typography>
+				{user.username && (
+					<Typography
+						variant='h5'
+						sx={{ m: 0 }}
+					>
+						{user.username}
+					</Typography>
+				)}
 
-				<Typography
-					variant='body1'
-					sx={{ m: 0, color: 'gray', font: 'italic' }}
-				>
-					{user.bio}
-				</Typography>
+				{user.bio && (
+					<Typography
+						variant='body1'
+						sx={{ m: 0, color: 'gray', fontStyle: 'italic' }}
+					>
+						{user.bio}
+					</Typography>
+				)}
 			</Box>
-
 			{/* Public Artworks Carousel */}
-			<Box sx={{ ml: 2 }}>
+			<Box sx={{ ml: 2, mt: 10 }}>
 				<Typography variant='h5'>Artwork</Typography>
 				<PublicArtCarousel artworks={artworks} />
 			</Box>

@@ -173,7 +173,7 @@ const PortfolioPage = () => {
 			<Typography
 				variant='h6'
 				sx={{
-					marginTop: 35,
+					marginTop: 20,
 				}}
 			>
 				Artwork

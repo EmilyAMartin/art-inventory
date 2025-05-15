@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-import { IconButton } from '@mui/material';
+import { IconButton, useMediaQuery } from '@mui/material';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Slide from '@mui/material/Slide';
@@ -8,29 +8,41 @@ import Stack from '@mui/material/Stack';
 import NewArtCard from './NewArtCard';
 
 function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
+	const isSmallScreen = useMediaQuery('(max-width:600px)');
+	const cardsPerPage = isSmallScreen ? 1 : 5;
+	const containerWidth = cardsPerPage * 300;
+
 	const [currentPage, setCurrentPage] = useState(0);
 	const [slideDirection, setSlideDirection] = useState('left');
 
-	const cardsPerPage = 5;
-	const containerWidth = cardsPerPage * 300;
+	const maxPage = Math.max(0, Math.ceil(artworks.length / cardsPerPage) - 1);
+
+	const safeCurrentPage = Math.min(currentPage, maxPage);
 
 	const handleNextPage = () => {
-		if (currentPage < Math.ceil(artworks.length / cardsPerPage) - 1) {
+		const nextPage = Math.min(safeCurrentPage + 1, maxPage);
+		if (safeCurrentPage < maxPage) {
 			setSlideDirection('left');
-			setCurrentPage((prevPage) => prevPage + 1);
+			setCurrentPage(nextPage);
 		}
 	};
 
 	const handlePrevPage = () => {
-		if (currentPage > 0) {
+		const prevPage = Math.max(safeCurrentPage - 1, 0);
+		if (safeCurrentPage > 0) {
 			setSlideDirection('right');
-			setCurrentPage((prevPage) => prevPage - 1);
+			setCurrentPage(prevPage);
 		}
 	};
 
+	const handleDotClick = (idx) => {
+		setSlideDirection(idx > safeCurrentPage ? 'left' : 'right');
+		setCurrentPage(idx);
+	};
+
 	const currentArtworks = artworks.slice(
-		currentPage * cardsPerPage,
-		currentPage * cardsPerPage + cardsPerPage
+		safeCurrentPage * cardsPerPage,
+		safeCurrentPage * cardsPerPage + cardsPerPage
 	);
 
 	return (
@@ -49,13 +61,21 @@ function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
 			<IconButton
 				onClick={handlePrevPage}
 				sx={{ margin: 5 }}
-				disabled={currentPage === 0}
+				disabled={safeCurrentPage === 0}
 			>
 				<NavigateBeforeIcon />
 			</IconButton>
 
 			{/* Carousel Content */}
-			<Box sx={{ width: `${containerWidth}px`, height: '100%' }}>
+			<Box
+				sx={{
+					width: `${containerWidth}px`,
+					height: '100%',
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+				}}
+			>
 				<Slide
 					direction={slideDirection}
 					in={true}
@@ -81,13 +101,54 @@ function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
 						))}
 					</Stack>
 				</Slide>
+				<br />
+				<br />
+				<br />
+				{/* Dot Carousel for Small Screens - UNDER the card(s) */}
+				{isSmallScreen && (
+					<Stack
+						direction='row'
+						spacing={1}
+						sx={{
+							mt: 2,
+							bgcolor: 'background.paper',
+							borderRadius: 2,
+							py: 0.5,
+							px: 2,
+							boxShadow: 1,
+						}}
+					>
+						{Array.from({ length: maxPage + 1 }).map((_, idx) => (
+							<IconButton
+								key={idx}
+								size='small'
+								onClick={() => handleDotClick(idx)}
+								sx={{
+									color: idx === safeCurrentPage ? 'primary.main' : 'grey.400',
+									width: 16,
+									height: 16,
+									padding: 0,
+								}}
+							>
+								<Box
+									sx={{
+										width: 10,
+										height: 10,
+										borderRadius: '50%',
+										bgcolor: idx === safeCurrentPage ? 'primary.main' : 'grey.400',
+									}}
+								/>
+							</IconButton>
+						))}
+					</Stack>
+				)}
 			</Box>
 
 			{/* Next Button */}
 			<IconButton
 				onClick={handleNextPage}
 				sx={{ margin: 5 }}
-				disabled={currentPage >= Math.ceil(artworks.length / cardsPerPage) - 1}
+				disabled={safeCurrentPage >= maxPage}
 			>
 				<NavigateNextIcon />
 			</IconButton>
