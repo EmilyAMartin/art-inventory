@@ -183,7 +183,7 @@ export const Navbar = () => {
 								open={Boolean(anchorEl)}
 								onClose={handleMenuClose}
 								anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-								transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+								transformOrigin={{ vertical: 'top', horizontal: 'center' }}
 							>
 								<MenuItem
 									onClick={() => {
