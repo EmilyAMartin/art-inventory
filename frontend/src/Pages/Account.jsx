@@ -39,7 +39,7 @@ const Account = () => {
 		mutationFn: async (file) => {
 			const formData = new FormData();
 			formData.append('image', file);
-			const response = await axios.post('${BASE_URL}/profile/image', formData, {
+			const response = await axios.post(`${BASE_URL}/profile/image`, formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 				},

@@ -125,7 +125,10 @@ export const Navbar = () => {
 						<Box
 							component='li'
 							key={path}
-							sx={{ width: { xs: '100%', sm: 'auto' }, textAlign: 'center' }}
+							sx={{
+								width: { xs: '100%', sm: 'auto' },
+								textAlign: 'center',
+							}}
 						>
 							<Typography
 								component={NavLink}
@@ -220,7 +223,7 @@ export const Navbar = () => {
 					{!currentUser?.name && (
 						<Box
 							component='li'
-							sx={{ mt: '6px', textAlign: 'center' }}
+							sx={{ textAlign: 'center' }}
 						>
 							<LoginBtn />
 						</Box>
