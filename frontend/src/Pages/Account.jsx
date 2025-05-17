@@ -4,7 +4,6 @@ import Form from '../components/Form';
 import axios from 'axios';
 import { useContext } from 'react';
 import { AuthContext } from './Context';
-import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Box, Typography } from '@mui/material';
 import { BASE_URL } from '../config';
@@ -49,6 +48,10 @@ const Account = () => {
 		},
 		onSuccess: (updatedUser) => {
 			updatedUser.profile_image = `${BASE_URL}${updatedUser.profile_image}`;
+			queryClient.setQueryData(['userData'], (old) => ({
+				...old,
+				profile_image: updatedUser.profile_image,
+			}));
 			refetchCurrentUser();
 		},
 		onError: (error) => {
@@ -86,24 +89,25 @@ const Account = () => {
 				}}
 			>
 				{userData.profile_image ? (
-					<Link to={`/users/${currentUser.id}`}>
-						<Box
-							component='img'
-							src={userData.profile_image}
-							alt='Profile'
-							sx={{
-								width: 150,
-								height: 150,
-								borderRadius: '50%',
-								objectFit: 'cover',
-							}}
-						/>
-					</Link>
+					<Box
+						component='img'
+						src={userData.profile_image}
+						alt='Profile'
+						onClick={handleClick}
+						sx={{
+							width: 150,
+							height: 150,
+							borderRadius: '50%',
+							objectFit: 'cover',
+							cursor: 'pointer',
+						}}
+					/>
 				) : (
 					<BsPersonCircle
 						fontSize={150}
 						className='button-upload'
 						onClick={handleClick}
+						style={{ cursor: 'pointer' }}
 					/>
 				)}
 				<input
