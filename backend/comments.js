@@ -1,4 +1,5 @@
 import { dbPool } from './db.js';
+import { BASE_URL } from './config.js';
 
 export async function createCommentsTable() {
 	const sql = `
@@ -29,7 +30,9 @@ export function setupCommentRoutes(app) {
 			const fullComments = rows.map((comment) => ({
 				...comment,
 				profile_picture: comment.profile_picture
-					? `http://localhost:3000${comment.profile_picture}`
+					? comment.profile_picture.startsWith('http')
+						? comment.profile_picture
+						: `${BASE_URL}${comment.profile_picture}`
 					: 'https://example.com/default-pic.jpg',
 			}));
 
