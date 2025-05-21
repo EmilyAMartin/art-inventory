@@ -14,6 +14,8 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { BASE_URL } from '../config';
+import { useContext } from 'react';
+import { AuthContext } from '../Pages/Context';
 
 const SignUpBtn = () => {
 	const [open, setOpen] = useState(false);
@@ -22,6 +24,7 @@ const SignUpBtn = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [repeatPassword, setRepeatPassword] = useState('');
+	const { refetchCurrentUser } = useContext(AuthContext);
 
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
@@ -40,13 +43,20 @@ const SignUpBtn = () => {
 		}
 
 		try {
-			const response = await axios.post(`${BASE_URL}/register`, {
-				name: email,
-				email: email,
-				password: password,
-			});
+			const response = await axios.post(
+				`${BASE_URL}/register`,
+				{
+					name: email,
+					email: email,
+					password: password,
+				},
+				{ withCredentials: true }
+			);
 
 			toast.success(response.data.message);
+
+			await refetchCurrentUser();
+
 			handleClose();
 		} catch (error) {
 			console.error('Error registering user:', error);
