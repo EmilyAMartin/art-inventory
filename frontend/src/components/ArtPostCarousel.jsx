@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Box from '@mui/material/Box';
 import { IconButton, useMediaQuery } from '@mui/material';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
@@ -6,8 +6,10 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Slide from '@mui/material/Slide';
 import Stack from '@mui/material/Stack';
 import ArtworkPost from './ArtworkPost';
+import { AuthContext } from '../Pages/Context';
 
 function ArtPostCarousel({ artworks, onSubmitComment }) {
+	const { currentUser } = useContext(AuthContext);
 	const isSmallScreen = useMediaQuery('(max-width:600px)');
 	const cardsPerPage = isSmallScreen ? 1 : 5;
 	const containerWidth = cardsPerPage * 300;
@@ -93,6 +95,7 @@ function ArtPostCarousel({ artworks, onSubmitComment }) {
 									onSubmitComment={onSubmitComment}
 									key={art.id}
 									artwork={art}
+									isLoggedIn={!!currentUser}
 								/>
 							</Box>
 						))}

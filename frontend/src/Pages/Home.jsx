@@ -8,7 +8,7 @@ import { Box, Typography } from '@mui/material';
 import { BASE_URL } from '../config';
 
 const fetchPublicArtworks = async () => {
-	const response = await fetch(`${BASE_URL}/artworks?visibility=public`, {
+	const response = await fetch(`${BASE_URL}/artworks`, {
 		credentials: 'include',
 	});
 	if (!response.ok) throw new Error('Failed to fetch public artworks');

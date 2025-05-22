@@ -152,34 +152,43 @@ const ImageUploadModal = ({
 							display: 'flex',
 							justifyContent: 'center',
 							alignItems: 'center',
-							backgroundColor: '#6c63ff',
-							p: 1,
-							fontSize: '0.9rem',
-							width: '98%',
+							backgroundColor: 'transparent',
+							p: 0,
+							width: '100%',
 							cursor: 'pointer',
 							borderRadius: 2,
 						}}
 					>
 						<label
 							htmlFor='image-upload'
-							style={{
-								display: 'flex',
-								alignItems: 'center',
-								gap: '8px',
-								cursor: 'pointer',
-								color: 'white',
-							}}
+							style={{ width: '100%' }}
 						>
-							<CloudUploadIcon />
-							<Typography>Upload</Typography>
+							<input
+								id='image-upload'
+								type='file'
+								accept='image/*'
+								style={{ display: 'none' }}
+								onChange={handleImageChange}
+							/>
+							<Button
+								variant='contained'
+								component='span'
+								startIcon={<CloudUploadIcon />}
+								sx={{
+									width: '100%',
+									backgroundColor: '#6c63ff',
+									color: 'white',
+									textTransform: 'none',
+									fontSize: '0.9rem',
+									borderRadius: 2,
+									'&:hover': {
+										backgroundColor: '#574fd6',
+									},
+								}}
+							>
+								Upload
+							</Button>
 						</label>
-						<input
-							id='image-upload'
-							type='file'
-							accept='image/*'
-							style={{ display: 'none' }}
-							onChange={handleImageChange}
-						/>
 					</Box>
 
 					{images.length > 0 && (

@@ -1,0 +1,24 @@
+# fly.toml app configuration file generated for art-portfolio-db on 2025-05-21T21:04:24-02:30
+
+app = 'art-portfolio-db'
+primary_region = 'yul'
+
+[build]
+  image = 'mysql:8'
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
+
+[processes]
+app = """--datadir /data/mysql \
+--mysql-native-password=ON"""
+
+[mounts]
+  source = "mysqldata"
+  destination = "/data"
+
+[env]
+  MYSQL_DATABASE = "some_db"
+  MYSQL_USER = "non_root_user"

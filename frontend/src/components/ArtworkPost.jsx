@@ -24,36 +24,36 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { green, red } from '@mui/material/colors';
 import { BASE_URL } from '../config';
 
-const fetchComments = async (artworkId) => {
-	const response = await fetch(`${BASE_URL}/api/comments/${artworkId}`, {
-		credentials: 'include',
-	});
-	if (!response.ok) {
-		throw new Error('Error fetching comments');
-	}
-	return response.json();
-};
-
-const submitComment = async ({ artworkId, commentText }) => {
-	const response = await fetch(`${BASE_URL}/api/comments/${artworkId}`, {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		credentials: 'include',
-		body: JSON.stringify({ text: commentText }),
-	});
-	if (!response.ok) {
-		throw new Error('Failed to submit comment');
-	}
-	return response.json();
-};
-
-const ArtworkPost = ({ artwork }) => {
+const ArtworkPost = ({ artwork, isLoggedIn }) => {
 	const [comment, setComment] = useState('');
 	const [isCommentSectionVisible, setIsCommentSectionVisible] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
 	const open = Boolean(anchorEl);
 	const queryClient = useQueryClient();
+
+	const fetchComments = async (artworkId) => {
+		const response = await fetch(`${BASE_URL}/api/comments/${artworkId}`, {
+			credentials: 'include',
+		});
+		if (!response.ok) {
+			throw new Error('Error fetching comments');
+		}
+		return response.json();
+	};
+
+	const submitComment = async ({ artworkId, commentText }) => {
+		const response = await fetch(`${BASE_URL}/api/comments/${artworkId}`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			credentials: 'include',
+			body: JSON.stringify({ text: commentText }),
+		});
+		if (!response.ok) {
+			throw new Error('Failed to submit comment');
+		}
+		return response.json();
+	};
 
 	const {
 		data: comments = [],
@@ -188,16 +188,25 @@ const ArtworkPost = ({ artwork }) => {
 			>
 				<DialogTitle>Comments</DialogTitle>
 				<DialogContent dividers>
-					<TextField
-						label='Write a comment'
-						variant='outlined'
-						fullWidth
-						multiline
-						rows={2}
-						value={comment}
-						onChange={handleCommentChange}
-						sx={{ mb: 2 }}
-					/>
+					{!isLoggedIn ? (
+						<Typography
+							color='error'
+							sx={{ mb: 2 }}
+						>
+							You must be logged in to leave a comment.
+						</Typography>
+					) : (
+						<TextField
+							label='Write a comment'
+							variant='outlined'
+							fullWidth
+							multiline
+							rows={2}
+							value={comment}
+							onChange={handleCommentChange}
+							sx={{ mb: 2 }}
+						/>
+					)}
 
 					{isLoading ? (
 						<Typography>Loading comments...</Typography>
@@ -262,7 +271,7 @@ const ArtworkPost = ({ artwork }) => {
 					<Button
 						variant='contained'
 						onClick={handleSubmitComment}
-						disabled={mutation.isLoading}
+						disabled={!isLoggedIn || mutation.isLoading}
 						sx={{
 							fontSize: '1rem',
 							textTransform: 'none',

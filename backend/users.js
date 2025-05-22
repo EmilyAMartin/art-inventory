@@ -80,7 +80,11 @@ export const setupRoutes = (app) => {
 	});
 
 	app.post('/register', async (req, res) => {
-		const { name, email, password, username, bio } = req.body;
+		const { name, email, password, username, bio, secret } = req.body;
+		const REQUIRED_SECRET = process.env.REGISTER_SECRET || 'mySuperSecret';
+		if (secret !== REQUIRED_SECRET) {
+			return res.status(403).json({ message: 'Invalid secret password' });
+		}
 
 		try {
 			const [existingUserResult] = await dbPool.query(

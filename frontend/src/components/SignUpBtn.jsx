@@ -25,6 +25,7 @@ const SignUpBtn = () => {
 	const [password, setPassword] = useState('');
 	const [repeatPassword, setRepeatPassword] = useState('');
 	const { refetchCurrentUser } = useContext(AuthContext);
+	const [secret, setSecret] = useState('');
 
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
@@ -49,6 +50,7 @@ const SignUpBtn = () => {
 					name: email,
 					email: email,
 					password: password,
+					secret,
 				},
 				{ withCredentials: true }
 			);
@@ -193,6 +195,29 @@ const SignUpBtn = () => {
 								label='Repeat Password'
 							/>
 						</FormControl>
+						<FormControl
+							sx={{ width: '100%' }}
+							variant='outlined'
+						>
+							<InputLabel htmlFor='outlined-adornment-secret'>
+								Secret Password
+							</InputLabel>
+							<OutlinedInput
+								id='outlined-adornment-secret'
+								type='password'
+								value={secret}
+								onChange={(e) => setSecret(e.target.value)}
+								label='Secret Password'
+							/>
+						</FormControl>
+						<Typography
+							variant='caption'
+							color='text.secondary'
+							sx={{ mt: -2, mb: 2 }}
+						>
+							To prevent spam, a secret password is required to register. Please
+							contact the site admin to obtain it.
+						</Typography>
 
 						<Box
 							sx={{
