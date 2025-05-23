@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	TextField,
 	Typography,
@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { BASE_URL } from '../config';
@@ -24,6 +24,13 @@ const checkLoginStatus = async () => {
 	return response.status === 200;
 };
 
+const fetchProfile = async () => {
+	const response = await axios.get(`${BASE_URL}/profile`, {
+		withCredentials: true,
+	});
+	return response.data.user;
+};
+
 const updateProfile = async (values) => {
 	const response = await axios.put(`${BASE_URL}/profile`, values, {
 		withCredentials: true,
@@ -31,30 +38,48 @@ const updateProfile = async (values) => {
 	return response.data;
 };
 
-function Form({ userData }) {
+function Form() {
 	const [values, setValues] = useState({
 		email: '',
 		bio: '',
 		username: '',
 	});
+	const [currentPassword, setCurrentPassword] = useState('');
 	const [newpassword, setNewPassword] = useState('');
 	const [reppassword, setRepPassword] = useState('');
 	const [showPassword, setShowPassword] = useState(false);
+	const queryClient = useQueryClient();
 
-	const {
-		data: isLoggedIn,
-		isLoading: isLoginLoading,
-		error: loginError,
-	} = useQuery({
+	const { data: isLoggedIn, isLoading: isLoginLoading } = useQuery({
 		queryKey: ['checkLogin'],
 		queryFn: checkLoginStatus,
 		retry: false,
 	});
 
+	const { data: userProfile, isLoading: isProfileLoading } = useQuery({
+		queryKey: ['profile'],
+		queryFn: fetchProfile,
+		enabled: isLoggedIn,
+	});
+
+	useEffect(() => {
+		if (userProfile) {
+			setValues({
+				email: userProfile.email || '',
+				bio: userProfile.bio || '',
+				username: userProfile.username || '',
+			});
+		}
+	}, [userProfile]);
+
 	const mutation = useMutation({
 		mutationFn: updateProfile,
 		onSuccess: () => {
 			toast.success('Profile updated successfully!');
+			queryClient.invalidateQueries(['profile']);
+			setCurrentPassword('');
+			setNewPassword('');
+			setRepPassword('');
 		},
 		onError: (error) => {
 			toast.error(
@@ -67,11 +92,23 @@ function Form({ userData }) {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
+		if (
+			(currentPassword || newpassword || reppassword) &&
+			(!currentPassword || !newpassword || !reppassword)
+		) {
+			toast.error('To change your password, fill all password fields.');
+			return;
+		}
 		if (newpassword && newpassword !== reppassword) {
 			toast.error('New password and re-typed password do not match!');
 			return;
 		}
-		mutation.mutate(values);
+		const payload = { ...values };
+		if (currentPassword && newpassword) {
+			payload.currentPassword = currentPassword;
+			payload.newPassword = newpassword;
+		}
+		mutation.mutate(payload);
 	};
 
 	const handleChange = (event) => {
@@ -84,7 +121,7 @@ function Form({ userData }) {
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 	const handleMouseDownPassword = (event) => event.preventDefault();
 
-	if (isLoginLoading) {
+	if (isLoginLoading || isProfileLoading) {
 		return <Typography>Loading...</Typography>;
 	}
 
@@ -161,9 +198,11 @@ function Form({ userData }) {
 					fullWidth
 					margin='normal'
 					label='Current Password'
-					name='current-password'
-					type='text'
-					value={'**********'}
+					name='currentPassword'
+					type={showPassword ? 'text' : 'password'}
+					placeholder='Current Password'
+					value={currentPassword}
+					onChange={(e) => setCurrentPassword(e.target.value)}
 				/>
 
 				<FormControl
@@ -178,6 +217,7 @@ function Form({ userData }) {
 						name='new-password'
 						placeholder='New Password'
 						type={showPassword ? 'text' : 'password'}
+						value={newpassword}
 						onChange={(e) => setNewPassword(e.target.value)}
 						endAdornment={
 							<InputAdornment position='end'>
@@ -208,6 +248,7 @@ function Form({ userData }) {
 						name='reppassword'
 						placeholder='Re-Type Password'
 						type={showPassword ? 'text' : 'password'}
+						value={reppassword}
 						onChange={(e) => setRepPassword(e.target.value)}
 						endAdornment={
 							<InputAdornment position='end'>

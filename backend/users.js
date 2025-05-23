@@ -168,15 +168,17 @@ export const setupRoutes = (app) => {
 
 	app.put('/profile', async (req, res) => {
 		if (req.session.user) {
-			const { username, bio } = req.body;
+			const { username, bio, currentPassword, newPassword, email } = req.body;
 
 			try {
-				if (!username || !bio) {
-					return res.status(400).json({ message: 'Username and Bio are required' });
+				if (!username || !bio || !email) {
+					return res
+						.status(400)
+						.json({ message: 'Username, Bio, and Email are required' });
 				}
 
 				const [userResult] = await dbPool.query(
-					'SELECT id FROM users WHERE id = ?',
+					'SELECT * FROM users WHERE id = ?',
 					[req.session.user.id]
 				);
 
@@ -184,11 +186,39 @@ export const setupRoutes = (app) => {
 					return res.status(404).json({ message: 'User not found' });
 				}
 
-				await dbPool.query('UPDATE users SET username = ?, bio = ? WHERE id = ?', [
-					username,
-					bio,
-					req.session.user.id,
-				]);
+				if (currentPassword || newPassword) {
+					if (!currentPassword || !newPassword) {
+						return res
+							.status(400)
+							.json({ message: 'Both current and new password are required.' });
+					}
+					const user = userResult[0];
+					const passwordMatch = await bcrypt.compare(
+						currentPassword,
+						user.password_hash
+					);
+					if (!passwordMatch) {
+						return res
+							.status(400)
+							.json({ message: 'Current password is incorrect.' });
+					}
+					if (newPassword.length < 6) {
+						return res
+							.status(400)
+							.json({ message: 'New password must be at least 6 characters.' });
+					}
+					const hashedPassword = await bcrypt.hash(newPassword, 10);
+					await dbPool.query('UPDATE users SET password_hash = ? WHERE id = ?', [
+						hashedPassword,
+						req.session.user.id,
+					]);
+				}
+
+				await dbPool.query(
+					'UPDATE users SET username = ?, bio = ?, email = ? WHERE id = ?',
+					[username, bio, email, req.session.user.id]
+				);
+
 				const [updatedUserResult] = await dbPool.query(
 					'SELECT id, name, email, username, bio, profile_image FROM users WHERE id = ?',
 					[req.session.user.id]
@@ -206,7 +236,6 @@ export const setupRoutes = (app) => {
 			res.status(401).json({ message: 'Not logged in' });
 		}
 	});
-
 	app.post('/profile/image', upload.single('image'), async (req, res) => {
 		if (!req.session.user) {
 			return res.status(401).json({ message: 'Not logged in' });
