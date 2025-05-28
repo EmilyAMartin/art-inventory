@@ -12,11 +12,17 @@ import cors from 'cors';
 import { dbPool } from './db.js';
 import path from 'path';
 import fs from 'fs';
+import { BASE_URL } from './config.js';
 
 const sessionStore = new MySQLStore({}, dbPool);
 const app = express();
+const allowedOrigins = [
+	'http://localhost:5173', // Vite dev server
+	'https://art-portfolio.fly.dev', // Your deployed frontend
+];
+
 const corsOptions = {
-	origin: 'http://localhost:5173',
+	origin: allowedOrigins,
 	credentials: true,
 	methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 	allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
@@ -73,7 +79,7 @@ app.use((err, req, res, next) => {
 	res.status(500).json({ message: 'Internal Server Error' });
 });
 
-app.use(express.static('public'));
+app.use(express.static(path.join(import.meta.dirname, './dist')));
 
 const port = 3000;
 app.listen(port, () => {

@@ -165,8 +165,20 @@ const Favorites = () => {
 					variant='contained'
 					color='primary'
 					onClick={() => navigate('/gallery')}
+					sx={{
+						p: '0.5rem',
+						color: '#fff',
+						borderRadius: '1rem',
+						fontSize: '1rem',
+						fontWeight: 500,
+						cursor: 'pointer',
+						transition: '0.2s',
+						textTransform: 'none',
+						width: 150,
+						backgroundColor: '#6c63ff',
+					}}
 				>
-					Go to Gallery
+					Gallery
 				</Button>
 			</Box>
 		);

@@ -20,3 +20,6 @@ primary_region = 'yul'
   memory = '1gb'
   cpu_kind = 'shared'
   cpus = 1
+
+[env]
+  BASE_URL = 'https://art-portfolio.fly.dev'

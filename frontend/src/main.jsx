@@ -7,7 +7,7 @@ import { queryClient } from './components/queryClient';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
 	<React.StrictMode>
-		<BrowserRouter basename='/art-inventory'>
+		<BrowserRouter>
 			<QueryClientProvider client={queryClient}>
 				<App />
 			</QueryClientProvider>
