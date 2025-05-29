@@ -1,6 +1,7 @@
 import React from 'react';
 import Grid2 from '@mui/material/Grid2';
 import ArtCard from '../components/ArtCard';
+import PublicArtCard from '../components/PublicArtCard';
 import axios from 'axios';
 import { Typography, Button, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +17,28 @@ const checkImageUrl = async (imageUrl) => {
 	} catch {
 		return false;
 	}
+};
+
+const fetchPublicArtFavorites = async () => {
+	const response = await fetch(`${BASE_URL}/public-artworks/favorites`, {
+		method: 'GET',
+		credentials: 'include',
+	});
+	if (response.status === 401) {
+		return [];
+	}
+	if (!response.ok) {
+		throw new Error('Failed to fetch public artwork favorites');
+	}
+	const data = await response.json();
+	return data.favorites.map((art) => ({
+		...art,
+		favorite: true,
+		image_url:
+			art.images && art.images.length > 0
+				? `${BASE_URL}/uploads/${art.images[0]}`
+				: null,
+	}));
 };
 
 const fetchFavorites = async () => {
@@ -47,6 +70,7 @@ const fetchFavorites = async () => {
 				...artData.data,
 				favorite: true,
 				image_url: imageUrl,
+				type: 'external',
 			};
 		} catch {
 			return null;
@@ -66,29 +90,57 @@ const fetchFavorites = async () => {
 const Favorites = () => {
 	const navigate = useNavigate();
 
-	const { data, isLoading, error, refetch } = useQuery({
+	const {
+		data: externalData,
+		isLoading,
+		error,
+		refetch,
+	} = useQuery({
 		queryKey: ['favorites'],
 		queryFn: fetchFavorites,
 		refetchOnWindowFocus: false,
 	});
 
-	const handleFavUpdate = async (artworkId) => {
-		if (!data?.isLoggedIn) {
+	const { data: publicArtFavorites = [], refetch: refetchPublic } = useQuery({
+		queryKey: ['publicArtFavorites'],
+		queryFn: fetchPublicArtFavorites,
+		refetchOnWindowFocus: false,
+	});
+
+	const handleFavUpdate = async (artworkId, type = 'external') => {
+		if (!externalData?.isLoggedIn) {
 			toast.error('You must be logged in to update favorites');
 			return;
 		}
 		try {
-			const response = await fetch(`${BASE_URL}/favorites`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ artworkId, favorite: false }),
-				credentials: 'include',
-			});
-			if (!response.ok) throw new Error('Failed to update favorite status');
-			toast.success('Artwork removed from favorites');
-			refetch();
+			if (type === 'external') {
+				const response = await fetch(`${BASE_URL}/favorites`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ artworkId, favorite: false }),
+					credentials: 'include',
+				});
+				if (!response.ok) throw new Error('Failed to update favorite status');
+				toast.success('Artwork removed from favorites');
+				refetch();
+			} else if (type === 'public') {
+				const response = await fetch(
+					`${BASE_URL}/public-artworks/${artworkId}/favorite`,
+					{
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({ artworkId, favorite: false }),
+						credentials: 'include',
+					}
+				);
+				if (!response.ok) throw new Error('Failed to update favorite status');
+				toast.success('Artwork removed from favorites');
+				refetchPublic();
+			}
 		} catch {
 			toast.error('Failed to update favorite status');
 		}
@@ -98,7 +150,7 @@ const Favorites = () => {
 		return <Typography sx={{ ml: 10 }}>Loading artwork...</Typography>;
 	if (error) return <Typography>Error: {error.message}</Typography>;
 
-	const { isLoggedIn, artwork } = data;
+	const { isLoggedIn, artwork: externalArtwork = [] } = externalData || {};
 
 	if (!isLoggedIn) {
 		return (
@@ -136,7 +188,12 @@ const Favorites = () => {
 		);
 	}
 
-	if (artwork.length === 0) {
+	const allFavorites = [
+		...(externalArtwork.map((art) => ({ ...art, type: 'external' })) || []),
+		...(publicArtFavorites.map((art) => ({ ...art, type: 'public' })) || []),
+	];
+
+	if (allFavorites.length === 0) {
 		return (
 			<Box
 				sx={{
@@ -200,17 +257,25 @@ const Favorites = () => {
 				spacing={8}
 				sx={{ mt: 3, justifyContent: 'space-between' }}
 			>
-				{artwork.map((art) => (
+				{allFavorites.map((art) => (
 					<Grid2
 						xs={12}
 						ms={5}
-						key={art.id}
+						key={`${art.type}-${art.id}`}
 					>
-						<ArtCard
-							art={art}
-							handleFavUpdate={handleFavUpdate}
-							isLoggedIn={isLoggedIn}
-						/>
+						{art.type === 'external' ? (
+							<ArtCard
+								art={art}
+								handleFavUpdate={() => handleFavUpdate(art.id, 'external')}
+								isLoggedIn={isLoggedIn}
+							/>
+						) : (
+							<PublicArtCard
+								artwork={art}
+								handleFavUpdate={() => handleFavUpdate(art.id, 'public')}
+								isLoggedIn={isLoggedIn}
+							/>
+						)}
 					</Grid2>
 				))}
 			</Grid2>

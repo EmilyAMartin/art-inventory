@@ -146,6 +146,7 @@ export const setupRoutes = (app) => {
 			res.status(401).json({ message: 'Not logged in' });
 		}
 	});
+
 	app.get('/users/:userId', async (req, res) => {
 		try {
 			const { userId } = req.params;
@@ -166,7 +167,37 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	app.put('/profile', async (req, res) => {
+	app.get('/users/:userId/public-artworks', async (req, res) => {
+		const { userId } = req.params;
+		const sessionUserId = req.session.user?.id;
+
+		try {
+			const [artworks] = await dbPool.query(
+				'SELECT * FROM public_artworks WHERE user_id = ?',
+				[userId]
+			);
+
+			let favoriteIds = [];
+			if (sessionUserId) {
+				const [favorites] = await dbPool.query(
+					'SELECT public_artwork_id FROM public_artwork_favorites WHERE user_id = ?',
+					[sessionUserId]
+				);
+				favoriteIds = favorites.map((fav) => fav.public_artwork_id);
+			}
+
+			const artworksWithFavorite = artworks.map((art) => ({
+				...art,
+				favorite: favoriteIds.includes(art.id),
+			}));
+
+			res.json(artworksWithFavorite);
+		} catch (err) {
+			console.error('Error fetching public artworks:', err);
+			res.status(500).json({ message: 'Error fetching artworks' });
+		}
+	});
+	-app.put('/profile', async (req, res) => {
 		if (req.session.user) {
 			const { username, bio, currentPassword, newPassword, email } = req.body;
 
