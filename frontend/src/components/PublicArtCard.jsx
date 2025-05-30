@@ -8,39 +8,14 @@ import ReactCardFlip from 'react-card-flip';
 import CardActionArea from '@mui/material/CardActionArea';
 import Box from '@mui/material/Box';
 import { BASE_URL } from '../config';
-import { Favorite, FavoriteBorder } from '@mui/icons-material';
-import Tooltip from '@mui/material/Tooltip';
 
-const PublicArtCard = ({ artwork, handleFavUpdate, isLoggedIn }) => {
+const PublicArtCard = ({ artwork }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
 	const [flip, setFlip] = useState(false);
 	const open = Boolean(anchorEl);
 
 	if (!artwork) return null;
-	const handleFavClick = () => {
-		if (!isLoggedIn) return;
-		handleFavUpdate(artwork.id, !artwork.favorite);
-	};
-
-	const renderFavoriteIcon = () => {
-		if (!isLoggedIn) {
-			return (
-				<Tooltip title='Log in to favorite artwork'>
-					<Box sx={{ cursor: 'not-allowed', display: 'inline-flex' }}>
-						<FavoriteBorder sx={{ opacity: 0.5 }} />
-					</Box>
-				</Tooltip>
-			);
-		}
-		const Icon = artwork.favorite ? Favorite : FavoriteBorder;
-		return (
-			<Icon
-				onClick={handleFavClick}
-				sx={{ cursor: 'pointer' }}
-			/>
-		);
-	};
 
 	const handlePopClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -58,7 +33,11 @@ const PublicArtCard = ({ artwork, handleFavUpdate, isLoggedIn }) => {
 			: null;
 
 	return (
-		<Box sx={{ position: 'relative' }}>
+		<Box
+			sx={{
+				position: 'relative',
+			}}
+		>
 			<Box
 				sx={{
 					filter: open ? 'blur(5px)' : 'none',
@@ -87,6 +66,7 @@ const PublicArtCard = ({ artwork, handleFavUpdate, isLoggedIn }) => {
 								alt='Artwork Image'
 								onClick={handlePopClick}
 							/>
+
 							<CardContent sx={{ width: 300, position: 'relative' }}>
 								<Typography
 									gutterBottom
@@ -108,6 +88,7 @@ const PublicArtCard = ({ artwork, handleFavUpdate, isLoggedIn }) => {
 									{artwork.date}
 								</Typography>
 							</CardContent>
+
 							<Box
 								className='favorites-more'
 								sx={{
@@ -117,26 +98,32 @@ const PublicArtCard = ({ artwork, handleFavUpdate, isLoggedIn }) => {
 									m: 3,
 								}}
 							>
-								<Typography
+								<Box
 									sx={{
-										position: 'absolute',
-										bottom: 15,
-										left: 15,
-										fontSize: 15,
-										fontWeight: 600,
-										cursor: 'pointer',
+										display: 'flex',
+										flexDirection: 'row',
+										justifyContent: 'space-between',
 									}}
-									onClick={() => setFlip(true)}
 								>
-									Learn More
-								</Typography>
-								<Box sx={{ position: 'absolute', bottom: 15, right: 15 }}>
-									{renderFavoriteIcon()}
+									<Typography
+										sx={{
+											position: 'absolute',
+											bottom: 15,
+											left: 15,
+											fontSize: 15,
+											fontWeight: 600,
+											cursor: 'pointer',
+										}}
+										onClick={() => setFlip(true)}
+									>
+										Learn More
+									</Typography>
 								</Box>
 							</Box>
 						</CardActionArea>
 					</Card>
-					{/* ...Back Side... */}
+
+					{/* Back Side */}
 					<Card sx={{ maxWidth: 300, maxHeight: 450 }}>
 						<CardContent sx={{ width: 300, height: 500 }}>
 							<Typography

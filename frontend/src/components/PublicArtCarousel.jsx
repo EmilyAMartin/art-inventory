@@ -7,7 +7,7 @@ import Slide from '@mui/material/Slide';
 import Stack from '@mui/material/Stack';
 import PublicArtCard from './PublicArtCard';
 
-function PublicArtCarousel({ artworks, handleFavUpdate, isLoggedIn }) {
+function PublicArtCarousel({ artworks }) {
 	const isSmallScreen = useMediaQuery('(max-width:600px)');
 	const cardsPerPage = isSmallScreen ? 1 : 5;
 	const containerWidth = cardsPerPage * 300;
@@ -86,15 +86,14 @@ function PublicArtCarousel({ artworks, handleFavUpdate, isLoggedIn }) {
 						justifyContent='center'
 						sx={{ width: '100%', height: '100%' }}
 					>
-						{currentArtworks.map((artwork) => (
+						{currentArtworks.map((art, i) => (
 							<Box
-								key={artwork.id}
+								key={`art-${i}`}
 								sx={{ width: '300px' }}
 							>
 								<PublicArtCard
-									artwork={artwork}
-									handleFavUpdate={handleFavUpdate}
-									isLoggedIn={isLoggedIn}
+									key={art.id}
+									artwork={art}
 								/>
 							</Box>
 						))}
