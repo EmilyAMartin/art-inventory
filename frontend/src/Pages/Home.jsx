@@ -36,7 +36,6 @@ const Home = () => {
 			sx={{
 				display: 'flex',
 				flexDirection: 'column',
-				gap: 4,
 			}}
 		>
 			{/* Hero Section */}
@@ -91,7 +90,9 @@ const Home = () => {
 							textAlign: { xs: 'center', md: 'left' },
 						}}
 					>
-						Welcome to Portfolio,
+						{currentUser
+							? `Welcome back, ${currentUser.username}!`
+							: 'Welcome to Portfolio,'}
 					</Typography>
 
 					<Typography
@@ -107,10 +108,9 @@ const Home = () => {
 							my: '1rem',
 						}}
 					>
-						Portfolio is a dynamic platform where artists can showcase their work,
-						explore a curated gallery of masterpieces, and gain inspiration for their
-						next project. Connect with fellow enthusiasts, discover new techniques,
-						and celebrate creativity. Join us and ignite your passion for art!
+						{currentUser
+							? `Explore a vibrant community of artists and art lovers, where you can showcase your masterpieces, gain inspiration, and connect with other art enthusiasts.`
+							: 'Portfolio is a dynamic platform where artists can showcase their work, explore a curated gallery of masterpieces, and gain inspiration for their next project. Connect with fellow enthusiasts, discover new techniques, and celebrate creativity. Join us and ignite your passion for art!'}
 					</Typography>
 
 					{!currentUser && (
@@ -132,7 +132,7 @@ const Home = () => {
 				>
 					<Box
 						component='img'
-						src='/art-inventory/Images/home.png'
+						src='/Images/home.png'
 						alt='Illustration of girl painting'
 						sx={{
 							width: {

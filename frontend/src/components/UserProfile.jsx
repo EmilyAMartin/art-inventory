@@ -96,8 +96,7 @@ const UserProfile = () => {
 				)}
 			</Box>
 			{/* Public Artworks Carousel */}
-			<Box sx={{ ml: 2, mt: 10 }}>
-				<Typography variant='h5'>Artwork</Typography>
+			<Box sx={{ ml: 2, mt: 10, mb: 20 }}>
 				<PublicArtCarousel artworks={artworks} />
 			</Box>
 		</Box>

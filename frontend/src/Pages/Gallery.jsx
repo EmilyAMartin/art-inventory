@@ -48,18 +48,22 @@ const fetchFavorites = async () => {
 const fetchArtwork = async ({ queryKey }) => {
 	const [_key, page, searchQuery] = queryKey;
 	const { isLoggedIn, favorites } = await fetchFavorites();
-	const MAX_ATTEMPTS = 3;
+	const MAX_ATTEMPTS = 10; // Increase attempts to ensure enough results
 	let attempts = 0;
-	let currentPage = page;
+	let currentApiPage = 1;
 	let validArtwork = [];
 	let totalResults = 0;
+	const artworksToSkip = (page - 1) * RESULTS_PER_PAGE;
 
-	while (validArtwork.length < RESULTS_PER_PAGE && attempts < MAX_ATTEMPTS) {
+	while (
+		validArtwork.length < artworksToSkip + RESULTS_PER_PAGE &&
+		attempts < MAX_ATTEMPTS
+	) {
 		let data;
 
 		if (searchQuery) {
 			const searchResponse = await axios.get(
-				`${API_URL}/search?q=${searchQuery}&page=${currentPage}`
+				`${API_URL}/search?q=${searchQuery}&page=${currentApiPage}`
 			);
 			totalResults = searchResponse.data.pagination.total;
 			const results = await Promise.all(
@@ -69,7 +73,7 @@ const fetchArtwork = async ({ queryKey }) => {
 			);
 			data = results;
 		} else {
-			const response = await axios.get(`${API_URL}?page=${currentPage}`);
+			const response = await axios.get(`${API_URL}?page=${currentApiPage}`);
 			totalResults = response.data.pagination.total;
 			data = response.data.data;
 		}
@@ -90,12 +94,18 @@ const fetchArtwork = async ({ queryKey }) => {
 		);
 
 		validArtwork = [...validArtwork, ...filtered.filter((art) => art !== null)];
-		currentPage++;
+		currentApiPage++;
 		attempts++;
 	}
 
+	// Only return the artworks for the current user-facing page
+	const artwork = validArtwork.slice(
+		artworksToSkip,
+		artworksToSkip + RESULTS_PER_PAGE
+	);
+
 	return {
-		artwork: validArtwork.slice(0, RESULTS_PER_PAGE),
+		artwork,
 		isLoggedIn,
 		totalResults,
 	};
@@ -234,7 +244,7 @@ const Gallery = () => {
 			{/* Artwork Grid */}
 			<Box>
 				{isLoading && <Typography>Loading...</Typography>}
-				{error && <div>Error: {error.message}</div>}
+				{error && <Typography>Error: {error.message}</Typography>}
 				<Grid2
 					container
 					spacing={8}

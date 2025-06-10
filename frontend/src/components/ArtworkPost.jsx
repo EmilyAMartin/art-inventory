@@ -118,13 +118,27 @@ const ArtworkPost = ({ artwork, isLoggedIn }) => {
 						onClick={handlePopClick}
 					/>
 
+					{/* Popover */}
 					<Popover
+						sx={{
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
+							position: 'fixed',
+							top: 0,
+							left: 0,
+							width: '100%',
+							height: '100%',
+							backgroundColor: 'rgba(0, 0, 0, 0.5)',
+							zIndex: 1300,
+						}}
 						open={open}
 						anchorEl={anchorEl}
+						anchorReference='none'
 						onClose={handleClose}
 						anchorOrigin={{
 							vertical: 'bottom',
-							horizontal: 'center',
+							horizontal: 'left',
 						}}
 					>
 						<CardMedia
