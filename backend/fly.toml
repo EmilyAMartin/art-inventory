@@ -21,5 +21,9 @@ primary_region = 'yyz'
   cpu_kind = 'shared'
   cpus = 1
 
+  [mounts]
+  source="uploads_data"
+  destination="/data/uploads"
+
 [env]
   BASE_URL = 'https://art-portfolio.fly.dev'

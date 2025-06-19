@@ -31,11 +31,10 @@ app.use(cors(corsOptions));
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ limit: '5mb', extended: true }));
 
-const uploadDir = path.join(process.cwd(), 'uploads');
+const uploadDir = process.env.UPLOAD_DIR || '/data/uploads';
 if (!fs.existsSync(uploadDir)) {
-	fs.mkdirSync(uploadDir);
+	fs.mkdirSync(uploadDir, { recursive: true });
 }
-
 app.use('/uploads', express.static(uploadDir));
 
 app.use(
