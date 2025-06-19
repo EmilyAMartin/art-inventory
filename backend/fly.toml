@@ -4,7 +4,7 @@
 #
 
 app = 'art-portfolio'
-primary_region = 'yul'
+primary_region = 'yyz'
 
 [build]
 

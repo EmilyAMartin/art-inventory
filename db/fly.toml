@@ -1,7 +1,7 @@
 # fly.toml app configuration file generated for art-portfolio-db on 2025-05-21T21:04:24-02:30
 
 app = 'art-portfolio-db'
-primary_region = 'yul'
+primary_region = 'yyz'
 
 [build]
   image = 'mysql:8'
