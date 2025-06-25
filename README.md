@@ -44,13 +44,6 @@ API: Art Institute of Chicago
 
 My coach, Lucas Hillier, has been an incredible source of support and guidance throughout the development of this project. His insightful suggestions were crucial in transforming my idea into reality. This project would not have been possible without him and I am truly grateful for all his help.
 
-## Preview
-
-<img src="public/Images/9.jpg" alt="img of home screen" width="500"/>
-<img src="public/Images/10.jpg" alt="img of artwork page" width="500"/>
-<img src="public/Images/11.jpg" alt="img of gallery page" width="500"/>
-<img src="public/Images/12.jpg" alt="img of account page" width="500"/>
-
 ## Resources
 
 Project Page Photo's by Geordanna Cordero on Unsplash
