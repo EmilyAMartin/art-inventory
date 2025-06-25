@@ -7,7 +7,7 @@ primary_region = 'yyz'
   image = 'mysql:8'
 
 [[vm]]
-  memory = '1gb'
+  memory = '768mb'
   cpu_kind = 'shared'
   cpus = 1
 
