@@ -7,7 +7,7 @@ https://emilyamartin.github.io/art-inventory/
 Portfolio is a website I developed to help artists and creators catalog their work while also offering inspiration from other artists. The platform features several key pages:
 <br>
 <br>
-Artwork Page: Allows users to organize and catalog their own artworks.
+Artwork Page: Allows users to organize and catalog their own artworks and projects.
 <br>
 <br>
 Gallery Page: Users can browse and save artworks from the Art Institute of Chicago, utilizing their open API.
@@ -16,7 +16,6 @@ Gallery Page: Users can browse and save artworks from the Art Institute of Chica
 Accounts Page: Enables users to create and manage personal profiles and accounts.
 <br>
 <br>
-In Module 3, I will be focusing on developing the sign-up, login, and artwork upload features. Additionally, I plan to introduce a new page that allows users to upload project ideas. This feature will enable users to upload color palettes, images, sketches, and notes to inspire future projects.
 
 ## Motivation
 
@@ -26,9 +25,9 @@ This project was inspired by my personal need for a platform to catalog my own a
 
 Search for inspiration using the Art Institute of Chicago's API.
 <br>
-Create an account and catalog personal artwork (coming soon).
+Create an account and catalog personal artwork.
 <br>
-Use the new project feature to brainstorm art projects (coming soon).
+Use the new project feature to brainstorm art projects.
 
 ## Technology Stack
 

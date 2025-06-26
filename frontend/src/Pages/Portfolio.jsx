@@ -157,18 +157,6 @@ const PortfolioPage = () => {
 				boxSizing: 'border-box',
 			}}
 		>
-			{/* Project Section */}
-			<Typography
-				variant='h6'
-				sx={{
-					marginTop: 5,
-				}}
-			>
-				Portfolio
-			</Typography>
-			<AddProjectBtn onProjectAdded={handleProjectAdded} />
-			{isLoading ? <Typography>Loading projects...</Typography> : renderProjects()}
-
 			{/* Artwork Section */}
 			<Typography
 				variant='h6'
@@ -180,6 +168,19 @@ const PortfolioPage = () => {
 			</Typography>
 			<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
 			{isLoading ? <Typography>Loading artwork...</Typography> : renderArtwork()}
+
+			{/* Project Section */}
+			<Typography
+				variant='h6'
+				sx={{
+					marginTop: 5,
+				}}
+			>
+				Projects
+			</Typography>
+			<AddProjectBtn onProjectAdded={handleProjectAdded} />
+			{isLoading ? <Typography>Loading projects...</Typography> : renderProjects()}
+
 			<Box sx={{ height: 50 }} />
 		</Box>
 	);
