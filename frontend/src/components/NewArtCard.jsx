@@ -198,22 +198,22 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 					{/* Back Side */}
 					<Card
 						sx={{
-							maxWidth: 300,
-							maxHeight: 450,
+							width: 300,
 							height: 450,
 							display: 'flex',
 							flexDirection: 'column',
+							boxSizing: 'border-box',
 						}}
 					>
 						<CardContent
 							sx={{
-								width: 300,
-								height: '100%',
+								flex: 1,
 								display: 'flex',
 								flexDirection: 'column',
 								justifyContent: 'space-between',
+								boxSizing: 'border-box',
 								overflowY: 'auto',
-								gap: 1,
+								padding: 2,
 							}}
 						>
 							<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
@@ -272,10 +272,9 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 								sx={{
 									display: 'flex',
 									justifyContent: 'flex-end',
-									position: 'absolute',
-									bottom: 15,
-									left: 15,
-									zIndex: 2,
+									alignItems: 'center',
+									width: '100%',
+									mt: 2,
 								}}
 							>
 								<Typography

@@ -158,7 +158,14 @@ const PortfolioPage = () => {
 			}}
 		>
 			{/* Artwork Section */}
-			<Typography variant='h6'>Artwork</Typography>
+			<Typography
+				variant='h6'
+				sx={{
+					marginTop: 5,
+				}}
+			>
+				Artwork
+			</Typography>
 			<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
 			{isLoading ? <Typography>Loading artwork...</Typography> : renderArtwork()}
 

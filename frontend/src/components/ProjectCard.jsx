@@ -134,54 +134,76 @@ const ProjectCard = ({ project, handleDelete }) => {
 					</Card>
 
 					{/* Back Side */}
-					<Card sx={{ maxWidth: 300, maxHeight: 450 }}>
-						<CardContent sx={{ width: 300, height: 500 }}>
-							<Typography
-								gutterBottom
-								fontSize={16}
-								fontWeight={500}
-							>
-								{project.title}
-							</Typography>
-							<br />
-							<Typography
-								variant='body2'
-								sx={{ color: 'text.secondary' }}
-							>
-								Medium: {project.medium}
-							</Typography>
-							<br />
-							<Typography
-								variant='body2'
-								sx={{ color: 'text.secondary' }}
-							>
-								Description: {project.description}
-							</Typography>
-						</CardContent>
-
-						<Box
+					<Card
+						sx={{
+							width: 300,
+							height: 450,
+							display: 'flex',
+							flexDirection: 'column',
+							boxSizing: 'border-box',
+						}}
+					>
+						<CardContent
 							sx={{
+								flex: 1,
 								display: 'flex',
-								flexDirection: 'row',
+								flexDirection: 'column',
 								justifyContent: 'space-between',
-								m: 3,
+								boxSizing: 'border-box',
+								overflowY: 'auto',
+								padding: 2,
 							}}
 						>
-							<Typography
+							<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+								<Typography
+									gutterBottom
+									fontSize={16}
+									fontWeight={500}
+								>
+									{project.title}
+								</Typography>
+								<Typography
+									variant='body2'
+									sx={{
+										color: 'text.secondary',
+										whiteSpace: 'normal',
+										wordBreak: 'break-word',
+									}}
+								>
+									<b>Medium:</b> {project.medium}
+								</Typography>
+								<Typography
+									variant='body2'
+									sx={{
+										color: 'text.secondary',
+										whiteSpace: 'normal',
+										wordBreak: 'break-word',
+									}}
+								>
+									<b>Description:</b> {project.description}
+								</Typography>
+							</Box>
+							<Box
 								sx={{
-									position: 'absolute',
-									bottom: 15,
-									left: 15,
-									zIndex: 2,
-									fontSize: 15,
-									fontWeight: 600,
-									cursor: 'pointer',
+									display: 'flex',
+									justifyContent: 'flex-end',
+									alignItems: 'center',
+									width: '100%',
+									mt: 2,
 								}}
-								onClick={() => setFlip(!flip)}
 							>
-								Back
-							</Typography>
-						</Box>
+								<Typography
+									sx={{
+										fontSize: 15,
+										fontWeight: 600,
+										cursor: 'pointer',
+									}}
+									onClick={() => setFlip(!flip)}
+								>
+									Back
+								</Typography>
+							</Box>
+						</CardContent>
 					</Card>
 				</ReactCardFlip>
 			</Box>
