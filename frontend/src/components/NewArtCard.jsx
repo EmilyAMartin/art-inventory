@@ -196,75 +196,100 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 					</Card>
 
 					{/* Back Side */}
-					<Card sx={{ maxWidth: 300, maxHeight: 450 }}>
-						<CardContent sx={{ width: 300, height: 500 }}>
-							<Typography
-								gutterBottom
-								fontSize={16}
-								fontWeight={500}
-							>
-								{artwork.title}
-							</Typography>
-							<br />
-							<Typography
-								variant='body2'
-								sx={{ color: 'text.secondary' }}
-							>
-								Artist: {artwork.artist}
-							</Typography>
-							<br />
-							<Typography
-								variant='body2'
-								sx={{ color: 'text.secondary' }}
-							>
-								Date: {artwork.date}
-							</Typography>
-							<br />
-							<Typography
-								variant='body2'
-								sx={{ color: 'text.secondary' }}
-							>
-								Location: {artwork.location}
-							</Typography>
-							<br />
-							<Typography
-								variant='body2'
-								sx={{ color: 'text.secondary' }}
-							>
-								Medium: {artwork.medium}
-							</Typography>
-							<br />
-							<Typography
-								variant='body2'
-								sx={{ color: 'text.secondary' }}
-							>
-								Description: {artwork.description}
-							</Typography>
-						</CardContent>
-
-						<Box
+					<Card
+						sx={{
+							maxWidth: 300,
+							maxHeight: 450,
+							height: 450,
+							display: 'flex',
+							flexDirection: 'column',
+						}}
+					>
+						<CardContent
 							sx={{
+								width: 300,
+								height: '100%',
 								display: 'flex',
-								flexDirection: 'row',
+								flexDirection: 'column',
 								justifyContent: 'space-between',
-								m: 3,
+								overflowY: 'auto',
+								gap: 1,
 							}}
 						>
-							<Typography
+							<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+								<Typography
+									variant='body2'
+									sx={{
+										color: 'text.secondary',
+										whiteSpace: 'normal',
+										wordBreak: 'break-word',
+									}}
+								>
+									<b>Description:</b> {artwork.description}
+								</Typography>
+								<Typography
+									variant='body2'
+									sx={{
+										color: 'text.secondary',
+										whiteSpace: 'normal',
+										wordBreak: 'break-word',
+									}}
+								>
+									<b>Artist:</b> {artwork.artist}
+								</Typography>
+								<Typography
+									variant='body2'
+									sx={{
+										color: 'text.secondary',
+										whiteSpace: 'normal',
+										wordBreak: 'break-word',
+									}}
+								>
+									<b>Date:</b> {artwork.date}
+								</Typography>
+								<Typography
+									variant='body2'
+									sx={{
+										color: 'text.secondary',
+										whiteSpace: 'normal',
+										wordBreak: 'break-word',
+									}}
+								>
+									<b>Location:</b> {artwork.location}
+								</Typography>
+								<Typography
+									variant='body2'
+									sx={{
+										color: 'text.secondary',
+										whiteSpace: 'normal',
+										wordBreak: 'break-word',
+									}}
+								>
+									<b>Medium:</b> {artwork.medium}
+								</Typography>
+							</Box>
+							<Box
 								sx={{
+									display: 'flex',
+									justifyContent: 'flex-end',
 									position: 'absolute',
 									bottom: 15,
 									left: 15,
 									zIndex: 2,
-									fontSize: 15,
-									fontWeight: 600,
-									cursor: 'pointer',
 								}}
-								onClick={() => setFlip(!flip)}
 							>
-								Back
-							</Typography>
-						</Box>
+								<Typography
+									sx={{
+										fontSize: 15,
+										fontWeight: 600,
+										cursor: 'pointer',
+									}}
+									onClick={() => setFlip(!flip)}
+								>
+									Back
+								</Typography>
+							</Box>
+						</CardContent>
 					</Card>
 				</ReactCardFlip>
 			</Box>
