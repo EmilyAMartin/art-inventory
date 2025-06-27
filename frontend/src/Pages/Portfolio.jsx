@@ -164,7 +164,7 @@ const PortfolioPage = () => {
 					marginTop: 5,
 				}}
 			>
-				Artwork
+				Test Artwork
 			</Typography>
 			<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
 			{isLoading ? <Typography>Loading artwork...</Typography> : renderArtwork()}
