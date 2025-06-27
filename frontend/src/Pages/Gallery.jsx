@@ -98,7 +98,6 @@ const fetchArtwork = async ({ queryKey }) => {
 		attempts++;
 	}
 
-	// Only return the artworks for the current user-facing page
 	const artwork = validArtwork.slice(
 		artworksToSkip,
 		artworksToSkip + RESULTS_PER_PAGE
@@ -114,7 +113,6 @@ const fetchArtwork = async ({ queryKey }) => {
 const Gallery = () => {
 	const [page, setPage] = useState(1);
 	const [searchQuery, setSearchQuery] = useState('');
-
 	const { data, isLoading, error, refetch } = useQuery({
 		queryKey: ['gallery', page, searchQuery],
 		queryFn: fetchArtwork,
@@ -218,10 +216,10 @@ const Gallery = () => {
 								padding: '8px 16px',
 								textTransform: 'capitalize',
 								color: searchQuery === preset ? 'white' : 'black',
-								backgroundColor: searchQuery === preset ? '#b9b5ff' : 'transparent',
-								borderColor: searchQuery === preset ? '#b9b5ff' : 'lightgrey',
+								backgroundColor: searchQuery === preset ? '#6c63ff' : 'transparent',
+								borderColor: searchQuery === preset ? '#6c63ff' : 'lightgrey',
 								'&:hover': {
-									backgroundColor: '#b9b5ff',
+									backgroundColor: '#6c63ff',
 									color: 'white',
 								},
 
