@@ -176,7 +176,7 @@ const PortfolioPage = () => {
 					marginTop: 20,
 				}}
 			>
-				Projects
+				Test Projects
 			</Typography>
 			<AddProjectBtn onProjectAdded={handleProjectAdded} />
 			{isLoading ? <Typography>Loading projects...</Typography> : renderProjects()}
