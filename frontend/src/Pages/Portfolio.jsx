@@ -164,7 +164,7 @@ const PortfolioPage = () => {
 					marginTop: 5,
 				}}
 			>
-				Test Artwork
+				Artwork
 			</Typography>
 			<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
 			{isLoading ? <Typography>Loading artwork...</Typography> : renderArtwork()}
@@ -176,7 +176,7 @@ const PortfolioPage = () => {
 					marginTop: 20,
 				}}
 			>
-				Test Projects
+				Projects
 			</Typography>
 			<AddProjectBtn onProjectAdded={handleProjectAdded} />
 			{isLoading ? <Typography>Loading projects...</Typography> : renderProjects()}

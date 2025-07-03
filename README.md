@@ -29,6 +29,17 @@ Create an account and catalog personal artwork.
 <br>
 Use the new project feature to brainstorm art projects.
 
+## Preview
+
+<p float="left">
+  <img src="assets/ss1.jpg" width="200"/>
+  <img src="assets/ss2.png" width="200"/>
+  <img src="assets/ss3.jpg" width="200"/>
+   <img src="assets/ss4.jpg" width="200"/>
+    <img src="assets/ss5.jpg" width="200"/>
+     <img src="assets/ss6.jpg" width="200"/>
+</p>
+
 ## Technology Stack
 
 Layout: Figma
