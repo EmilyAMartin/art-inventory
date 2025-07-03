@@ -31,14 +31,12 @@ Use the new project feature to brainstorm art projects.
 
 ## Preview
 
-<p float="left">
-  <img src="assets/ss1.jpg" width="200"/>
-  <img src="assets/ss2.png" width="200"/>
-  <img src="assets/ss3.jpg" width="200"/>
-   <img src="assets/ss4.jpg" width="200"/>
-    <img src="assets/ss5.jpg" width="200"/>
-     <img src="assets/ss6.jpg" width="200"/>
-</p>
+![Screenshot 1](assets/ss1.jpg)
+![Screenshot 2](assets/ss2.png)
+![Screenshot 3](assets/ss3.jpg)
+![Screenshot 4](assets/ss4.jpg)
+![Screenshot 5](assets/ss5.jpg)
+![Screenshot 6](assets/ss6.jpg)
 
 ## Technology Stack
 
