@@ -48,7 +48,7 @@ const fetchFavorites = async () => {
 const fetchArtwork = async ({ queryKey }) => {
 	const [_key, page, searchQuery] = queryKey;
 	const { isLoggedIn, favorites } = await fetchFavorites();
-	const MAX_ATTEMPTS = 10; // Increase attempts to ensure enough results
+	const MAX_ATTEMPTS = 30;
 	let attempts = 0;
 	let currentApiPage = 1;
 	let validArtwork = [];
@@ -94,6 +94,7 @@ const fetchArtwork = async ({ queryKey }) => {
 		);
 
 		validArtwork = [...validArtwork, ...filtered.filter((art) => art !== null)];
+		if (!data.length) break;
 		currentApiPage++;
 		attempts++;
 	}
@@ -106,7 +107,7 @@ const fetchArtwork = async ({ queryKey }) => {
 	return {
 		artwork,
 		isLoggedIn,
-		totalResults,
+		totalResults: validArtwork.length,
 	};
 };
 
@@ -243,6 +244,9 @@ const Gallery = () => {
 			<Box>
 				{isLoading && <Typography>Loading...</Typography>}
 				{error && <Typography>Error: {error.message}</Typography>}
+				{!isLoading && data?.artwork.length === 0 && (
+					<Typography>No artworks found for this search.</Typography>
+				)}
 				<Grid2
 					container
 					spacing={8}
