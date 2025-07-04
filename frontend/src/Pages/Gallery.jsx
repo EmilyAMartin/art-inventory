@@ -48,7 +48,7 @@ const fetchFavorites = async () => {
 const fetchArtwork = async ({ queryKey }) => {
 	const [_key, page, searchQuery] = queryKey;
 	const { isLoggedIn, favorites } = await fetchFavorites();
-	const MAX_ATTEMPTS = 30;
+	const MAX_ATTEMPTS = 10;
 	let attempts = 0;
 	let currentApiPage = 1;
 	let validArtwork = [];
@@ -287,7 +287,7 @@ const Gallery = () => {
 				</Button>
 				<Button
 					color='black'
-					disabled={page * RESULTS_PER_PAGE >= (data?.totalResults || 0)}
+					disabled={data?.artwork.length < RESULTS_PER_PAGE}
 					onClick={() => {
 						setPage(page + 1);
 						window.scrollTo(0, 0);
