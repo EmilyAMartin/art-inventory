@@ -48,16 +48,17 @@ const fetchFavorites = async () => {
 const fetchArtwork = async ({ queryKey }) => {
 	const [_key, page, searchQuery] = queryKey;
 	const { isLoggedIn, favorites } = await fetchFavorites();
-	const MAX_ATTEMPTS = 10;
+	const MAX_ATTEMPTS = 40;
 	let attempts = 0;
 	let currentApiPage = 1;
 	let validArtwork = [];
-	let totalResults = 0;
 	const artworksToSkip = (page - 1) * RESULTS_PER_PAGE;
+	let reachedEnd = false;
 
 	while (
 		validArtwork.length < artworksToSkip + RESULTS_PER_PAGE &&
-		attempts < MAX_ATTEMPTS
+		attempts < MAX_ATTEMPTS &&
+		!reachedEnd
 	) {
 		let data;
 
@@ -65,7 +66,10 @@ const fetchArtwork = async ({ queryKey }) => {
 			const searchResponse = await axios.get(
 				`${API_URL}/search?q=${searchQuery}&page=${currentApiPage}`
 			);
-			totalResults = searchResponse.data.pagination.total;
+			if (searchResponse.data.data.length === 0) {
+				reachedEnd = true;
+				break;
+			}
 			const results = await Promise.all(
 				searchResponse.data.data.map((art) =>
 					axios.get(`${API_URL}/${art.id}`).then((res) => res.data.data)
@@ -74,7 +78,10 @@ const fetchArtwork = async ({ queryKey }) => {
 			data = results;
 		} else {
 			const response = await axios.get(`${API_URL}?page=${currentApiPage}`);
-			totalResults = response.data.pagination.total;
+			if (response.data.data.length === 0) {
+				reachedEnd = true;
+				break;
+			}
 			data = response.data.data;
 		}
 
@@ -94,7 +101,6 @@ const fetchArtwork = async ({ queryKey }) => {
 		);
 
 		validArtwork = [...validArtwork, ...filtered.filter((art) => art !== null)];
-		if (!data.length) break;
 		currentApiPage++;
 		attempts++;
 	}
@@ -107,7 +113,8 @@ const fetchArtwork = async ({ queryKey }) => {
 	return {
 		artwork,
 		isLoggedIn,
-		totalResults: validArtwork.length,
+		hasMore:
+			!reachedEnd && validArtwork.length > artworksToSkip + RESULTS_PER_PAGE,
 	};
 };
 
