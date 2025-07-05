@@ -157,7 +157,7 @@ const Home = () => {
 			<Box
 				sx={{
 					pb: 10,
-					marginTop: { xs: 4, md: 10 },
+					marginTop: { xs: 6, md: 6 },
 				}}
 			>
 				<Typography variant='h6'>New on Portfolio</Typography>

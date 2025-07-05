@@ -9,7 +9,14 @@ import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
 import ArtCard from '../components/ArtCard';
 import toast from 'react-hot-toast';
-import { Typography } from '@mui/material';
+import {
+	Typography,
+	useMediaQuery,
+	Select,
+	MenuItem,
+	InputLabel,
+	FormControl,
+} from '@mui/material';
 import { BASE_URL } from '../config';
 
 const API_URL = 'https://api.artic.edu/api/v1/artworks';
@@ -121,6 +128,14 @@ const fetchArtwork = async ({ queryKey }) => {
 const Gallery = () => {
 	const [page, setPage] = useState(1);
 	const [searchQuery, setSearchQuery] = useState('');
+	const isSmallScreen = useMediaQuery('(max-width:600px)');
+	const presetOptions = [
+		'Painting',
+		'Printmaking',
+		'Sculpture',
+		'Photography',
+		'Textile',
+	];
 	const { data, isLoading, error, refetch } = useQuery({
 		queryKey: ['gallery', page, searchQuery],
 		queryFn: fetchArtwork,
@@ -203,8 +218,6 @@ const Gallery = () => {
 					Reset
 				</Button>
 			</Box>
-
-			{/* Search Buttons */}
 			<Box
 				sx={{
 					display: 'flex',
@@ -212,10 +225,40 @@ const Gallery = () => {
 					gap: 2,
 					flexWrap: 'wrap',
 					padding: 2,
+					width: '100%',
 				}}
 			>
-				{['Painting', 'Printmaking', 'Sculpture', 'Photography', 'Textile'].map(
-					(preset) => (
+				{isSmallScreen ? (
+					<FormControl
+						fullWidth
+						size='small'
+					>
+						<InputLabel id='preset-select-label'>Category</InputLabel>
+						<Select
+							labelId='preset-select-label'
+							id='preset-select'
+							value={presetOptions.includes(searchQuery) ? searchQuery : ''}
+							label='Category'
+							onChange={(e) => {
+								setSearchQuery(e.target.value);
+								setPage(1);
+							}}
+						>
+							<MenuItem value=''>
+								<em>None</em>
+							</MenuItem>
+							{presetOptions.map((preset) => (
+								<MenuItem
+									key={preset}
+									value={preset}
+								>
+									{preset}
+								</MenuItem>
+							))}
+						</Select>
+					</FormControl>
+				) : (
+					presetOptions.map((preset) => (
 						<Button
 							key={preset}
 							variant='outlined'
@@ -230,7 +273,6 @@ const Gallery = () => {
 									backgroundColor: '#6c63ff',
 									color: 'white',
 								},
-
 								width: {
 									xs: '100%',
 									sm: 'auto',
@@ -243,7 +285,7 @@ const Gallery = () => {
 						>
 							{preset}
 						</Button>
-					)
+					))
 				)}
 			</Box>
 
