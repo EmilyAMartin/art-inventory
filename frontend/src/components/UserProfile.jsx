@@ -52,7 +52,6 @@ const UserProfile = () => {
 		return <Typography>Error fetching data</Typography>;
 	}
 
-	// Add this check:
 	if (
 		!user ||
 		typeof user !== 'object' ||

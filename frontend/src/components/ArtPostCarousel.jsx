@@ -58,13 +58,15 @@ function ArtPostCarousel({ artworks, onSubmitComment }) {
 				marginTop: '40px',
 			}}
 		>
-			<IconButton
-				onClick={handlePrevPage}
-				sx={{ margin: 5 }}
-				disabled={safeCurrentPage === 0}
-			>
-				<NavigateBeforeIcon />
-			</IconButton>
+			{!isSmallScreen && (
+				<IconButton
+					onClick={handlePrevPage}
+					sx={{ margin: 5 }}
+					disabled={safeCurrentPage === 0}
+				>
+					<NavigateBeforeIcon />
+				</IconButton>
+			)}
 
 			<Box
 				sx={{
@@ -142,13 +144,15 @@ function ArtPostCarousel({ artworks, onSubmitComment }) {
 					</Stack>
 				)}
 			</Box>
-			<IconButton
-				onClick={handleNextPage}
-				sx={{ margin: 5 }}
-				disabled={safeCurrentPage >= maxPage}
-			>
-				<NavigateNextIcon />
-			</IconButton>
+			{!isSmallScreen && (
+				<IconButton
+					onClick={handleNextPage}
+					sx={{ margin: 5 }}
+					disabled={safeCurrentPage >= maxPage}
+				>
+					<NavigateNextIcon />
+				</IconButton>
+			)}
 		</Box>
 	);
 }
