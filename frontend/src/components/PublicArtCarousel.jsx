@@ -56,14 +56,16 @@ function PublicArtCarousel({ artworks }) {
 				marginTop: '40px',
 			}}
 		>
-			{/* Previous Button */}
-			<IconButton
-				onClick={handlePrevPage}
-				sx={{ margin: 5 }}
-				disabled={safeCurrentPage === 0}
-			>
-				<NavigateBeforeIcon />
-			</IconButton>
+			{/* Previous Button - hide on small screens */}
+			{!isSmallScreen && (
+				<IconButton
+					onClick={handlePrevPage}
+					sx={{ margin: 5 }}
+					disabled={safeCurrentPage === 0}
+				>
+					<NavigateBeforeIcon />
+				</IconButton>
+			)}
 
 			{/* Carousel Content */}
 			<Box
@@ -141,14 +143,16 @@ function PublicArtCarousel({ artworks }) {
 				)}
 			</Box>
 
-			{/* Next Button */}
-			<IconButton
-				onClick={handleNextPage}
-				sx={{ margin: 5 }}
-				disabled={safeCurrentPage >= maxPage}
-			>
-				<NavigateNextIcon />
-			</IconButton>
+			{/* Next Button - hide on small screens */}
+			{!isSmallScreen && (
+				<IconButton
+					onClick={handleNextPage}
+					sx={{ margin: 5 }}
+					disabled={safeCurrentPage >= maxPage}
+				>
+					<NavigateNextIcon />
+				</IconButton>
+			)}
 		</Box>
 	);
 }
