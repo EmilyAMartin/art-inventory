@@ -1,7 +1,9 @@
 ## View Here
+
 https://art-portfolio.fly.dev
 
 ## Project Overview
+
 Portfolio is a website I developed to help artists and creators catalog their work while also offering inspiration from other artists. The platform features several key pages:  
 <br>
 <br>
@@ -14,9 +16,11 @@ Gallery Page: Users can browse and favourite artworks from the Art Institute of 
 Accounts Page: Enables users to create and manage personal profiles and accounts.
 
 ## Motivation
+
 This project was inspired by my personal need for a platform to catalog my own artworks. I wanted to create a space where I, as well as other creators, could easily document their artworks, search for inspiration and brainstorm ideas all in one unified platform.
 
 ## Key Features
+
 Search for inspiration using the Art Institute of Chicago's API. 
 <br>
 Create a personal account and catalog artworks.
@@ -26,6 +30,7 @@ Use the project feature to brainstorm and organize art ideas.
 Explore other artists’ profiles, view their public artworks, and leave comments
 
 ## Preview
+
 <p float="left">
   <img src="assets/ss1.jpg" width="400"/>
   <img src="assets/ss2.png" width="400"/>
@@ -36,6 +41,7 @@ Explore other artists’ profiles, view their public artworks, and leave comment
 </p>
 
 ## Technology Stack
+
 Layout: Figma
 <br>
 Frontend: React JS
@@ -49,4 +55,5 @@ Component Library: MUI
 API: Art Institute of Chicago
 
 ## Credits
+
 Big shoutout to my Get Building coaches, Lucas Hillier and Jack Harrhy. They’ve been an incredible source of support and guidance throughout this project and their thoughtful suggestions were key in turning my ideas into reality. I honestly couldn’t have done it without them, and I’m really grateful for all their help.
