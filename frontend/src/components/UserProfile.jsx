@@ -52,6 +52,16 @@ const UserProfile = () => {
 		return <Typography>Error fetching data</Typography>;
 	}
 
+	// Add this check:
+	if (
+		!user ||
+		typeof user !== 'object' ||
+		Array.isArray(user) ||
+		!user.username
+	) {
+		return <Typography>User not found.</Typography>;
+	}
+
 	return (
 		<Box>
 			{/*Profile Header */}
@@ -65,22 +75,24 @@ const UserProfile = () => {
 					alignItems: 'center',
 				}}
 			>
-				<Box
-					component='img'
-					src={user.profile_image}
-					alt='Profile'
-					sx={{
-						width: 150,
-						height: 150,
-						borderRadius: '50%',
-						objectFit: 'cover',
-					}}
-				/>
+				{user.profile_image && (
+					<Box
+						component='img'
+						src={user.profile_image}
+						alt='Profile'
+						sx={{
+							width: 150,
+							height: 150,
+							borderRadius: '50%',
+							objectFit: 'cover',
+						}}
+					/>
+				)}
 
 				{user.username && (
 					<Typography
 						variant='h5'
-						sx={{ m: 0 }}
+						sx={{ m: 0, textAlign: 'center' }}
 					>
 						{user.username}
 					</Typography>
@@ -89,7 +101,7 @@ const UserProfile = () => {
 				{user.bio && (
 					<Typography
 						variant='body1'
-						sx={{ m: 0, color: 'gray', fontStyle: 'italic' }}
+						sx={{ m: 0, color: 'gray', fontStyle: 'italic', textAlign: 'center' }}
 					>
 						{user.bio}
 					</Typography>

@@ -120,7 +120,7 @@ const Account = () => {
 				{userData.username && (
 					<Typography
 						variant='h5'
-						sx={{ m: 0 }}
+						sx={{ m: 0, textAlign: 'center' }}
 					>
 						{userData.username}
 					</Typography>
@@ -128,7 +128,7 @@ const Account = () => {
 				{userData.bio && (
 					<Typography
 						variant='body1'
-						sx={{ m: 0, color: 'gray', fontStyle: 'italic' }}
+						sx={{ m: 0, color: 'gray', fontStyle: 'italic', textAlign: 'center' }}
 					>
 						{userData.bio}
 					</Typography>
