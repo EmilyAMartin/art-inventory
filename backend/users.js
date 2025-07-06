@@ -149,9 +149,8 @@ export const setupRoutes = (app) => {
 	app.get('/users/:userId', async (req, res) => {
 		try {
 			const { userId } = req.params;
-
 			const [userResult] = await dbPool.query(
-				'SELECT id, name, email, username, bio, profile_image FROM users WHERE id = ?',
+				'SELECT id, username, bio, profile_image FROM users WHERE id = ?',
 				[userId]
 			);
 
