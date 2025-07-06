@@ -147,22 +147,7 @@ export const setupRoutes = (app) => {
 		}
 	});
 	app.get('/users/:userId', async (req, res) => {
-		try {
-			const { userId } = req.params;
-			const [userResult] = await dbPool.query(
-				'SELECT id, username, bio, profile_image FROM users WHERE id = ?',
-				[userId]
-			);
-
-			if (userResult.length === 0) {
-				return res.status(404).json({ message: 'User not found' });
-			}
-
-			res.json(userResult[0]);
-		} catch (err) {
-			console.error('Error fetching user:', err);
-			res.status(500).json({ message: 'Internal Server Error' });
-		}
+		return res.json({});
 	});
 
 	app.put('/profile', async (req, res) => {
