@@ -67,13 +67,16 @@ const initDb = async () => {
 };
 
 initDb();
-artwork.setupRoutes(app);
-users.setupRoutes(app);
-favorites.setupFavoritesRoutes(app);
-comments.setupCommentRoutes(app);
-projects.setupRoutes(app);
+const apiRouter = express.Router();
+artwork.setupRoutes(apiRouter);
+users.setupRoutes(apiRouter);
+favorites.setupFavoritesRoutes(apiRouter);
+comments.setupCommentRoutes(apiRouter);
+projects.setupRoutes(apiRouter);
 
+app.use('/api', apiRouter);
 app.use(express.static(path.join(import.meta.dirname, './dist')));
+
 app.get('*', (req, res) => {
 	res.sendFile(path.join(import.meta.dirname, './dist/index.html'));
 });
