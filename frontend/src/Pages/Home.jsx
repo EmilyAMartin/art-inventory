@@ -36,6 +36,7 @@ const Home = () => {
 			sx={{
 				display: 'flex',
 				flexDirection: 'column',
+				alignItems: 'flex-start',
 			}}
 		>
 			{/* Hero Section */}

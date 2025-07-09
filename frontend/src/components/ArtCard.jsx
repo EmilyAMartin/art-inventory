@@ -34,13 +34,7 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 
 	const renderFavoriteIcon = () => {
 		if (!isLoggedIn) {
-			return (
-				<Tooltip title='Log in to favorite artwork'>
-					<Box sx={{ cursor: 'not-allowed', display: 'inline-flex' }}>
-						<FavoriteBorder sx={{ opacity: 0.5 }} />
-					</Box>
-				</Tooltip>
-			);
+			return null; // Hide the icon if not logged in
 		}
 
 		const Icon = art.favorite ? Favorite : FavoriteBorder;
