@@ -36,7 +36,6 @@ const Home = () => {
 			sx={{
 				display: 'flex',
 				flexDirection: 'column',
-				alignItems: 'flex-start',
 			}}
 		>
 			{/* Hero Section */}
@@ -129,6 +128,7 @@ const Home = () => {
 						width: '100%',
 						display: 'flex',
 						justifyContent: 'right',
+						alignItems: 'flex-start',
 					}}
 				>
 					<Box

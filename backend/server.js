@@ -74,18 +74,7 @@ comments.setupCommentRoutes(app);
 projects.setupRoutes(app);
 
 app.use(express.static(path.join(import.meta.dirname, './dist')));
-app.get('*', (req, res, next) => {
-	if (
-		req.path.startsWith('/uploads') ||
-		req.path.startsWith('/favorites') ||
-		req.path.startsWith('/users') ||
-		req.path.startsWith('/projects') ||
-		req.path.startsWith('/comments') ||
-		req.path.startsWith('/artwork') ||
-		req.path.startsWith('/profile')
-	) {
-		return next();
-	}
+app.get('*', (req, res) => {
 	res.sendFile(path.join(import.meta.dirname, './dist/index.html'));
 });
 
