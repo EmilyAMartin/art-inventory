@@ -17,8 +17,8 @@ import { BASE_URL } from './config.js';
 const sessionStore = new MySQLStore({}, dbPool);
 const app = express();
 const allowedOrigins = [
-	'http://localhost:5173', // Vite dev server
-	'https://art-portfolio.fly.dev', // Your deployed frontend
+	'http://localhost:5173',
+	'https://art-portfolio.fly.dev',
 ];
 
 const corsOptions = {
@@ -73,12 +73,14 @@ favorites.setupFavoritesRoutes(app);
 comments.setupCommentRoutes(app);
 projects.setupRoutes(app);
 
+app.use(express.static(path.join(import.meta.dirname, './dist')));
+app.get('*', (req, res) => {
+	res.sendFile(path.join(import.meta.dirname, './dist/index.html'));
+});
 app.use((err, req, res, next) => {
 	console.error('Unhandled Error:', err);
 	res.status(500).json({ message: 'Internal Server Error' });
 });
-
-app.use(express.static(path.join(import.meta.dirname, './dist')));
 
 const port = 3000;
 app.listen(port, () => {

@@ -143,7 +143,7 @@ const Gallery = () => {
 	});
 
 	const handleFavUpdate = async (artworkId, isFavorite) => {
-		if (!data?.isLoggedIn) {
+		if (!data || !data.isLoggedIn) {
 			toast.error('You must be logged in to favorite artwork');
 			return;
 		}

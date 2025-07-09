@@ -151,6 +151,7 @@ const PortfolioPage = () => {
 			sx={{
 				display: 'flex',
 				flexDirection: 'column',
+				alignItems: 'flex-start',
 				gap: 2,
 				paddingBottom: 20,
 				minHeight: '100vh',
