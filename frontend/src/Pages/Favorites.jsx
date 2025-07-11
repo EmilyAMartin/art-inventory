@@ -185,6 +185,7 @@ const Favorites = () => {
 		);
 	}
 
+	console.log('Artwork array:', artwork);
 	return (
 		<Box
 			sx={{
