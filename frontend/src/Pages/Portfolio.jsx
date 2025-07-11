@@ -151,7 +151,6 @@ const PortfolioPage = () => {
 			sx={{
 				display: 'flex',
 				flexDirection: 'column',
-				alignItems: { xs: 'center', md: 'flex-start' },
 				gap: 2,
 				paddingBottom: 20,
 				minHeight: '100vh',
@@ -163,24 +162,48 @@ const PortfolioPage = () => {
 				variant='h6'
 				sx={{
 					marginTop: 5,
+					textAlign: { xs: 'left', md: 'left' },
 				}}
 			>
 				Artwork
 			</Typography>
-			<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
-			{isLoading ? <Typography>Loading artwork...</Typography> : renderArtwork()}
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: { xs: 'center', md: 'flex-start' }, // Center on mobile, left on desktop
+					width: '100%',
+				}}
+			>
+				<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
+				{isLoading ? <Typography>Loading artwork...</Typography> : renderArtwork()}
+			</Box>
 
 			{/* Project Section */}
 			<Typography
 				variant='h6'
 				sx={{
 					marginTop: 20,
+					textAlign: { xs: 'left', md: 'left' },
 				}}
 			>
 				Projects
 			</Typography>
-			<AddProjectBtn onProjectAdded={handleProjectAdded} />
-			{isLoading ? <Typography>Loading projects...</Typography> : renderProjects()}
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: { xs: 'center', md: 'flex-start' },
+					width: '100%',
+				}}
+			>
+				<AddProjectBtn onProjectAdded={handleProjectAdded} />
+				{isLoading ? (
+					<Typography>Loading projects...</Typography>
+				) : (
+					renderProjects()
+				)}
+			</Box>
 
 			<Box sx={{ height: 50 }} />
 		</Box>
