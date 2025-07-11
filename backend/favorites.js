@@ -29,7 +29,7 @@ export const setupFavoritesRoutes = (app) => {
 				'SELECT artwork_external_id as id FROM favorites WHERE user_id = ?',
 				[userId]
 			);
-			res.json({ userId, favorites });
+			res.json({ userId, favorites: Array.isArray(favorites) ? favorites : [] });
 		} catch (err) {
 			console.error('Error fetching favorites:', err);
 			res.status(500).json({ message: 'Internal Server Error' });

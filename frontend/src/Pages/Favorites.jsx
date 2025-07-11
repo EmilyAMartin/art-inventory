@@ -1,4 +1,3 @@
-import React from 'react';
 import Grid2 from '@mui/material/Grid2';
 import ArtCard from '../components/ArtCard';
 import axios from 'axios';
