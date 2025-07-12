@@ -166,10 +166,6 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	app.get('/api/users/:userId/public-artworks', async (req, res) => {
-		res.json([]);
-	});
-
 	app.put('/api/profile', async (req, res) => {
 		if (req.session.user) {
 			const { username, bio, currentPassword, newPassword, email } = req.body;

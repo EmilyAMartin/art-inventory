@@ -113,4 +113,5 @@ const UserProfile = () => {
 		</Box>
 	);
 };
+
 export default UserProfile;
