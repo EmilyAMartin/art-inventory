@@ -167,15 +167,15 @@ const PortfolioPage = () => {
 			>
 				Artwork
 			</Typography>
+			<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
 			<Box
 				sx={{
 					display: 'flex',
 					flexDirection: 'column',
-					alignItems: { xs: 'center', md: 'flex-start' }, // Center on mobile, left on desktop
+					alignItems: { xs: 'center', md: 'flex-start' },
 					width: '100%',
 				}}
 			>
-				<AddNewBtn onArtworkAdded={handleNewArtworkAdded} />
 				{isLoading ? <Typography>Loading artwork...</Typography> : renderArtwork()}
 			</Box>
 
@@ -189,6 +189,7 @@ const PortfolioPage = () => {
 			>
 				Projects
 			</Typography>
+			<AddProjectBtn onProjectAdded={handleProjectAdded} />
 			<Box
 				sx={{
 					display: 'flex',
@@ -197,7 +198,6 @@ const PortfolioPage = () => {
 					width: '100%',
 				}}
 			>
-				<AddProjectBtn onProjectAdded={handleProjectAdded} />
 				{isLoading ? (
 					<Typography>Loading projects...</Typography>
 				) : (
