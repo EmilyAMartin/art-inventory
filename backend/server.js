@@ -74,7 +74,8 @@ comments.setupCommentRoutes(app);
 projects.setupRoutes(app);
 
 app.use(express.static(path.join(import.meta.dirname, './dist')));
-app.get('*', (req, res) => {
+
+app.get(/^\/(?!api\/).*$/, (req, res) => {
 	res.sendFile(path.join(import.meta.dirname, './dist/index.html'));
 });
 

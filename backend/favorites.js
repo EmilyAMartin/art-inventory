@@ -18,7 +18,7 @@ export const createFavoritesTable = async () => {
 };
 
 export const setupFavoritesRoutes = (app) => {
-	app.get('/favorites', async (req, res) => {
+	app.get('/api/favorites', async (req, res) => {
 		const userId = req.session.user?.id;
 		if (!userId) {
 			return res.status(401).json({ message: 'Not logged in' });
@@ -36,7 +36,7 @@ export const setupFavoritesRoutes = (app) => {
 		}
 	});
 
-	app.post('/favorites', async (req, res) => {
+	app.post('/api/favorites', async (req, res) => {
 		const { artworkId, favorite } = req.body;
 		const userId = req.session.user?.id;
 

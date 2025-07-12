@@ -18,7 +18,7 @@ const checkImageUrl = async (imageUrl) => {
 };
 
 const fetchFavorites = async () => {
-	const response = await fetch(`${BASE_URL}/favorites`, {
+	const response = await fetch(`${BASE_URL}/api/favorites`, {
 		method: 'GET',
 		credentials: 'include',
 	});
@@ -78,7 +78,7 @@ const Favorites = () => {
 			return;
 		}
 		try {
-			const response = await fetch(`${BASE_URL}/favorites`, {
+			const response = await fetch(`${BASE_URL}/api/favorites`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
