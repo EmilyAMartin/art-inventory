@@ -7,7 +7,7 @@ import PublicArtCarousel from './PublicArtCarousel';
 import { BASE_URL } from '../config';
 
 const fetchUserData = async (userId) => {
-	const userResponse = await axios.get(`${BASE_URL}/users/${userId}`);
+	const userResponse = await axios.get(`${BASE_URL}/api/users/${userId}`);
 	const user = userResponse.data;
 	if (user.profile_image) {
 		user.profile_image = `${BASE_URL}${user.profile_image}`;
@@ -17,7 +17,7 @@ const fetchUserData = async (userId) => {
 
 const fetchUserArtworks = async (userId) => {
 	const artworksResponse = await axios.get(
-		`${BASE_URL}/users/${userId}/public-artworks`
+		`${BASE_URL}/api/users/${userId}/public-artworks`
 	);
 	return artworksResponse.data;
 };
