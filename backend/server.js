@@ -67,16 +67,32 @@ const initDb = async () => {
 };
 
 initDb();
+
 artwork.setupRoutes(app);
 users.setupRoutes(app);
 favorites.setupFavoritesRoutes(app);
 comments.setupCommentRoutes(app);
 projects.setupRoutes(app);
 
-app.use(express.static(path.join(import.meta.dirname, './dist')));
+// Serve static files from React build
+app.use(express.static(path.join(import.meta.dirname, '../frontend/dist')));
 
-app.get(/^\/(?!api\/).*$/, (req, res) => {
-	res.sendFile(path.join(import.meta.dirname, './dist/index.html'));
+// Catch-all route for SPA client-side routing
+app.get('*', (req, res, next) => {
+	if (
+		req.method === 'GET' &&
+		!req.path.startsWith('/api') &&
+		!req.path.startsWith('/uploads') &&
+		!req.path.startsWith('/artwork') &&
+		!req.path.startsWith('/users') &&
+		!req.path.startsWith('/favorites') &&
+		!req.path.startsWith('/projects') &&
+		!req.path.startsWith('/comments')
+	) {
+		res.sendFile(path.join(import.meta.dirname, '../frontend/dist/index.html'));
+	} else {
+		next();
+	}
 });
 
 app.use((err, req, res, next) => {
