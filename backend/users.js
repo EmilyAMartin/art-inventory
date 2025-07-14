@@ -65,7 +65,7 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	app.post('/logout', (req, res) => {
+	app.post('/api/logout', (req, res) => {
 		if (req.session.user) {
 			req.session.destroy((err) => {
 				if (err) {
@@ -79,7 +79,7 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	app.post('/register', async (req, res) => {
+	app.post('/api/register', async (req, res) => {
 		const { name, email, password, username, bio, secret } = req.body;
 		const REQUIRED_SECRET = process.env.REGISTER_SECRET || 'mySuperSecret';
 		if (secret !== REQUIRED_SECRET) {
@@ -125,7 +125,7 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	app.get('/profile', async (req, res) => {
+	app.get('/api/profile', async (req, res) => {
 		if (req.session.user) {
 			try {
 				const [userResult] = await dbPool.query(
@@ -165,7 +165,7 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	app.put('/profile', async (req, res) => {
+	app.put('/api/profile', async (req, res) => {
 		if (req.session.user) {
 			const { username, bio, currentPassword, newPassword, email } = req.body;
 
@@ -235,7 +235,7 @@ export const setupRoutes = (app) => {
 			res.status(401).json({ message: 'Not logged in' });
 		}
 	});
-	app.post('/profile/image', upload.single('image'), async (req, res) => {
+	app.post('/api/profile/image', upload.single('image'), async (req, res) => {
 		if (!req.session.user) {
 			return res.status(401).json({ message: 'Not logged in' });
 		}
