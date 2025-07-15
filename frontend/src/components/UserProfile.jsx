@@ -1,3 +1,4 @@
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
@@ -6,9 +7,7 @@ import PublicArtCarousel from './PublicArtCarousel';
 import { BASE_URL } from '../config';
 
 const fetchUserData = async (userId) => {
-	const userResponse = await axios.get(`${BASE_URL}/api/users/${userId}`, {
-		withCredentials: true,
-	});
+	const userResponse = await axios.get(`${BASE_URL}/users/${userId}`);
 	const user = userResponse.data;
 	if (user.profile_image) {
 		user.profile_image = `${BASE_URL}${user.profile_image}`;
@@ -18,10 +17,7 @@ const fetchUserData = async (userId) => {
 
 const fetchUserArtworks = async (userId) => {
 	const artworksResponse = await axios.get(
-		`${BASE_URL}/api/users/${userId}/public-artworks`,
-		{
-			withCredentials: true,
-		}
+		`${BASE_URL}/users/${userId}/public-artworks`
 	);
 	return artworksResponse.data;
 };
