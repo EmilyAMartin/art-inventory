@@ -165,6 +165,22 @@ export const setupRoutes = (app) => {
 		}
 	});
 
+	app.get('/api/users/:userId/public-artworks', async (req, res) => {
+		try {
+			const { userId } = req.params;
+
+			const [artworksResult] = await dbPool.query(
+				'SELECT id, title, image_url, description FROM artworks WHERE user_id = ? AND is_public = 1',
+				[userId]
+			);
+
+			res.json(artworksResult);
+		} catch (err) {
+			console.error('Error fetching public artworks:', err);
+			res.status(500).json({ message: 'Internal Server Error' });
+		}
+	});
+
 	app.put('/profile', async (req, res) => {
 		if (req.session.user) {
 			const { username, bio, currentPassword, newPassword, email } = req.body;
