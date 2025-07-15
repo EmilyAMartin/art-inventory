@@ -146,7 +146,7 @@ export const setupRoutes = (app) => {
 			res.status(401).json({ message: 'Not logged in' });
 		}
 	});
-	app.get('api/users/:userId', async (req, res) => {
+	app.get('/api/users/:userId', async (req, res) => {
 		try {
 			const { userId } = req.params;
 			const [userResult] = await dbPool.query(
