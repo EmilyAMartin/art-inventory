@@ -146,7 +146,7 @@ export const setupRoutes = (app) => {
 			res.status(401).json({ message: 'Not logged in' });
 		}
 	});
-	app.get('/api/users/:userId', async (req, res) => {
+	app.get('/users/:userId', async (req, res) => {
 		try {
 			const { userId } = req.params;
 			const [userResult] = await dbPool.query(
@@ -161,22 +161,6 @@ export const setupRoutes = (app) => {
 			res.json(userResult[0]);
 		} catch (err) {
 			console.error('Error fetching user:', err);
-			res.status(500).json({ message: 'Internal Server Error' });
-		}
-	});
-
-	app.get('/api/users/:userId/public-artworks', async (req, res) => {
-		try {
-			const { userId } = req.params;
-
-			const [artworksResult] = await dbPool.query(
-				'SELECT id, title, image_url, description FROM artworks WHERE user_id = ? AND is_public = 1',
-				[userId]
-			);
-
-			res.json(artworksResult);
-		} catch (err) {
-			console.error('Error fetching public artworks:', err.stack || err);
 			res.status(500).json({ message: 'Internal Server Error' });
 		}
 	});
