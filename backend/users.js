@@ -176,7 +176,7 @@ export const setupRoutes = (app) => {
 
 			res.json(artworksResult);
 		} catch (err) {
-			console.error('Error fetching public artworks:', err);
+			console.error('Error fetching public artworks:', err.stack || err);
 			res.status(500).json({ message: 'Internal Server Error' });
 		}
 	});
