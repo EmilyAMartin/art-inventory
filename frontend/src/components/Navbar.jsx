@@ -11,7 +11,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { AuthContext } from '../Pages/Context';
-import LoginBtn from './api/loginBtn';
+import LoginBtn from './LoginBtn';
 import { BASE_URL } from '../config';
 
 export const Navbar = () => {
