@@ -25,7 +25,7 @@ export const createTable = async () => {
 };
 
 export const setupRoutes = (app) => {
-	app.post('/login', async (req, res) => {
+	app.post('/api/login', async (req, res) => {
 		const { email, password } = req.body;
 
 		console.log('Login attempt:', { email });
@@ -65,7 +65,7 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	app.post('/logout', (req, res) => {
+	app.post('/api/logout', (req, res) => {
 		if (req.session.user) {
 			req.session.destroy((err) => {
 				if (err) {
@@ -79,7 +79,7 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	app.post('/register', async (req, res) => {
+	app.post('/api/register', async (req, res) => {
 		const { name, email, password, username, bio, secret } = req.body;
 		const REQUIRED_SECRET = process.env.REGISTER_SECRET || 'mySuperSecret';
 		if (secret !== REQUIRED_SECRET) {
@@ -125,7 +125,7 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	app.get('/profile', async (req, res) => {
+	app.get('/api/profile', async (req, res) => {
 		if (req.session.user) {
 			try {
 				const [userResult] = await dbPool.query(
@@ -146,7 +146,7 @@ export const setupRoutes = (app) => {
 			res.status(401).json({ message: 'Not logged in' });
 		}
 	});
-	app.get('/users/:userId', async (req, res) => {
+	app.get('/api/users/:userId', async (req, res) => {
 		try {
 			const { userId } = req.params;
 			const [userResult] = await dbPool.query(
@@ -165,7 +165,7 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	app.put('/profile', async (req, res) => {
+	app.put('/api/profile', async (req, res) => {
 		if (req.session.user) {
 			const { username, bio, currentPassword, newPassword, email } = req.body;
 
@@ -235,50 +235,54 @@ export const setupRoutes = (app) => {
 			res.status(401).json({ message: 'Not logged in' });
 		}
 	});
-	app.post('/profile/image', upload.single('image'), async (req, res) => {
-		if (!req.session.user) {
-			return res.status(401).json({ message: 'Not logged in' });
-		}
-
-		try {
-			if (!req.file) {
-				return res.status(400).json({ message: 'No image file provided' });
+	app.post(
+		'/api/api/profile/image',
+		upload.single('image'),
+		async (req, res) => {
+			if (!req.session.user) {
+				return res.status(401).json({ message: 'Not logged in' });
 			}
 
-			const imageUrl = `/uploads/${req.file.filename}`;
-			const [userResult] = await dbPool.query(
-				'SELECT profile_image FROM users WHERE id = ?',
-				[req.session.user.id]
-			);
-
-			if (userResult[0].profile_image) {
-				const oldImagePath = path.join(
-					'uploads',
-					path.basename(userResult[0].profile_image)
-				);
-				if (fs.existsSync(oldImagePath)) {
-					fs.unlinkSync(oldImagePath);
+			try {
+				if (!req.file) {
+					return res.status(400).json({ message: 'No image file provided' });
 				}
+
+				const imageUrl = `/uploads/${req.file.filename}`;
+				const [userResult] = await dbPool.query(
+					'SELECT profile_image FROM users WHERE id = ?',
+					[req.session.user.id]
+				);
+
+				if (userResult[0].profile_image) {
+					const oldImagePath = path.join(
+						'uploads',
+						path.basename(userResult[0].profile_image)
+					);
+					if (fs.existsSync(oldImagePath)) {
+						fs.unlinkSync(oldImagePath);
+					}
+				}
+
+				await dbPool.query('UPDATE users SET profile_image = ? WHERE id = ?', [
+					imageUrl,
+					req.session.user.id,
+				]);
+
+				const [updatedUserResult] = await dbPool.query(
+					'SELECT id, name, email, username, bio, profile_image FROM users WHERE id = ?',
+					[req.session.user.id]
+				);
+				req.session.user = updatedUserResult[0];
+
+				res.json({
+					message: 'Profile image updated successfully',
+					user: updatedUserResult[0],
+				});
+			} catch (err) {
+				console.error('Error updating profile image:', err);
+				res.status(500).json({ message: 'Internal Server Error' });
 			}
-
-			await dbPool.query('UPDATE users SET profile_image = ? WHERE id = ?', [
-				imageUrl,
-				req.session.user.id,
-			]);
-
-			const [updatedUserResult] = await dbPool.query(
-				'SELECT id, name, email, username, bio, profile_image FROM users WHERE id = ?',
-				[req.session.user.id]
-			);
-			req.session.user = updatedUserResult[0];
-
-			res.json({
-				message: 'Profile image updated successfully',
-				user: updatedUserResult[0],
-			});
-		} catch (err) {
-			console.error('Error updating profile image:', err);
-			res.status(500).json({ message: 'Internal Server Error' });
 		}
-	});
+	);
 };

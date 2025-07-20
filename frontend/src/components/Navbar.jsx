@@ -11,7 +11,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { AuthContext } from '../Pages/Context';
-import LoginBtn from './LoginBtn';
+import LoginBtn from './api/loginBtn';
 import { BASE_URL } from '../config';
 
 export const Navbar = () => {
@@ -33,7 +33,7 @@ export const Navbar = () => {
 
 	const handleLogout = async () => {
 		try {
-			const response = await fetch(`${BASE_URL}/logout`, {
+			const response = await fetch(`${BASE_URL}/api/logout`, {
 				method: 'POST',
 				credentials: 'include',
 			});

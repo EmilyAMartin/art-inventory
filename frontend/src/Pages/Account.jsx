@@ -20,7 +20,7 @@ const Account = () => {
 	} = useQuery({
 		queryKey: ['userData'],
 		queryFn: async () => {
-			const response = await axios.get(`${BASE_URL}/profile`, {
+			const response = await axios.get(`${BASE_URL}/api/profile`, {
 				withCredentials: true,
 			});
 			const user = response.data.user;
@@ -38,12 +38,16 @@ const Account = () => {
 		mutationFn: async (file) => {
 			const formData = new FormData();
 			formData.append('image', file);
-			const response = await axios.post(`${BASE_URL}/profile/image`, formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data',
-				},
-				withCredentials: true,
-			});
+			const response = await axios.post(
+				`${BASE_URL}/api/api/profile/image`,
+				formData,
+				{
+					headers: {
+						'Content-Type': 'multipart/form-data',
+					},
+					withCredentials: true,
+				}
+			);
 			return response.data.user;
 		},
 		onSuccess: (updatedUser) => {

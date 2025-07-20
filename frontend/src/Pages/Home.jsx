@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { AuthContext } from './Context';
 import SignUpBtn from '../components/SignUpBtn';
-import LoginBtn from '../components/LoginBtn';
+import LoginBtn from '../components/api/loginBtn';
 import ArtPostCarousel from '../components/ArtPostCarousel';
 import { Box, Typography } from '@mui/material';
 import { BASE_URL } from '../config';

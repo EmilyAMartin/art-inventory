@@ -128,7 +128,7 @@ const Favorites = () => {
 				<Button
 					variant='contained'
 					color='primary'
-					onClick={() => navigate('/login')}
+					onClick={() => navigate('/api/login')}
 				>
 					Log In
 				</Button>

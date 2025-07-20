@@ -110,7 +110,7 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	app.get('/users/:userId/public-artworks', async (req, res) => {
+	app.get('/api/users/:userId/public-artworks', async (req, res) => {
 		try {
 			const { userId } = req.params;
 

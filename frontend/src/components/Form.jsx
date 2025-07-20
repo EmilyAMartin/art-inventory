@@ -18,21 +18,21 @@ import toast from 'react-hot-toast';
 import { BASE_URL } from '../config';
 
 const checkLoginStatus = async () => {
-	const response = await axios.get(`${BASE_URL}/profile`, {
+	const response = await axios.get(`${BASE_URL}/api/profile`, {
 		withCredentials: true,
 	});
 	return response.status === 200;
 };
 
 const fetchProfile = async () => {
-	const response = await axios.get(`${BASE_URL}/profile`, {
+	const response = await axios.get(`${BASE_URL}/api/profile`, {
 		withCredentials: true,
 	});
 	return response.data.user;
 };
 
 const updateProfile = async (values) => {
-	const response = await axios.put(`${BASE_URL}/profile`, values, {
+	const response = await axios.put(`${BASE_URL}/api/profile`, values, {
 		withCredentials: true,
 	});
 	return response.data;
