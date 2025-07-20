@@ -235,54 +235,50 @@ export const setupRoutes = (app) => {
 			res.status(401).json({ message: 'Not logged in' });
 		}
 	});
-	app.post(
-		'/api/api/profile/image',
-		upload.single('image'),
-		async (req, res) => {
-			if (!req.session.user) {
-				return res.status(401).json({ message: 'Not logged in' });
-			}
-
-			try {
-				if (!req.file) {
-					return res.status(400).json({ message: 'No image file provided' });
-				}
-
-				const imageUrl = `/uploads/${req.file.filename}`;
-				const [userResult] = await dbPool.query(
-					'SELECT profile_image FROM users WHERE id = ?',
-					[req.session.user.id]
-				);
-
-				if (userResult[0].profile_image) {
-					const oldImagePath = path.join(
-						'uploads',
-						path.basename(userResult[0].profile_image)
-					);
-					if (fs.existsSync(oldImagePath)) {
-						fs.unlinkSync(oldImagePath);
-					}
-				}
-
-				await dbPool.query('UPDATE users SET profile_image = ? WHERE id = ?', [
-					imageUrl,
-					req.session.user.id,
-				]);
-
-				const [updatedUserResult] = await dbPool.query(
-					'SELECT id, name, email, username, bio, profile_image FROM users WHERE id = ?',
-					[req.session.user.id]
-				);
-				req.session.user = updatedUserResult[0];
-
-				res.json({
-					message: 'Profile image updated successfully',
-					user: updatedUserResult[0],
-				});
-			} catch (err) {
-				console.error('Error updating profile image:', err);
-				res.status(500).json({ message: 'Internal Server Error' });
-			}
+	app.post('api/profile/image', upload.single('image'), async (req, res) => {
+		if (!req.session.user) {
+			return res.status(401).json({ message: 'Not logged in' });
 		}
-	);
+
+		try {
+			if (!req.file) {
+				return res.status(400).json({ message: 'No image file provided' });
+			}
+
+			const imageUrl = `/uploads/${req.file.filename}`;
+			const [userResult] = await dbPool.query(
+				'SELECT profile_image FROM users WHERE id = ?',
+				[req.session.user.id]
+			);
+
+			if (userResult[0].profile_image) {
+				const oldImagePath = path.join(
+					'uploads',
+					path.basename(userResult[0].profile_image)
+				);
+				if (fs.existsSync(oldImagePath)) {
+					fs.unlinkSync(oldImagePath);
+				}
+			}
+
+			await dbPool.query('UPDATE users SET profile_image = ? WHERE id = ?', [
+				imageUrl,
+				req.session.user.id,
+			]);
+
+			const [updatedUserResult] = await dbPool.query(
+				'SELECT id, name, email, username, bio, profile_image FROM users WHERE id = ?',
+				[req.session.user.id]
+			);
+			req.session.user = updatedUserResult[0];
+
+			res.json({
+				message: 'Profile image updated successfully',
+				user: updatedUserResult[0],
+			});
+		} catch (err) {
+			console.error('Error updating profile image:', err);
+			res.status(500).json({ message: 'Internal Server Error' });
+		}
+	});
 };

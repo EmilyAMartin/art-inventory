@@ -38,16 +38,12 @@ const Account = () => {
 		mutationFn: async (file) => {
 			const formData = new FormData();
 			formData.append('image', file);
-			const response = await axios.post(
-				`${BASE_URL}/api/api/profile/image`,
-				formData,
-				{
-					headers: {
-						'Content-Type': 'multipart/form-data',
-					},
-					withCredentials: true,
-				}
-			);
+			const response = await axios.post(`${BASE_URL}api/profile/image`, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+				withCredentials: true,
+			});
 			return response.data.user;
 		},
 		onSuccess: (updatedUser) => {
