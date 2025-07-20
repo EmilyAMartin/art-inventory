@@ -28,7 +28,7 @@ const Home = () => {
 		queryFn: fetchPublicArtworks,
 	});
 
-	if (isLoading) return <Typography>Loading public artworks...</Typography>;
+	if (isLoading) return <Typography>Loading artworks...</Typography>;
 	if (isError) return <Typography>Error: {error.message}</Typography>;
 
 	return (
@@ -109,7 +109,7 @@ const Home = () => {
 						}}
 					>
 						{currentUser
-							? `Explore a vibrant community of artists and art lovers, where you can showcase your masterpieces, gain inspiration, and connect with other art enthusiasts.`
+							? `Explore a vibrant community of artists and art lovers, where you can showcase your masterpieces, gain inspiration and connect with other art enthusiasts.`
 							: 'Portfolio is a dynamic platform where artists can showcase their work, explore a curated gallery of masterpieces, and gain inspiration for their next project. Connect with fellow enthusiasts, discover new techniques, and celebrate creativity. Join us and ignite your passion for art!'}
 					</Typography>
 
