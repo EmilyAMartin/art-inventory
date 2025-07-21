@@ -2,7 +2,7 @@ import 'dotenv/config';
 import * as artwork from './artwork.js';
 import * as users from './users.js';
 import * as favorites from './favorites.js';
-import * as projects from '.api/projects.js';
+import * as projects from './projects.js';
 import * as comments from './comments.js';
 
 import express from 'express';

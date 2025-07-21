@@ -14,7 +14,7 @@ const AddProjectBtn = ({ onProjectAdded }) => {
 	];
 
 	const handleSubmit = async (formData) => {
-		const response = await fetch(`${BASE_URL}api/projects`, {
+		const response = await fetch(`${BASE_URL}/projects`, {
 			method: 'POST',
 			body: formData,
 			credentials: 'include',

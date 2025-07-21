@@ -23,7 +23,7 @@ const AddNewBtn = ({ onArtworkAdded }) => {
 			return;
 		}
 
-		const response = await fetch(`${BASE_URL}api/artworks`, {
+		const response = await fetch(`${BASE_URL}/artworks`, {
 			method: 'POST',
 			body: formData,
 			credentials: 'include',

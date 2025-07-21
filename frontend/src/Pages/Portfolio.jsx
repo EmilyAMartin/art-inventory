@@ -10,7 +10,7 @@ import { BASE_URL } from '../config';
 
 const fetchPortfolioData = async () => {
 	const [projectsResponse, artworksResponse] = await Promise.all([
-		fetch(`${BASE_URL}api/projects`, {
+		fetch(`${BASE_URL}/projects`, {
 			credentials: 'include',
 		}),
 		fetch(`${BASE_URL}/my-artworks`, {
@@ -67,7 +67,7 @@ const PortfolioPage = () => {
 
 	const handleDeleteProject = async (projectId) => {
 		try {
-			const response = await fetch(`${BASE_URL}api/projects/${projectId}`, {
+			const response = await fetch(`${BASE_URL}/projects/${projectId}`, {
 				method: 'DELETE',
 				credentials: 'include',
 			});
@@ -91,7 +91,7 @@ const PortfolioPage = () => {
 
 	const handleDeleteNewArtwork = async (artworkId) => {
 		try {
-			const response = await fetch(`${BASE_URL}api/artworks/${artworkId}`, {
+			const response = await fetch(`${BASE_URL}/artworks/${artworkId}`, {
 				method: 'DELETE',
 				credentials: 'include',
 			});

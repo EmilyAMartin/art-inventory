@@ -26,7 +26,7 @@ export const createTable = async () => {
 };
 
 export const setupRoutes = (app) => {
-	app.get('api/projects', async (req, res) => {
+	app.get('/projects', async (req, res) => {
 		if (!req.session.user) {
 			return res.status(401).json({
 				success: false,
@@ -59,7 +59,7 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	app.post('api/projects', upload.single('image'), async (req, res) => {
+	app.post('/projects', upload.single('image'), async (req, res) => {
 		console.log('Received project creation request:', req.body);
 		console.log('Uploaded file:', req.file);
 		console.log('Session user:', req.session.user);
@@ -160,7 +160,7 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	app.delete('api/projects/:id', async (req, res) => {
+	app.delete('/projects/:id', async (req, res) => {
 		if (!req.session.user) {
 			return res.status(401).json({
 				success: false,

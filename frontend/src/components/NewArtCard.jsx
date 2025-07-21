@@ -35,7 +35,7 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 
 		try {
 			const response = await fetch(
-				`${BASE_URL}api/artworks/${artwork.id}/toggle-public`,
+				`${BASE_URL}/artworks/${artwork.id}/toggle-public`,
 				{
 					method: 'PATCH',
 					headers: {
