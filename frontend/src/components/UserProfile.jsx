@@ -25,6 +25,8 @@ const fetchUserArtworks = async (userId) => {
 const UserProfile = () => {
 	const { userId } = useParams();
 
+	console.log('userId from params:', userId);
+
 	const {
 		data: user,
 		isLoading: isUserLoading,
@@ -43,6 +45,11 @@ const UserProfile = () => {
 		queryFn: () => fetchUserArtworks(userId),
 		enabled: !!user,
 	});
+
+	console.log('user:', user);
+	console.log('artworks:', artworks);
+	console.log('userError:', userError);
+	console.log('artworksError:', artworksError);
 
 	if (isUserLoading || isArtworksLoading) {
 		return <Typography>Loading...</Typography>;
