@@ -74,7 +74,7 @@ function App() {
 						element={<Account />}
 					/>
 					<Route
-						path='/api/users/:userId'
+						path='/users/:userId'
 						element={<UserProfile />}
 					/>
 				</Routes>
