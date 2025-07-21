@@ -35,7 +35,7 @@ const fetchFavorites = async () => {
 	const artworkPromises = favoritesArray.map(async (fav) => {
 		try {
 			const { data: artData } = await axios.get(
-				`https://api.artic.edu/api/v1/artworks/${fav.id}`
+				`https://api.artic.edu/api/v1api/artworks/${fav.id}`
 			);
 			if (!artData.data.image_id) return null;
 

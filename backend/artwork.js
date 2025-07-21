@@ -45,7 +45,7 @@ export const createTable = async () => {
 export const setupRoutes = (app) => {
 	app.use('/uploads', express.static('uploads'));
 
-	app.get('/artworks', async (req, res) => {
+	app.get('api/artworks', async (req, res) => {
 		try {
 			const [results] = await dbPool.query(`
       SELECT id, title, date_end, image_path, 
@@ -143,7 +143,7 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	app.post('/artworks', upload.single('image'), async (req, res) => {
+	app.post('api/artworks', upload.single('image'), async (req, res) => {
 		console.log('Received artwork creation request:', req.body);
 		console.log('Uploaded file:', req.file);
 		console.log('Session user:', req.session.user);
@@ -239,7 +239,7 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	app.patch('/artworks/:id/toggle-public', async (req, res) => {
+	app.patch('api/artworks/:id/toggle-public', async (req, res) => {
 		if (!req.session.user) {
 			return res.status(401).json({
 				success: false,
@@ -290,7 +290,7 @@ export const setupRoutes = (app) => {
 			});
 		}
 	});
-	app.delete('/artworks/:id', async (req, res) => {
+	app.delete('api/artworks/:id', async (req, res) => {
 		if (!req.session.user) {
 			console.log('No user session found');
 			return res.status(401).json({
