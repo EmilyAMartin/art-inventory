@@ -8,8 +8,7 @@ import { BASE_URL } from '../config';
 
 const fetchUserData = async (userId) => {
 	const userResponse = await axios.get(`${BASE_URL}/users/${userId}`);
-	// FIX: extract the nested user object
-	const user = userResponse.data.user;
+	const user = userResponse.data; // <-- FIXED
 	if (user.profile_image) {
 		user.profile_image = `${BASE_URL}${user.profile_image}`;
 	}
