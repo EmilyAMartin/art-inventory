@@ -33,7 +33,7 @@ const ArtworkPost = ({ artwork, isLoggedIn }) => {
 	const queryClient = useQueryClient();
 
 	const fetchComments = async (artworkId) => {
-		const response = await fetch(`${BASE_URL}/api/comments/${artworkId}`, {
+		const response = await fetch(`${BASE_URL}/comments/${artworkId}`, {
 			credentials: 'include',
 		});
 		if (!response.ok) {
@@ -43,7 +43,7 @@ const ArtworkPost = ({ artwork, isLoggedIn }) => {
 	};
 
 	const submitComment = async ({ artworkId, commentText }) => {
-		const response = await fetch(`${BASE_URL}/api/comments/${artworkId}`, {
+		const response = await fetch(`${BASE_URL}/comments/${artworkId}`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			credentials: 'include',

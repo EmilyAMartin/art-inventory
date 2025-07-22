@@ -27,7 +27,7 @@ const LoginBtn = () => {
 
 	const mutation = useMutation({
 		mutationFn: ({ email, password }) =>
-			fetch(`${BASE_URL}/api/login`, {
+			fetch(`${BASE_URL}/login`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ email, password }),

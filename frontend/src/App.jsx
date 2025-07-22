@@ -22,7 +22,7 @@ function App() {
 	} = useQuery({
 		queryKey: ['userProfile'],
 		queryFn: async () => {
-			const userResponse = await fetch(`${BASE_URL}/api/profile`, {
+			const userResponse = await fetch(`${BASE_URL}/profile`, {
 				method: 'GET',
 				credentials: 'include',
 			});

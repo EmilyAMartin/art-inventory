@@ -45,7 +45,7 @@ const SignUpBtn = () => {
 
 		try {
 			const response = await axios.post(
-				`${BASE_URL}/api/register`,
+				`${BASE_URL}/register`,
 				{
 					name: email,
 					email: email,

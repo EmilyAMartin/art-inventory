@@ -33,7 +33,7 @@ export const Navbar = () => {
 
 	const handleLogout = async () => {
 		try {
-			const response = await fetch(`${BASE_URL}/api/logout`, {
+			const response = await fetch(`${BASE_URL}/logout`, {
 				method: 'POST',
 				credentials: 'include',
 			});
