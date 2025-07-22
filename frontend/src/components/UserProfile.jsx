@@ -37,6 +37,10 @@ const UserProfile = () => {
 		queryFn: () => fetchUserData(userId),
 	});
 
+	console.log('user:', user);
+	console.log('isUserLoading:', isUserLoading);
+	console.log('userError:', userError);
+
 	const {
 		data: artworks,
 		isLoading: isArtworksLoading,
@@ -47,9 +51,8 @@ const UserProfile = () => {
 		enabled: !!user,
 	});
 
-	console.log('user:', user);
 	console.log('artworks:', artworks);
-	console.log('userError:', userError);
+	console.log('isArtworksLoading:', isArtworksLoading);
 	console.log('artworksError:', artworksError);
 
 	if (isUserLoading || isArtworksLoading) {
