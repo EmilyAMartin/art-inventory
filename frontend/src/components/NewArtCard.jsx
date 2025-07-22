@@ -71,7 +71,9 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 
 	const imageUrl =
 		artwork.images && artwork.images.length > 0
-			? `${BASE_URL}/uploads/${artwork.images[0]}`
+			? artwork.images[0].startsWith('http')
+				? artwork.images[0]
+				: `https://art-portfolio.fly.dev/uploads/${artwork.images[0]}`
 			: null;
 
 	return (

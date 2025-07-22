@@ -10,7 +10,9 @@ const fetchUserData = async (userId) => {
 	const userResponse = await axios.get(`${BASE_URL}/users/${userId}`);
 	const user = userResponse.data; // <-- FIXED
 	if (user.profile_image) {
-		user.profile_image = `${BASE_URL}${user.profile_image}`;
+		user.profile_image = user.profile_image.startsWith('http')
+			? user.profile_image
+			: `https://art-portfolio.fly.dev${user.profile_image}`;
 	}
 	return user;
 };

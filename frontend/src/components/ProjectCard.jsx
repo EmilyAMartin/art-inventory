@@ -23,7 +23,9 @@ const ProjectCard = ({ project, handleDelete }) => {
 
 	const imageUrl =
 		project.images && project.images.length > 0
-			? `${BASE_URL}/uploads/${project.images[0]}`
+			? project.images[0].startsWith('http')
+				? project.images[0]
+				: `https://art-portfolio.fly.dev/uploads/${project.images[0]}`
 			: null;
 
 	const handlePopClick = (event) => {

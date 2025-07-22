@@ -25,7 +25,9 @@ const Account = () => {
 			});
 			const user = response.data.user;
 			if (user.profile_image) {
-				user.profile_image = `${BASE_URL}${user.profile_image}`;
+				user.profile_image = user.profile_image.startsWith('http')
+					? user.profile_image
+					: `https://art-portfolio.fly.dev${user.profile_image}`;
 			}
 			return user;
 		},
@@ -47,7 +49,9 @@ const Account = () => {
 			return response.data.user;
 		},
 		onSuccess: (updatedUser) => {
-			updatedUser.profile_image = `${BASE_URL}${updatedUser.profile_image}`;
+			updatedUser.profile_image = updatedUser.profile_image.startsWith('http')
+				? updatedUser.profile_image
+				: `https://art-portfolio.fly.dev${updatedUser.profile_image}`;
 			queryClient.setQueryData(['userData'], (old) => ({
 				...old,
 				profile_image: updatedUser.profile_image,
