@@ -34,7 +34,9 @@ function App() {
 			}
 			const data = await userResponse.json();
 			if (data.user.profile_image) {
-				data.user.profile_image = `${BASE_URL}${data.user.profile_image}`;
+				data.user.profile_image = data.user.profile_image.startsWith('http')
+					? data.user.profile_image
+					: `https://art-portfolio.fly.dev${data.user.profile_image}`;
 			}
 			return data.user;
 		},
