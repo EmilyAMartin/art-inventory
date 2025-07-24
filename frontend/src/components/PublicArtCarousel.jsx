@@ -9,7 +9,16 @@ import PublicArtCard from './PublicArtCard';
 
 function PublicArtCarousel({ artworks }) {
 	const isSmallScreen = useMediaQuery('(max-width:600px)');
-	const cardsPerPage = isSmallScreen ? 1 : 5;
+	const isTablet = useMediaQuery('(max-width:1024px)'); // Adjust as needed
+
+	let cardsPerPage;
+	if (isSmallScreen) {
+		cardsPerPage = 1;
+	} else if (isTablet) {
+		cardsPerPage = 3; // or 3, depending on your design
+	} else {
+		cardsPerPage = 5;
+	}
 	const containerWidth = cardsPerPage * 300;
 
 	const [currentPage, setCurrentPage] = useState(0);
