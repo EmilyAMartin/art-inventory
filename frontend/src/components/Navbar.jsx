@@ -13,6 +13,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { AuthContext } from '../Pages/Context';
 import LoginBtn from './LoginBtn';
 import { BASE_URL } from '../config';
+import Logo from '../assets/Logo.png';
 
 export const Navbar = () => {
 	const { currentUser } = useContext(AuthContext);
@@ -88,7 +89,7 @@ export const Navbar = () => {
 				>
 					<Box
 						component='img'
-						src='./Images/Logo.png'
+						src={Logo}
 						alt='logo portfolio'
 						sx={{ width: '85%' }}
 					/>
