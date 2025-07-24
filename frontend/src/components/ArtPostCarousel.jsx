@@ -11,7 +11,15 @@ import { AuthContext } from '../Pages/Context';
 function ArtPostCarousel({ artworks, onSubmitComment }) {
 	const { currentUser } = useContext(AuthContext);
 	const isSmallScreen = useMediaQuery('(max-width:600px)');
-	const cardsPerPage = isSmallScreen ? 1 : 5;
+	const isTablet = useMediaQuery('(max-width:1024px)');
+	let cardsPerPage;
+	if (isSmallScreen) {
+		cardsPerPage = 1;
+	} else if (isTablet) {
+		cardsPerPage = 3;
+	} else {
+		cardsPerPage = 5;
+	}
 	const containerWidth = cardsPerPage * 300;
 
 	const [currentPage, setCurrentPage] = useState(0);
@@ -58,7 +66,7 @@ function ArtPostCarousel({ artworks, onSubmitComment }) {
 				marginTop: '40px',
 			}}
 		>
-			{!isSmallScreen && (
+			{!(isSmallScreen || isTablet) && (
 				<IconButton
 					onClick={handlePrevPage}
 					sx={{ margin: 5 }}
@@ -106,7 +114,7 @@ function ArtPostCarousel({ artworks, onSubmitComment }) {
 				<br />
 				<br />
 				<br />
-				{isSmallScreen && (
+				{(isSmallScreen || isTablet) && (
 					<Stack
 						direction='row'
 						spacing={1}
@@ -144,7 +152,7 @@ function ArtPostCarousel({ artworks, onSubmitComment }) {
 					</Stack>
 				)}
 			</Box>
-			{!isSmallScreen && (
+			{!(isSmallScreen || isTablet) && (
 				<IconButton
 					onClick={handleNextPage}
 					sx={{ margin: 5 }}

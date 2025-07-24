@@ -9,7 +9,15 @@ import NewArtCard from './NewArtCard';
 
 function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
 	const isSmallScreen = useMediaQuery('(max-width:600px)');
-	const cardsPerPage = isSmallScreen ? 1 : 5;
+	const isTablet = useMediaQuery('(max-width:1024px)');
+	let cardsPerPage;
+	if (isSmallScreen) {
+		cardsPerPage = 1;
+	} else if (isTablet) {
+		cardsPerPage = 3;
+	} else {
+		cardsPerPage = 5;
+	}
 	const containerWidth = cardsPerPage * 300;
 
 	const [currentPage, setCurrentPage] = useState(0);
@@ -57,8 +65,8 @@ function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
 				marginTop: '40px',
 			}}
 		>
-			{/* Previous Button - hide on small screens */}
-			{!isSmallScreen && (
+			{/* Previous Button - hide on small screens and tablets */}
+			{!(isSmallScreen || isTablet) && (
 				<IconButton
 					onClick={handlePrevPage}
 					sx={{ margin: 5 }}
@@ -106,7 +114,8 @@ function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
 				<br />
 				<br />
 				<br />
-				{isSmallScreen && (
+				{/* Dot navigation - show on small screens and tablets */}
+				{(isSmallScreen || isTablet) && (
 					<Stack
 						direction='row'
 						spacing={1}
@@ -145,8 +154,8 @@ function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
 				)}
 			</Box>
 
-			{/* Next Button - hide on small screens */}
-			{!isSmallScreen && (
+			{/* Next Button - hide on small screens and tablets */}
+			{!(isSmallScreen || isTablet) && (
 				<IconButton
 					onClick={handleNextPage}
 					sx={{ margin: 5 }}
