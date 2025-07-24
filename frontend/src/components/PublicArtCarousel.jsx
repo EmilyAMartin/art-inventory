@@ -9,13 +9,13 @@ import PublicArtCard from './PublicArtCard';
 
 function PublicArtCarousel({ artworks }) {
 	const isSmallScreen = useMediaQuery('(max-width:600px)');
-	const isTablet = useMediaQuery('(max-width:1024px)'); // Adjust as needed
+	const isTablet = useMediaQuery('(max-width:1024px)');
 
 	let cardsPerPage;
 	if (isSmallScreen) {
 		cardsPerPage = 1;
 	} else if (isTablet) {
-		cardsPerPage = 3; // or 3, depending on your design
+		cardsPerPage = 3;
 	} else {
 		cardsPerPage = 5;
 	}
@@ -65,8 +65,8 @@ function PublicArtCarousel({ artworks }) {
 				marginTop: '40px',
 			}}
 		>
-			{/* Previous Button - hide on small screens */}
-			{!isSmallScreen && (
+			{/* Previous Button - hide on small screens and tablets */}
+			{!(isSmallScreen || isTablet) && (
 				<IconButton
 					onClick={handlePrevPage}
 					sx={{ margin: 5 }}
@@ -113,7 +113,8 @@ function PublicArtCarousel({ artworks }) {
 				<br />
 				<br />
 				<br />
-				{isSmallScreen && (
+				{/* Dot navigation - show on small screens and tablets */}
+				{(isSmallScreen || isTablet) && (
 					<Stack
 						direction='row'
 						spacing={1}
@@ -152,8 +153,8 @@ function PublicArtCarousel({ artworks }) {
 				)}
 			</Box>
 
-			{/* Next Button - hide on small screens */}
-			{!isSmallScreen && (
+			{/* Next Button - hide on small screens and tablets */}
+			{!(isSmallScreen || isTablet) && (
 				<IconButton
 					onClick={handleNextPage}
 					sx={{ margin: 5 }}
