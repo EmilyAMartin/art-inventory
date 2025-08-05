@@ -48,7 +48,9 @@ function App() {
 	return (
 		<Box
 			sx={{
-				margin: 8,
+				margin: { xs: 2, sm: 4, md: 6, lg: 8 },
+				maxWidth: '100vw',
+				overflowX: 'hidden',
 			}}
 		>
 			<Toast />

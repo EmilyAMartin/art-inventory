@@ -71,11 +71,13 @@ function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
 			)}
 			<Box
 				sx={{
-					width: `${containerWidth}px`,
+					width: { xs: '100%', sm: `${containerWidth}px` },
+					maxWidth: '100%',
 					height: '100%',
 					display: 'flex',
 					flexDirection: 'column',
 					alignItems: 'center',
+					overflow: 'hidden',
 				}}
 			>
 				<Slide
@@ -92,7 +94,10 @@ function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
 						{currentArtworks.map((art, i) => (
 							<Box
 								key={`art-${i}`}
-								sx={{ width: '300px' }}
+								sx={{
+									width: { xs: '280px', sm: '300px' },
+									maxWidth: '100%',
+								}}
 							>
 								<NewArtCard
 									key={art.id}

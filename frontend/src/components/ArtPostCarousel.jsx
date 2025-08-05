@@ -20,7 +20,7 @@ function ArtPostCarousel({ artworks, onSubmitComment }) {
 	} else {
 		cardsPerPage = 5;
 	}
-	const containerWidth = cardsPerPage * 300;
+	const containerWidth = Math.min(cardsPerPage * 300, window.innerWidth - 100);
 
 	const [currentPage, setCurrentPage] = useState(0);
 	const [slideDirection, setSlideDirection] = useState('left');
@@ -78,11 +78,13 @@ function ArtPostCarousel({ artworks, onSubmitComment }) {
 
 			<Box
 				sx={{
-					width: `${containerWidth}px`,
+					width: { xs: '100%', sm: `${containerWidth}px` },
+					maxWidth: '100%',
 					height: '100%',
 					display: 'flex',
 					flexDirection: 'column',
 					alignItems: 'center',
+					overflow: 'hidden',
 				}}
 			>
 				<Slide
@@ -99,7 +101,10 @@ function ArtPostCarousel({ artworks, onSubmitComment }) {
 						{currentArtworks.map((art, i) => (
 							<Box
 								key={`art-${i}`}
-								sx={{ width: '300px' }}
+								sx={{
+									width: { xs: '280px', sm: '300px' },
+									maxWidth: '100%',
+								}}
 							>
 								<ArtworkPost
 									onSubmitComment={onSubmitComment}
