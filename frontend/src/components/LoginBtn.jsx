@@ -101,6 +101,7 @@ const LoginBtn = () => {
 						transform: 'translate(-50%, -50%)',
 						bgcolor: 'background.paper',
 						maxWidth: 600,
+						borderRadius: '1rem',
 					}}
 				>
 					<Box

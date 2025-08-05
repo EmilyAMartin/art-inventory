@@ -19,14 +19,10 @@ function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
 		cardsPerPage = 5;
 	}
 	const containerWidth = cardsPerPage * 300;
-
 	const [currentPage, setCurrentPage] = useState(0);
 	const [slideDirection, setSlideDirection] = useState('left');
-
 	const maxPage = Math.max(0, Math.ceil(artworks.length / cardsPerPage) - 1);
-
 	const safeCurrentPage = Math.min(currentPage, maxPage);
-
 	const handleNextPage = () => {
 		const nextPage = Math.min(safeCurrentPage + 1, maxPage);
 		if (safeCurrentPage < maxPage) {
@@ -52,7 +48,6 @@ function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
 		safeCurrentPage * cardsPerPage,
 		safeCurrentPage * cardsPerPage + cardsPerPage
 	);
-
 	return (
 		<Box
 			sx={{
@@ -65,7 +60,6 @@ function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
 				marginTop: '40px',
 			}}
 		>
-			{/* Previous Button - hide on small screens and tablets */}
 			{!(isSmallScreen || isTablet) && (
 				<IconButton
 					onClick={handlePrevPage}
@@ -75,8 +69,6 @@ function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
 					<NavigateBeforeIcon />
 				</IconButton>
 			)}
-
-			{/* Carousel Content */}
 			<Box
 				sx={{
 					width: `${containerWidth}px`,
@@ -114,7 +106,6 @@ function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
 				<br />
 				<br />
 				<br />
-				{/* Dot navigation - show on small screens and tablets */}
 				{(isSmallScreen || isTablet) && (
 					<Stack
 						direction='row'
@@ -153,8 +144,6 @@ function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
 					</Stack>
 				)}
 			</Box>
-
-			{/* Next Button - hide on small screens and tablets */}
 			{!(isSmallScreen || isTablet) && (
 				<IconButton
 					onClick={handleNextPage}

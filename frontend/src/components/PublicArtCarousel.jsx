@@ -65,7 +65,6 @@ function PublicArtCarousel({ artworks }) {
 				marginTop: '40px',
 			}}
 		>
-			{/* Previous Button - hide on small screens and tablets */}
 			{!(isSmallScreen || isTablet) && (
 				<IconButton
 					onClick={handlePrevPage}
@@ -76,7 +75,6 @@ function PublicArtCarousel({ artworks }) {
 				</IconButton>
 			)}
 
-			{/* Carousel Content */}
 			<Box
 				sx={{
 					width: `${containerWidth}px`,
@@ -113,7 +111,6 @@ function PublicArtCarousel({ artworks }) {
 				<br />
 				<br />
 				<br />
-				{/* Dot navigation - show on small screens and tablets */}
 				{(isSmallScreen || isTablet) && (
 					<Stack
 						direction='row'
@@ -152,8 +149,6 @@ function PublicArtCarousel({ artworks }) {
 					</Stack>
 				)}
 			</Box>
-
-			{/* Next Button - hide on small screens and tablets */}
 			{!(isSmallScreen || isTablet) && (
 				<IconButton
 					onClick={handleNextPage}
