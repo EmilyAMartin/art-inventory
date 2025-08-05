@@ -78,13 +78,11 @@ function ProjectCardCarousel({ projects, handleDeleteProject }) {
 			{/* Carousel Content */}
 			<Box
 				sx={{
-					width: { xs: '100%', sm: `${containerWidth}px` },
-					maxWidth: '100%',
+					width: `${containerWidth}px`,
 					height: '100%',
 					display: 'flex',
 					flexDirection: 'column',
 					alignItems: 'center',
-					overflow: 'hidden',
 				}}
 			>
 				<Slide
@@ -101,10 +99,7 @@ function ProjectCardCarousel({ projects, handleDeleteProject }) {
 						{currentProjects.map((project, i) => (
 							<Box
 								key={`project-${i}`}
-								sx={{
-									width: { xs: '280px', sm: '300px' },
-									maxWidth: '100%',
-								}}
+								sx={{ width: '300px' }}
 							>
 								<ProjectCard
 									project={project}
