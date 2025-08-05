@@ -111,7 +111,7 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 								onClick={handlePopClick}
 							/>
 
-							<CardContent sx={{ width: 300, position: 'relative', pb: 6 }}>
+							<CardContent sx={{ width: 300, position: 'relative', pb: 3 }}>
 								<IconButton
 									aria-label='delete'
 									sx={{
@@ -176,7 +176,7 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 								<Typography
 									sx={{
 										position: 'absolute',
-										bottom: 16,
+										bottom: 8,
 										left: 16,
 										fontSize: 15,
 										fontWeight: 600,
