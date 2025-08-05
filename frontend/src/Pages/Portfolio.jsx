@@ -38,9 +38,10 @@ const fetchPortfolioData = async () => {
 	const formattedArtworks = artworksData.map((artwork) => ({
 		...artwork,
 		images: artwork.image_path ? [artwork.image_path] : [],
-		location: artwork.place_of_origin,
-		medium: artwork.medium_display,
-		date: artwork.date_end,
+		location: artwork.place_of_origin || '',
+		medium: artwork.medium_display || '',
+		date: artwork.date_end || '',
+		isPublic: artwork.isPublic || false,
 	}));
 
 	return {
