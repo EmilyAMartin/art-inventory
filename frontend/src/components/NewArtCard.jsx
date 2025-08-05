@@ -20,10 +20,10 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popoverImageId, setPopoverImageId] = useState(null);
 	const [flip, setFlip] = useState(false);
-	const [isPublic, setIsPublic] = useState(artwork?.isPublic || false);
+	const [isPublic, setIsPublic] = useState(artwork.isPublic || false);
 	const open = Boolean(anchorEl);
 
-	if (!artwork || !artwork.id) return null;
+	if (!artwork) return null;
 
 	const handleDeleteClick = (e) => {
 		e.stopPropagation();
