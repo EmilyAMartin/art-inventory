@@ -7,7 +7,6 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
-import Tooltip from '@mui/material/Tooltip';
 import Box from '@mui/material/Box';
 
 const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
@@ -34,7 +33,7 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 
 	const renderFavoriteIcon = () => {
 		if (!isLoggedIn) {
-			return null; // Hide the icon if not logged in
+			return null;
 		}
 
 		const Icon = art.favorite ? Favorite : FavoriteBorder;
@@ -128,8 +127,6 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 								</Typography>
 							</CardContent>
 						</CardActionArea>
-
-						{/* Favorite Icon and Learn More */}
 						<Box
 							sx={{
 								display: 'flex',
@@ -152,8 +149,6 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 							{renderFavoriteIcon()}
 						</Box>
 					</Card>
-
-					{/* Back Side */}
 					<Card
 						sx={{
 							display: 'flex',
