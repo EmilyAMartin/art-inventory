@@ -111,13 +111,13 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 								onClick={handlePopClick}
 							/>
 
-							<CardContent sx={{ width: 300, position: 'relative', pb: 3 }}>
+							<CardContent sx={{ width: 300, position: 'relative' }}>
 								<IconButton
 									aria-label='delete'
 									sx={{
 										position: 'absolute',
-										top: 8,
-										right: 8,
+										bottom: -25,
+										right: 35,
 										zIndex: 2,
 										color: 'black',
 										'&:hover': {
@@ -134,7 +134,6 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 										display: 'flex',
 										alignItems: 'center',
 										justifyContent: 'space-between',
-										mt: 2,
 									}}
 								>
 									<Typography
@@ -172,25 +171,33 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 								>
 									{artwork.date}
 								</Typography>
+							</CardContent>
 
+							<Box
+								sx={{
+									display: 'flex',
+									flexDirection: 'row',
+									justifyContent: 'space-between',
+								}}
+							>
 								<Typography
 									sx={{
 										position: 'absolute',
-										bottom: 8,
-										left: 16,
+										bottom: -20,
+										left: 15,
 										fontSize: 15,
 										fontWeight: 600,
 										cursor: 'pointer',
-										color: 'primary.main',
-										'&:hover': {
-											textDecoration: 'underline',
-										},
+										zIndex: 1,
 									}}
-									onClick={() => setFlip(true)}
+									onClick={(e) => {
+										e.stopPropagation();
+										setFlip(true);
+									}}
 								>
 									Learn More
 								</Typography>
-							</CardContent>
+							</Box>
 						</CardActionArea>
 					</Card>
 
