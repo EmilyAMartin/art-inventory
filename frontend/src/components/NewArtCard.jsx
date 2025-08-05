@@ -188,12 +188,8 @@ const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
 										fontSize: 15,
 										fontWeight: 600,
 										cursor: 'pointer',
-										zIndex: 1,
 									}}
-									onClick={(e) => {
-										e.stopPropagation();
-										setFlip(true);
-									}}
+									onClick={() => setFlip(true)}
 								>
 									Learn More
 								</Typography>
