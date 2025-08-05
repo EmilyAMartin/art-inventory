@@ -1,165 +1,331 @@
 import React, { useState } from 'react';
-import Box from '@mui/material/Box';
-import { IconButton, useMediaQuery } from '@mui/material';
-import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import Slide from '@mui/material/Slide';
-import Stack from '@mui/material/Stack';
-import NewArtCard from './NewArtCard';
+import {
+	Popover,
+	Card,
+	CardContent,
+	CardMedia,
+	Typography,
+	IconButton,
+	CardActionArea,
+	Checkbox,
+	Box,
+} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ReactCardFlip from 'react-card-flip';
+import toast from 'react-hot-toast';
+import { queryClient } from './queryClient';
+import { BASE_URL } from '../config';
 
-function NewArtCardCarousel({ artworks, handleDeleteNewArtwork }) {
-	const isSmallScreen = useMediaQuery('(max-width:600px)');
-	const isTablet = useMediaQuery('(max-width:1024px)');
-	let cardsPerPage;
-	if (isSmallScreen) {
-		cardsPerPage = 1;
-	} else if (isTablet) {
-		cardsPerPage = 3;
-	} else {
-		cardsPerPage = 5;
-	}
-	const containerWidth = cardsPerPage * 300;
-	const [currentPage, setCurrentPage] = useState(0);
-	const [slideDirection, setSlideDirection] = useState('left');
-	const maxPage = Math.max(0, Math.ceil(artworks.length / cardsPerPage) - 1);
-	const safeCurrentPage = Math.min(currentPage, maxPage);
-	const handleNextPage = () => {
-		const nextPage = Math.min(safeCurrentPage + 1, maxPage);
-		if (safeCurrentPage < maxPage) {
-			setSlideDirection('left');
-			setCurrentPage(nextPage);
+const NewArtCard = ({ artwork, handleDelete, yourAuthToken }) => {
+	const [anchorEl, setAnchorEl] = useState(null);
+	const [popoverImageId, setPopoverImageId] = useState(null);
+	const [flip, setFlip] = useState(false);
+	const [isPublic, setIsPublic] = useState(artwork.isPublic || false);
+	const open = Boolean(anchorEl);
+
+	if (!artwork) return null;
+
+	const handleDeleteClick = (e) => {
+		e.stopPropagation();
+		handleDelete(artwork.id);
+	};
+
+	const handleTogglePublic = async () => {
+		const updatedStatus = !isPublic;
+
+		try {
+			const response = await fetch(
+				`${BASE_URL}/artworks/${artwork.id}/toggle-public`,
+				{
+					method: 'PATCH',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ isPublic: updatedStatus }),
+					credentials: 'include',
+				}
+			);
+
+			if (!response.ok) {
+				throw new Error('Failed to update public status');
+			}
+
+			setIsPublic(updatedStatus);
+			toast.success(`Artwork is now ${updatedStatus ? 'public' : 'private'}`);
+			queryClient.invalidateQueries(['portfolio']);
+		} catch (error) {
+			console.error('Toggle error:', error);
+			toast.error('Failed to update public status');
 		}
 	};
 
-	const handlePrevPage = () => {
-		const prevPage = Math.max(safeCurrentPage - 1, 0);
-		if (safeCurrentPage > 0) {
-			setSlideDirection('right');
-			setCurrentPage(prevPage);
-		}
+	const handlePopClick = (event) => {
+		setAnchorEl(event.currentTarget);
+		setPopoverImageId(event.target.src);
 	};
 
-	const handleDotClick = (idx) => {
-		setSlideDirection(idx > safeCurrentPage ? 'left' : 'right');
-		setCurrentPage(idx);
+	const handleClose = () => {
+		setAnchorEl(null);
+		setPopoverImageId(null);
 	};
 
-	const currentArtworks = artworks.slice(
-		safeCurrentPage * cardsPerPage,
-		safeCurrentPage * cardsPerPage + cardsPerPage
-	);
+	const imageUrl =
+		artwork.images && artwork.images.length > 0
+			? artwork.images[0].startsWith('http')
+				? artwork.images[0]
+				: `https://art-portfolio.fly.dev/uploads/${artwork.images[0]}`
+			: null;
+
 	return (
 		<Box
 			sx={{
-				display: 'flex',
-				flexDirection: 'row',
-				alignItems: 'center',
-				justifyContent: 'center',
-				height: '400px',
-				width: '100%',
-				marginTop: '40px',
+				position: 'relative',
 			}}
 		>
-			{!(isSmallScreen || isTablet) && (
-				<IconButton
-					onClick={handlePrevPage}
-					sx={{ margin: 5 }}
-					disabled={safeCurrentPage === 0}
-				>
-					<NavigateBeforeIcon />
-				</IconButton>
-			)}
 			<Box
 				sx={{
-					width: { xs: '100%', sm: `${containerWidth}px` },
-					maxWidth: '100%',
-					height: '100%',
-					display: 'flex',
-					flexDirection: 'column',
-					alignItems: 'center',
-					overflow: 'hidden',
+					filter: open ? 'blur(5px)' : 'none',
+					pointerEvents: open ? 'none' : 'auto',
+					transition: 'filter 0.3s ease',
 				}}
 			>
-				<Slide
-					direction={slideDirection}
-					in={true}
+				<ReactCardFlip
+					isFlipped={flip}
+					flipDirection='horizontal'
 				>
-					<Stack
-						spacing={2}
-						direction='row'
-						alignContent='center'
-						justifyContent='center'
-						sx={{ width: '100%', height: '100%' }}
-					>
-						{currentArtworks.map((art, i) => (
-							<Box
-								key={`art-${i}`}
-								sx={{
-									width: { xs: '280px', sm: '300px' },
-									maxWidth: '100%',
-								}}
-							>
-								<NewArtCard
-									key={art.id}
-									artwork={art}
-									handleDelete={handleDeleteNewArtwork}
-								/>
-							</Box>
-						))}
-					</Stack>
-				</Slide>
-				<br />
-				<br />
-				<br />
-				{(isSmallScreen || isTablet) && (
-					<Stack
-						direction='row'
-						spacing={1}
+					{/* Front Side */}
+					<Card
 						sx={{
-							mt: 2,
-							bgcolor: 'background.paper',
-							borderRadius: 2,
-							py: 0.5,
-							px: 2,
-							boxShadow: 1,
+							maxWidth: 300,
+							height: 450,
+							display: 'flex',
+							flexDirection: 'column',
 						}}
 					>
-						{Array.from({ length: maxPage + 1 }).map((_, idx) => (
-							<IconButton
-								key={idx}
-								size='small'
-								onClick={() => handleDotClick(idx)}
-								sx={{
-									color: idx === safeCurrentPage ? 'primary.main' : 'grey.400',
-									width: 16,
-									height: 16,
-									padding: 0,
-								}}
-							>
+						<CardActionArea>
+							<CardMedia
+								sx={{ width: 300, height: 300 }}
+								component='img'
+								image={imageUrl}
+								alt='Artwork Image'
+								onClick={handlePopClick}
+							/>
+
+							<CardContent sx={{ width: 300, position: 'relative' }}>
+								<IconButton
+									aria-label='delete'
+									sx={{
+										position: 'absolute',
+										bottom: -25,
+										right: 35,
+										zIndex: 2,
+										color: 'black',
+										'&:hover': {
+											backgroundColor: 'rgba(0, 0, 0, 0.04)',
+										},
+									}}
+									onClick={handleDeleteClick}
+								>
+									<DeleteIcon />
+								</IconButton>
+
 								<Box
 									sx={{
-										width: 10,
-										height: 10,
-										borderRadius: '50%',
-										bgcolor: idx === safeCurrentPage ? 'primary.main' : 'grey.400',
+										display: 'flex',
+										alignItems: 'center',
+										justifyContent: 'space-between',
 									}}
-								/>
-							</IconButton>
-						))}
-					</Stack>
-				)}
+								>
+									<Typography
+										gutterBottom
+										fontSize={16}
+										fontWeight={500}
+									>
+										{artwork.title}
+									</Typography>
+
+									<Box sx={{ display: 'flex', alignItems: 'center', ml: '2rem' }}>
+										<Checkbox
+											checked={isPublic}
+											onChange={handleTogglePublic}
+											color='primary'
+										/>
+										<Typography
+											variant='body2'
+											sx={{ mr: '2rem' }}
+										>
+											Public
+										</Typography>
+									</Box>
+								</Box>
+
+								<Typography
+									variant='body2'
+									sx={{ color: 'text.secondary' }}
+								>
+									{artwork.artist}
+								</Typography>
+								<Typography
+									variant='body2'
+									sx={{ color: 'text.secondary' }}
+								>
+									{artwork.date}
+								</Typography>
+							</CardContent>
+
+							<Box
+								sx={{
+									display: 'flex',
+									flexDirection: 'row',
+									justifyContent: 'space-between',
+								}}
+							>
+								<Typography
+									sx={{
+										position: 'absolute',
+										bottom: -20,
+										left: 15,
+										fontSize: 15,
+										fontWeight: 600,
+										cursor: 'pointer',
+									}}
+									onClick={() => setFlip(true)}
+								>
+									Learn More
+								</Typography>
+							</Box>
+						</CardActionArea>
+					</Card>
+
+					{/* Back Side */}
+					<Card
+						sx={{
+							width: 300,
+							height: 450,
+							display: 'flex',
+							flexDirection: 'column',
+							boxSizing: 'border-box',
+						}}
+					>
+						<CardContent
+							sx={{
+								flex: 1,
+								display: 'flex',
+								flexDirection: 'column',
+								justifyContent: 'space-between',
+								boxSizing: 'border-box',
+								overflowY: 'auto',
+								padding: 2,
+							}}
+						>
+							<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+								<Typography
+									variant='body2'
+									sx={{
+										color: 'text.secondary',
+										whiteSpace: 'normal',
+										wordBreak: 'break-word',
+									}}
+								>
+									<b>Description:</b> {artwork.description}
+								</Typography>
+								<Typography
+									variant='body2'
+									sx={{
+										color: 'text.secondary',
+										whiteSpace: 'normal',
+										wordBreak: 'break-word',
+									}}
+								>
+									<b>Artist:</b> {artwork.artist}
+								</Typography>
+								<Typography
+									variant='body2'
+									sx={{
+										color: 'text.secondary',
+										whiteSpace: 'normal',
+										wordBreak: 'break-word',
+									}}
+								>
+									<b>Date:</b> {artwork.date}
+								</Typography>
+								<Typography
+									variant='body2'
+									sx={{
+										color: 'text.secondary',
+										whiteSpace: 'normal',
+										wordBreak: 'break-word',
+									}}
+								>
+									<b>Location:</b> {artwork.location}
+								</Typography>
+								<Typography
+									variant='body2'
+									sx={{
+										color: 'text.secondary',
+										whiteSpace: 'normal',
+										wordBreak: 'break-word',
+									}}
+								>
+									<b>Medium:</b> {artwork.medium}
+								</Typography>
+							</Box>
+							<Box
+								sx={{
+									display: 'flex',
+									justifyContent: 'flex-end',
+									alignItems: 'center',
+									width: '100%',
+									mt: 2,
+								}}
+							>
+								<Typography
+									sx={{
+										fontSize: 15,
+										fontWeight: 600,
+										cursor: 'pointer',
+									}}
+									onClick={() => setFlip(!flip)}
+								>
+									Back
+								</Typography>
+							</Box>
+						</CardContent>
+					</Card>
+				</ReactCardFlip>
 			</Box>
-			{!(isSmallScreen || isTablet) && (
-				<IconButton
-					onClick={handleNextPage}
-					sx={{ margin: 5 }}
-					disabled={safeCurrentPage >= maxPage}
-				>
-					<NavigateNextIcon />
-				</IconButton>
-			)}
+
+			{/* Popover */}
+			<Popover
+				sx={{
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center',
+					position: 'fixed',
+					top: 0,
+					left: 0,
+					width: '100%',
+					height: '100%',
+					backgroundColor: 'rgba(0, 0, 0, 0.5)',
+					zIndex: 1300,
+				}}
+				open={open}
+				anchorEl={anchorEl}
+				anchorReference='none'
+				onClose={handleClose}
+				anchorOrigin={{
+					vertical: 'bottom',
+					horizontal: 'left',
+				}}
+			>
+				<CardMedia
+					component='img'
+					image={popoverImageId}
+					alt='Enlarged Artwork'
+				/>
+			</Popover>
 		</Box>
 	);
-}
+};
 
-export default NewArtCardCarousel;
+export default NewArtCard;
