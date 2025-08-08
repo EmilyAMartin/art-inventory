@@ -110,8 +110,16 @@ const ArtworkPost = ({ artwork, isLoggedIn }) => {
 
 	return (
 		<Box sx={{ display: 'flex', justifyContent: 'center', paddingBottom: 4 }}>
-			<Card sx={{ maxWidth: 300, maxHeight: 450, position: 'relative' }}>
-				<CardActionArea>
+			<Card
+				sx={{
+					maxWidth: 300,
+					height: 450,
+					position: 'relative',
+					display: 'flex',
+					flexDirection: 'column',
+				}}
+			>
+				<CardActionArea sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
 					<CardMedia
 						sx={{ width: 300, height: 300 }}
 						component='img'
@@ -120,7 +128,7 @@ const ArtworkPost = ({ artwork, isLoggedIn }) => {
 						onClick={handlePopClick}
 					/>
 
-					<CardContent>
+					<CardContent sx={{ flex: 1, pb: 0 }}>
 						<Typography
 							gutterBottom
 							fontSize={16}
@@ -146,16 +154,12 @@ const ArtworkPost = ({ artwork, isLoggedIn }) => {
 				{/* Comments section outside CardActionArea */}
 				<Box
 					sx={{
-						position: 'absolute',
-						bottom: 0,
-						left: 0,
-						right: 0,
 						backgroundColor: 'rgba(255, 255, 255, 0.95)',
 						borderTop: '1px solid rgba(0, 0, 0, 0.12)',
 						zIndex: 3,
 					}}
 				>
-					<CardContent sx={{ py: 1 }}>
+					<CardContent sx={{ py: 2, px: 2 }}>
 						<Box
 							display='flex'
 							justifyContent='space-between'
