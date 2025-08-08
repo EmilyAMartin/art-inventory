@@ -127,6 +127,8 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 								</Typography>
 							</CardContent>
 						</CardActionArea>
+
+						{/* Learn More and Favorite buttons outside CardActionArea */}
 						<Box
 							sx={{
 								display: 'flex',
@@ -134,6 +136,11 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 								alignItems: 'center',
 								padding: { xs: 1, sm: 2 },
 								backgroundColor: 'rgba(255, 255, 255, 0.9)',
+								position: 'absolute',
+								bottom: 0,
+								left: 0,
+								right: 0,
+								zIndex: 3,
 							}}
 						>
 							<Typography
@@ -141,6 +148,9 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 									fontSize: { xs: '0.8rem', sm: '1rem' },
 									fontWeight: 600,
 									cursor: 'pointer',
+									'&:hover': {
+										color: 'primary.main',
+									},
 								}}
 								onClick={() => setFlip(true)}
 							>
