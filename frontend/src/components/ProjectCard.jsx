@@ -62,6 +62,7 @@ const ProjectCard = ({ project, handleDelete }) => {
 							height: 450,
 							display: 'flex',
 							flexDirection: 'column',
+							position: 'relative',
 						}}
 					>
 						<CardActionArea>
@@ -74,26 +75,6 @@ const ProjectCard = ({ project, handleDelete }) => {
 							/>
 
 							<CardContent sx={{ width: 300, position: 'relative' }}>
-								<IconButton
-									aria-label='delete'
-									sx={{
-										position: 'absolute',
-										bottom: -60,
-										right: 35,
-										zIndex: 2,
-										color: 'black',
-										'&:hover': {
-											backgroundColor: 'rgba(0, 0, 0, 0.04)',
-										},
-									}}
-									onClick={(e) => {
-										e.stopPropagation();
-										handleDelete();
-									}}
-								>
-									<DeleteIcon />
-								</IconButton>
-
 								<Typography
 									gutterBottom
 									fontSize={16}
@@ -109,30 +90,47 @@ const ProjectCard = ({ project, handleDelete }) => {
 									{project.medium}
 								</Typography>
 							</CardContent>
-
-							<Box
-								sx={{
-									display: 'flex',
-									flexDirection: 'row',
-									justifyContent: 'space-between',
-									m: 3,
-								}}
-							>
-								<Typography
-									sx={{
-										position: 'absolute',
-										bottom: -5,
-										left: 15,
-										fontSize: 15,
-										fontWeight: 600,
-										cursor: 'pointer',
-									}}
-									onClick={() => setFlip(true)}
-								>
-									Learn More
-								</Typography>
-							</Box>
 						</CardActionArea>
+
+						{/* Learn More button outside CardActionArea */}
+						<Typography
+							sx={{
+								position: 'absolute',
+								bottom: 15,
+								left: 15,
+								fontSize: 15,
+								fontWeight: 600,
+								cursor: 'pointer',
+								zIndex: 3,
+								'&:hover': {
+									color: 'primary.main',
+								},
+							}}
+							onClick={() => setFlip(true)}
+						>
+							Learn More
+						</Typography>
+
+						{/* Delete button outside CardActionArea */}
+						<IconButton
+							aria-label='delete'
+							sx={{
+								position: 'absolute',
+								bottom: 15,
+								right: 15,
+								zIndex: 3,
+								color: 'black',
+								'&:hover': {
+									backgroundColor: 'rgba(0, 0, 0, 0.04)',
+								},
+							}}
+							onClick={(e) => {
+								e.stopPropagation();
+								handleDelete();
+							}}
+						>
+							<DeleteIcon />
+						</IconButton>
 					</Card>
 
 					{/* Back Side */}

@@ -58,6 +58,7 @@ const PublicArtCard = ({ artwork }) => {
 							height: 450,
 							display: 'flex',
 							flexDirection: 'column',
+							position: 'relative',
 						}}
 					>
 						<CardActionArea>
@@ -90,39 +91,26 @@ const PublicArtCard = ({ artwork }) => {
 									{artwork.date}
 								</Typography>
 							</CardContent>
-
-							<Box
-								className='favorites-more'
-								sx={{
-									display: 'flex',
-									flexDirection: 'row',
-									justifyContent: 'space-between',
-									m: 3,
-								}}
-							>
-								<Box
-									sx={{
-										display: 'flex',
-										flexDirection: 'row',
-										justifyContent: 'space-between',
-									}}
-								>
-									<Typography
-										sx={{
-											position: 'absolute',
-											bottom: 15,
-											left: 15,
-											fontSize: 15,
-											fontWeight: 600,
-											cursor: 'pointer',
-										}}
-										onClick={() => setFlip(true)}
-									>
-										Learn More
-									</Typography>
-								</Box>
-							</Box>
 						</CardActionArea>
+
+						{/* Learn More button outside CardActionArea */}
+						<Typography
+							sx={{
+								position: 'absolute',
+								bottom: 15,
+								left: 15,
+								fontSize: 15,
+								fontWeight: 600,
+								cursor: 'pointer',
+								zIndex: 3,
+								'&:hover': {
+									color: 'primary.main',
+								},
+							}}
+							onClick={() => setFlip(true)}
+						>
+							Learn More
+						</Typography>
 					</Card>
 
 					{/* Back Side */}
