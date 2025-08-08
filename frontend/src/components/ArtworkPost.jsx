@@ -110,7 +110,7 @@ const ArtworkPost = ({ artwork, isLoggedIn }) => {
 
 	return (
 		<Box sx={{ display: 'flex', justifyContent: 'center', paddingBottom: 4 }}>
-			<Card sx={{ maxWidth: 300, maxHeight: 450 }}>
+			<Card sx={{ maxWidth: 300, maxHeight: 450, position: 'relative' }}>
 				<CardActionArea>
 					<CardMedia
 						sx={{ width: 300, height: 300 }}
@@ -119,36 +119,6 @@ const ArtworkPost = ({ artwork, isLoggedIn }) => {
 						alt={artwork.title}
 						onClick={handlePopClick}
 					/>
-
-					{/* Popover */}
-					<Popover
-						sx={{
-							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'center',
-							position: 'fixed',
-							top: 0,
-							left: 0,
-							width: '100%',
-							height: '100%',
-							backgroundColor: 'rgba(0, 0, 0, 0.5)',
-							zIndex: 1300,
-						}}
-						open={open}
-						anchorEl={anchorEl}
-						anchorReference='none'
-						onClose={handleClose}
-						anchorOrigin={{
-							vertical: 'bottom',
-							horizontal: 'left',
-						}}
-					>
-						<CardMedia
-							component='img'
-							image={popoverImageId}
-							alt='Enlarged Artwork'
-						/>
-					</Popover>
 
 					<CardContent>
 						<Typography
@@ -170,8 +140,22 @@ const ArtworkPost = ({ artwork, isLoggedIn }) => {
 						>
 							{artwork.date}
 						</Typography>
-						<Divider sx={{ my: 1 }} />
+					</CardContent>
+				</CardActionArea>
 
+				{/* Comments section outside CardActionArea */}
+				<Box
+					sx={{
+						position: 'absolute',
+						bottom: 0,
+						left: 0,
+						right: 0,
+						backgroundColor: 'rgba(255, 255, 255, 0.95)',
+						borderTop: '1px solid rgba(0, 0, 0, 0.12)',
+						zIndex: 3,
+					}}
+				>
+					<CardContent sx={{ py: 1 }}>
 						<Box
 							display='flex'
 							justifyContent='space-between'
@@ -183,7 +167,14 @@ const ArtworkPost = ({ artwork, isLoggedIn }) => {
 							>
 								Comments
 							</Typography>
-							<IconButton onClick={toggleCommentSection}>
+							<IconButton
+								onClick={toggleCommentSection}
+								sx={{
+									'&:hover': {
+										backgroundColor: 'rgba(0, 0, 0, 0.04)',
+									},
+								}}
+							>
 								<Badge
 									badgeContent={comments.length}
 									color='primary'
@@ -193,7 +184,37 @@ const ArtworkPost = ({ artwork, isLoggedIn }) => {
 							</IconButton>
 						</Box>
 					</CardContent>
-				</CardActionArea>
+				</Box>
+
+				{/* Popover */}
+				<Popover
+					sx={{
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+						position: 'fixed',
+						top: 0,
+						left: 0,
+						width: '100%',
+						height: '100%',
+						backgroundColor: 'rgba(0, 0, 0, 0.5)',
+						zIndex: 1300,
+					}}
+					open={open}
+					anchorEl={anchorEl}
+					anchorReference='none'
+					onClose={handleClose}
+					anchorOrigin={{
+						vertical: 'bottom',
+						horizontal: 'left',
+					}}
+				>
+					<CardMedia
+						component='img'
+						image={popoverImageId}
+						alt='Enlarged Artwork'
+					/>
+				</Popover>
 			</Card>
 
 			<Dialog
