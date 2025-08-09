@@ -110,7 +110,7 @@ const ArtworkPost = ({ artwork, isLoggedIn }) => {
 
 	return (
 		<Box sx={{ display: 'flex', justifyContent: 'center', paddingBottom: 4 }}>
-			<Card sx={{ maxWidth: 300, maxHeight: 450 }}>
+			<Card sx={{ maxWidth: 300, maxHeight: 450, position: 'relative' }}>
 				<CardActionArea>
 					<CardMedia
 						sx={{ width: 300, height: 300 }}
@@ -178,22 +178,32 @@ const ArtworkPost = ({ artwork, isLoggedIn }) => {
 							alignItems='center'
 						>
 							<Typography
-								variant='body2'
+								variant='body1'
 								fontWeight={500}
 							>
 								Comments
 							</Typography>
-							<IconButton onClick={toggleCommentSection}>
-								<Badge
-									badgeContent={comments.length}
-									color='primary'
-								>
-									<CommentIcon />
-								</Badge>
-							</IconButton>
 						</Box>
 					</CardContent>
 				</CardActionArea>
+
+				{/* Comment button outside CardActionArea to prevent whole card hover */}
+				<Box
+					sx={{
+						position: 'absolute',
+						bottom: 16,
+						right: 16,
+					}}
+				>
+					<IconButton onClick={toggleCommentSection}>
+						<Badge
+							badgeContent={comments.length}
+							color='primary'
+						>
+							<CommentIcon />
+						</Badge>
+					</IconButton>
+				</Box>
 			</Card>
 
 			<Dialog
