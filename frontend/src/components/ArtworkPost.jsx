@@ -191,7 +191,7 @@ const ArtworkPost = ({ artwork, isLoggedIn }) => {
 				<Box
 					sx={{
 						position: 'absolute',
-						bottom: 28,
+						bottom: 20,
 						right: 16,
 					}}
 				>
