@@ -7,4 +7,19 @@ export const queryClient = new QueryClient({
 			toast.error(query?.meta?.errorMessage ?? 'Something went wrong!');
 		},
 	}),
+	defaultOptions: {
+		queries: {
+			// Reduce memory usage by limiting cache time
+			staleTime: 5 * 60 * 1000, // 5 minutes
+			gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
+			// Limit concurrent queries to reduce memory pressure
+			maxConcurrency: 3,
+			// Retry fewer times to reduce memory usage
+			retry: 1,
+		},
+		mutations: {
+			// Reduce retry attempts for mutations
+			retry: 1,
+		},
+	},
 });

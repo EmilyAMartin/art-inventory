@@ -60,7 +60,7 @@ const PortfolioPage = () => {
 	const projects = data?.formattedProjects;
 	const artworks = data?.formattedArtworks;
 
-	const handleProjectAdded = (newProject) => {
+	const handleProjectAdded = () => {
 		queryClient.invalidateQueries(['portfolio']);
 		toast.success('Project added successfully');
 	};
@@ -84,7 +84,7 @@ const PortfolioPage = () => {
 		}
 	};
 
-	const handleNewArtworkAdded = (newArtwork) => {
+	const handleNewArtworkAdded = () => {
 		queryClient.invalidateQueries(['portfolio']);
 		toast.success('Artwork added successfully');
 	};

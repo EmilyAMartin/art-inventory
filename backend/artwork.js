@@ -158,7 +158,20 @@ export const setupRoutes = (app) => {
 
 		try {
 			const { title, artist, date, medium, location, description } = req.body;
-			const imagePath = req.file ? req.file.filename : null;
+
+			let imagePath = null;
+			if (req.file) {
+				// Generate unique filename
+				const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+				const baseFilename = `artwork-${uniqueSuffix}${path.extname(
+					req.file.originalname
+				)}`;
+
+				// Process and save image in multiple sizes
+				const { processAndSaveImage } = await import('./fileUpload.js');
+				const imagePaths = await processAndSaveImage(req.file, baseFilename);
+				imagePath = imagePaths.medium; // Use medium size as default
+			}
 
 			if (!title || !date || !medium || !location) {
 				return res.status(400).json({
