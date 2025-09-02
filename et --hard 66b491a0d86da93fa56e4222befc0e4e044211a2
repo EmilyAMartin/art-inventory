@@ -1,0 +1,105 @@
+[33ma1a1bc8[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge branch 'main' of https://github.com/EmilyAMartin/art-inventory
+[33mb5128cc[m Trying to fix broken app
+[33md33dce3[m Fixing broken app
+[33me554a96[m Fixing chnages
+[33m8e541ba[m Fixing issues with memory usage
+[33m66b491a[m Working on comments
+[33mf95855f[m Working on spacing
+[33m8589099[m Working on comment button
+[33m975da5c[m Fixing comment button aligment
+[33mf463dd0[m Fixing issue with comment on post card
+[33m481c8f2[m Rixing artpost
+[33mb0cf548[m Fixing spacing on the art post card
+[33m73a04ae[m Fixing gallery and post cards
+[33m2762217[m Fixing learn more on  gallery card
+[33m03d6069[m Fixing learn more and delete on other cards
+[33m41887f0[m Moving learn more and detelt outside of card action area
+[33mf99e70a[m Fixing issue
+[33mf88b33e[m Fixing broken profile page
+[33m5222d97[m Fixing broken app
+[33m28aee72[m Trying to fix issue with new art card spacing
+[33mbe90b17[m updating new art card
+[33m5333acb[m Fixing issue with learn more button
+[33mcfb4d9d[m Working on profile cards
+[33mc9299d6[m Fixing scrolling and hover issues
+[33m24c77f4[m Updating Login/Sign Up modal
+[33mf1a0484[m Updating files
+[33m1243eab[m Fixing issue with deployment
+[33m5c092e2[m Fixing logo issue
+[33m9c2539a[m Adding changes to all carousal
+[33m282d0ce[m Adding dot click to tabled sizing
+[33ma7bebfe[m Fixing tablet sizing issues
+[33me6977d4[m fixing issue with profile picture
+[33m18b51e3[m Fixing error with images
+[33m411c7b4[m Trying to fix broken app
+[33mdc45d29[m Fixing api roots in backend
+[33md5f6cf4[m Editing fetchdata on user profile
+[33m4e9669e[m Working on user profile issues
+[33m6ebb7e8[m Trying to fix user not found on user profile page
+[33m8d85a29[m Broken app going back to older version
+[33m53ab4bd[m Working on switching to /apo
+[33m4fb5729[m Working to fix issues with config
+[33md263174[m Going back to old version
+[33m8a26390[m Fixing new error
+[33m7175981[m Working on profile error
+[33mdbce2d2[m Working on backned
+[33m740a465[m Trying to fix profile page
+[33mce0cc59[m working on backend
+[33m2a47961[m Trying to fix no data issue
+[33m221cd92[m Working on user profile issue
+[33mfedcef4[m Trying to fix issue with profile page
+[33m0361956[m Fixing error with deployment
+[33m5a00793[m Working on deployment
+[33m5f52520[m Switch roots to /api
+[33m2a2c6d0[m User profile back to orginal
+[33ma2b68f1[m Reverting back to old version
+[33medf2989[m working on console error on user page
+[33mc340f05[m Working on public art error
+[33mfcd2ac2[m Fixing consol errors
+[33m80916da[m Working on refresh
+[33m96f0458[m Trying to fix user profile refresh
+[33m474182b[m Going back to original user profile
+[33m8ae0a93[m User profile error
+[33mdc2b552[m Fixing user profile error
+[33m419c6ab[m Trying to fix refresh issue
+[33m65c3391[m Fixing broken website
+[33m0ab8244[m Working on issues with user profile
+[33m5df7bb9[m fixing issues
+[33me1bcd17[m Fixing last update
+[33mbd94993[m Fixing refresh issue on user profile
+[33m314fae7[m Working on favorites refresh issue
+[33mb27a00f[m Fixing spacing
+[33m1d62b13[m fixing center issues on profile
+[33mf09714a[m Working on isssue
+[33m31b24d9[m Trying to fix issue with fav refresh
+[33mfe6d58e[m Fixing changes that broke site
+[33m0340544[m Working on fav refresh issue
+[33mbad05d8[m Fixing user profile refresh
+[33m27b8abe[m Fixing issue with refresh on user profile and favorites
+[33m91b9a96[m Fixing issue with error on refesh
+[33mb000126[m Fixed user profile issue
+[33mbdb7391[m Trying to set up return for empty object
+[33mf9a094d[m trying to fix user profile issue with refresh
+[33m8cd9a81[m Fixing seach buttons on small screens
+[33mc9900bc[m Fixing carousal on samll screens
+[33me9070cb[m Trying to fix user profile and hidding arrows
+[33mab357d9[m Fixing issues with user profile
+[33m2db246d[m Merge branch 'main' of https://github.com/EmilyAMartin/art-inventory
+[33ma7fcced[m Fixing bio section on account/userprofile and issue with page refresh on userprofile
+[33mb5b6929[m Update README.md
+[33m3cff75e[m Increasing the amount of seach results on galley page
+[33mf09a480[m Working on fixing galley page
+[33m213330e[m Adding more search results to gallery
+[33m112134f[m Adjusting size of images
+[33m6afbfda[m Moving folder to root
+[33m0a82c7c[m Adding to assets
+[33m3cc5cc7[m Fixing image path
+[33mcb7e700[m fixing images in read me
+[33md94f454[m Working on read me
+[33mfa6f80a[m Testing
+[33m0308312[m Testing workflow with changes
+[33m1fbd2c6[m Testing workflow
+[33m9cd3a3e[m Updating  workflow
+[33m83c6c79[m Fixing search bar
+[33m9246b0d[m Working on yml
+[33m4ceb0ba[m Fixing issue with overflow on cards
