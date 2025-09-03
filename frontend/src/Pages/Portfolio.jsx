@@ -58,7 +58,7 @@ const PortfolioPage = () => {
 	});
 
 	const projects = data?.formattedProjects;
-	const artworks = data?.formattedArtworks;
+	const artworks = data?.formattedArtworks?.artworks || data?.formattedArtworks;
 
 	const handleProjectAdded = () => {
 		queryClient.invalidateQueries(['portfolio']);

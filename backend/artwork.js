@@ -1,4 +1,4 @@
-import { dbPool } from './db.js';
+import { dbPool, executeQuery, executePaginatedQuery } from './db.js';
 import upload from './fileUpload.js';
 import path from 'path';
 import fs from 'fs';
@@ -47,13 +47,23 @@ export const setupRoutes = (app) => {
 
 	app.get('/api/artworks', async (req, res) => {
 		try {
-			const [results] = await dbPool.query(`
-      SELECT id, title, date_end, image_path, 
-             place_of_origin, artwork_type_title, medium_display, 
-             credit_line, description, is_public, artist_name
-      FROM artwork
-      WHERE is_public = true
-    `);
+			const page = parseInt(req.query.page) || 1;
+			const limit = Math.min(parseInt(req.query.limit) || 20, 50); // Max 50 items per page
+			
+			const [results] = await executePaginatedQuery(`
+				SELECT id, title, date_end, image_path, 
+					   place_of_origin, artwork_type_title, medium_display, 
+					   credit_line, description, is_public, artist_name
+				FROM artwork
+				WHERE is_public = true
+				ORDER BY id DESC
+			`, [], page, limit);
+
+			// Get total count for pagination
+			const [countResult] = await executeQuery(`
+				SELECT COUNT(*) as total FROM artwork WHERE is_public = true
+			`);
+			const total = countResult.total;
 
 			const formattedArtworks = results.map((artwork) => ({
 				...artwork,
@@ -66,7 +76,15 @@ export const setupRoutes = (app) => {
 				isPublic: artwork.is_public,
 			}));
 
-			res.json(formattedArtworks);
+			res.json({
+				artworks: formattedArtworks,
+				pagination: {
+					page,
+					limit,
+					total,
+					pages: Math.ceil(total / limit)
+				}
+			});
 		} catch (error) {
 			console.error('Error fetching public artworks:', error);
 			res.status(500).json({ success: false, error: 'Internal Server Error' });
@@ -81,16 +99,27 @@ export const setupRoutes = (app) => {
 		}
 
 		try {
-			const [results] = await dbPool.query(
+			const page = parseInt(req.query.page) || 1;
+			const limit = Math.min(parseInt(req.query.limit) || 20, 50); // Max 50 items per page
+			
+			const [results] = await executePaginatedQuery(
 				`
-      SELECT id, title, date_end, image_path, 
-             place_of_origin, artwork_type_title, medium_display, 
-             credit_line, description, is_public, artist_name
-      FROM artwork
-      WHERE artist_id = ?
-    `,
+				SELECT id, title, date_end, image_path, 
+					   place_of_origin, artwork_type_title, medium_display, 
+					   credit_line, description, is_public, artist_name
+				FROM artwork
+				WHERE artist_id = ?
+				ORDER BY id DESC
+			`,
+				[req.session.user.id], page, limit
+			);
+
+			// Get total count for pagination
+			const [countResult] = await executeQuery(
+				'SELECT COUNT(*) as total FROM artwork WHERE artist_id = ?',
 				[req.session.user.id]
 			);
+			const total = countResult.total;
 
 			const formattedArtworks = results.map((artwork) => ({
 				...artwork,
@@ -103,7 +132,15 @@ export const setupRoutes = (app) => {
 				isPublic: artwork.is_public,
 			}));
 
-			res.json(formattedArtworks);
+			res.json({
+				artworks: formattedArtworks,
+				pagination: {
+					page,
+					limit,
+					total,
+					pages: Math.ceil(total / limit)
+				}
+			});
 		} catch (error) {
 			console.error('Error fetching user artworks:', error);
 			res.status(500).json({ success: false, error: 'Internal Server Error' });
