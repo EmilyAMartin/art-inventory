@@ -14,28 +14,6 @@ import path from 'path';
 import fs from 'fs';
 import { BASE_URL } from './config.js';
 
-// Memory monitoring and optimization
-const logMemoryUsage = () => {
-	const memUsage = process.memoryUsage();
-	console.log('Memory Usage:', {
-		rss: `${Math.round(memUsage.rss / 1024 / 1024)} MB`,
-		heapTotal: `${Math.round(memUsage.heapTotal / 1024 / 1024)} MB`,
-		heapUsed: `${Math.round(memUsage.heapUsed / 1024 / 1024)} MB`,
-		external: `${Math.round(memUsage.external / 1024 / 1024)} MB`
-	});
-};
-
-// Log memory usage every 5 minutes
-setInterval(logMemoryUsage, 300000);
-
-// Force garbage collection if available (Node.js with --expose-gc flag)
-if (global.gc) {
-	setInterval(() => {
-		global.gc();
-		console.log('Garbage collection performed');
-	}, 600000); // Every 10 minutes
-}
-
 const sessionStore = new MySQLStore({}, dbPool);
 const app = express();
 const allowedOrigins = [
@@ -50,24 +28,8 @@ const corsOptions = {
 	allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
 };
 app.use(cors(corsOptions));
-
-// Reduce request size limits to prevent memory issues
-app.use(express.json({ limit: '2mb' }));
-app.use(express.urlencoded({ limit: '2mb', extended: true }));
-
-// Add compression to reduce memory usage
-import compression from 'compression';
-app.use(compression({
-	level: 6, // Balanced compression level
-	threshold: 1024, // Only compress responses > 1KB
-	filter: (req, res) => {
-		// Don't compress images
-		if (req.headers['x-no-compression']) {
-			return false;
-		}
-		return compression.filter(req, res);
-	}
-}));
+app.use(express.json({ limit: '5mb' }));
+app.use(express.urlencoded({ limit: '5mb', extended: true }));
 
 const uploadDir = process.env.UPLOAD_DIR || '/data/uploads';
 if (!fs.existsSync(uploadDir)) {
