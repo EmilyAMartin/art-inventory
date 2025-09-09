@@ -36,4 +36,5 @@ COPY --from=build /app /app
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD [ "npm", "run", "start" ]
+# Limit Node.js memory usage to 256MB
+CMD [ "node", "--max-old-space-size=256", "server.js" ]
