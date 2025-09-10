@@ -42,16 +42,13 @@ const ImageUploadModal = ({
 			if (missingFields.length > 0) {
 				toast.error(
 					`Please fill in all required fields: ${missingFields.join(', ')}`
-				);
-				return;
-			}
-
-			const submitData = new FormData();
-			Object.entries(formData).forEach(([key, value]) => {
-				submitData.append(key, value);
-			});
-
-			if (images.length > 0) {
+	const handleImageChange = (e) => {
+		const file = e.target.files[0];
+		if (file) {
+			const objectUrl = URL.createObjectURL(file);
+			setImages([objectUrl]);
+		}
+	};
 				const response = await fetch(images[0]);
 				const blob = await response.blob();
 				submitData.append('image', blob, 'image.jpg');
