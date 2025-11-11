@@ -236,7 +236,7 @@ const ArtCard = ({ art, handleFavUpdate, isLoggedIn }) => {
 									<Typography
 										sx={{
 											fontSize: { xs: '0.8rem', sm: '1rem' },
-											fontWeight: 600,
+											fontWeight: 500,
 											cursor: 'pointer',
 											marginTop: 'auto',
 										}}

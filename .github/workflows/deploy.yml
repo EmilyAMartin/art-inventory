@@ -27,16 +27,37 @@ jobs:
      working-directory: ./frontend
      run: npm run build
 
+   # Debug step: show that the frontend build produced files
+   - name: List frontend dist
+     working-directory: ./frontend
+     run: |
+      echo "Listing frontend/dist"
+      ls -la dist || (echo "frontend/dist missing" && exit 1)
+
    - name: Copy frontend build to backend
      run: |
-      rm -rf backend/dist
-      cp -r frontend/dist backend/dist
+      echo "Preparing backend/dist"
+      rm -rf backend/dist || true
+      mkdir -p backend/dist
+      cp -r frontend/dist/* backend/dist/
+
+   - name: Show backend dist
+     run: |
+      echo "Listing backend/dist"
+      ls -la backend/dist || (echo "backend/dist missing" && exit 1)
 
    - name: Set up Fly CLI
      uses: superfly/flyctl-actions/setup-flyctl@master
 
    - name: Deploy to Fly.io
      working-directory: ./backend
-     run: flyctl deploy --remote-only
+     run: |
+      echo "Checking FLY_API_TOKEN"
+      if [ -z "${{ secrets.FLY_API_TOKEN }}" ]; then
+        echo "FLY_API_TOKEN secret is not set. Set it in repository secrets." >&2
+        exit 1
+      fi
+      flyctl version
+      flyctl deploy --remote-only
      env:
       FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
