@@ -84,7 +84,7 @@ const Home = () => {
 								sm: '3rem',
 								md: 'clamp(2rem, 5vw, 3.5rem)',
 							},
-							fontWeight: 600,
+							fontWeight: 500,
 							color: '#000',
 							maxWidth: { xs: '90%', md: '600px' },
 							textAlign: { xs: 'center', md: 'left' },
