@@ -45,15 +45,22 @@ export const createTable = async () => {
 export const setupRoutes = (app) => {
 	app.use('/uploads', express.static('uploads'));
 
+	// GET with pagination: ?page=1&perPage=20
 	app.get('/api/artworks', async (req, res) => {
 		try {
-			const [results] = await dbPool.query(`
-      SELECT id, title, date_end, image_path, 
-             place_of_origin, artwork_type_title, medium_display, 
-             credit_line, description, is_public, artist_name
-      FROM artwork
-      WHERE is_public = true
-    `);
+			const page = Math.max(1, Number(req.query.page) || 1);
+			const perPage = Math.min(100, Math.max(5, Number(req.query.perPage) || 20));
+			const offset = (page - 1) * perPage;
+
+			const [results] = await dbPool.query(
+				`SELECT id, title, date_end, image_path, 
+					place_of_origin, artwork_type_title, medium_display, 
+					credit_line, description, is_public, artist_name
+				FROM artwork
+				WHERE is_public = true
+				LIMIT ? OFFSET ?`,
+				[perPage, offset]
+			);
 
 			const formattedArtworks = results.map((artwork) => ({
 				...artwork,
@@ -81,15 +88,18 @@ export const setupRoutes = (app) => {
 		}
 
 		try {
+			const page = Math.max(1, Number(req.query.page) || 1);
+			const perPage = Math.min(100, Math.max(5, Number(req.query.perPage) || 20));
+			const offset = (page - 1) * perPage;
+
 			const [results] = await dbPool.query(
-				`
-      SELECT id, title, date_end, image_path, 
-             place_of_origin, artwork_type_title, medium_display, 
-             credit_line, description, is_public, artist_name
-      FROM artwork
-      WHERE artist_id = ?
-    `,
-				[req.session.user.id]
+				`SELECT id, title, date_end, image_path, 
+					place_of_origin, artwork_type_title, medium_display, 
+					credit_line, description, is_public, artist_name
+				FROM artwork
+				WHERE artist_id = ?
+				LIMIT ? OFFSET ?`,
+				[req.session.user.id, perPage, offset]
 			);
 
 			const formattedArtworks = results.map((artwork) => ({
@@ -114,15 +124,18 @@ export const setupRoutes = (app) => {
 		try {
 			const { userId } = req.params;
 
+			const page = Math.max(1, Number(req.query.page) || 1);
+			const perPage = Math.min(100, Math.max(5, Number(req.query.perPage) || 20));
+			const offset = (page - 1) * perPage;
+
 			const [results] = await dbPool.query(
-				`
-      SELECT id, title, date_end, image_path, 
-             place_of_origin, artwork_type_title, medium_display, 
-             credit_line, description, is_public, artist_name
-      FROM artwork
-      WHERE is_public = true AND artist_id = ?
-    `,
-				[userId]
+				`SELECT id, title, date_end, image_path, 
+					place_of_origin, artwork_type_title, medium_display, 
+					credit_line, description, is_public, artist_name
+				FROM artwork
+				WHERE is_public = true AND artist_id = ?
+				LIMIT ? OFFSET ?`,
+				[userId, perPage, offset]
 			);
 
 			const formattedArtworks = results.map((artwork) => ({
@@ -324,9 +337,19 @@ export const setupRoutes = (app) => {
 			}
 			if (artworkResult[0].image_path) {
 				try {
-					fs.unlinkSync(artworkResult[0].image_path);
+					// Use upload dir and unlink asynchronously to avoid blocking
+					const uploadDir = process.env.UPLOAD_DIR || 'uploads';
+					const fileToDelete = path.join(
+						uploadDir,
+						path.basename(artworkResult[0].image_path)
+					);
+					fs.unlink(fileToDelete, (unlinkError) => {
+						if (unlinkError) {
+							console.error('Error deleting image file:', unlinkError);
+						}
+					});
 				} catch (unlinkError) {
-					console.error('Error deleting image file:', unlinkError);
+					console.error('Error preparing to delete image file:', unlinkError);
 				}
 			}
 			await dbPool.query('DELETE FROM artwork WHERE id = ?', [artworkId]);

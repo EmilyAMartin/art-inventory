@@ -252,12 +252,19 @@ export const setupRoutes = (app) => {
 			);
 
 			if (userResult[0].profile_image) {
-				const oldImagePath = path.join(
-					'uploads',
-					path.basename(userResult[0].profile_image)
-				);
-				if (fs.existsSync(oldImagePath)) {
-					fs.unlinkSync(oldImagePath);
+				try {
+					const uploadDir = process.env.UPLOAD_DIR || 'uploads';
+					const oldImagePath = path.join(
+						uploadDir,
+						path.basename(userResult[0].profile_image)
+					);
+					fs.unlink(oldImagePath, (err) => {
+						if (err && err.code !== 'ENOENT') {
+							console.error('Error deleting old profile image:', err);
+						}
+					});
+				} catch (unlinkErr) {
+					console.error('Error preparing to delete old profile image:', unlinkErr);
 				}
 			}
 

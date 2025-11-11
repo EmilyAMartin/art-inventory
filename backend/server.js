@@ -28,14 +28,37 @@ const corsOptions = {
 	allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
 };
 app.use(cors(corsOptions));
-app.use(express.json({ limit: '5mb' }));
-app.use(express.urlencoded({ limit: '5mb', extended: true }));
+// Reduce JSON/urlencoded body size to avoid large payloads being held in memory
+app.use(express.json({ limit: process.env.JSON_BODY_LIMIT || '100kb' }));
+app.use(
+	express.urlencoded({
+		limit: process.env.URLENCODED_BODY_LIMIT || '100kb',
+		extended: true,
+	})
+);
 
 const uploadDir = process.env.UPLOAD_DIR || '/data/uploads';
 if (!fs.existsSync(uploadDir)) {
 	fs.mkdirSync(uploadDir, { recursive: true });
 }
 app.use('/uploads', express.static(uploadDir));
+
+// Lightweight periodic memory logging to observe trends on small VMs
+if (process.env.ENABLE_MEMORY_LOGGING !== 'false') {
+	setInterval(() => {
+		try {
+			const m = process.memoryUsage();
+			console.log('memory-usage', {
+				rss: Math.round(m.rss / 1024 / 1024) + 'MB',
+				heapTotal: Math.round(m.heapTotal / 1024 / 1024) + 'MB',
+				heapUsed: Math.round(m.heapUsed / 1024 / 1024) + 'MB',
+				external: Math.round(m.external / 1024 / 1024) + 'MB',
+			});
+		} catch (e) {
+			console.error('Error measuring memory usage', e);
+		}
+	}, Number(process.env.MEMORY_LOG_INTERVAL_MS || 60000));
+}
 
 app.use(
 	session({
@@ -82,6 +105,35 @@ app.get(/^\/(?!api\/).*$/, (req, res) => {
 app.use((err, req, res, next) => {
 	console.error('Unhandled Error:', err);
 	res.status(500).json({ message: 'Internal Server Error' });
+});
+
+// Protected debug endpoint to inspect memory usage. Enable by setting DEBUG_SECRET in env.
+app.get('/api/_debug/mem', (req, res) => {
+	const secret = req.query.secret || req.headers['x-debug-secret'];
+	if (!process.env.DEBUG_SECRET || secret !== process.env.DEBUG_SECRET) {
+		return res.status(403).json({ message: 'Forbidden' });
+	}
+
+	const mem = process.memoryUsage();
+	const payload = {
+		rss: mem.rss,
+		heapTotal: mem.heapTotal,
+		heapUsed: mem.heapUsed,
+		external: mem.external,
+		arrayBuffers: mem.arrayBuffers,
+	};
+
+	// If node was started with --expose-gc we can optionally trigger a GC and return post-GC stats.
+	if (process.env.DEBUG_TRIGGER_GC === 'true' && global.gc) {
+		try {
+			global.gc();
+			payload.postGc = process.memoryUsage();
+		} catch (e) {
+			payload.gcError = String(e);
+		}
+	}
+
+	res.json(payload);
 });
 
 const port = 3000;

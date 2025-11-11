@@ -194,9 +194,18 @@ export const setupRoutes = (app) => {
 
 			if (projectResult[0].image_path) {
 				try {
-					fs.unlinkSync(projectResult[0].image_path);
+					const uploadDir = process.env.UPLOAD_DIR || 'uploads';
+					const fileToDelete = path.join(
+						uploadDir,
+						path.basename(projectResult[0].image_path)
+					);
+					fs.unlink(fileToDelete, (unlinkError) => {
+						if (unlinkError) {
+							console.error('Error deleting image file:', unlinkError);
+						}
+					});
 				} catch (unlinkError) {
-					console.error('Error deleting image file:', unlinkError);
+					console.error('Error preparing to delete image file:', unlinkError);
 				}
 			}
 			await dbPool.query('DELETE FROM projects WHERE id = ?', [projectId]);
