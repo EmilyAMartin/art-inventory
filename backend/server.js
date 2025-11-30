@@ -29,10 +29,10 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 // Reduce JSON/urlencoded body size to avoid large payloads being held in memory
-app.use(express.json({ limit: process.env.JSON_BODY_LIMIT || '100kb' }));
+app.use(express.json({ limit: process.env.JSON_BODY_LIMIT || '50kb' }));
 app.use(
 	express.urlencoded({
-		limit: process.env.URLENCODED_BODY_LIMIT || '100kb',
+		limit: process.env.URLENCODED_BODY_LIMIT || '50kb',
 		extended: true,
 	})
 );
@@ -43,7 +43,7 @@ if (!fs.existsSync(uploadDir)) {
 }
 app.use('/uploads', express.static(uploadDir));
 
-// Lightweight periodic memory logging to observe trends on small VMs
+// Lightweight periodic memory logging to observe trends on small VMs (reduced frequency to save resources)
 if (process.env.ENABLE_MEMORY_LOGGING !== 'false') {
 	setInterval(() => {
 		try {
@@ -57,7 +57,7 @@ if (process.env.ENABLE_MEMORY_LOGGING !== 'false') {
 		} catch (e) {
 			console.error('Error measuring memory usage', e);
 		}
-	}, Number(process.env.MEMORY_LOG_INTERVAL_MS || 60000));
+	}, Number(process.env.MEMORY_LOG_INTERVAL_MS || 300000)); // Reduced from 60s to 5min to save resources
 }
 
 app.use(
@@ -70,8 +70,9 @@ app.use(
 			httpOnly: true,
 			secure: false,
 			sameSite: 'lax',
-			maxAge: 24 * 60 * 60 * 1000,
+			maxAge: 24 * 60 * 60 * 1000, // 24 hours
 		},
+		name: 'sessionId', // Use shorter cookie name to reduce memory
 	})
 );
 

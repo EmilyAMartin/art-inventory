@@ -1,5 +1,5 @@
 import { dbPool } from './db.js';
-import upload from './fileUpload.js';
+import upload, { compressAndSaveImage } from './fileUpload.js';
 import path from 'path';
 import fs from 'fs';
 import express from 'express';
@@ -156,7 +156,7 @@ export const setupRoutes = (app) => {
 		}
 	});
 
-	app.post('/api/artworks', upload.single('image'), async (req, res) => {
+	app.post('/api/artworks', upload.single('image'), compressAndSaveImage, async (req, res) => {
 		console.log('Received artwork creation request:', req.body);
 		console.log('Uploaded file:', req.file);
 		console.log('Session user:', req.session.user);

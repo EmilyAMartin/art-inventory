@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { dbPool } from './db.js';
-import upload from './fileUpload.js';
+import upload, { compressAndSaveImage } from './fileUpload.js';
 import path from 'path';
 import fs from 'fs';
 
@@ -235,7 +235,7 @@ export const setupRoutes = (app) => {
 			res.status(401).json({ message: 'Not logged in' });
 		}
 	});
-	app.post('api/profile/image', upload.single('image'), async (req, res) => {
+	app.post('api/profile/image', upload.single('image'), compressAndSaveImage, async (req, res) => {
 		if (!req.session.user) {
 			return res.status(401).json({ message: 'Not logged in' });
 		}

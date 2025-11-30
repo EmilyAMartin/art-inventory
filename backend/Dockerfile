@@ -31,6 +31,12 @@ COPY . .
 # Final stage for app image
 FROM base
 
+# Install runtime dependencies for sharp (image processing)
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y \
+    libvips-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 # Copy built application
 COPY --from=build /app /app
 

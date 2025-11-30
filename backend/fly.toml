@@ -18,13 +18,13 @@ primary_region = 'yyz'
 
 
 [[vm]]
-  memory = '256mb'
+  memory = '256mb'  # Minimum memory - optimizations in code should keep usage low
   cpu_kind = 'shared'
   cpus = 1
 
   [mounts]
   source="uploads_data"
-  destination="/data/uploads"
+  destination="/data/uploads"  # Images are compressed before storage to reduce volume costs
 
 [env]
   BASE_URL = 'https://art-portfolio.fly.dev'
