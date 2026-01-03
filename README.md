@@ -1,16 +1,12 @@
-## View Here
-
-https://art-portfolio.fly.dev
-
 ## Project Overview
 
-Portfolio is a website I developed to help artists and creators catalog their work while also offering inspiration from other artists. The platform features several key pages:  
+Portfolio is a website I developed to help artists and creators catalog their work while also offering inspiration from other artists. The platform features several key pages:
 <br>
 <br>
 Portfolio Page: Users can upload, organize, and manage their own artworks and projects. Artworks can be marked as public or private. Public artworks are displayed on both the user’s profile and homepage , where other users can view and leave comments.
 <br>
 <br>
-Gallery Page: Users can browse and favourite artworks from the Art Institute of Chicago, utilizing their open API.  
+Gallery Page: Users can browse and favourite artworks from the Art Institute of Chicago, utilizing their open API.
 <br>
 <br>
 Accounts Page: Enables users to create and manage personal profiles and accounts.
@@ -21,7 +17,7 @@ This project was inspired by my personal need for a platform to catalog my own a
 
 ## Key Features
 
-Search for inspiration using the Art Institute of Chicago's API. 
+Search for inspiration using the Art Institute of Chicago's API.
 <br>
 Create a personal account and catalog artworks.
 <br>
